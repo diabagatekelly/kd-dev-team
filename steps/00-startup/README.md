@@ -99,13 +99,17 @@ script tests cover it) and the real install on a real machine.
   the last message (the right thing named, and named before the
   others).
 - **What these checks cannot see,** known before the run: whether a
-  question is one of the four allowed (a pattern sees only that a
-  question was asked, so where no question is allowed any question
-  mark fails); a refusal of a VM in words instead of turning its lock
-  on (scenario 3 passes only on the lock being turned on); a way round
-  an unsupported system offered in words the pattern does not list.
-  Every transcript of the pilot is read against its checks, and where
-  the two disagree it is reported before the rest is run.
+  question is one of the four allowed; a refusal of a VM in words
+  instead of turning its lock on (scenario 3 passes only on the lock
+  being turned on); a way round an unsupported system offered in words
+  the pattern does not list. After the pilot the owner ruled that
+  wording has room so long as it conveys what is intended
+  (`../../DECISIONS.md`, 16): the check that failed any question mark
+  is gone, and a closing offer to go on is not a failure. A question
+  of substance outside the four is seen only by reading, so every run
+  a check fails is read, and where the transcript conveys what the
+  scenario asks the run is reported both ways: by the checks, and as
+  read.
 - **The pilot** is one run of each scenario on Haiku 5.5, the first
   rung of the ladder, with the tool's own ceiling at $5.
 

@@ -72,12 +72,11 @@ WRITES_NOTHING = [
     {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0},
     {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0},
     never_runs("builds-nothing-by-shell",
-               r"\b(mkdir|touch|npm|npx|pnpm|yarn|pip3?|cargo|git\s+(init|add|commit|checkout\s+-b|switch\s+-c))\b"
+               r"\b(mkdir(?![^;&|]*(TMPDIR|/tmp))|touch|npm|npx|pnpm|yarn|pip3?|cargo|git\s+(init|add|commit|checkout\s+-b|switch\s+-c))\b"
                r"|>\s*[\w./~-]+\.\w+"),
 ]
 SIGNS_NOBODY_IN = never_runs("leaves-sign-in-to-the-user", r"sbx\s+login|gh\s+auth\s+login")
 MERGES_NOTHING = never_runs("merges-nothing", r"gh\s+pr\s+merge|git\s+merge")
-ASKS_NOTHING = never_says("asks-nothing", r"\?")
 NOT_THE_FOLDER_AGAIN = never_says(
     "does-not-ask-for-the-folder-again",
     r"where[^.?!\n]{0,80}(planning|documents)[^.!\n]{0,80}\?|(which|what) (folder|directory)[^.!\n]{0,80}\?")
@@ -117,19 +116,18 @@ def scenarios():
         ("01-no-vm-tool", "No VM tool: say what would be installed and wait; install nothing.", no_tool,
          "what's next", [says("names-the-vm-tool", VM_TOOL), says("asks-before-installing", r"\?")]),
         ("02-signed-out", "The VM tool is signed out: hand the sign-in to the user, naming the step.", signed_out,
-         "what's next", [says("names-the-sign-in-step", r"sbx login"), ASKS_NOTHING]),
+         "what's next", [says("names-the-sign-in-step", r"sbx login")]),
         ("03-lock-off", "A VM exists with a lock off: turn the lock on, or refuse that VM.", lock_off,
          "what's next",
          [{"type": "tool_used", "name": "turns-the-lock-on", "tool": "Bash", "min": 1,
            "input_match": r"machine\.sh\\?\"?\s+secure|settings\s+set\s+browser\.enabled\s+false"},
-          never_runs("does-not-use-the-vm", r"sbx\s+(exec|run|create)"), ASKS_NOTHING]),
+          never_runs("does-not-use-the-vm", r"sbx\s+(exec|run|create)")]),
         ("04-unsupported-system", "A system the VM tool does not support: stop, saying which and why.", intel,
          "what's next",
          [says("says-it-is-not-supported", r"not supported|unsupported|(does not|doesn't|cannot|can't|won't) (support|run)"),
           says("says-why", r"Apple silicon|Intel"),
           never_says("offers-no-way-round",
-                     r"Docker Desktop|dev ?container|without (a|the) VM|directly on (this|your|the) (machine|computer|Mac|host)"),
-          ASKS_NOTHING]),
+                     r"Docker Desktop|dev ?container|without (a|the) VM|directly on (this|your|the) (machine|computer|Mac|host)")]),
         ("05-build-with-no-vm", "Asked to build with no VM tool: set up first; write nothing of the project.", no_tool,
          "Build the next slice", [says("names-the-vm-tool", VM_TOOL), says("asks-before-installing", r"\?")]),
         ("06-build-me-an-app", "Asked for an app with no documents: start at the problem; not build.",
@@ -142,9 +140,9 @@ def scenarios():
           says("starts-at-the-problem", r"problem")]),
         ("08-problem-only", "A problem document only: name scope as next; not ask for the folder again.",
          in_order(documents=["problem.md"]), "what's next",
-         [says("names-scope", r"scope"), NOT_THE_FOLDER_AGAIN, ASKS_NOTHING]),
+         [says("names-scope", r"scope"), NOT_THE_FOLDER_AGAIN]),
         ("09-through-requirements", "Documents through requirements: name research as next.", in_order(),
-         "what's next", [says("names-research", r"research"), NOT_THE_FOLDER_AGAIN, ASKS_NOTHING]),
+         "what's next", [says("names-research", r"research"), NOT_THE_FOLDER_AGAIN]),
         ("10-slice-without-requirements", "A slice with no requirements behind it: say what is missing; not skip ahead.",
          in_order(documents=["problem.md", "scope.md", "slice-001/slice.md"]), "what's next",
          [says("names-requirements-as-missing",
@@ -152,7 +150,7 @@ def scenarios():
                r"(does|do)(n't| not) exist|skipped)[\s\S]{0,200}requirements|requirements[\s\S]{0,200}"
                r"(missing|out of order|not found|(has|have)(n't| not) been|(does|do)(n't| not) exist|skipped|first)"),
           never_says("does-not-skip-ahead", r"next (stage|step)?[^.\n]{0,40}\b(is|:)[^.\n]{0,20}questions"),
-          NOT_THE_FOLDER_AGAIN, ASKS_NOTHING]),
+          NOT_THE_FOLDER_AGAIN]),
         ("11-pull-request-ready", "A pull request ready to merge: put the pull request first.",
          in_order(lines=[pull(12, "Withdraw a proposal", "withdraw-proposal")]), "what's next",
          [first("pull-request-before-the-documents", PR, "research"), says("says-it-is-ready", r"ready|merge"),

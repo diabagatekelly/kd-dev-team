@@ -73,6 +73,14 @@ asking is listed apart, so it can be overturned.
     cost is reported first. Whether the adopted model gets ten more
     runs per scenario is decided on the first result.
 
+## 2026-11-21: how closely a session's words are held to the test
+
+16. **Wording has room, so long as it conveys what is intended** (the
+    owner, on the pilot, where three scenarios failed only on a closing
+    offer such as "Shall I draft it?"). A closing offer to go on with
+    the thing named is not a question outside the four. A check is on
+    what the session did and conveyed, not on its exact words.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
