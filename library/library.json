@@ -1,0 +1,2752 @@
+[
+ {
+  "id": "call-external-01",
+  "action": "call-external",
+  "failure": "The other system carried out the request, but its reply never arrived.",
+  "question": "What does the product do, and what exists on the other side, when a request may or may not have taken effect?",
+  "source": {
+   "title": "Making retries safe with idempotent APIs (Amazon Builders' Library)",
+   "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+   "evidence": "It's not clear whether the singleton workload is running or not."
+  }
+ },
+ {
+  "id": "call-external-02",
+  "action": "call-external",
+  "failure": "A request that seemed to fail is sent again and the other system carries it out a second time, so its effect happens twice.",
+  "question": "Which requests are safe to send again, and how is a second copy of the same request recognised so its effect happens only once?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "if an operation that increments a value repeats, it produces an incorrect result"
+  }
+ },
+ {
+  "id": "call-external-03",
+  "action": "call-external",
+  "failure": "The other system gives no answer and the product keeps waiting, holding up the work queued behind that request.",
+  "question": "How long does the product wait for each outside system before it stops waiting, and what does it do then?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "Timeouts that are too long cause threads and connections to accumulate during outages."
+  }
+ },
+ {
+  "id": "call-external-04",
+  "action": "call-external",
+  "failure": "The product stops waiting for an answer that was only slow, and treats a request that was working as failed.",
+  "question": "How is the waiting limit chosen so that a slow but working outside system is not treated as broken?",
+  "source": {
+   "title": "Timeouts, retries, and backoff with jitter (Amazon Builders' Library)",
+   "url": "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter",
+   "evidence": "Increased small backend latency leading to a complete outage, because all requests start being retried."
+  }
+ },
+ {
+  "id": "call-external-05",
+  "action": "call-external",
+  "failure": "Repeated attempts against a system that is failing because it is overloaded add to its load and keep it from recovering.",
+  "question": "How many times, how far apart and for how long does the product try again, and when does it stop trying altogether?",
+  "source": {
+   "title": "Timeouts, retries, and backoff with jitter (Amazon Builders' Library)",
+   "url": "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter",
+   "evidence": "When failures are caused by overload, retries that increase load can make matters significantly worse."
+  }
+ },
+ {
+  "id": "call-external-06",
+  "action": "call-external",
+  "failure": "The product tries again after a refusal that will never turn into success, such as a request the other system rejects as wrong or not permitted.",
+  "question": "Which kinds of refusal are worth another attempt, and which are reported at once as final?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "Don't retry operations that can't succeed"
+  }
+ },
+ {
+  "id": "call-external-07",
+  "action": "call-external",
+  "failure": "The other system stays unavailable for hours or days, so every new operation that needs it fails after a full round of attempts.",
+  "question": "What does the product still offer, and what does it tell people, while an outside system it depends on is down for a long time?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "Create a plan to handle operations that continue to fail at every attempt. These situations are inevitable."
+  }
+ },
+ {
+  "id": "call-external-08",
+  "action": "call-external",
+  "failure": "A person is kept waiting with no result while the product quietly tries the same request again and again.",
+  "question": "What is the longest a person waits for an operation that depends on an outside system, counting every repeated attempt, and what do they see meanwhile?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "avoid making users wait for a response, which holds open connections and can reduce availability for other users"
+  }
+ },
+ {
+  "id": "call-external-09",
+  "action": "call-external",
+  "failure": "An operation made of several requests fails partway, after the earlier requests have already taken effect on the other side.",
+  "question": "When a later step fails, what happens to the steps that already succeeded: are they undone, finished later, or left as they are and shown as such?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "difficult or costly to compensate for all the operational steps that have already succeeded when one of them fails"
+  }
+ },
+ {
+  "id": "call-external-10",
+  "action": "call-external",
+  "failure": "A request sent again late reaches the other system after the thing it concerns has since been changed or removed.",
+  "question": "For how long may an old request still be sent again, and what should happen when the thing it refers to no longer exists or has moved on?",
+  "source": {
+   "title": "Making retries safe with idempotent APIs (Amazon Builders' Library)",
+   "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+   "evidence": "even in cases where the resource has been deleted"
+  }
+ },
+ {
+  "id": "call-external-11",
+  "action": "call-external",
+  "failure": "The failure of an outside system that only one feature needs makes the whole product unusable.",
+  "question": "Which outside systems can the product not work without, and which may fail while only the feature that uses them is lost?",
+  "source": {
+   "title": "Architecture strategies for performing failure mode analysis (Azure Well-Architected Framework)",
+   "url": "https://learn.microsoft.com/en-us/azure/well-architected/reliability/failure-mode-analysis",
+   "evidence": "The absence of weak dependencies might only affect specific features and not affect overall availability."
+  }
+ },
+ {
+  "id": "call-external-12",
+  "action": "call-external",
+  "failure": "There is no working connection at the moment the product needs to reach the other system, and nothing was planned for that case.",
+  "question": "What can a person still do, and what are they told, when the product cannot reach an outside system at all?",
+  "source": {
+   "title": "Fallacies of distributed computing (Wikipedia)",
+   "url": "https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing",
+   "evidence": "Software applications are written with little error-handling on networking errors."
+  }
+ },
+ {
+  "id": "receive-external-data-01",
+  "action": "receive-external-data",
+  "failure": "Values arriving from another system are used without being checked, because that system is trusted more than a person typing.",
+  "question": "Which checks does every value from an outside system pass before the product stores, shows or acts on it, and what happens to a value that fails them?",
+  "source": {
+   "title": "API10:2023 Unsafe Consumption of APIs (OWASP API Security Top 10)",
+   "url": "https://api-security.owasp.org/editions/2023/en/0xaa-unsafe-consumption-of-apis",
+   "evidence": "Developers tend to trust data received from third-party APIs more than user input."
+  }
+ },
+ {
+  "id": "receive-external-data-02",
+  "action": "receive-external-data",
+  "failure": "The same notification from the other system is delivered more than once.",
+  "question": "How does the product recognise a notification it has already handled, so that handling it again changes nothing?",
+  "source": {
+   "title": "Receive Stripe events in your webhook endpoint (Stripe documentation)",
+   "url": "https://docs.stripe.com/webhooks",
+   "evidence": "Webhook endpoints might occasionally receive the same event more than once."
+  }
+ },
+ {
+  "id": "receive-external-data-03",
+  "action": "receive-external-data",
+  "failure": "Notifications arrive in a different order from the one in which the things they describe happened.",
+  "question": "What does the product do when it learns of a later change before the earlier one it builds on?",
+  "source": {
+   "title": "Receive Stripe events in your webhook endpoint (Stripe documentation)",
+   "url": "https://docs.stripe.com/webhooks",
+   "evidence": "Stripe doesn't guarantee the delivery of events in the order that they're generated."
+  }
+ },
+ {
+  "id": "receive-external-data-04",
+  "action": "receive-external-data",
+  "failure": "A notification never arrives because the product could not accept it for longer than the sender keeps trying.",
+  "question": "How does the product find out about changes it was never told of, and how soon after an outage of its own?",
+  "source": {
+   "title": "Receive Stripe events in your webhook endpoint (Stripe documentation)",
+   "url": "https://docs.stripe.com/webhooks",
+   "evidence": "Stripe attempts to deliver events to your destination for up to three days"
+  }
+ },
+ {
+  "id": "receive-external-data-05",
+  "action": "receive-external-data",
+  "failure": "Someone other than the real sender delivers a made-up notification and the product acts on it.",
+  "question": "How does the product prove a notification really came from the system it claims to come from before acting on it?",
+  "source": {
+   "title": "Receive Stripe events in your webhook endpoint (Stripe documentation)",
+   "url": "https://docs.stripe.com/webhooks",
+   "evidence": "an attacker could send fake webhook events to your endpoint to trigger actions"
+  }
+ },
+ {
+  "id": "receive-external-data-06",
+  "action": "receive-external-data",
+  "failure": "The product takes so long to deal with a notification that the sender counts the delivery as failed and sends it again.",
+  "question": "Does the product confirm receipt before or after doing the work a notification calls for, and what happens to the work if it then fails?",
+  "source": {
+   "title": "Receive Stripe events in your webhook endpoint (Stripe documentation)",
+   "url": "https://docs.stripe.com/webhooks",
+   "evidence": "The destination server took too long to respond to the webhook request."
+  }
+ },
+ {
+  "id": "receive-external-data-07",
+  "action": "receive-external-data",
+  "failure": "A value arrives that belongs to a category the product has never seen, because the sender added a new one.",
+  "question": "What does the product do with a kind, status or category it does not recognise: refuse the whole record, keep it as unknown, or guess?",
+  "source": {
+   "title": "AIP-180: Backwards compatibility (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/180",
+   "evidence": "it is possible that user code does not handle new values gracefully"
+  }
+ },
+ {
+  "id": "receive-external-data-08",
+  "action": "receive-external-data",
+  "failure": "The sender changes how an existing value is written, or stops sending it, and the product misreads the record or loses the value.",
+  "question": "How does the product notice that data from an outside system has changed shape, and what does it do with records it can no longer read fully?",
+  "source": {
+   "title": "AIP-180: Backwards compatibility (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/180",
+   "evidence": "APIs must not change the expected format or algorithm used to construct the value of an existing field."
+  }
+ },
+ {
+  "id": "receive-external-data-09",
+  "action": "receive-external-data",
+  "failure": "A number arrives that is larger or more exact than the product can hold, and is silently rounded or altered.",
+  "question": "What are the largest and most exact numbers an outside system can send, and does the product keep them unchanged?",
+  "source": {
+   "title": "RFC 8259: The JavaScript Object Notation (JSON) Data Interchange Format",
+   "url": "https://www.rfc-editor.org/rfc/rfc8259",
+   "evidence": "A JSON number such as 1E400 or 3.141592653589793238462643383279 may indicate potential interoperability problems"
+  }
+ },
+ {
+  "id": "receive-external-data-10",
+  "action": "receive-external-data",
+  "failure": "A reply is far larger than expected and the product runs out of room or time handling it.",
+  "question": "What is the largest reply the product accepts from an outside system, and what does it do with one that is larger?",
+  "source": {
+   "title": "API10:2023 Unsafe Consumption of APIs (OWASP API Security Top 10)",
+   "url": "https://api-security.owasp.org/editions/2023/en/0xaa-unsafe-consumption-of-apis",
+   "evidence": "Does not limit the number of resources available to process third-party services responses"
+  }
+ },
+ {
+  "id": "receive-external-data-11",
+  "action": "receive-external-data",
+  "failure": "The other system returns only the first part of a list and the product treats that part as the whole.",
+  "question": "How does the product know it has received everything it asked for, and what does it show when it has only some of it?",
+  "source": {
+   "title": "AIP-180: Backwards compatibility (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/180",
+   "evidence": "older clients will incorrectly assume all results were returned"
+  }
+ },
+ {
+  "id": "receive-external-data-12",
+  "action": "receive-external-data",
+  "failure": "Slightly malformed data is accepted and quietly patched up, so the fault at the sender is never noticed and wrong values pass through.",
+  "question": "When arriving data does not match what was agreed, is it refused, set aside for review or repaired, and who is told?",
+  "source": {
+   "title": "RFC 9413: Maintaining Robust Protocols",
+   "url": "https://www.rfc-editor.org/rfc/rfc9413",
+   "evidence": "Tolerating unexpected input instead conceals problems, making it harder, if not impossible, to fix them later."
+  }
+ },
+ {
+  "id": "sync-01",
+  "action": "sync",
+  "failure": "The same thing is changed in two copies while they are out of touch, and both changes meet when the copies next exchange updates.",
+  "question": "When two copies hold different changes to the same thing, which one stands, and is the person shown both?",
+  "source": {
+   "title": "Local-first software: You own your data, in spite of the cloud (Ink & Switch)",
+   "url": "https://www.inkandswitch.com/essay/local-first/",
+   "evidence": "multiple users concurrently update the same property of the same object"
+  }
+ },
+ {
+  "id": "sync-02",
+  "action": "sync",
+  "failure": "A rule that keeps only the most recent change silently throws away the other person's or the other device's work.",
+  "question": "Is any change ever discarded without the person who made it being told, and can a discarded change be recovered?",
+  "source": {
+   "title": "Build an offline-first app (Android Developers)",
+   "url": "https://developer.android.com/topic/architecture/data-layer/offline-first",
+   "evidence": "it discards any data older than its current state while accepting those newer than its current state"
+  }
+ },
+ {
+  "id": "sync-03",
+  "action": "sync",
+  "failure": "A change saved locally while out of touch is refused by the source later, after the person believes it was saved.",
+  "question": "How and when is a person told that something they saved earlier was not accepted, and what happens to their change?",
+  "source": {
+   "title": "Build an offline-first app (Android Developers)",
+   "url": "https://developer.android.com/topic/architecture/data-layer/offline-first",
+   "evidence": "Since writes can fail, it is often necessary to communicate to the user that the write failed"
+  }
+ },
+ {
+  "id": "sync-04",
+  "action": "sync",
+  "failure": "After a long time out of touch, the local copy is badly out of date or empty, and is shown as if it were current.",
+  "question": "How does a person know how old the information in front of them is, and what is shown when there is none yet?",
+  "source": {
+   "title": "Build an offline-first app (Android Developers)",
+   "url": "https://developer.android.com/topic/architecture/data-layer/offline-first",
+   "evidence": "the user attempts to visit app destinations with a cache that is either stale or empty"
+  }
+ },
+ {
+  "id": "sync-05",
+  "action": "sync",
+  "failure": "The source no longer accepts the product's saved place in the stream of changes, so only-what-changed updating cannot continue.",
+  "question": "What happens to the local copy, and to local changes not yet sent, when updating has to start again from nothing?",
+  "source": {
+   "title": "Synchronize resources efficiently (Google Calendar API guide)",
+   "url": "https://developers.google.com/workspace/calendar/api/guides/sync",
+   "evidence": "This should trigger a full wipe of the client's store and a new full sync."
+  }
+ },
+ {
+  "id": "sync-06",
+  "action": "sync",
+  "failure": "Something removed at the source stays in the local copy, because only additions and edits were carried across.",
+  "question": "How does the local copy learn that something was removed at the source, and what happens to local work attached to it?",
+  "source": {
+   "title": "RFC 6578: Collection Synchronization for WebDAV",
+   "url": "https://www.rfc-editor.org/rfc/rfc6578",
+   "evidence": "A member MUST be reported as removed if its mapping under the target collection has been removed"
+  }
+ },
+ {
+  "id": "sync-07",
+  "action": "sync",
+  "failure": "The source changes again while an update is under way, so the local copy ends up matching no single moment of the source.",
+  "question": "What does the product do about changes made at the source during an update: pick them up in the same pass, the next one, or not at all?",
+  "source": {
+   "title": "RFC 6578: Collection Synchronization for WebDAV",
+   "url": "https://www.rfc-editor.org/rfc/rfc6578",
+   "evidence": "additional changes to the collection could occur between the time of the synchronization report"
+  }
+ },
+ {
+  "id": "sync-08",
+  "action": "sync",
+  "failure": "There are more changes than one update can carry, the source sends only some, and the product treats the update as complete.",
+  "question": "How does the product know an update brought everything, and what does it show while it has caught up only partly?",
+  "source": {
+   "title": "RFC 6578: Collection Synchronization for WebDAV",
+   "url": "https://www.rfc-editor.org/rfc/rfc6578",
+   "evidence": "A server MAY limit the number of member URLs in a response"
+  }
+ },
+ {
+  "id": "sync-09",
+  "action": "sync",
+  "failure": "Copies running different versions of the product exchange data, and each understands or stores it differently.",
+  "question": "What happens when a newer and an older version of the product share the same data: can each still read, and not damage, what the other wrote?",
+  "source": {
+   "title": "Local-first software: You own your data, in spite of the cloud (Ink & Switch)",
+   "url": "https://www.inkandswitch.com/essay/local-first/",
+   "evidence": "Different collaborators may be using different versions of an application, potentially with different features"
+  }
+ },
+ {
+  "id": "sync-10",
+  "action": "sync",
+  "failure": "Changes arriving from elsewhere alter or replace what a person is looking at or editing at that moment.",
+  "question": "What does a person see when the thing they are working on changes underneath them?",
+  "source": {
+   "title": "Local-first software: You own your data, in spite of the cloud (Ink & Switch)",
+   "url": "https://www.inkandswitch.com/essay/local-first/",
+   "evidence": "Newly arriving changes might unexpectedly modify parts of the document you are working on"
+  }
+ },
+ {
+  "id": "sync-11",
+  "action": "sync",
+  "failure": "The source the local copy is kept in line with shuts down for good or becomes unreachable permanently.",
+  "question": "What can a person still do with the local copy, and can they take their information elsewhere, if the source never comes back?",
+  "source": {
+   "title": "Local-first software: You own your data, in spite of the cloud (Ink & Switch)",
+   "url": "https://www.inkandswitch.com/essay/local-first/",
+   "evidence": "If the service shuts down, the software stops functioning, and data created with that software is lost"
+  }
+ },
+ {
+  "id": "sync-12",
+  "action": "sync",
+  "failure": "Each update fetches again a large amount of content that has not changed, using up the person's data allowance, battery or time.",
+  "question": "How much is fetched on each update, how often, and under which conditions does the product hold back?",
+  "source": {
+   "title": "Build an offline-first app (Android Developers)",
+   "url": "https://developer.android.com/topic/architecture/data-layer/offline-first",
+   "evidence": "Prone to heavy data use ... repeated visits to a navigation destination trigger unnecessary refetching of unchanged information."
+  }
+ },
+ {
+  "id": "limits-01",
+  "action": "limits",
+  "failure": "Another system refuses the product's requests because too many were sent in a given period.",
+  "question": "What does the product do, and what do people see, when an outside system tells it that it has asked too often?",
+  "source": {
+   "title": "RFC 6585: Additional HTTP Status Codes",
+   "url": "https://www.rfc-editor.org/rfc/rfc6585",
+   "evidence": "The 429 status code indicates that the user has sent too many requests in a given amount of time"
+  }
+ },
+ {
+  "id": "limits-02",
+  "action": "limits",
+  "failure": "A refusal states how long to wait, and the product tries again sooner than that.",
+  "question": "When a system says when to come back, does the product wait at least that long, and what happens to the waiting work meanwhile?",
+  "source": {
+   "title": "Transient fault handling (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults",
+   "evidence": "wait at least the specified duration before the next attempt"
+  }
+ },
+ {
+  "id": "limits-03",
+  "action": "limits",
+  "failure": "One user or group uses so much of a shared resource that the product slows down or fails for everyone else.",
+  "question": "How much may any one user or group consume, and what happens to them, and to the others, when they reach that amount?",
+  "source": {
+   "title": "Noisy Neighbor antipattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/noisy-neighbor",
+   "evidence": "a single tenant uses a disproportionate amount of the resources ... the overall performance of the system can degrade"
+  }
+ },
+ {
+  "id": "limits-04",
+  "action": "limits",
+  "failure": "Total demand rises above what the product can handle, and it slows down or fails for all users at once.",
+  "question": "What is the most the product is meant to handle at one time, and what does it do with demand beyond that?",
+  "source": {
+   "title": "Throttling pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/throttling",
+   "evidence": "If processing demand exceeds available capacity, the system slows or fails."
+  }
+ },
+ {
+  "id": "limits-05",
+  "action": "limits",
+  "failure": "Near its capacity the product treats all work alike, so essential operations fail alongside ones that could have been switched off or put off.",
+  "question": "Which features are given up first when the product is close to its limit, and which must keep working?",
+  "source": {
+   "title": "Throttling pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/throttling",
+   "evidence": "Turn off or degrade nonessential features so that essential features have enough resources."
+  }
+ },
+ {
+  "id": "limits-06",
+  "action": "limits",
+  "failure": "A request is refused for being over a limit, with nothing to say which limit was reached or when to try again.",
+  "question": "What is a person or a calling system told when a limit stops them, and can they tell what to do next?",
+  "source": {
+   "title": "Throttling pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/throttling",
+   "evidence": "Unexplained rejections don't help callers adapt."
+  }
+ },
+ {
+  "id": "limits-07",
+  "action": "limits",
+  "failure": "There is no upper bound on the size of a single thing a person or system may submit, and one oversized submission exhausts the product.",
+  "question": "What is the largest single item the product accepts, and what happens to one that is larger?",
+  "source": {
+   "title": "API4:2023 Unrestricted Resource Consumption (OWASP API Security Top 10)",
+   "url": "https://api-security.owasp.org/editions/2023/en/0xa4-unrestricted-resource-consumption",
+   "evidence": "Maximum upload file size"
+  }
+ },
+ {
+  "id": "limits-08",
+  "action": "limits",
+  "failure": "There is no upper bound on how many items one request may ask for, and a request for everything at once overwhelms the product.",
+  "question": "How many items may be asked for or shown in one go, and how does a person reach the rest?",
+  "source": {
+   "title": "API4:2023 Unrestricted Resource Consumption (OWASP API Security Top 10)",
+   "url": "https://api-security.owasp.org/editions/2023/en/0xa4-unrestricted-resource-consumption",
+   "evidence": "Number of records per page to return in a single request-response"
+  }
+ },
+ {
+  "id": "limits-09",
+  "action": "limits",
+  "failure": "Use of an outside service that charges by use grows without a ceiling or a warning, and the cost is discovered only afterwards.",
+  "question": "What is the most the product may spend on each paid outside service in a period, who is warned as it approaches, and what stops at the ceiling?",
+  "source": {
+   "title": "API4:2023 Unrestricted Resource Consumption (OWASP API Security Top 10)",
+   "url": "https://api-security.owasp.org/editions/2023/en/0xa4-unrestricted-resource-consumption",
+   "evidence": "there were no consumption cost alerts, nor a maximum cost allowance for the cloud service"
+  }
+ },
+ {
+  "id": "limits-10",
+  "action": "limits",
+  "failure": "Many copies of the product, or many scheduled jobs, start the same work at the same moment and create a burst no steady flow would.",
+  "question": "Which regular or scheduled work could all start at once, and how is it spread out?",
+  "source": {
+   "title": "Timeouts, retries, and backoff with jitter (Amazon Builders' Library)",
+   "url": "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter",
+   "evidence": "they can line up and trigger their requests at the same time"
+  }
+ },
+ {
+  "id": "limits-11",
+  "action": "limits",
+  "failure": "Work is accepted faster than it can be finished, and the backlog grows until the product runs out of room and stops.",
+  "question": "How much waiting work does the product hold, and what does it do with new work once that much is waiting?",
+  "source": {
+   "title": "Handling Overload (Google, Site Reliability Engineering)",
+   "url": "https://sre.google/sre-book/handling-overload/",
+   "evidence": "tasks eventually run out of memory and crash"
+  }
+ },
+ {
+  "id": "limits-12",
+  "action": "limits",
+  "failure": "The product goes on doing work for a requester who has already stopped waiting for the answer.",
+  "question": "How does the product learn that nobody is waiting for a piece of work any more, and does it stop?",
+  "source": {
+   "title": "Addressing Cascading Failures (Google, Site Reliability Engineering)",
+   "url": "https://sre.google/sre-book/addressing-cascading-failures/",
+   "evidence": "servers spend resources handling requests that will exceed their deadlines on the client"
+  }
+ },
+ {
+  "id": "durable-write-01",
+  "action": "durable-write",
+  "failure": "The product stopped or lost power partway through saving, and what is stored is part the old content and part the new.",
+  "question": "What does the product guarantee is stored when a save is cut off partway: all of the old content, all of the new, or something it can detect and repair?",
+  "source": {
+   "title": "Files are hard (Dan Luu)",
+   "url": "https://danluu.com/file-consistency/",
+   "evidence": "\"if there's a crash during the write, we could get a boo, a far, or any other combination\""
+  }
+ },
+ {
+  "id": "durable-write-02",
+  "action": "durable-write",
+  "failure": "The product told the person their change was saved, and after a power loss or sudden restart the change is gone because the product had chosen speed over waiting for storage to confirm.",
+  "question": "At what moment does the product say a change is saved, and how much recently confirmed work may be lost if power fails right after?",
+  "source": {
+   "title": "Write-Ahead Logging (SQLite documentation)",
+   "url": "https://www.sqlite.org/wal.html",
+   "evidence": "\"transactions are no longer durable and might rollback following a power failure or hard reset\""
+  }
+ },
+ {
+  "id": "durable-write-03",
+  "action": "durable-write",
+  "failure": "The storage device reported that content was safely written when it was still held only in temporary memory, and a power loss then left the stored data damaged.",
+  "question": "On what kinds of storage does the product promise its saved data survives a power loss, and how would it notice damage on storage that does not keep that promise?",
+  "source": {
+   "title": "How To Corrupt An SQLite Database File",
+   "url": "https://www.sqlite.org/howtocorrupt.html",
+   "evidence": "\"Unfortunately, most consumer-grade mass storage devices lie about syncing.\""
+  }
+ },
+ {
+  "id": "durable-write-04",
+  "action": "durable-write",
+  "failure": "A save could not complete because the storage had no room left.",
+  "question": "What does the person see, and what state is the previously saved data in, when a save fails for lack of space?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"indicates that a write could not complete because the disk is full\""
+  }
+ },
+ {
+  "id": "durable-write-05",
+  "action": "durable-write",
+  "failure": "Storage reported a failed write only once, and when the product asked again it was told everything was written although the content had been dropped.",
+  "question": "What does the product do after storage reports a failed save, given that trying again and being told it worked does not prove the data is there?",
+  "source": {
+   "title": "Fsync Errors (PostgreSQL wiki)",
+   "url": "https://wiki.postgresql.org/wiki/Fsync_Errors",
+   "evidence": "Buffers are marked clean after an error, \"so retrying fsync() can falsely report success\"; \"potential for unreported data loss\"."
+  }
+ },
+ {
+  "id": "durable-write-06",
+  "action": "durable-write",
+  "failure": "The product replaced a whole saved file with a new one, a crash came during the swap, and afterwards neither the complete old file nor the complete new one is in place.",
+  "question": "When saved data is replaced wholesale, what is guaranteed to be found after a crash at any point during the replacement?",
+  "source": {
+   "title": "Files are hard (Dan Luu)",
+   "url": "https://danluu.com/file-consistency/",
+   "evidence": "\"POSIX says that rename is atomic, but this only applies to normal operation, not to crashes.\""
+  }
+ },
+ {
+  "id": "durable-write-07",
+  "action": "durable-write",
+  "failure": "A record being added to the end of a growing saved history was cut off by a crash, leaving a partial or meaningless last record.",
+  "question": "How does the product recognise and treat an incomplete or meaningless final record in a history it adds to over time?",
+  "source": {
+   "title": "Files are hard (Dan Luu)",
+   "url": "https://danluu.com/file-consistency/",
+   "evidence": "Applications \"had bad data corruption bugs that came from assuming appends are atomic\"; the log \"will contain random garbage\"."
+  }
+ },
+ {
+  "id": "durable-write-08",
+  "action": "durable-write",
+  "failure": "The product saved several related pieces in a set order, storage carried them out in a different order, and a crash left a combination that was never meant to exist together.",
+  "question": "Which pieces of saved data must always agree with one another, and what does the product do when it finds them disagreeing after a crash?",
+  "source": {
+   "title": "Files are hard (Dan Luu)",
+   "url": "https://danluu.com/file-consistency/",
+   "evidence": "\"The most common class of error was incorrectly assuming ordering between syscalls.\""
+  }
+ },
+ {
+  "id": "durable-write-09",
+  "action": "durable-write",
+  "failure": "Content that was saved correctly later changed on the storage device on its own, with no error reported at the time.",
+  "question": "How does the product detect saved data that has silently changed since it was written, and what does it do with it?",
+  "source": {
+   "title": "Files are hard (Dan Luu)",
+   "url": "https://danluu.com/file-consistency/",
+   "evidence": "Silent corruption \"happened on .5% of disks per year\"."
+  }
+ },
+ {
+  "id": "durable-write-10",
+  "action": "durable-write",
+  "failure": "A copy of the saved data was taken while a save was under way, so the copy holds some old and some new content.",
+  "question": "How are copies of the saved data (backups, exports, device transfers) taken so that a copy made during a save is still usable?",
+  "source": {
+   "title": "How To Corrupt An SQLite Database File",
+   "url": "https://www.sqlite.org/howtocorrupt.html",
+   "evidence": "\"The backup copy then might contain some old and some new content, and thus be corrupt.\""
+  }
+ },
+ {
+  "id": "durable-write-11",
+  "action": "durable-write",
+  "failure": "The saved data lives in more than one file, and a person or tool moved, copied or deleted one of them without the others.",
+  "question": "Which files together make up the saved data, and what happens when only some of them are moved, copied, restored or cleaned up?",
+  "source": {
+   "title": "Write-Ahead Logging (SQLite documentation)",
+   "url": "https://www.sqlite.org/wal.html",
+   "evidence": "\"If a database file is separated from its WAL file, then transactions that were previously committed ... might be lost\""
+  }
+ },
+ {
+  "id": "durable-write-12",
+  "action": "durable-write",
+  "failure": "The person closed the product while a save was still in progress, and the save was dropped without anyone being told.",
+  "question": "What happens to a save that is still in progress when the product is closed, and how does the person learn on return that it did not happen?",
+  "source": {
+   "title": "Using IndexedDB (MDN Web Docs)",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB",
+   "evidence": "\"Since the user can exit the browser at any time ... you cannot rely upon any particular transaction to complete\""
+  }
+ },
+ {
+  "id": "startup-read-01",
+  "action": "startup-read",
+  "failure": "At start the product found its saved data damaged and unreadable in whole or in part.",
+  "question": "What does the product do at start when its saved data is damaged: refuse to run, run with what can be read, or start fresh, and what is the person told?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"The SQLITE_CORRUPT result code indicates that the database file has been corrupted.\""
+  }
+ },
+ {
+  "id": "startup-read-02",
+  "action": "startup-read",
+  "failure": "The file found where the saved data should be is not something the product wrote or can recognise.",
+  "question": "What does the product do when the thing in its saved-data location is not recognisably its own, and does it ever overwrite it?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"the file being opened does not appear to be an SQLite database file\""
+  }
+ },
+ {
+  "id": "startup-read-03",
+  "action": "startup-read",
+  "failure": "At start the saved data could not be opened at all, because it is absent, out of reach or not permitted to the product.",
+  "question": "How does the product tell a first run with nothing saved apart from saved data that exists but cannot be opened, and what does it do in each case?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"The SQLITE_CANTOPEN result code indicates that SQLite was unable to open a file.\""
+  }
+ },
+ {
+  "id": "startup-read-04",
+  "action": "startup-read",
+  "failure": "At start the product found the leftovers of a save that an earlier run never finished, so the saved data cannot be trusted until it is repaired.",
+  "question": "What does the product do at start when it finds a save that an earlier run left unfinished: complete it, undo it, or ask?",
+  "source": {
+   "title": "Atomic Commit In SQLite",
+   "url": "https://www.sqlite.org/atomiccommit.html",
+   "evidence": "\"A hot journal means that the database file is in an inconsistent state and needs to be repaired\""
+  }
+ },
+ {
+  "id": "startup-read-05",
+  "action": "startup-read",
+  "failure": "The saved data needed repair before it could be read, but the product was only allowed to read the storage, not change it.",
+  "question": "What does the product do when it may read its saved data but not change it, including when that data needs repair first?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"has a hot journal that needs to be rolled back but cannot because the database is readonly\""
+  }
+ },
+ {
+  "id": "startup-read-06",
+  "action": "startup-read",
+  "failure": "The product could not load its saved data at start because another running copy was in the middle of repairing it after a crash.",
+  "question": "What does a starting copy of the product do when another copy is already repairing the saved data: wait, for how long, and what does it show meanwhile?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"another process is busy recovering a WAL mode database file following a crash\""
+  }
+ },
+ {
+  "id": "startup-read-07",
+  "action": "startup-read",
+  "failure": "Between two runs the platform the product runs on removed everything the product had saved, without the person asking for it.",
+  "question": "Where can the platform remove the product's saved data on its own, and what does the person find, and can get back, when that has happened?",
+  "source": {
+   "title": "Storage quotas and eviction criteria (MDN Web Docs)",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria",
+   "evidence": "\"When an origin's data is evicted by the browser, all of its data, not parts of it, is deleted\""
+  }
+ },
+ {
+  "id": "startup-read-08",
+  "action": "startup-read",
+  "failure": "Content rescued from damaged saved data came back incomplete, altered, or including items that had previously been removed.",
+  "question": "After a rescue of damaged saved data, what is checked before the result is used, and how is the person told what may be missing, changed or back again?",
+  "source": {
+   "title": "Recovering Data From A Corrupt SQLite Database",
+   "url": "https://www.sqlite.org/recovery.html",
+   "evidence": "\"Previously deleted content might reappear.\" \"Recovered content might be altered.\" \"the results will always be suspect\""
+  }
+ },
+ {
+  "id": "startup-read-09",
+  "action": "startup-read",
+  "failure": "The saved data loaded without complaint but had been quietly made wrong by a defect weeks or months earlier, and nobody noticed until now.",
+  "question": "How would the product or its owner find out that saved data is readable but wrong, and how far back can a good version be recovered?",
+  "source": {
+   "title": "Data Integrity: What You Read Is What You Wrote (Google SRE Book, chapter 26)",
+   "url": "https://sre.google/sre-book/data-integrity/",
+   "evidence": "\"low-grade corruption or deletion that was discovered weeks to months after the bugs were first released\""
+  }
+ },
+ {
+  "id": "startup-read-10",
+  "action": "startup-read",
+  "failure": "The saved data was unusable, and the spare copy the product relied on had never been tried and could not be brought back either.",
+  "question": "Which spare copy does the product fall back on when its saved data is unusable, and when was bringing it back last actually tried?",
+  "source": {
+   "title": "Data Integrity: What You Read Is What You Wrote (Google SRE Book, chapter 26)",
+   "url": "https://sre.google/sre-book/data-integrity/",
+   "evidence": "\"you only know that you can recover your recent state if you actually do so\""
+  }
+ },
+ {
+  "id": "migration-01",
+  "action": "migration",
+  "failure": "The product started and found saved data written by a newer version of itself than the one now running.",
+  "question": "What does a version of the product do when it meets saved data written by a later version: refuse, open it read-only, or use what it understands?",
+  "source": {
+   "title": "Using IndexedDB (MDN Web Docs)",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB",
+   "evidence": "\"the version of the database stored on the disk is greater than the version that you are trying to open\""
+  }
+ },
+ {
+  "id": "migration-02",
+  "action": "migration",
+  "failure": "The saved data was written by a version so old that the current version has no route for bringing it up to date, and the only choices left are failing to start or erasing it.",
+  "question": "From how far back must saved data be carried forward, and what happens to data older than that: is it ever erased, and who agrees to that?",
+  "source": {
+   "title": "Migrate your Room database (Android Developers)",
+   "url": "https://developer.android.com/training/data-storage/room/migrating-db-versions",
+   "evidence": "\"If Room can't find a migration path ... an IllegalStateException occurs\"; the fallback \"permanently deletes all data\"."
+  }
+ },
+ {
+  "id": "migration-03",
+  "action": "migration",
+  "failure": "A new version was withdrawn after it had already saved data in a form the previous version cannot read.",
+  "question": "After a new version has saved anything, can the previous version still be put back, and what does it do with what the new one wrote?",
+  "source": {
+   "title": "Ensuring rollback safety during deployments (Amazon Builders' Library)",
+   "url": "https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments",
+   "evidence": "\"After the new version writes some compressed data, rolling back isn't an option.\""
+  }
+ },
+ {
+  "id": "migration-04",
+  "action": "migration",
+  "failure": "An older and a newer version of the product were running at the same time against the same saved data, each writing things the other had to read.",
+  "question": "While an update is being rolled out, which versions run side by side, and can each read and safely change what the other saves?",
+  "source": {
+   "title": "Ensuring rollback safety during deployments (Amazon Builders' Library)",
+   "url": "https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments",
+   "evidence": "\"The writer and the reader could be running different versions of the software.\""
+  }
+ },
+ {
+  "id": "migration-05",
+  "action": "migration",
+  "failure": "The saved data could not be brought up to date because another window or copy of the product, still on the older version, had it open.",
+  "question": "What do the updating copy and the still-open older copy each do and show when the older one stands in the way of bringing saved data up to date?",
+  "source": {
+   "title": "Using IndexedDB (MDN Web Docs)",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB",
+   "evidence": "\"all other open databases must explicitly acknowledge the request before you can start making changes to the database\""
+  }
+ },
+ {
+  "id": "migration-06",
+  "action": "migration",
+  "failure": "A stored value's slot was given a new meaning or a new kind of content, so values saved under the old meaning are now read as something they are not.",
+  "question": "When the meaning or kind of a stored value changes, what happens to every value already saved under the old meaning?",
+  "source": {
+   "title": "Proto Best Practices: Dos and Don'ts (Protocol Buffers documentation)",
+   "url": "https://protobuf.dev/best-practices/dos-donts/",
+   "evidence": "\"Never re-use a tag number. It messes up deserialization.\" \"Almost never change the type of a field\""
+  }
+ },
+ {
+  "id": "migration-07",
+  "action": "migration",
+  "failure": "The new version requires a value in every record, and records saved before the change do not have it.",
+  "question": "For each value the new version expects, what do records saved before it existed get: a stated default, a marked blank, or a question to the person?",
+  "source": {
+   "title": "Evolutionary Database Design (Martin Fowler and Pramod Sadalage)",
+   "url": "https://martinfowler.com/articles/evodb.html",
+   "evidence": "\"We'll also get problems if there are any nulls in the existing data.\""
+  }
+ },
+ {
+  "id": "migration-08",
+  "action": "migration",
+  "failure": "A stored item was given a new name, and data saved under the old name is no longer found by the version that looks for the new one.",
+  "question": "When something stored is renamed, how is data saved under the old name still found, and for how long must both names be accepted?",
+  "source": {
+   "title": "Schema evolution in Avro, Protocol Buffers and Thrift (Martin Kleppmann)",
+   "url": "https://martin.kleppmann.com/2012/12/05/schema-evolution-in-avro-protocol-buffers-thrift.html",
+   "evidence": "\"Because fields are matched by name, changing the name of a field is tricky.\""
+  }
+ },
+ {
+  "id": "migration-09",
+  "action": "migration",
+  "failure": "Bringing saved data up to date threw away or merged information, so the change cannot be reversed if it turns out to be wrong.",
+  "question": "Which steps of bringing saved data up to date discard information, and what is kept so that they can be reversed?",
+  "source": {
+   "title": "Evolutionary Database Design (Martin Fowler and Pramod Sadalage)",
+   "url": "https://martinfowler.com/articles/evodb.html",
+   "evidence": "\"Many changes, however don't have this property, we call these destructive changes.\""
+  }
+ },
+ {
+  "id": "migration-10",
+  "action": "migration",
+  "failure": "The step that brings saved data up to date was itself wrong for some real data, and the product stopped during it.",
+  "question": "What state is the saved data in when bringing it up to date fails partway, and what does the product do the next time it starts?",
+  "source": {
+   "title": "Migrate your Room database (Android Developers)",
+   "url": "https://developer.android.com/training/data-storage/room/migrating-db-versions",
+   "evidence": "\"Migrations are often complex, and an incorrectly defined migration can cause your app to crash.\""
+  }
+ },
+ {
+  "id": "migration-11",
+  "action": "migration",
+  "failure": "A spare copy taken before a change of form could no longer be used by the current version when it was needed.",
+  "question": "Can spare copies taken under earlier versions still be brought back by the current version, and how long is that promised?",
+  "source": {
+   "title": "Data Integrity: What You Read Is What You Wrote (Google SRE Book, chapter 26)",
+   "url": "https://sre.google/sre-book/data-integrity/",
+   "evidence": "\"changes to code and schema may render older backups ineffective in high-velocity environments\""
+  }
+ },
+ {
+  "id": "migration-12",
+  "action": "migration",
+  "failure": "A multi-step piece of work was begun and recorded by one version, and the next version could not resume, finish or undo it.",
+  "question": "What happens to work that was in progress when the product was updated: can the new version continue it, or must it be finished or abandoned first?",
+  "source": {
+   "title": "Scheduler Agent Supervisor pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/scheduler-agent-supervisor",
+   "evidence": "\"changes to workflow logic or persisted state can prevent replay, recovery, or compensation for in-flight work\""
+  }
+ },
+ {
+  "id": "concurrency-01",
+  "action": "concurrency",
+  "failure": "Two operations each read the same item, changed it, and saved it back, and the one that saved last wiped out the other's change.",
+  "question": "When two changes to the same item are made from what each saw earlier, which survives, and is the person whose change was replaced told?",
+  "source": {
+   "title": "Lost Update (P4) (Jepsen consistency reference)",
+   "url": "https://jepsen.io/consistency/phenomena/p4",
+   "evidence": "\"Lost Update, occurs when the effects of a committed transaction are effectively lost\""
+  }
+ },
+ {
+  "id": "concurrency-02",
+  "action": "concurrency",
+  "failure": "Two operations each checked a rule that spans several items, each changed a different item, and together they broke the rule that each alone had respected.",
+  "question": "Which rules span more than one item, and how are they kept true when two operations each change a different item at the same moment?",
+  "source": {
+   "title": "Write Skew (A5B) (Jepsen consistency reference)",
+   "url": "https://jepsen.io/consistency/phenomena/a5b",
+   "evidence": "\"two committed transactions write different objects and each fails to observe the other's write\""
+  }
+ },
+ {
+  "id": "concurrency-03",
+  "action": "concurrency",
+  "failure": "An operation read several related items while another was changing them and saw some from before the change and some from after.",
+  "question": "Which sets of items must always be read as they stood at a single moment, and how is that ensured while changes are going on?",
+  "source": {
+   "title": "Read Skew (A5A) (Jepsen consistency reference)",
+   "url": "https://jepsen.io/consistency/phenomena/a5a",
+   "evidence": "\"a transaction both observes and fails to observe the effects of another transaction\""
+  }
+ },
+ {
+  "id": "concurrency-04",
+  "action": "concurrency",
+  "failure": "An operation looked up the items matching a condition twice, and the set was different the second time because another operation had added or removed matching items in between.",
+  "question": "Where does the product decide something from the set of items matching a condition, and what happens if that set changes before the decision is acted on?",
+  "source": {
+   "title": "Transaction Isolation (PostgreSQL documentation)",
+   "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+   "evidence": "\"finds that the set of rows satisfying the condition has changed due to another recently-committed transaction\""
+  }
+ },
+ {
+  "id": "concurrency-05",
+  "action": "concurrency",
+  "failure": "An operation read and acted on a change that another operation had made but not yet confirmed, and that other operation was then abandoned.",
+  "question": "Can anything see or act on a change before it is final, and what happens to what was built on it if the change is withdrawn?",
+  "source": {
+   "title": "Transaction Isolation (PostgreSQL documentation)",
+   "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+   "evidence": "\"A transaction reads data written by a concurrent uncommitted transaction.\""
+  }
+ },
+ {
+  "id": "concurrency-06",
+  "action": "concurrency",
+  "failure": "A change was completed in one place, and a read made afterwards from another place still showed the state from before it.",
+  "question": "After a change is confirmed, how soon must every window, copy and device show it, and what does a person see in the meantime?",
+  "source": {
+   "title": "Stale Read (Jepsen consistency reference)",
+   "url": "https://jepsen.io/consistency/phenomena/stale-read",
+   "evidence": "\"a read fails to observe the consequences of an earlier completed write\""
+  }
+ },
+ {
+  "id": "concurrency-07",
+  "action": "concurrency",
+  "failure": "A copy of the product that held the exclusive right to do something paused, the right ran out and passed to another copy, and the first then carried on as if it still held it.",
+  "question": "When the exclusive right to do something has a time limit, what stops a holder that was delayed past the limit from acting anyway?",
+  "source": {
+   "title": "How to do distributed locking (Martin Kleppmann)",
+   "url": "https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html",
+   "evidence": "\"the client doesn't realise that it has expired, it may go ahead and make some unsafe change\""
+  }
+ },
+ {
+  "id": "concurrency-08",
+  "action": "concurrency",
+  "failure": "An operation was refused because another operation or another copy of the product was using the same stored data at that moment.",
+  "question": "What does the product do when the stored data is in use by another operation: wait, try again, or tell the person, and for how long?",
+  "source": {
+   "title": "Result and Error Codes (SQLite documentation)",
+   "url": "https://www.sqlite.org/rescode.html",
+   "evidence": "\"could not be written (or in some cases read) because of concurrent activity by some other database connection\""
+  }
+ },
+ {
+  "id": "concurrency-09",
+  "action": "concurrency",
+  "failure": "The storage layer noticed that two simultaneous operations conflicted and cancelled one of them whole, leaving the product to start it again from the beginning.",
+  "question": "When an operation is cancelled because it clashed with another, is it repeated automatically from the start, and what if it cannot simply be repeated?",
+  "source": {
+   "title": "Transaction Isolation (PostgreSQL documentation)",
+   "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+   "evidence": "\"it should abort the current transaction and retry the whole transaction from the beginning\""
+  }
+ },
+ {
+  "id": "concurrency-10",
+  "action": "concurrency",
+  "failure": "Two operations each held something the other needed and each waited for the other, so neither could finish until one was forcibly cancelled.",
+  "question": "Which operations hold several things at once, what happens when two of them wait on each other, and is anything ever held while waiting for a person?",
+  "source": {
+   "title": "Explicit Locking (PostgreSQL documentation)",
+   "url": "https://www.postgresql.org/docs/current/explicit-locking.html",
+   "evidence": "\"two (or more) transactions each hold locks that the other wants\"; resolved \"by aborting one of the transactions involved\"."
+  }
+ },
+ {
+  "id": "concurrency-11",
+  "action": "concurrency",
+  "failure": "An operation that needs sole use of the stored data never got its turn because there was always at least one other operation still reading.",
+  "question": "What guarantees that an operation needing sole use eventually runs when others never stop reading, and what builds up while it waits?",
+  "source": {
+   "title": "Write-Ahead Logging (SQLite documentation)",
+   "url": "https://www.sqlite.org/wal.html",
+   "evidence": "\"there is always at least one active reader, then no checkpoints will be able to complete\""
+  }
+ },
+ {
+  "id": "concurrency-12",
+  "action": "concurrency",
+  "failure": "Two copies of the product changed the same stored data at once because the means each used to keep the other out was invisible to the other or did not work where the data was kept.",
+  "question": "What stops two copies of the product from changing the same stored data at once, and in which setups (shared or remote storage, mixed versions) does that protection not hold?",
+  "source": {
+   "title": "How To Corrupt An SQLite Database File",
+   "url": "https://www.sqlite.org/howtocorrupt.html",
+   "evidence": "\"the two applications will not see each other's locks and will not be able to coordinate database access\""
+  }
+ },
+ {
+  "id": "lifecycle-01",
+  "action": "lifecycle",
+  "failure": "Creating something took several steps, a later step failed, and the earlier steps had already taken effect.",
+  "question": "When making something takes several steps and a later one fails, what is done about the steps already carried out, and who decides between undoing them and carrying on another way?",
+  "source": {
+   "title": "Compensating Transaction pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction",
+   "evidence": "\"After a failure, you might need to undo work from completed operation steps.\""
+  }
+ },
+ {
+  "id": "lifecycle-02",
+  "action": "lifecycle",
+  "failure": "The undoing of a partly finished piece of work itself failed or stalled, leaving the thing neither completed nor cleanly undone.",
+  "question": "How is a thing shown and handled when undoing it has itself failed, and who is alerted to sort it out by hand?",
+  "source": {
+   "title": "Scheduler Agent Supervisor pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/scheduler-agent-supervisor",
+   "evidence": "\"A compensating operation that itself fails leaves the task in a state that's neither completed nor cleanly undone.\""
+  }
+ },
+ {
+  "id": "lifecycle-03",
+  "action": "lifecycle",
+  "failure": "One step of a multi-step piece of work could not be taken back once done, and a step after it failed.",
+  "question": "Which steps cannot be taken back once done, and is everything that could still fail checked before them?",
+  "source": {
+   "title": "Compensating Transaction pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction",
+   "evidence": "\"Define clear points of no return and irreversible steps.\" \"you can't safely or meaningfully undo some operations\""
+  }
+ },
+ {
+  "id": "lifecycle-04",
+  "action": "lifecycle",
+  "failure": "A thing stayed marked as in progress indefinitely because whatever was working on it stopped without recording an outcome.",
+  "question": "How long may a thing stay in progress before the product treats the work as failed, and what then happens to it?",
+  "source": {
+   "title": "Scheduler Agent Supervisor pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/scheduler-agent-supervisor",
+   "evidence": "\"the state store record still shows the step as running, but with an expired complete-by time\""
+  }
+ },
+ {
+  "id": "lifecycle-05",
+  "action": "lifecycle",
+  "failure": "Two records that must be created together were saved separately, and only one of them was written.",
+  "question": "Which records only make sense as a pair or set, and how is one that exists without its partner found and dealt with?",
+  "source": {
+   "title": "Scheduler Agent Supervisor pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/scheduler-agent-supervisor",
+   "evidence": "\"if only one write completes, an application record might have no state-store record\""
+  }
+ },
+ {
+  "id": "lifecycle-06",
+  "action": "lifecycle",
+  "failure": "A thing was removed, and the things that belonged to it were left behind with nothing to belong to.",
+  "question": "When a thing is removed, what happens to everything that belongs to it: removed too, kept on its own, or handed to another owner?",
+  "source": {
+   "title": "Garbage Collection (Kubernetes documentation)",
+   "url": "https://kubernetes.io/docs/concepts/architecture/garbage-collection/",
+   "evidence": "\"When Kubernetes deletes an owner object, the dependents left behind are called orphan objects.\""
+  }
+ },
+ {
+  "id": "lifecycle-07",
+  "action": "lifecycle",
+  "failure": "A thing could not be removed because other things still depended on it.",
+  "question": "When a person asks to remove something that other things still depend on, is the removal refused, do the dependants go with it, or are they detached, and what is the person told?",
+  "source": {
+   "title": "SQLite Foreign Key Support",
+   "url": "https://www.sqlite.org/foreignkeys.html",
+   "evidence": "\"prohibited from deleting ... a parent key when there exists one or more child keys mapped to it\""
+  }
+ },
+ {
+  "id": "lifecycle-08",
+  "action": "lifecycle",
+  "failure": "Things that were started and never finished or cancelled piled up unseen, taking up space and cost.",
+  "question": "How long is something that was started and then abandoned kept, and what removes it afterwards?",
+  "source": {
+   "title": "Configuring a bucket lifecycle configuration to delete incomplete multipart uploads (Amazon S3 User Guide)",
+   "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html",
+   "evidence": "A rule to \"stop multipart uploads that aren't completed within a specified number of days\", \"to minimize your storage costs\"."
+  }
+ },
+ {
+  "id": "lifecycle-09",
+  "action": "lifecycle",
+  "failure": "A removed thing came back because a copy that had missed the removal later shared it again as if it were current.",
+  "question": "How does every copy learn that a thing was removed, and how long is the removal remembered so that a late copy cannot bring the thing back?",
+  "source": {
+   "title": "Tombstones (Apache Cassandra documentation)",
+   "url": "https://cassandra.apache.org/doc/latest/cassandra/managing/operating/compaction/tombstones.html",
+   "evidence": "\"This would cause our data to be resurrected as a zombie even though it had been deleted.\""
+  }
+ },
+ {
+  "id": "lifecycle-10",
+  "action": "lifecycle",
+  "failure": "A person removed something by mistake and wanted it back.",
+  "question": "After a person removes something, for how long and by what means can they get it back?",
+  "source": {
+   "title": "Data Integrity: What You Read Is What You Wrote (Google SRE Book, chapter 26)",
+   "url": "https://sre.google/sre-book/data-integrity/",
+   "evidence": "\"A trash folder that allows users to undelete data is the primary defense against user error.\""
+  }
+ },
+ {
+  "id": "lifecycle-11",
+  "action": "lifecycle",
+  "failure": "Something a person removed was still being kept somewhere (a holding area, a spare copy, another system) long after it was supposed to be gone for good.",
+  "question": "By when is a removed thing truly gone from every place it was kept, and how does that deadline fit with the period in which it can be restored?",
+  "source": {
+   "title": "Data Integrity: What You Read Is What You Wrote (Google SRE Book, chapter 26)",
+   "url": "https://sre.google/sre-book/data-integrity/",
+   "evidence": "\"data must be destroyed within a reasonable time after users delete it\""
+  }
+ },
+ {
+  "id": "lifecycle-12",
+  "action": "lifecycle",
+  "failure": "Something held temporarily for a piece of work in progress ran out its time limit before the work was finished.",
+  "question": "What is held for a limited time while work is in progress, and what happens to the work when a hold runs out first?",
+  "source": {
+   "title": "Compensating Transaction pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction",
+   "evidence": "\"place a short-term lock with a timeout on each resource\"; \"Finalize all actions before the locks expire.\""
+  }
+ },
+ {
+  "id": "user-input-01",
+  "action": "user-input",
+  "failure": "A value a person gives is longer than the space the product allows for it, and is refused or cut short.",
+  "question": "How long may each typed value be, and what does the person see when theirs is longer?",
+  "source": {
+   "title": "Falsehoods Programmers Believe About Names (Patrick McKenzie)",
+   "url": "https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/",
+   "evidence": "Listed as a falsehood: \"People’s names fit within a certain defined amount of space.\""
+  }
+ },
+ {
+  "id": "user-input-02",
+  "action": "user-input",
+  "failure": "The product demands a value in a field for which some people truthfully have nothing to give.",
+  "question": "Which fields are truly required, and what can a person do who has no value for one of them?",
+  "source": {
+   "title": "Personal names around the world (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-personal-names",
+   "evidence": "\"If you require family names, you may create significant problems in these cultures.\""
+  }
+ },
+ {
+  "id": "user-input-03",
+  "action": "user-input",
+  "failure": "A genuine value is refused because it contains a letter, mark or punctuation the product's rule did not foresee.",
+  "question": "Which characters does each field accept, and on what grounds is any character refused?",
+  "source": {
+   "title": "Input Validation - OWASP Cheat Sheet Series",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+   "evidence": "\"Blocking apostrophes, for example, rejects legitimate names without making a database query safe.\""
+  }
+ },
+ {
+  "id": "user-input-04",
+  "action": "user-input",
+  "failure": "The product splits a value into fixed parts in a fixed order, and a person's real value does not divide that way.",
+  "question": "Is each value asked for whole or in parts, and what happens when a person's value has fewer, more or differently ordered parts?",
+  "source": {
+   "title": "Personal names around the world (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-personal-names",
+   "evidence": "\"don't assume that the order they will provide names in will be given followed by family.\""
+  }
+ },
+ {
+  "id": "user-input-05",
+  "action": "user-input",
+  "failure": "A value is checked only on the person's own device, and an unchecked value reaches the product by another route.",
+  "question": "Where is each rule about a typed value enforced, and what happens to a value that arrives without having passed the on-screen check?",
+  "source": {
+   "title": "Client-side form validation (MDN)",
+   "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation",
+   "evidence": "\"Never trust data passed to your server from the client.\""
+  }
+ },
+ {
+  "id": "user-input-06",
+  "action": "user-input",
+  "failure": "A value is refused and the message does not say which field is wrong or how to put it right.",
+  "question": "For each way a value can be refused, what does the message say and where does it appear?",
+  "source": {
+   "title": "Client-side form validation (MDN)",
+   "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation",
+   "evidence": "\"Point out exactly where the error occurs, especially on large forms.\""
+  }
+ },
+ {
+  "id": "user-input-07",
+  "action": "user-input",
+  "failure": "A person leaves a field empty, types only spaces, or puts spaces before or after the value.",
+  "question": "Is an empty or all-spaces value accepted, and are spaces around a value kept, removed or refused?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Strings to try: \"Leave Blank, Single Space, Multiple Spaces, Leading Spaces\"."
+  }
+ },
+ {
+  "id": "user-input-08",
+  "action": "user-input",
+  "failure": "A number a person types is zero, negative, far larger than expected, or exactly on the edge of what is allowed.",
+  "question": "What are the smallest and largest numbers each field accepts, and what happens at and just beyond each edge?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"Boundaries: Approaching the Boundary (almost too big, almost too small), At the Boundary\"; numbers to try include 0 and negative."
+  }
+ },
+ {
+  "id": "user-input-09",
+  "action": "user-input",
+  "failure": "A person gives a value that must be the only one of its kind, and the same value already exists.",
+  "question": "Which values must be unique, how is sameness judged, and what is the person told when theirs is taken?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"Violates Uniqueness Constraint\"; \"enter duplicate IDs or names\"."
+  }
+ },
+ {
+  "id": "user-input-10",
+  "action": "user-input",
+  "failure": "Text a person typed contains characters that the product later treats as instructions or layout instead of as plain text.",
+  "question": "Wherever typed text is later shown, stored or passed on, how is it kept from being acted on as anything but text?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"allowing the user to enter arbitrary HTML tags and JavaScript commands can lead to security vulnerabilities\""
+  }
+ },
+ {
+  "id": "user-input-11",
+  "action": "user-input",
+  "failure": "Each value a person gives is acceptable alone, but together they contradict each other.",
+  "question": "Which fields depend on one another, and what happens when their values do not agree?",
+  "source": {
+   "title": "Input Validation - OWASP Cheat Sheet Series",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+   "evidence": "\"a booking needs valid dates and an end date after its start date.\""
+  }
+ },
+ {
+  "id": "user-input-12",
+  "action": "user-input",
+  "failure": "A person types a number or date in the way their own region writes it, and the product reads it as a different value.",
+  "question": "In which written forms may a number or a date be typed, and how is an ambiguous one settled?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Numbers to try: \"With Commas (1,234,567)\", \"European Style (1.234.567,89)\"; dates \"dd.mm.yyyy, mm/dd/yyyy\"."
+  }
+ },
+ {
+  "id": "user-action-01",
+  "action": "user-action",
+  "failure": "A person starts an operation, sees no sign that it was received, and starts it again.",
+  "question": "What does the person see at once after starting an operation, and what happens if they start it a second time before the first has finished?",
+  "source": {
+   "title": "Progress Indicators Make a Slow System Less Insufferable (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/progress-indicators/",
+   "evidence": "\"most users will assume the action was not registered and they will try again.\""
+  }
+ },
+ {
+  "id": "user-action-02",
+  "action": "user-action",
+  "failure": "A person reloads the screen that followed an operation, and the operation is sent a second time.",
+  "question": "What does reloading do on each screen that follows an operation that changed something?",
+  "source": {
+   "title": "Post/Redirect/Get (Wikipedia)",
+   "url": "https://en.wikipedia.org/wiki/Post/Redirect/Get",
+   "evidence": "\"attempts to refresh the server response can cause the contents of the original POST to be resubmitted\""
+  }
+ },
+ {
+  "id": "user-action-03",
+  "action": "user-action",
+  "failure": "A person steps back to an earlier screen after an operation, and it shows what was true before or lets them repeat a step already done.",
+  "question": "What does each screen show, and what can be done from it, when it is reached by stepping back after the operation it led to?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"Back (watch for ‘Expired’ messages and double-posted transactions)\""
+  }
+ },
+ {
+  "id": "user-action-04",
+  "action": "user-action",
+  "failure": "After a person signs out, stepping back still shows what they saw while signed in.",
+  "question": "What remains visible on the device after a person signs out, including on screens reached by stepping back?",
+  "source": {
+   "title": "Back/forward cache (web.dev)",
+   "url": "https://web.dev/articles/bfcache",
+   "evidence": "\"This could potentially expose private data that the user assumed was cleared when they logged out.\""
+  }
+ },
+ {
+  "id": "user-action-05",
+  "action": "user-action",
+  "failure": "A person leaves or closes the screen while changes they made on it are not yet saved.",
+  "question": "When are a person's changes saved, and what becomes of unsaved ones when they leave without warning the product?",
+  "source": {
+   "title": "Window: beforeunload event (MDN)",
+   "url": "https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event",
+   "evidence": "The leave warning \"is not reliably fired, especially on mobile platforms.\""
+  }
+ },
+ {
+  "id": "user-action-06",
+  "action": "user-action",
+  "failure": "The device sets aside or throws away a screen the person left in the background, and its unfinished state is gone when they return.",
+  "question": "What does a person find when they come back to a screen their device has suspended or discarded in the meantime?",
+  "source": {
+   "title": "Page Lifecycle API (Chrome for Developers)",
+   "url": "https://developer.chrome.com/docs/web-platform/page-lifecycle-api",
+   "evidence": "\"Modern browsers today will sometimes suspend pages or discard them entirely when system resources are constrained.\""
+  }
+ },
+ {
+  "id": "user-action-07",
+  "action": "user-action",
+  "failure": "A person has the product open in two windows, and one window shows or acts on something the other has already changed.",
+  "question": "When the same person has several windows open, how does each learn of a change made in another, and which one wins if both act?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Web tests: \"Multiple Browser Instances Open\"; multi-user: \"same account logged in twice\"."
+  }
+ },
+ {
+  "id": "user-action-08",
+  "action": "user-action",
+  "failure": "A person carries out an action by mistake and has no way to take it back.",
+  "question": "Which actions can be undone, for how long, and what can a person do about one that cannot?",
+  "source": {
+   "title": "User Control and Freedom (Usability Heuristic #3) (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/user-control-and-freedom/",
+   "evidence": "\"Users often choose system functions by mistake\" and need a \"clearly marked 'emergency exit'\"."
+  }
+ },
+ {
+  "id": "user-action-09",
+  "action": "user-action",
+  "failure": "The product asks for confirmation so often that people agree without reading, including for the one action that destroys something.",
+  "question": "Which actions ask for confirmation, and why will a person still read the question on the one that matters?",
+  "source": {
+   "title": "Confirmation Dialogs Can Prevent User Errors (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/confirmation-dialog/",
+   "evidence": "\"people will stop paying attention to the question\"; \"Such automated behavior provides no protection at all\"."
+  }
+ },
+ {
+  "id": "user-action-10",
+  "action": "user-action",
+  "failure": "A person abandons an operation of several steps partway through, and the steps already taken stay in effect.",
+  "question": "At each step of a longer operation, how does a person back out, and what is left behind if they do or simply leave?",
+  "source": {
+   "title": "User Control and Freedom (Usability Heuristic #3) (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/user-control-and-freedom/",
+   "evidence": "\"She should be able to cancel that task at any point.\""
+  }
+ },
+ {
+  "id": "user-action-11",
+  "action": "user-action",
+  "failure": "A person's signed-in period ends while they are in the middle of a task, and what they had entered is lost.",
+  "question": "What happens to work in progress when a person's signed-in period ends, and can they carry on after signing in again?",
+  "source": {
+   "title": "Understanding Success Criterion 2.2.5: Re-authenticating (W3C WCAG 2.2)",
+   "url": "https://www.w3.org/WAI/WCAG22/Understanding/re-authenticating.html",
+   "evidence": "\"When an authenticated session expires, the user can continue the activity without loss of data after re-authenticating.\""
+  }
+ },
+ {
+  "id": "user-action-12",
+  "action": "user-action",
+  "failure": "A person returns straight to a screen deep inside the product by a saved address, while signed out or after the thing it showed has changed or gone.",
+  "question": "What does a saved address to each screen lead to when the person is signed out, or when what it pointed at no longer exists?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Navigation tests: \"Bookmark the URL\"; \"Select Bookmark when Logged Out\"."
+  }
+ },
+ {
+  "id": "long-operation-01",
+  "action": "long-operation",
+  "failure": "An operation runs past the point where a person's attention holds, with nothing saying how far along it is or when it will end.",
+  "question": "For each operation that can take more than a few seconds, what is the person shown while it runs?",
+  "source": {
+   "title": "Response Time Limits (Jakob Nielsen, Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/response-times-3-important-limits/",
+   "evidence": "\"10 seconds is about the limit for keeping the user's attention focused on the dialogue.\""
+  }
+ },
+ {
+  "id": "long-operation-02",
+  "action": "long-operation",
+  "failure": "The sign that an operation is running keeps moving the same way whether the work is advancing or has stopped.",
+  "question": "How can a person tell an operation that is still working from one that has stopped?",
+  "source": {
+   "title": "Progress Indicators Make a Slow System Less Insufferable (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/progress-indicators/",
+   "evidence": "With a looped animation \"users cannot be sure if the system is still working or if it's stopped\"."
+  }
+ },
+ {
+  "id": "long-operation-03",
+  "action": "long-operation",
+  "failure": "A person decides not to wait and has no way to stop the operation.",
+  "question": "Which operations can be stopped once started, and how?",
+  "source": {
+   "title": "Progress Indicators Make a Slow System Less Insufferable (Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/progress-indicators/",
+   "evidence": "\"give users the option to stop the process, in case they decide they cannot wait.\""
+  }
+ },
+ {
+  "id": "long-operation-04",
+  "action": "long-operation",
+  "failure": "An operation is stopped partway, and the part already done stays in place with nothing marking it unfinished.",
+  "question": "When an operation is stopped partway, is the finished part undone, kept or completed later, and how is it shown?",
+  "source": {
+   "title": "Asynchronous Request-Reply pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply",
+   "evidence": "On cancelling: \"Determine whether the operation supports partial rollback or requires a compensating transaction.\""
+  }
+ },
+ {
+  "id": "long-operation-05",
+  "action": "long-operation",
+  "failure": "A person turns to something else or leaves while the operation runs, and it ends when they are not looking.",
+  "question": "How does a person who went elsewhere learn that an operation ended, and where do they find its result?",
+  "source": {
+   "title": "Response Time Limits (Jakob Nielsen, Nielsen Norman Group)",
+   "url": "https://www.nngroup.com/articles/response-times-3-important-limits/",
+   "evidence": "\"users will want to perform other tasks while waiting for the computer to finish.\""
+  }
+ },
+ {
+  "id": "long-operation-06",
+  "action": "long-operation",
+  "failure": "The product or the device is shut down, restarted, put to sleep or cut off while an operation is under way.",
+  "question": "After an interruption in the middle of an operation, does it resume, restart or stay abandoned, and what state is left meanwhile?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"Interruptions: Log Off, Shut Down, Reboot, Kill Process, Disconnect, Hibernate, Timeout, Cancel\""
+  }
+ },
+ {
+  "id": "long-operation-07",
+  "action": "long-operation",
+  "failure": "An operation is accepted, then fails later, after the person has been told it began.",
+  "question": "Where is a late failure recorded, and how does the person who started the operation come to know of it?",
+  "source": {
+   "title": "AIP-151: Long-running operations (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/151",
+   "evidence": "\"Operations that fail during their execution phase must return an error response\""
+  }
+ },
+ {
+  "id": "long-operation-08",
+  "action": "long-operation",
+  "failure": "An operation over many items succeeds for some and fails for others.",
+  "question": "When only some items of an operation succeed, what is kept, what is reported, and how are the failed ones tried again?",
+  "source": {
+   "title": "AIP-151: Long-running operations (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/151",
+   "evidence": "\"Non-terminal errors that occur over the course of an operation may be placed in the metadata message\""
+  }
+ },
+ {
+  "id": "long-operation-09",
+  "action": "long-operation",
+  "failure": "An operation never reaches an end, neither succeeding nor failing, and goes on being shown as running.",
+  "question": "After how long without progress is an operation treated as stuck, and what happens to it then?",
+  "source": {
+   "title": "Asynchronous Request-Reply pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply",
+   "evidence": "A last-updated time \"Helps clients distinguish between stalled and in-progress operations\"; a start time helps \"detect stale or abandoned operations\"."
+  }
+ },
+ {
+  "id": "long-operation-10",
+  "action": "long-operation",
+  "failure": "The result of a finished operation is kept only for a while, and the person comes for it after it has been cleared away.",
+  "question": "How long is the result of a finished operation kept, and what does a person find after that?",
+  "source": {
+   "title": "AIP-151: Long-running operations (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/151",
+   "evidence": "\"APIs may allow their operation resources to expire after sufficient time has elapsed after the operation completed.\""
+  }
+ },
+ {
+  "id": "long-operation-11",
+  "action": "long-operation",
+  "failure": "A second operation is started on the same thing while the first is still running.",
+  "question": "When an operation is requested on something that already has one running, is the new one refused, queued, or does it replace the old?",
+  "source": {
+   "title": "AIP-151: Long-running operations (Google API Improvement Proposals)",
+   "url": "https://google.aip.dev/151",
+   "evidence": "\"Resources that accept multiple parallel operations may place them in a queue\"; others refuse a parallel operation."
+  }
+ },
+ {
+  "id": "long-operation-12",
+  "action": "long-operation",
+  "failure": "A request that could never succeed is accepted, and the person learns it was wrong only after the long wait.",
+  "question": "What is checked before a long operation is accepted, so that a request sure to fail is refused at once?",
+  "source": {
+   "title": "Asynchronous Request-Reply pattern (Azure Architecture Center)",
+   "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply",
+   "evidence": "\"The API should validate the request and the action to be performed before it starts the long-running process.\""
+  }
+ },
+ {
+  "id": "time-01",
+  "action": "time",
+  "failure": "The clock of the device the product runs on is set to the wrong time.",
+  "question": "Which behaviours depend on the device's own clock, and what happens to each when that clock is wrong?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"The system clock will always be set to the correct local time.\""
+  }
+ },
+ {
+  "id": "time-02",
+  "action": "time",
+  "failure": "Two machines that take part in one operation disagree about what time it is.",
+  "question": "When two machines' clocks differ, whose time decides, and how large a difference is tolerated?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"The server clock and the client clock will always be set to the same time.\""
+  }
+ },
+ {
+  "id": "time-03",
+  "action": "time",
+  "failure": "The clock is moved backward or jumps forward while the product is in use, so a later event carries an earlier time or a wait ends at once.",
+  "question": "What do waits, expiries and the order of events do when the clock is set back or leaps ahead?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Time and date tests: \"Reset Clock Backward or Forward\"."
+  }
+ },
+ {
+  "id": "time-04",
+  "action": "time",
+  "failure": "A span counted in days is worked out as a fixed number of hours, on a day that is longer or shorter than usual.",
+  "question": "Is each span the product measures meant in elapsed hours or in calendar days, and what happens on a day the clocks change?",
+  "source": {
+   "title": "Falsehoods programmers believe about time and time zones (Creative Deletion)",
+   "url": "https://www.creativedeletion.com/2015/01/28/falsehoods-programmers-date-time-zones.html",
+   "evidence": "Listed as a falsehood: \"Every day has 24 hours\"."
+  }
+ },
+ {
+  "id": "time-05",
+  "action": "time",
+  "failure": "A local date and time a person gives either never occurs or occurs twice, because the clocks change at that moment.",
+  "question": "What does the product do with a local time that is skipped or repeated when the clocks change?",
+  "source": {
+   "title": "Falsehoods programmers believe about time and time zones (Creative Deletion)",
+   "url": "https://www.creativedeletion.com/2015/01/28/falsehoods-programmers-date-time-zones.html",
+   "evidence": "Listed as a falsehood: \"The date-time combination 2014 March 30th 2:20:42 is always valid\"."
+  }
+ },
+ {
+  "id": "time-06",
+  "action": "time",
+  "failure": "The official rules for a place's local time change after the product has stored a future moment worked out under the old rules.",
+  "question": "For a moment set in the future, what is stored, and how is it corrected when a place's clock rules change?",
+  "source": {
+   "title": "Storing UTC is not a silver bullet (Jon Skeet's coding blog)",
+   "url": "https://codeblog.jonskeet.uk/2019/03/27/storing-utc-is-not-a-silver-bullet/",
+   "evidence": "\"time zone rules change, and that applications should expect that they will change.\""
+  }
+ },
+ {
+  "id": "time-07",
+  "action": "time",
+  "failure": "A value that is only a calendar date, or only a time of day, is treated as an exact moment and shows as a different day or hour elsewhere.",
+  "question": "Which values are plain dates or plain times with no zone, and how are they kept from shifting when stored, moved or shown?",
+  "source": {
+   "title": "Working with Time and Time Zones (W3C)",
+   "url": "https://www.w3.org/TR/timezone/",
+   "evidence": "\"Errors are often the result when a floating time value is deserialized\""
+  }
+ },
+ {
+  "id": "time-08",
+  "action": "time",
+  "failure": "The person is in, or travels to, a different time zone from the one the product or their device assumes for them.",
+  "question": "Whose time zone governs each date and time the product handles, and what changes when a person's zone does?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"Devices will be set to the local timezone\"."
+  }
+ },
+ {
+  "id": "time-09",
+  "action": "time",
+  "failure": "A date reached by adding months or years to another falls on a day that does not exist in that month or year.",
+  "question": "What date results when counting forward from the last days of a month or from a leap day?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "Time and date tests: \"Leap Days; Always Invalid Days (Feb 30, Sept 31); Feb 29 in Non-Leap Years\"."
+  }
+ },
+ {
+  "id": "time-10",
+  "action": "time",
+  "failure": "Something set to repeat at the same local time is worked out as a fixed interval, and drifts by an hour when the clocks change.",
+  "question": "How is each occurrence of a repeating schedule worked out, so that it stays at the intended local time all year?",
+  "source": {
+   "title": "Working with Time and Time Zones (W3C)",
+   "url": "https://www.w3.org/TR/timezone/",
+   "evidence": "For recurring events: \"It is important to use the time zone to perform these computations\"."
+  }
+ },
+ {
+  "id": "time-11",
+  "action": "time",
+  "failure": "Two separate events carry exactly the same recorded time, and the product relies on times to tell them apart or put them in order.",
+  "question": "What tells two events apart and orders them when their recorded times are equal?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"A time stamp of sufficient precision can safely be considered unique.\""
+  }
+ },
+ {
+  "id": "time-12",
+  "action": "time",
+  "failure": "The time recorded for an event is when the product learned of it, which is later than when it happened.",
+  "question": "For each recorded time, is it when the thing happened or when it was recorded, and which of the two do later decisions use?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"A timestamp represents the time that an event actually occurred.\""
+  }
+ },
+ {
+  "id": "text-01",
+  "action": "text",
+  "failure": "Two pieces of text that look identical are stored as different underlying sequences, and the product treats them as different.",
+  "question": "When are two pieces of text counted as the same, and is that settled before they are stored or each time they are compared?",
+  "source": {
+   "title": "Character Model for the World Wide Web: String Matching (W3C)",
+   "url": "https://www.w3.org/TR/charmod-norm/",
+   "evidence": "\"these variations in encoding cause text values not to match\""
+  }
+ },
+ {
+  "id": "text-02",
+  "action": "text",
+  "failure": "Matching that ignores capital and small letters follows one language's rules and gives wrong answers for text in another.",
+  "question": "Where does the product ignore the difference between capital and small letters, and by which language's rules?",
+  "source": {
+   "title": "Character Model for the World Wide Web: String Matching (W3C)",
+   "url": "https://www.w3.org/TR/charmod-norm/",
+   "evidence": "\"Failure to apply this localized case mapping would change the meaning of the text in Turkish\""
+  }
+ },
+ {
+  "id": "text-03",
+  "action": "text",
+  "failure": "Text contains characters that cannot be seen, or a different kind of space, and a comparison that should succeed fails.",
+  "question": "What does the product do with unseen characters and unusual spaces in text it stores and compares?",
+  "source": {
+   "title": "Character Model for the World Wide Web: String Matching (W3C)",
+   "url": "https://www.w3.org/TR/charmod-norm/",
+   "evidence": "Invisible controls \"can cause matches that ought to succeed to mysteriously fail\"."
+  }
+ },
+ {
+  "id": "text-04",
+  "action": "text",
+  "failure": "A person searches for a word with or without its accent marks, or in another way of writing the same word, and the product does not find it.",
+  "question": "Which differences does search ignore (accent marks, letter size, alternative ways of writing the same word) and which must match exactly?",
+  "source": {
+   "title": "String Searching (W3C)",
+   "url": "https://www.w3.org/TR/string-search/",
+   "evidence": "\"Users will sometimes vary their input when dealing with letters that contain accents or diacritic marks\""
+  }
+ },
+ {
+  "id": "text-05",
+  "action": "text",
+  "failure": "Text is cut, counted or edited at a point that falls inside what a reader sees as one character.",
+  "question": "How does the product measure the length of text, and where may it cut text that is too long?",
+  "source": {
+   "title": "UAX #29: Unicode Text Segmentation",
+   "url": "https://www.unicode.org/reports/tr29/",
+   "evidence": "A user-perceived character: \"There are many cases where such a basic unit is made up of multiple Unicode code points.\""
+  }
+ },
+ {
+  "id": "text-06",
+  "action": "text",
+  "failure": "A list of text is put in order by the internal numbers of its characters instead of the order a reader expects.",
+  "question": "By what rule is each list of text ordered, and has a reader of that language checked it?",
+  "source": {
+   "title": "UTS #10: Unicode Collation Algorithm",
+   "url": "https://www.unicode.org/reports/tr10/",
+   "evidence": "\"Collation is not code point (binary) order.\""
+  }
+ },
+ {
+  "id": "text-07",
+  "action": "text",
+  "failure": "Readers of different languages expect the same list in different orders, and the product has one order for everyone.",
+  "question": "Whose language decides the order of a list: the reader's, the content's, or one fixed for all?",
+  "source": {
+   "title": "UTS #10: Unicode Collation Algorithm",
+   "url": "https://www.unicode.org/reports/tr10/",
+   "evidence": "\"Germans, French and Swedes sort the same characters differently.\""
+  }
+ },
+ {
+  "id": "text-08",
+  "action": "text",
+  "failure": "The rules for ordering text change with an update, and order worked out earlier and stored no longer agrees with order worked out now.",
+  "question": "What stored results depend on the ordering rules for text, and what is done with them when those rules are updated?",
+  "source": {
+   "title": "UTS #10: Unicode Collation Algorithm",
+   "url": "https://www.unicode.org/reports/tr10/",
+   "evidence": "\"Collation order is not fixed.\" \"This means that collations must be carefully versioned.\""
+  }
+ },
+ {
+  "id": "text-09",
+  "action": "text",
+  "failure": "Text written right to left is placed inside text written left to right, or the reverse, and nearby numbers and punctuation appear in the wrong place.",
+  "question": "Wherever a stored or typed value is put into a sentence or a row, what keeps text of the opposite direction from disturbing what surrounds it?",
+  "source": {
+   "title": "Inline markup and bidirectional text in HTML (W3C Internationalization)",
+   "url": "https://www.w3.org/International/articles/inline-bidi-markup/",
+   "evidence": "\"The problem is worse in applications that drop text into a page, say from a database.\""
+  }
+ },
+ {
+  "id": "text-10",
+  "action": "text",
+  "failure": "Two different pieces of text look the same to a reader, and one is taken for the other.",
+  "question": "Where must people tell names or labels apart by eye, and what stops one being made to look like another?",
+  "source": {
+   "title": "UTS #39: Unicode Security Mechanisms",
+   "url": "https://www.unicode.org/reports/tr39/",
+   "evidence": "\"This illustrates a general security concern for identifiers: potential ambiguity of strings.\""
+  }
+ },
+ {
+  "id": "text-11",
+  "action": "text",
+  "failure": "The product finds words by looking for spaces, and the text is in a writing system that puts no spaces between words.",
+  "question": "Which features depend on knowing where words begin and end, and what do they do with text that has no spaces?",
+  "source": {
+   "title": "UAX #29: Unicode Text Segmentation",
+   "url": "https://www.unicode.org/reports/tr29/",
+   "evidence": "\"some languages do not use spaces at all\"; finding words there \"requires the use of dictionary lookup or other mechanisms.\""
+  }
+ },
+ {
+  "id": "text-12",
+  "action": "text",
+  "failure": "Wording in another language takes more room than the original, and is cut off, overlaps or breaks the layout.",
+  "question": "How much room does each label and message have, and what happens when the wording in another language is longer or taller?",
+  "source": {
+   "title": "Text size in translation (W3C Internationalization)",
+   "url": "https://www.w3.org/International/articles/article-text-size",
+   "evidence": "\"The general message is that text will normally expand\"; \"avoid small fixed-width containers or tight squeezes where possible\"."
+  }
+ },
+ {
+  "id": "presentation-01",
+  "action": "presentation",
+  "failure": "A date written only in numbers is read by people in different regions as different days.",
+  "question": "In what form is each date shown, and could a reader anywhere take it for another day?",
+  "source": {
+   "title": "Date formats (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-date-format",
+   "evidence": "\"Visitors to a web site from varying locales may be confused by date formats.\""
+  }
+ },
+ {
+  "id": "presentation-02",
+  "action": "presentation",
+  "failure": "A number is shown with marks for the decimal point and for thousands that the reader's region uses the other way round.",
+  "question": "Whose conventions decide how numbers are written on screen, and are they applied everywhere a number appears?",
+  "source": {
+   "title": "Number, currency, and unit formatting (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-number-format",
+   "evidence": "Some regions \"use a period as the decimal separator\"; \"much of Europe and South America use a comma\"."
+  }
+ },
+ {
+  "id": "presentation-03",
+  "action": "presentation",
+  "failure": "An amount is shown with a symbol that stands for more than one unit, so the reader cannot tell which is meant.",
+  "question": "How does each amount shown make its unit unmistakable to every reader?",
+  "source": {
+   "title": "Number, currency, and unit formatting (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-number-format",
+   "evidence": "\"The same symbol might represent multiple currencies\""
+  }
+ },
+ {
+  "id": "presentation-04",
+  "action": "presentation",
+  "failure": "Wording built around a count has only a one-and-many pair of forms, and is wrong for languages with other forms or for a count of zero or one.",
+  "question": "How is wording that includes a count chosen for zero, one and each other form the reader's language has?",
+  "source": {
+   "title": "Unicode Technical Standard #35: Unicode Common Locale Data & Rules (CLDR) Part 3: Numbers",
+   "url": "https://www.unicode.org/reports/tr35/tr35-numbers.html",
+   "evidence": "\"Other languages may have additional forms or only one form for each type of plural.\""
+  }
+ },
+ {
+  "id": "presentation-05",
+  "action": "presentation",
+  "failure": "Amounts in different units need different numbers of decimal places and different rounding, and the product shows them all one way.",
+  "question": "How many decimal places, and what rounding, does each kind of amount get, and what decides it?",
+  "source": {
+   "title": "Unicode Technical Standard #35: Unicode Common Locale Data & Rules (CLDR) Part 3: Numbers",
+   "url": "https://www.unicode.org/reports/tr35/tr35-numbers.html",
+   "evidence": "\"The number of decimal places and the rounding for each currency is not locale-specific data\""
+  }
+ },
+ {
+  "id": "presentation-06",
+  "action": "presentation",
+  "failure": "Numbers are shown in one set of digit shapes to readers whose language normally uses another.",
+  "question": "Which digit shapes does the product show, and is that the reader's choice?",
+  "source": {
+   "title": "Number, currency, and unit formatting (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-number-format",
+   "evidence": "\"many cultures prefer their native numeral systems.\""
+  }
+ },
+ {
+  "id": "presentation-07",
+  "action": "presentation",
+  "failure": "A time is shown without saying which zone it is in, or with a short zone label that stands for several different zones.",
+  "question": "For each time shown, how does the reader know which zone it is in?",
+  "source": {
+   "title": "Falsehoods programmers believe about time and time zones (Creative Deletion)",
+   "url": "https://www.creativedeletion.com/2015/01/28/falsehoods-programmers-date-time-zones.html",
+   "evidence": "Listed as a falsehood: \"CST is a unique identifier for a time zone\"."
+  }
+ },
+ {
+  "id": "presentation-08",
+  "action": "presentation",
+  "failure": "A calendar or weekly view starts the week, or marks the days of rest, on days other than those the reader's region uses.",
+  "question": "Which day starts the week and which days count as rest days in what the product shows, and who decides?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as falsehoods: \"Weeks start on Monday.\" \"The weekend consists of Saturday and Sunday.\""
+  }
+ },
+ {
+  "id": "presentation-09",
+  "action": "presentation",
+  "failure": "Dates are shown only in one calendar to readers who keep their dates in another.",
+  "question": "Which calendar or calendars does the product show dates in, and what does a reader who uses another one see?",
+  "source": {
+   "title": "Falsehoods programmers believe about time, in a single list (gist collecting the two Infinite Undo articles)",
+   "url": "https://gist.github.com/timvisee/fcda9bbdff88d45cc9061606b4b923ca",
+   "evidence": "Listed as a falsehood: \"There is only one calendar system in use at one time.\""
+  }
+ },
+ {
+  "id": "presentation-10",
+  "action": "presentation",
+  "failure": "A list of people's names is ordered by a part of the name that readers in some places do not order by.",
+  "question": "By which part of a name is a list of people ordered, and does that suit the readers the product is for?",
+  "source": {
+   "title": "Personal names around the world (W3C Internationalization)",
+   "url": "https://www.w3.org/International/questions/qa-personal-names",
+   "evidence": "\"Lists of names are not always sorted by family name around the world.\""
+  }
+ },
+ {
+  "id": "presentation-11",
+  "action": "presentation",
+  "failure": "A column of numbers is ordered as if its values were words, so ten comes before two.",
+  "question": "For each column a list can be ordered by, is the order by number, by date or by spelling?",
+  "source": {
+   "title": "UTS #10: Unicode Collation Algorithm",
+   "url": "https://www.unicode.org/reports/tr10/",
+   "evidence": "\"numbers composed of a string of digits or other numerics will not necessarily sort in numerical order.\""
+  }
+ },
+ {
+  "id": "presentation-12",
+  "action": "presentation",
+  "failure": "A long list split over several pages is ordered within each page shown, not across the whole list.",
+  "question": "When a list too long for one screen is put in order, does the order hold across all of it?",
+  "source": {
+   "title": "Test Heuristics Cheat Sheet (Ministry of Testing edition of Elisabeth Hendrickson's sheet, PDF)",
+   "url": "https://s3.eu-west-1.amazonaws.com/matrix.assets/fa2aa6x6kkxle2lv5xm720wltja3",
+   "evidence": "\"Sorting: Alpha v. Numeric → Across Multiple Pages\""
+  }
+ },
+ {
+  "id": "corpus-01",
+  "action": "corpus",
+  "failure": "Nothing in the content says which revision it is, so nobody can tell which one a given copy of the product holds.",
+  "question": "How does the product, and a person using it, know exactly which revision of the content is in use?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"Version information makes a revision of a dataset uniquely identifiable.\""
+  }
+ },
+ {
+  "id": "corpus-02",
+  "action": "corpus",
+  "failure": "A new revision of the content replaces the old, and nobody knows which items were added, changed or removed.",
+  "question": "When the content is updated, how are the differences from the previous revision found, and what is done for things that relied on a changed item?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"Determining how the various versions of a dataset differ from each other is typically very laborious\""
+  }
+ },
+ {
+  "id": "corpus-03",
+  "action": "corpus",
+  "failure": "The labels by which items are referred to change or vanish in a new revision, and references saved earlier point at nothing.",
+  "question": "By what does the product refer to an item of the content, and does that reference still work after the content is updated?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"Developers may build URIs into their code and so it is important that those URIs persist\""
+  }
+ },
+ {
+  "id": "corpus-04",
+  "action": "corpus",
+  "failure": "The same reference points at different items in different editions of the content, and a reference saved against one edition is read against another.",
+  "question": "When more than one edition exists, how does a saved reference say which edition it belongs to?",
+  "source": {
+   "title": "FAIR Principles (GO FAIR Foundation)",
+   "url": "https://www.gofair.foundation/fair-principles/",
+   "evidence": "Principle F1: \"(meta)data are assigned a globally unique and persistent identifier\"."
+  }
+ },
+ {
+  "id": "corpus-05",
+  "action": "corpus",
+  "failure": "The content comes with no stated terms of use, so nobody knows whether the product may include, change or pass it on.",
+  "question": "Under what terms may the product use each body of content it ships, and where is that recorded?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"The presence of license information is essential for data consumers to assess the usability of data.\""
+  }
+ },
+ {
+  "id": "corpus-06",
+  "action": "corpus",
+  "failure": "The terms the content comes under require credit to be shown or forbid some use, and the product does not comply.",
+  "question": "What do the content's terms oblige the product to show or forbid it to do, and where does the product meet each obligation?",
+  "source": {
+   "title": "Considerations for licensors and licensees (Creative Commons wiki)",
+   "url": "https://wiki.creativecommons.org/Considerations_for_licensors_and_licensees",
+   "evidence": "\"All CC licenses require you provide attribution\"; they \"terminate automatically when you fail to comply\"."
+  }
+ },
+ {
+  "id": "corpus-07",
+  "action": "corpus",
+  "failure": "Nobody can say where the content came from or who altered it on the way, so its accuracy cannot be judged.",
+  "question": "For each body of content, what is its origin and what was done to it before it reached the product?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"Provenance is one means by which consumers of a dataset judge its quality.\""
+  }
+ },
+ {
+  "id": "corpus-08",
+  "action": "corpus",
+  "failure": "A copy of the content is altered or damaged without anyone noticing, in transfer or in storage.",
+  "question": "How does the product know its copy of the content is exactly what was published, and where does a good copy come from if it is not?",
+  "source": {
+   "title": "Fixity and checksums - Digital Preservation Handbook (Digital Preservation Coalition)",
+   "url": "https://www.dpconline.org/handbook/technical-solutions-and-tools/fixity-and-checksums",
+   "evidence": "Fixity is \"the assurance that a digital file has remained unchanged\"; checks catch \"silent errors\"."
+  }
+ },
+ {
+  "id": "corpus-09",
+  "action": "corpus",
+  "failure": "The content has known mistakes or weak parts that are recorded nowhere, and the product presents all of it as equally sound.",
+  "question": "What is known about the quality of the content, and what happens when a mistake in it is found after release?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"Documenting data quality significantly eases the process of dataset selection, increasing the chances of reuse.\""
+  }
+ },
+ {
+  "id": "corpus-10",
+  "action": "corpus",
+  "failure": "Part of the content is missing or withheld, and a person looking for it finds nothing and no reason why.",
+  "question": "What does a person see when they look for an item the content does not contain?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "Best Practice 22: \"Provide an explanation for data that is not available\"."
+  }
+ },
+ {
+  "id": "corpus-11",
+  "action": "corpus",
+  "failure": "The source has moved on, and the copy the product holds is older than what the source now says.",
+  "question": "How current must the content be, how is it brought up to date, and how does a person see how old their copy is?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"The availability of data on the Web should closely match the data creation or collection time.\""
+  }
+ },
+ {
+  "id": "corpus-12",
+  "action": "corpus",
+  "failure": "Turning the content from the form it was published in into the product's own form drops or changes part of its meaning.",
+  "question": "What is checked after the content is converted, to show that nothing was lost or altered?",
+  "source": {
+   "title": "Data on the Web Best Practices (W3C Recommendation)",
+   "url": "https://www.w3.org/TR/dwbp/",
+   "evidence": "\"the data may lose meaning as it is transformed.\""
+  }
+ },
+ {
+  "id": "secrets-01",
+  "action": "secrets",
+  "failure": "A credential or key is written into the product itself, so everyone who can read the product's code or its shipped copy can read the secret.",
+  "question": "Where does each credential the product uses live, and who can read that place?",
+  "source": {
+   "title": "CWE-798: Use of Hard-coded Credentials",
+   "url": "https://cwe.mitre.org/data/definitions/798.html",
+   "evidence": "The product contains hard-coded credentials, such as a password or cryptographic key."
+  }
+ },
+ {
+  "id": "secrets-02",
+  "action": "secrets",
+  "failure": "Every installed copy of the product carries the same built-in credential, so learning it from one copy opens all of them.",
+  "question": "Which credentials are unique to each installation or person, and how does each one come to be set?",
+  "source": {
+   "title": "CWE-798: Use of Hard-coded Credentials",
+   "url": "https://cwe.mitre.org/data/definitions/798.html",
+   "evidence": "This hard-coded password is the same for each installation of the product"
+  }
+ },
+ {
+  "id": "secrets-03",
+  "action": "secrets",
+  "failure": "A credential appears in readable form in what the product records about its own activity or prints while running.",
+  "question": "How is each credential kept out of everything the product records or prints, and what is done when one is found there?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Never be logged (must implement either an encryption or masking approach in place to avoid logging plaintext secrets)"
+  }
+ },
+ {
+  "id": "secrets-04",
+  "action": "secrets",
+  "failure": "A credential is never replaced, so a copy stolen at any time keeps working indefinitely.",
+  "question": "How often is each credential replaced, and does the product keep working while the replacement happens?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "You should regularly rotate secrets so that any stolen credentials will only work for a short time."
+  }
+ },
+ {
+  "id": "secrets-05",
+  "action": "secrets",
+  "failure": "A credential is known to have been exposed, and there is no prepared way to cancel it and issue a new one quickly.",
+  "question": "When a credential is exposed, who cancels it, how fast, and what stops working until the new one is in place?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Keys that were exposed should undergo immediate revocation."
+  }
+ },
+ {
+  "id": "secrets-06",
+  "action": "secrets",
+  "failure": "A credential has expired or been withdrawn, and the product goes on presenting it and fails without saying that this is the reason.",
+  "question": "What does the product do and tell the person when a credential it holds is no longer accepted?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Applications should verify that the secret is still active before trusting it."
+  }
+ },
+ {
+  "id": "secrets-07",
+  "action": "secrets",
+  "failure": "A credential the product holds permits far more than the product needs, so its loss exposes things the product never used.",
+  "question": "What is the least each credential must be allowed to do, and is it limited to that?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Secrets must have the minimum privileges assigned to them to enable their required use/role."
+  }
+ },
+ {
+  "id": "secrets-08",
+  "action": "secrets",
+  "failure": "Several parts of the product, or several people, use one shared credential, so a leak cannot be traced to its source and replacing it disrupts all of them.",
+  "question": "Which credentials are shared, by whom, and how would the source of a leak be found?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Often, services share the same secrets, which makes identifying the source of compromise or leak challenging."
+  }
+ },
+ {
+  "id": "secrets-09",
+  "action": "secrets",
+  "failure": "A credential is stored or sent in a form that anyone who reaches the storage or observes the exchange can read.",
+  "question": "In what form is each credential stored and sent, and who could read it on the way or at rest?",
+  "source": {
+   "title": "CWE-522: Insufficiently Protected Credentials",
+   "url": "https://cwe.mitre.org/data/definitions/522.html",
+   "evidence": "transmits or stores authentication credentials, but it uses an insecure method that is susceptible to unauthorized interception and/or retrieval"
+  }
+ },
+ {
+  "id": "secrets-10",
+  "action": "secrets",
+  "failure": "A credential is handed to the running product in a way that other programs on the same machine can also read.",
+  "question": "How does each credential reach the running product, and what else on that machine can see it on the way?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "environment variables are generally accessible to all processes"
+  }
+ },
+ {
+  "id": "secrets-11",
+  "action": "secrets",
+  "failure": "The place where credentials are kept is unavailable or lost, and the product cannot start, continue or be restored without them.",
+  "question": "What does the product do when the place its credentials are kept cannot be reached, and how are they recovered if it is lost?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "It could be impossible to retrieve the credentials required to restore the service if you did not previously acquire them."
+  }
+ },
+ {
+  "id": "secrets-12",
+  "action": "secrets",
+  "failure": "Nothing records who obtained or used a credential, so after a misuse nobody can tell who held it or when.",
+  "question": "What record is kept of who asked for and used each credential, and who reviews it?",
+  "source": {
+   "title": "OWASP Secrets Management Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+   "evidence": "Who requested a secret and for what system and role."
+  }
+ },
+ {
+  "id": "authorization-01",
+  "action": "authorization",
+  "failure": "An operation or piece of data can be reached with no check at all of whether the person asking is allowed.",
+  "question": "For every operation and every kind of data, who is allowed, and where is that checked?",
+  "source": {
+   "title": "CWE-862: Missing Authorization",
+   "url": "https://cwe.mitre.org/data/definitions/862.html",
+   "evidence": "The product does not perform an authorization check when an actor attempts to access a resource or perform an action."
+  }
+ },
+ {
+  "id": "authorization-02",
+  "action": "authorization",
+  "failure": "A signed-in person reaches another person's record by changing the identifier in a request to one that is not theirs.",
+  "question": "How does the product confirm that the particular record asked for belongs to, or is shared with, the person asking?",
+  "source": {
+   "title": "CWE-639: Authorization Bypass Through User-Controlled Key",
+   "url": "https://cwe.mitre.org/data/definitions/639.html",
+   "evidence": "gaining access to another user's data or record by modifying the key value identifying the data"
+  }
+ },
+ {
+  "id": "authorization-03",
+  "action": "authorization",
+  "failure": "What a person may do is enforced only by what their screen shows or hides, so a request sent directly is carried out.",
+  "question": "Where is each permission enforced, and what happens to a request that bypasses the screen?",
+  "source": {
+   "title": "OWASP Authorization Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+   "evidence": "Developers must never rely on client-side access control checks."
+  }
+ },
+ {
+  "id": "authorization-04",
+  "action": "authorization",
+  "failure": "Anything not explicitly restricted is open, so a new or forgotten function is available to everyone.",
+  "question": "What may a person do when no rule mentions them or the thing they ask for?",
+  "source": {
+   "title": "OWASP Top 10:2021 A01 Broken Access Control",
+   "url": "https://top10.owasp.org/2021/A01_2021-Broken_Access_Control/",
+   "evidence": "access should only be granted for particular capabilities, roles, or users, but is available to anyone"
+  }
+ },
+ {
+  "id": "authorization-05",
+  "action": "authorization",
+  "failure": "A person keeps permissions given for an earlier role or task long after they stopped needing them.",
+  "question": "When and how are a person's permissions reduced or removed as their role changes?",
+  "source": {
+   "title": "OWASP Authorization Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+   "evidence": "periodically review permissions in the system for \"privilege creep\""
+  }
+ },
+ {
+  "id": "authorization-06",
+  "action": "authorization",
+  "failure": "Another site causes a signed-in person's own device to send a request, and the product carries it out as though the person had asked.",
+  "question": "How does the product tell a request the person meant to make from one sent in their name by someone else's page?",
+  "source": {
+   "title": "OWASP Cross-Site Request Forgery Prevention Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+   "evidence": "unprotected target sites cannot distinguish between legitimate authorized requests and forged authenticated requests"
+  }
+ },
+ {
+  "id": "authorization-07",
+  "action": "authorization",
+  "failure": "An operation that changes or removes something is triggered by merely opening a link or loading a page.",
+  "question": "Which operations change something, and can any of them happen just because a link was followed or a page was loaded?",
+  "source": {
+   "title": "OWASP Cross-Site Request Forgery Prevention Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+   "evidence": "Do not use GET requests for state changing operations."
+  }
+ },
+ {
+  "id": "authorization-08",
+  "action": "authorization",
+  "failure": "The permission check itself fails or ends abnormally, and the operation goes ahead as if it had been allowed.",
+  "question": "What does the product do with a request when the check of its permission cannot be completed?",
+  "source": {
+   "title": "OWASP Authorization Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+   "evidence": "Ensure all exception and failed access control checks are handled no matter how unlikely they seem"
+  }
+ },
+ {
+  "id": "authorization-09",
+  "action": "authorization",
+  "failure": "Stored files and other fixed content are served to anyone who has or guesses their address, although the screens that list them are protected.",
+  "question": "Who may fetch each stored file directly, and is that checked the same way as the screen that shows it?",
+  "source": {
+   "title": "OWASP Authorization Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+   "evidence": "Ensure that static resources are incorporated into access control policies."
+  }
+ },
+ {
+  "id": "authorization-10",
+  "action": "authorization",
+  "failure": "A person gains higher permissions by altering information about who they are or what they may do that is kept on their own device.",
+  "question": "Which facts about a person's identity and permissions does the product take from the person's device, and how does it know they were not altered?",
+  "source": {
+   "title": "OWASP Top 10:2021 A01 Broken Access Control",
+   "url": "https://top10.owasp.org/2021/A01_2021-Broken_Access_Control/",
+   "evidence": "a cookie or hidden field manipulated to elevate privileges"
+  }
+ },
+ {
+  "id": "authorization-11",
+  "action": "authorization",
+  "failure": "After a person signs out, or their access is withdrawn, the proof of sign-in they already held continues to be accepted.",
+  "question": "How soon after signing out or losing access does everything a person already held stop working?",
+  "source": {
+   "title": "OWASP Top 10:2021 A01 Broken Access Control",
+   "url": "https://top10.owasp.org/2021/A01_2021-Broken_Access_Control/",
+   "evidence": "Stateful session identifiers should be invalidated on the server after logout."
+  }
+ },
+ {
+  "id": "authorization-12",
+  "action": "authorization",
+  "failure": "A person is signed in, without knowing it, to an account someone else controls, and what they then enter is kept in that account.",
+  "question": "How does the product make sure the account a person ends up signed in to is the one they chose?",
+  "source": {
+   "title": "OWASP Cross-Site Request Forgery Prevention Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+   "evidence": "CSRF vulnerabilities can still occur on login forms where the user is not authenticated"
+  }
+ },
+ {
+  "id": "configuration-01",
+  "action": "configuration",
+  "failure": "A setting that is only used later, such as one for handling a failure, is wrong, and nothing notices until the moment it is first needed.",
+  "question": "Which settings are checked when the product starts, and what does the product do if one is missing or wrong?",
+  "source": {
+   "title": "Early Detection of Configuration Errors to Reduce Failure Damage (USENIX OSDI 2016)",
+   "url": "https://www.usenix.org/conference/osdi16/technical-sessions/presentation/xu",
+   "evidence": "Such latent errors are likely to escape from sysadmins' observation and testing"
+  }
+ },
+ {
+  "id": "configuration-02",
+  "action": "configuration",
+  "failure": "A setting is well formed but means the wrong thing, such as a wrong unit or a location that does not exist, and is accepted.",
+  "question": "For each setting, what values make sense, and what happens when a well-formed value falls outside them?",
+  "source": {
+   "title": "Google SRE Workbook: Configuration Design and Best Practices",
+   "url": "https://sre.google/workbook/configuration-design/",
+   "evidence": "Even if your configuration is syntactically valid, is it likely to do useful things?"
+  }
+ },
+ {
+  "id": "configuration-03",
+  "action": "configuration",
+  "failure": "A value that differs from one installation to another is fixed inside the product, so it cannot be changed without rebuilding the product.",
+  "question": "Which values differ between installations, and where is each one set?",
+  "source": {
+   "title": "The Twelve-Factor App: III. Config",
+   "url": "https://12factor.net/config",
+   "evidence": "Apps sometimes store config as constants in the code."
+  }
+ },
+ {
+  "id": "configuration-04",
+  "action": "configuration",
+  "failure": "Settings are spread over several places and forms, so no single place shows what a given installation is running with.",
+  "question": "Where can someone see, in one place, every setting an installation is using and where each came from?",
+  "source": {
+   "title": "The Twelve-Factor App: III. Config",
+   "url": "https://12factor.net/config",
+   "evidence": "there is a tendency for config files to be scattered about in different places and different formats"
+  }
+ },
+ {
+  "id": "configuration-05",
+  "action": "configuration",
+  "failure": "The product ships with a default meant to be changed that is not safe, and nobody changes it.",
+  "question": "What does each setting default to, and is the product safe to run if no default is ever changed?",
+  "source": {
+   "title": "CWE-1188: Initialization of a Resource with an Insecure Default",
+   "url": "https://cwe.mitre.org/data/definitions/1188.html",
+   "evidence": "a default that is intended to be changed by the product's installer, administrator, or maintainer, but is not secure"
+  }
+ },
+ {
+  "id": "configuration-06",
+  "action": "configuration",
+  "failure": "Features, entry points or accounts the product does not need are left switched on in the running installation.",
+  "question": "What is switched on in a fresh installation, and which of it is actually needed?",
+  "source": {
+   "title": "OWASP Top 10:2021 A05 Security Misconfiguration",
+   "url": "https://top10.owasp.org/2021/A05_2021-Security_Misconfiguration/",
+   "evidence": "Unnecessary features are enabled or installed (e.g., unnecessary ports, services, pages, accounts, or privileges)."
+  }
+ },
+ {
+  "id": "configuration-07",
+  "action": "configuration",
+  "failure": "The place where the product is tried out is set up differently from the place where it is really used, so what passed in one fails in the other.",
+  "question": "In what ways do the settings of the trial and real installations differ, and how is each difference accounted for?",
+  "source": {
+   "title": "The Twelve-Factor App: X. Dev/prod parity",
+   "url": "https://12factor.net/dev-prod-parity",
+   "evidence": "causing code that worked and passed tests in development or staging to fail in production"
+  }
+ },
+ {
+  "id": "configuration-08",
+  "action": "configuration",
+  "failure": "A changed setting takes effect everywhere at once, so a wrong value breaks every installation or person at the same moment.",
+  "question": "How is a changed setting introduced, and how many are affected before it is known to be good?",
+  "source": {
+   "title": "Google SRE Workbook: Configuration Design and Best Practices",
+   "url": "https://sre.google/workbook/configuration-design/",
+   "evidence": "The ability to be deployed gradually, avoiding an all-or-nothing change."
+  }
+ },
+ {
+  "id": "configuration-09",
+  "action": "configuration",
+  "failure": "A changed setting proves harmful and there is no quick, known way back to the values that worked.",
+  "question": "How is a setting returned to its previous value, and how long does that take?",
+  "source": {
+   "title": "Google SRE Workbook: Configuration Design and Best Practices",
+   "url": "https://sre.google/workbook/configuration-design/",
+   "evidence": "The ability to roll back the change if it proves dangerous."
+  }
+ },
+ {
+  "id": "configuration-10",
+  "action": "configuration",
+  "failure": "A setting was changed and nothing shows who changed it, when, or what it was before.",
+  "question": "What record is kept of each change to a setting, and who owns each setting?",
+  "source": {
+   "title": "Google SRE Workbook: Configuration Design and Best Practices",
+   "url": "https://sre.google/workbook/configuration-design/",
+   "evidence": "Each configuration snippet for the system should have a clear owner."
+  }
+ },
+ {
+  "id": "configuration-11",
+  "action": "configuration",
+  "failure": "A mode meant for building and diagnosing the product is still switched on in the copy people really use.",
+  "question": "Which diagnostic modes exist, and what guarantees each is off where the product is really used?",
+  "source": {
+   "title": "CWE-489: Active Debug Code",
+   "url": "https://cwe.mitre.org/data/definitions/489.html",
+   "evidence": "The product is released with debugging code still enabled or active."
+  }
+ },
+ {
+  "id": "configuration-12",
+  "action": "configuration",
+  "failure": "A setting that governs how the product behaves can be altered by someone outside the product who should have no say over it.",
+  "question": "Who and what can change each setting, and which settings can be influenced from outside?",
+  "source": {
+   "title": "CWE-15: External Control of System or Configuration Setting",
+   "url": "https://cwe.mitre.org/data/definitions/15.html",
+   "evidence": "One or more system settings or configuration elements can be externally controlled by a user."
+  }
+ },
+ {
+  "id": "logging-01",
+  "action": "logging",
+  "failure": "An event that matters, such as a sign-in, a refused sign-in or an important change, leaves no record.",
+  "question": "Which events must always leave a record?",
+  "source": {
+   "title": "OWASP Top 10:2021 A09 Security Logging and Monitoring Failures",
+   "url": "https://top10.owasp.org/2021/A09_2021-Security_Logging_and_Monitoring_Failures/",
+   "evidence": "Auditable events, such as logins, failed logins, and high-value transactions, are not logged."
+  }
+ },
+ {
+  "id": "logging-02",
+  "action": "logging",
+  "failure": "A record exists but does not say when the event happened, where, who was involved or what was done.",
+  "question": "What must every record say so that someone can later tell what happened and to whom?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "The application logs must record \"when, where, who and what\" for each event."
+  }
+ },
+ {
+  "id": "logging-03",
+  "action": "logging",
+  "failure": "Private or sensitive values about people or their content are written into the product's records, where far more people can read them.",
+  "question": "Which values must never appear in a record, and how are they kept out?",
+  "source": {
+   "title": "CWE-532: Insertion of Sensitive Information into Log File",
+   "url": "https://cwe.mitre.org/data/definitions/532.html",
+   "evidence": "The product writes sensitive information to a log file."
+  }
+ },
+ {
+  "id": "logging-04",
+  "action": "logging",
+  "failure": "Text supplied from outside is written into the records unchanged, so someone can make false entries appear or make the records unreadable.",
+  "question": "How is outside-supplied text recorded so that it cannot pass for, or damage, the product's own entries?",
+  "source": {
+   "title": "CWE-117: Improper Output Neutralization for Logs",
+   "url": "https://cwe.mitre.org/data/definitions/117.html",
+   "evidence": "an attacker may be able to insert false entries into the log file"
+  }
+ },
+ {
+  "id": "logging-05",
+  "action": "logging",
+  "failure": "Recording an event fails, and the operation that was being recorded fails with it.",
+  "question": "What does the product do when it cannot write a record: stop, continue without it, or something else?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "Ensure failures in the logging processes/systems do not prevent the application from otherwise running"
+  }
+ },
+ {
+  "id": "logging-06",
+  "action": "logging",
+  "failure": "Records grow until they fill the space available, by accident or because someone provokes it, and nothing further can be recorded.",
+  "question": "How much may the records grow, and what happens when that limit is reached?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "An attacker floods log files in order to exhaust disk space available for further logging."
+  }
+ },
+ {
+  "id": "logging-07",
+  "action": "logging",
+  "failure": "The internal details of a failure are shown to the person using the product instead of being kept in the records.",
+  "question": "When something fails, what does the person see and what goes only into the records?",
+  "source": {
+   "title": "CWE-209: Generation of Error Message Containing Sensitive Information",
+   "url": "https://cwe.mitre.org/data/definitions/209.html",
+   "evidence": "generates an error message that includes sensitive information about its environment, users, or associated data"
+  }
+ },
+ {
+  "id": "logging-08",
+  "action": "logging",
+  "failure": "Records are kept only on the machine that produced them, so they are lost or out of reach when that machine fails or is taken over.",
+  "question": "Where are the records kept, and do they survive the loss of the machine that wrote them?",
+  "source": {
+   "title": "OWASP Top 10:2021 A09 Security Logging and Monitoring Failures",
+   "url": "https://top10.owasp.org/2021/A09_2021-Security_Logging_and_Monitoring_Failures/",
+   "evidence": "Logs are only stored locally."
+  }
+ },
+ {
+  "id": "logging-09",
+  "action": "logging",
+  "failure": "Records are written but nobody and nothing looks at them, so a problem they show goes unnoticed.",
+  "question": "Who or what reads the records, and which entries make someone get told?",
+  "source": {
+   "title": "OWASP Top 10:2021 A09 Security Logging and Monitoring Failures",
+   "url": "https://top10.owasp.org/2021/A09_2021-Security_Logging_and_Monitoring_Failures/",
+   "evidence": "Logs of applications and APIs are not monitored for suspicious activity."
+  }
+ },
+ {
+  "id": "logging-10",
+  "action": "logging",
+  "failure": "Records can be altered or removed without trace, so they cannot be relied on after something has gone wrong.",
+  "question": "Who can change or remove records, and how would a change or removal be noticed?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "Build in tamper detection so you know if a record has been modified or deleted"
+  }
+ },
+ {
+  "id": "logging-11",
+  "action": "logging",
+  "failure": "The times in records from different parts of the product do not agree, so the order of events cannot be worked out.",
+  "question": "Which clock does each record's time come from, and how are records from different places put in order?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "Synchronize time across all servers and devices"
+  }
+ },
+ {
+  "id": "logging-12",
+  "action": "logging",
+  "failure": "Records are discarded before they are needed, or kept long after they should have been destroyed.",
+  "question": "How long is each kind of record kept, and what removes it when that time is up?",
+  "source": {
+   "title": "OWASP Logging Cheat Sheet",
+   "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+   "evidence": "must not be destroyed before the required data retention period, and must not be kept beyond this time"
+  }
+ },
+ {
+  "id": "accessibility-01",
+  "action": "accessibility",
+  "failure": "Something on the screen can be done only with a pointer and cannot be done from the keyboard.",
+  "question": "For each thing a person can do on the screen, how is it done using the keyboard alone?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 2.1.1 Keyboard",
+   "url": "https://www.w3.org/TR/WCAG22/#keyboard",
+   "evidence": "All functionality of the content is operable through a keyboard interface"
+  }
+ },
+ {
+  "id": "accessibility-02",
+  "action": "accessibility",
+  "failure": "Keyboard focus enters part of the screen and cannot be moved out of it again using the keyboard.",
+  "question": "From every part of the screen a keyboard user can enter, how do they leave it?",
+  "source": {
+   "title": "W3C Understanding WCAG 2.2: Success Criterion 2.1.2 No Keyboard Trap",
+   "url": "https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html",
+   "evidence": "ensure that content does not \"trap\" keyboard focus within subsections of content"
+  }
+ },
+ {
+  "id": "accessibility-03",
+  "action": "accessibility",
+  "failure": "A person moving through the screen by keyboard cannot see which item currently has focus.",
+  "question": "How is the item that has keyboard focus shown, on every item that can take it?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 2.4.7 Focus Visible",
+   "url": "https://www.w3.org/TR/WCAG22/#focus-visible",
+   "evidence": "Any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible."
+  }
+ },
+ {
+  "id": "accessibility-04",
+  "action": "accessibility",
+  "failure": "The item that had focus disappears, as when a panel closes or an entry is removed, and focus is lost to nowhere useful.",
+  "question": "Where does focus go when the item holding it closes or is removed?",
+  "source": {
+   "title": "W3C WAI-ARIA Authoring Practices Guide: Developing a Keyboard Interface",
+   "url": "https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/",
+   "evidence": "browsers move focus to the body element, effectively causing a loss of focus within the user interface"
+  }
+ },
+ {
+  "id": "accessibility-05",
+  "action": "accessibility",
+  "failure": "A control has no name that assistive technology can read out, so a person who cannot see it cannot tell what it is for.",
+  "question": "What name and purpose does each control announce to someone who cannot see it?",
+  "source": {
+   "title": "W3C Techniques for WCAG 2.2: Failure F68",
+   "url": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F68",
+   "evidence": "a form control does not have a name exposed to assistive technologies"
+  }
+ },
+ {
+  "id": "accessibility-06",
+  "action": "accessibility",
+  "failure": "A picture, icon or chart carries meaning and has no text that says the same thing.",
+  "question": "For everything shown that is not text, what words give the same meaning?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 1.1.1 Non-text Content",
+   "url": "https://www.w3.org/TR/WCAG22/#non-text-content",
+   "evidence": "All non-text content that is presented to the user has a text alternative that serves the equivalent purpose"
+  }
+ },
+ {
+  "id": "accessibility-07",
+  "action": "accessibility",
+  "failure": "A message that appears after an operation, such as saved, failed or still working, is shown but never announced to a person using a screen reader.",
+  "question": "How does someone who cannot see the screen learn the result of what they just did?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 4.1.3 Status Messages",
+   "url": "https://www.w3.org/TR/WCAG22/#status-messages",
+   "evidence": "status messages can be programmatically determined"
+  }
+ },
+ {
+  "id": "accessibility-08",
+  "action": "accessibility",
+  "failure": "Something is told to the person by colour alone, such as which item is wrong, required or selected.",
+  "question": "Wherever colour carries meaning, what else on the screen carries the same meaning?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 1.4.1 Use of Color",
+   "url": "https://www.w3.org/TR/WCAG22/#use-of-color",
+   "evidence": "Color is not used as the only visual means of conveying information, indicating an action, prompting a response"
+  }
+ },
+ {
+  "id": "accessibility-09",
+  "action": "accessibility",
+  "failure": "Text is too close in brightness to its background for a person with reduced vision to read.",
+  "question": "What contrast between text and its background does every screen keep, in every state and theme?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 1.4.3 Contrast (Minimum)",
+   "url": "https://www.w3.org/TR/WCAG22/#contrast-minimum",
+   "evidence": "The visual presentation of text and images of text has a contrast ratio of at least 4.5:1"
+  }
+ },
+ {
+  "id": "accessibility-10",
+  "action": "accessibility",
+  "failure": "When a person enlarges the text, content is cut off, overlaps or controls become unreachable.",
+  "question": "What happens to each screen when its text is enlarged to twice its size?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 1.4.4 Resize Text",
+   "url": "https://www.w3.org/TR/WCAG22/#resize-text",
+   "evidence": "text can be resized without assistive technology up to 200 percent"
+  }
+ },
+ {
+  "id": "accessibility-11",
+  "action": "accessibility",
+  "failure": "A time limit ends a person's task or removes what they entered, and they cannot switch it off or get more time.",
+  "question": "Which steps have a time limit, and how does a person who needs longer get it?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 2.2.1 Timing Adjustable",
+   "url": "https://www.w3.org/TR/WCAG22/#timing-adjustable",
+   "evidence": "The user is allowed to turn off the time limit before encountering it"
+  }
+ },
+ {
+  "id": "accessibility-12",
+  "action": "accessibility",
+  "failure": "Movement set off by using the product cannot be switched off by a person whom motion makes unwell or distracts.",
+  "question": "What moves on the screen, and how does a person who asked for less motion get the product without it?",
+  "source": {
+   "title": "W3C Web Content Accessibility Guidelines (WCAG) 2.2: 2.3.3 Animation from Interactions",
+   "url": "https://www.w3.org/TR/WCAG22/#animation-from-interactions",
+   "evidence": "Motion animation triggered by interaction can be disabled, unless the animation is essential"
+  }
+ }
+]
