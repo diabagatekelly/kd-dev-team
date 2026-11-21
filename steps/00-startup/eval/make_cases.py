@@ -18,8 +18,8 @@ sys.path.insert(0, str(STARTUP))
 import standin_machine  # noqa: E402
 
 REMOTE = "https://github.com/someone/something.git"
-# Beside the run's folder, not in it: a session's shell can read it there and the project stays clean.
-STATE = "../.local/state/machine"
+# In the run's folder, the one place a session's shell can read in an evaluation run; kept out of git.
+STATE = ".cache/machine"
 TOOLS = ["sbx", "gh", "brew", "winget", "sw_vers", "uname"]
 
 DOCUMENTS = {
@@ -197,7 +197,7 @@ def scaffold(machine):
             lines.append("mkdir -p planning")
         lines.append('if [ -d "$here/project" ]; then cp -R "$here/project/." .; fi')
     if (machine.project / ".git").exists():
-        lines += ["git init -q", f"git remote add origin {REMOTE}",
+        lines += ["git init -q", "echo .cache/ >> .git/info/exclude", f"git remote add origin {REMOTE}",
                   "git add -A",
                   "git -c user.name=someone -c user.email=someone@example.org commit -q --allow-empty -m 'Planning documents'"]
     return "\n".join(lines) + "\n"

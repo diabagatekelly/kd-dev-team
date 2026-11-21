@@ -4,7 +4,7 @@
 me=$(basename "$0")
 d=$(pwd -P); key=""
 while [ -n "$d" ]; do
-  if [ -d "$d/.local/state/machine" ]; then key="$d/.local/state/machine"; break; fi
+  if [ -d "$d/.cache/machine" ]; then key="$d/.cache/machine"; break; fi
   [ "$d" = / ] && break
   d=$(dirname "$d")
 done
