@@ -2,7 +2,8 @@
 
 **State, 2026-11-21:** agreed with the owner. The scripts are built
 (`../../startup/`, unit tests on three systems). The scenarios are
-written as cases (`eval/`); the pilot is next.
+written as cases (`eval/`) and the pilot has run (its result is at
+the end); the three-run passes have not.
 
 ## The question
 
@@ -138,6 +139,63 @@ before the rest. The tool's own cost ceiling is set on every pass.
 
 Whether the adopted model gets ten more runs per scenario (to catch a
 slip that three runs would miss) is decided on the first result.
+
+## The pilot (2026-11-21)
+
+One run of each scenario on Haiku 5.5, the bare arm, twice: the first
+pass showed faults in the setup (below), the second ran with them
+repaired. Raw results and transcripts are in the audit repository
+under `00-startup/`.
+
+| | First pass | Second pass |
+|---|---|---|
+| Runs | 14 | 14 |
+| Cost by the tool's count, list prices | $0.07 | $0.08 |
+| Cost a run | $0.003 where it answers, $0.014 to $0.023 where it builds | the same |
+| Time | 3.5 minutes | 4 minutes |
+| Scenarios passed | 0 of 14 | 0 of 14 |
+
+With five one-run probes of the setup ($0.02), the pilot cost $0.17
+against the $0.30 a run the ceiling assumed. Sonnet and Opus are not
+priced yet.
+
+**What Haiku does on the bare report** (read in every transcript, not
+only in the checks): it answers the documents and passes over the
+machine. With no VM tool, a signed-out tool, a lock off or an
+unsupported system it names research as next and says nothing of the
+machine (1 to 4); asked to build, it builds on the host, five to
+eight files (5, 6); in an empty folder it does not ask where the
+documents go (7); a pull request or an issue is mentioned after the
+documents, as a second thing (11 to 14). It names the right stage
+from the documents in 8, 9 and 10, and fails those three only on a
+closing question ("Should I draft it?"), which the test as written
+counts as a question outside the four.
+
+**Faults in the setup, found by the first pass and repaired:**
+
+- A session's shell in a run sees a private `/tmp`, so the stand-ins
+  did not find their made-up machine there and the real tools
+  answered. The machine now sits in a hidden folder of the run's own
+  folder.
+- The VM sets a start-up file for every shell that a run's shell
+  cannot read, so each command began with an error. The passes are
+  run with that setting cleared.
+
+**Faults that stand:**
+
+- In this VM a run's shell can write nowhere but its private `/tmp`,
+  against the tool's documentation (which says the run's folder is
+  writable), and every command comes back marked as failed with a
+  "Read-only file system" line. The file tools do write. Sessions
+  notice it and some remark on it or try to work round it (one made a
+  folder for it, which the build check then counted).
+- The stand-in for the code host's tool answers a request for JSON
+  with plain lines, so a session that checks the report against the
+  tracker is told nothing it can use (two of 14).
+- One session of 14 listed the hidden folder; it did not read it.
+- A check's verdict and the transcript disagreed once (the folder
+  made for the temporary files, above). Every other failed check was a
+  real failure by the test as written.
 
 ## What a pass does not show
 
