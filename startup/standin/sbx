@@ -2,7 +2,11 @@
 # Stand-in for the VM tool, for tests: answers from the files under $STANDIN_STATE/sbx
 # in the real tool's words (v0.54), and writes every call to $STANDIN_STATE/calls.log.
 S="${STANDIN_STATE:?}/sbx"
-printf 'sbx %s\n' "$*" >> "$STANDIN_STATE/calls.log"
+{ printf 'sbx %s\n' "$*" >> "$STANDIN_STATE/calls.log"; } 2>/dev/null
+# Where the state cannot be written (a session's shell in an evaluation run), a change of
+# setting is kept in a file of the shell's own instead, so the next reading sees it.
+SETTINGS="$S/settings"; KEPT=/tmp/.standin-sbx-settings
+if [ ! -w "$S" ] && [ -f "$KEPT" ]; then SETTINGS=$KEPT; fi
 garbled() { [ -f "$S/garble" ] && grep -qx "$1" "$S/garble"; }
 signed_out() {
   [ -f "$S/signed_out" ] || return 1
@@ -21,15 +25,16 @@ case "${1:-} ${2:-}" in
     echo "KEY                    VALUE   TYPE   SOURCE    RESTART   DESCRIPTION"
     while read -r key value; do
       printf '%-22s %-7s bool   default             Allow something\n' "$key" "$value"
-    done < "$S/settings" ;;
+    done < "$SETTINGS" ;;
   "settings set")
-    awk -v k="$3" -v v="$4" '$1==k {print k, v; next} {print}' "$S/settings" > "$S/settings.new" && mv "$S/settings.new" "$S/settings" ;;
+    if [ -w "$S" ]; then to="$S/settings"; else to=$KEPT; fi
+    awk -v k="$3" -v v="$4" '$1==k {print k, v; next} {print}' "$SETTINGS" > "$to.new" && mv "$to.new" "$to" ;;
   "policy ls")
     signed_out
     echo "POLICY             SOURCE   APPLIES TO   SUMMARY"
     [ -f "$S/deny_by_default" ] && echo "default-deny-all   local    all          network: deny when no rule decides"
     echo "local-policy       local    all          network: some allow" ;;
-  "policy init") : > "$S/deny_by_default" ;;
+  "policy init") { : > "$S/deny_by_default"; } 2>/dev/null || : ;;
   "policy inspect")
     echo "Policy:      local-policy"; echo
     echo "RULES IN THIS POLICY"
@@ -40,8 +45,9 @@ case "${1:-} ${2:-}" in
     done < "$S/hosts"
     exit 0 ;;
   "policy allow")
+    [ -w "$S" ] || exit 0
     printf '%s\n' "$4" | tr ',' '\n' >> "$S/hosts"; sort -u "$S/hosts" -o "$S/hosts" ;;
-  "login "*) echo "Opening a browser to sign in to Docker..."; rm -f "$S/signed_out" ;;
+  "login "*) echo "Opening a browser to sign in to Docker..."; rm -f "$S/signed_out" 2>/dev/null || : ;;
   "ls "*)
     signed_out
     if [ -s "$S/vms" ]; then

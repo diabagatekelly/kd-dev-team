@@ -2,7 +2,7 @@
 # Stand-in for the code host's tool, for tests. `gh api graphql` answers with the lines
 # in $STANDIN_STATE/gh/lines: what the real tool prints once tracker.jq has been applied.
 S="${STANDIN_STATE:?}/gh"
-printf 'gh %s\n' "$*" >> "$STANDIN_STATE/calls.log"
+{ printf 'gh %s\n' "$*" >> "$STANDIN_STATE/calls.log"; } 2>/dev/null
 case "${1:-} ${2:-}" in
   "auth status")
     if [ -f "$S/signed_out" ]; then echo "You are not logged into any GitHub hosts." >&2; exit 1; fi

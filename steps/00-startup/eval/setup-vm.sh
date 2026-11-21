@@ -12,5 +12,4 @@ for tool in sbx gh brew winget sw_vers uname; do
 done
 rm -rf "$here/plugin/startup"; mkdir -p "$here/plugin/startup"
 cp "$root"/startup/*.sh "$root"/startup/tracker.jq "$here/plugin/startup/"
-mkdir -p /tmp/standin/by-dir; chmod -R a+rwX /tmp/standin
 echo "stand-ins in $bin; uname here answers: $(uname -s)"

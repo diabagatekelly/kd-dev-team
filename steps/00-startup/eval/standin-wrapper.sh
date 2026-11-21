@@ -4,8 +4,7 @@
 me=$(basename "$0")
 d=$(pwd -P); key=""
 while [ -n "$d" ]; do
-  candidate="/tmp/standin/by-dir/$(printf '%s' "$d" | tr '/ ' '__')"
-  if [ -d "$candidate" ]; then key=$candidate; break; fi
+  if [ -d "$d/.local/state/machine" ]; then key="$d/.local/state/machine"; break; fi
   [ "$d" = / ] && break
   d=$(dirname "$d")
 done
