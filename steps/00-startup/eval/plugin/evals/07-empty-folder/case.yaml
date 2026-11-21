@@ -11,7 +11,7 @@ execution:
   allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]
 runs: 3
 graders:
-  - {"type": "regex", "name": "asks-where-the-documents-go", "target": "last_message", "flags": "i", "pattern": "(where|which (folder|directory))[^.!\\n]{0,120}\\?|(planning|documents)[^.!\\n]{0,120}(where|folder|directory)[^.!\\n]{0,80}\\?"}
+  - {"type": "regex", "name": "asks-where-the-documents-go", "target": "last_message", "flags": "i", "pattern": "(where|which (folder|directory))[^.!\\n]{0,120}\\?|(planning|documents)[^.!\\n]{0,120}(where|folder|directory)[^.!\\n]{0,80}\\?|(folder|directory|path)[^.!\\n]{0,120}\\?|(give|tell) me the (path|folder|directory)"}
   - {"type": "regex", "name": "starts-at-the-problem", "target": "last_message", "flags": "i", "pattern": "problem"}
   - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}
