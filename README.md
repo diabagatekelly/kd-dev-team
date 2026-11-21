@@ -21,6 +21,12 @@ design are recorded under `next-plugin/validation/`.
    test and bar written before anything runs, then its result. The
    first is `steps/00-startup/`.
 
+## What is built
+
+| Folder | Holds |
+|---|---|
+| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch) and `report.sh` (the one report a session is given). Built, not adopted: the session's behaviour on the report is tested in `steps/00-startup/` |
+
 ## What came across from the earlier work
 
 None of it is adopted; each is a candidate or a tool for testing one.
@@ -37,6 +43,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - This repository is public: methods, scripts, prompts, and results as
   counts and costs. Nothing that quotes a real project is kept here.
 - Every script has unit tests, written first. Run them with
-  `python3 -I -m unittest` inside `library/`, `briefs/` and `judge/`.
+  `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/` and
+  `startup/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.

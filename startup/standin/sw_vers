@@ -1,0 +1,4 @@
+#!/bin/sh
+# Stand-in for macOS's sw_vers, for tests.
+[ "${1:-}" = "-productVersion" ] || { echo "stand-in sw_vers: no answer for: $*" >&2; exit 2; }
+cat "${STANDIN_STATE:?}/sys/macos"

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Stand-in for uname, for tests: the system is whatever $STANDIN_STATE/sys says.
+S="${STANDIN_STATE:?}/sys"
+case "${1:-}" in
+  -s) cat "$S/kernel" ;;
+  -m) cat "$S/arch" ;;
+  -r) cat "$S/release" ;;
+  *) echo "stand-in uname: no answer for: $*" >&2; exit 2 ;;
+esac

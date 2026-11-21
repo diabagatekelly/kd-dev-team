@@ -95,5 +95,34 @@ asking is listed apart, so it can be overturned.
 - At startup only issues that carry a severity are ranked; others are
   counted and shown.
 - The language of the scripts is settled by test: it must run on a
-  fresh Windows machine and a Mac with nothing extra installed.
+  fresh Windows machine and a Mac with nothing extra installed. No one
+  language does (2026-11-21, from the tools' documentation): a Mac has
+  a shell and no PowerShell; Windows has PowerShell, and a shell only
+  where Git for Windows is installed, which the tool recommends but
+  does not require. The scripts are in plain shell, tested on macOS,
+  Linux and Windows with Git for Windows; a PowerShell twin, held to
+  the same tests, is owed for Windows without it and is written in the
+  session on that machine.
+- Startup's scripts (`startup/`), 2026-11-21:
+  - A stage is found by its document in the planning folder:
+    `problem.md`, `scope.md`, `requirements.md`, a file in `research/`,
+    then in the latest `slice-NNN/` folder `slice.md`, `questions.md`,
+    `answers.md`, `open-facts.md`, `design.md`, `screens.md`,
+    `stack.md`, `readiness.md`, `owner-list.md`. These names stand
+    until the stage that writes each document is built.
+  - The planning folder is remembered in the plugin's own data folder,
+    by the project's root, so nothing is written in the project.
+  - An issue is ranked when a label of it says critical, high, blocker
+    or blocking.
+  - A pull request has comments to address when a review thread is
+    unresolved, changes are requested, or someone else has commented
+    since its last commit; it is ready to merge when it has none of
+    those, is not a draft, has no conflict, no failing or running
+    check and no review still required.
+  - A system is supported when the VM tool's install page lists it:
+    macOS 14 or later on Apple silicon, Windows 11 on Intel or AMD,
+    Ubuntu 24.04 or later. Linux inside Windows (WSL) is not listed and
+    is treated as not supported.
+  - On Linux the install asks for an administrator's password, so the
+    script hands the command to the user and does not run it.
 - This repository's layout.
