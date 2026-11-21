@@ -231,15 +231,19 @@ sed "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" "$report"
 """ % REPORTS
 
 
-def main():
-    plugin = HERE / "plugin"
+def main(table=False):
+    """The bare arm in plugin/; with table=True the same cases in plugin-table/, the hook adding the table."""
+    plugin = HERE / ("plugin-table" if table else "plugin")
     shutil.rmtree(plugin, ignore_errors=True)
     write(plugin / ".claude-plugin" / "plugin.json", json.dumps(
-        {"name": "kd-startup-trial", "version": "0.0.1",
+        {"name": "kd-startup-trial-table" if table else "kd-startup-trial", "version": "0.0.1",
          "description": "Stage 0's test only: one hook that hands a session the startup report."}, indent=2) + "\n")
     write(plugin / "hooks" / "hooks.json", json.dumps({"hooks": {"SessionStart": [{"hooks": [
         {"type": "command", "command": 'sh "${CLAUDE_PLUGIN_ROOT}/hooks/report.sh"'}]}]}}, indent=2) + "\n")
-    write(plugin / "hooks" / "report.sh", HOOK, executable=True)
+    write(plugin / "hooks" / "report.sh", HOOK + ('cat "${CLAUDE_PLUGIN_ROOT}/hooks/routing-table.md"\n' if table else ""),
+          executable=True)
+    if table:
+        shutil.copy(HERE / "routing-table.md", plugin / "hooks" / "routing-table.md")
     cleanup = _Cleanup()
     for name, description, make, prompt, graders in scenarios():
         machine = standin_machine.Machine(cleanup)
@@ -268,4 +272,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(table="--table" in sys.argv[1:])

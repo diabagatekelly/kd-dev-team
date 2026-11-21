@@ -10,6 +10,9 @@ sudo cp "$root"/startup/standin/* /opt/standin/
 for tool in sbx gh brew winget sw_vers uname; do
   sudo cp "$here/standin-wrapper.sh" "$bin/$tool"; sudo chmod 755 "$bin/$tool"
 done
-rm -rf "$here/plugin/startup"; mkdir -p "$here/plugin/startup"
-cp "$root"/startup/*.sh "$root"/startup/tracker.jq "$here/plugin/startup/"
+python3 -I "$here/make_cases.py" --table >/dev/null
+for plugin in plugin plugin-table; do
+  rm -rf "$here/$plugin/startup"; mkdir -p "$here/$plugin/startup"
+  cp "$root"/startup/*.sh "$root"/startup/tracker.jq "$here/$plugin/startup/"
+done
 echo "stand-ins in $bin; uname here answers: $(uname -s)"
