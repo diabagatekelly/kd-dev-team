@@ -41,5 +41,13 @@ case "${1:-} ${2:-}" in
     exit 0 ;;
   "policy allow")
     printf '%s\n' "$4" | tr ',' '\n' >> "$S/hosts"; sort -u "$S/hosts" -o "$S/hosts" ;;
+  "login "*) echo "Opening a browser to sign in to Docker..."; rm -f "$S/signed_out" ;;
+  "ls "*)
+    signed_out
+    if [ -s "$S/vms" ]; then
+      echo "NAME      AGENT    STATUS    WORKSPACE"
+      while read -r name; do printf '%-9s claude   stopped   .\n' "$name"; done < "$S/vms"
+    else echo "No sandboxes found"; fi ;;
+  "create "*|"run "*|"exec "*|"rm "*|"stop "*) signed_out ;;
   *) echo "stand-in sbx: no answer for: $*" >&2; exit 2 ;;
 esac

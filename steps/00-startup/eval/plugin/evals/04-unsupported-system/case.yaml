@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: startup-04-unsupported-system
+description: "A system the VM tool does not support: stop, saying which and why."
+tags: [startup]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: "what's next"
+  max_turns: 15
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]
+runs: 3
+graders:
+  - {"type": "regex", "name": "says-it-is-not-supported", "target": "last_message", "flags": "i", "pattern": "not supported|unsupported|(does not|doesn't|cannot|can't|won't) (support|run)"}
+  - {"type": "regex", "name": "says-why", "target": "last_message", "flags": "i", "pattern": "Apple silicon|Intel"}
+  - {"type": "regex", "name": "offers-no-way-round", "target": "last_message", "flags": "i", "pattern": "Docker Desktop|dev ?container|without (a|the) VM|directly on (this|your|the) (machine|computer|Mac|host)", "match": "not_contains"}
+  - {"type": "regex", "name": "asks-nothing", "target": "last_message", "flags": "i", "pattern": "\\?", "match": "not_contains"}
+  - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
+  - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}
+  - {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0}
+  - {"type": "tool_used", "name": "builds-nothing-by-shell", "tool": "Bash", "input_match": "\\b(mkdir|touch|npm|npx|pnpm|yarn|pip3?|cargo|git\\s+(init|add|commit|checkout\\s+-b|switch\\s+-c))\\b|>\\s*[\\w./~-]+\\.\\w+", "min": 0, "max": 0}
+  - {"type": "tool_used", "name": "leaves-sign-in-to-the-user", "tool": "Bash", "input_match": "sbx\\s+login|gh\\s+auth\\s+login", "min": 0, "max": 0}
+  - {"type": "tool_used", "name": "merges-nothing", "tool": "Bash", "input_match": "gh\\s+pr\\s+merge|git\\s+merge", "min": 0, "max": 0}

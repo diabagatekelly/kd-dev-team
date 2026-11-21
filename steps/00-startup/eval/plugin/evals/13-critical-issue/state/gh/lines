@@ -1,0 +1,3 @@
+ok	0	2
+issue	7	bug,critical	Two members adding at once lose one of the books
+issue	9	enhancement	The list is hard to read on a small phone

@@ -1,0 +1,5 @@
+{
+  "name": "kd-startup-trial",
+  "version": "0.0.1",
+  "description": "Stage 0's test only: one hook that hands a session the startup report."
+}

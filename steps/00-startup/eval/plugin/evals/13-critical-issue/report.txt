@@ -1,0 +1,21 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- system: macOS 15.1 on arm64 (supported by the VM tool)
+- VM tool (Docker Sandboxes, `sbx`): installed (v0.54.0)
+- signed in to the VM tool: yes
+- locks: all 6 on
+- VMs: none
+
+Tracker
+- repository: someone/something on GitHub
+- open pull requests: 0
+- open issues: 2, of which 1 is labelled critical, high or blocking
+  - #7 "Two members adding at once lose one of the books" [critical]
+  - with no such label: #9 "The list is hard to read on a small phone"
+
+Documents
+- planning folder: planning (chosen earlier for this project)
+- found: problem (problem.md), scope (scope.md), requirements (requirements.md)
+- next stage by the documents: research

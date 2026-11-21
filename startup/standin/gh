@@ -10,5 +10,8 @@ case "${1:-} ${2:-}" in
   "api graphql")
     if [ -f "$S/api_fail" ]; then echo "gh: Could not resolve to a Repository" >&2; exit 1; fi
     cat "$S/lines" ;;
+  "pr list"|"pr view"|"pr status"|"pr checks"|"issue list"|"issue view"|"issue status")
+    [ -f "$S/summary" ] && cat "$S/summary"; exit 0 ;;
+  "pr "*|"issue "*) : ;;
   *) echo "stand-in gh: no answer for: $*" >&2; exit 2 ;;
 esac
