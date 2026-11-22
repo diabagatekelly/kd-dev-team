@@ -110,6 +110,15 @@ asking is listed apart, so it can be overturned.
     that good, with the least text that holds. The text is tuned
     until it gets there. The test is in `steps/01-problem/README.md`.
 
+## 2026-11-21: the problem stage holds
+
+20. **The problem stage holds with the text of 49 lines in
+    `steps/01-problem/eval/problem-skill.md`, on the session's model,
+    Sonnet 5.5** (the owner, on the result in
+    `steps/01-problem/README.md`). It holds on Haiku too; the stage
+    is not pinned to it, because the saving is small and this is the
+    stage that talks with the user most.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

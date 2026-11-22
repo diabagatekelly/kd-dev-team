@@ -4,7 +4,8 @@
 49 lines (`eval/problem-skill.md`) Haiku passes 60 of 60 and Sonnet
 59 of 60 by the checks over ten runs a scenario, and its documents
 read at least as well as those of kad's skill (the result is near
-the end). Whether the stage holds is the owner's to say. The stage
+the end). The owner has said the stage holds, on the
+session's model, Sonnet 5.5 (decision 20). The stage
 runs inside the project's VM (decision 19).
 
 ## What the stage must do
