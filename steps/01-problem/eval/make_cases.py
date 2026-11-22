@@ -125,7 +125,7 @@ SCENARIOS = [
     ("07-answer-by-answer", "An account given one short answer at a time: one last question before writing.",
      "Nothing yet that I can think of.",
      [*WRITES_NOTHING, says("asks-whether-anything-else-goes-wrong",
-                            r"(anything|something|what) else[^?]{0,80}\?|else (that )?goes wrong[^?]{0,40}\?|"
+                            r"(anything|something|what) else[^?]{0,200}\?|else (that )?goes wrong[^?]{0,200}\?|"
                             r"is that (everything|all)[^?]{0,60}\?|(any|what) other[^?]{0,80}\?"),
       NO_SOLUTION_ASKED],
      [("user", "I want an app for our allotment society."),

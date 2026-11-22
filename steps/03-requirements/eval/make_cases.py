@@ -261,7 +261,8 @@ SCENARIOS = [
       in_list("has-the-inventory", INVENTORY)], None),
     ("02-a-one-row-problem", "A problem of one activity: a short list.",
      {"000_problem.md": ROTA_PROBLEM, "001_scope-map.md": ROTA_MAP}, {}, GO_ON,
-     [WRITTEN, *between(1, 5), *FORM, PLAIN, FEW, ASKS,
+     # "Email and nothing else" forces "nothing to sign in to": said of this limit, the word is no solution.
+     [WRITTEN, *between(1, 5), *FORM, {**PLAIN, "pattern": PLAIN["pattern"].replace("log ?ins?|sign[- ]in|", "")}, FEW, ASKS,
       in_list("the-outside-system-is-listed", section(INVENTORY, r"e-?mail"))], None),
     ("03-a-limit-and-an-open-question-it-leans-on", "The limit said as what it forces; the question still open, and asked.",
      {"000_problem.md": LEAGUE % FEE, "001_scope-map.md": LEAGUE_MAP % FEE}, {}, GO_ON,
