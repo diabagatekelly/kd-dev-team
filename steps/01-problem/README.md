@@ -167,6 +167,26 @@ limits what can be done. Scenario 07 was added. With every adopted
 text loaded, all seven scenarios on Sonnet, three runs each: 21 of
 21, $1.31; scenario 07 alone, ten runs: 10 of 10.
 
+## Set beside kad's skill, part by part (2026-11-22, decision 26)
+
+kad's `problem-framing-doc` (72 lines):
+
+| What kad's skill does | Here |
+|---|---|
+| Asks for every section the conversation has not answered, one question at a time | Kept |
+| Never fills a section from the folder's name, the repository or what such a product usually does | Kept |
+| No solution, no decision; "use library X" is a design, not a constraint | Kept; a floated idea is left out or kept as an open question |
+| A limit the writer assumes is an open question, never a constraint | Stricter: no limit, figure or question of the writer's own at all |
+| Open questions: what must be answered before a first slice, the writer's own included | **Different on purpose:** only what the user says is unknown. The planner's own questions are written at the requirements stage, by a walk (decision 27) |
+| Names the current process, not the wished-for one | Kept |
+| No "non-goals" section; an exclusion that is not obvious is one sentence in "The problem" | Kept in effect: no further sections, and what the user says is in the document |
+| One page; a problem that outgrows it is probably several, and is flagged | Kept (two problems are said to be two) |
+| Written for skimming | Kept (a bullet a point) |
+| Where the document goes is given, not chosen | Kept: the startup report names it |
+
+Nothing of kad's is missing here. Added since, from the end-to-end
+runs: the last question for an account given answer by answer.
+
 ## What a pass does not show
 
 The scenarios stand for points in a conversation of at most two

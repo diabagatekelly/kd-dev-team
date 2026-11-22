@@ -169,8 +169,18 @@ SCENARIOS = [
      {"000_problem.md": TOOLS_PROBLEM}, {"001_scope-map.md": TOOLS_MAP},
      "Repairs aren't part of this, a different group handles them. And returns matter most: start there.",
      [CHANGES_THE_MAP, *MARKS, in_map("returns-are-now", activity_with(r"return").replace("now|next|later", "now")),
-      not_in_map("repairs-are-no-activity", activity_with(r"repair"))],
+      not_in_map("repairs-are-no-activity", activity_with(r"repair")),
+      # Set beside kad's skill (decision 26): what the user takes out is said, so its absence is not read as a gap.
+      in_map("what-was-taken-out-is-said", problem.section(r"\bout\b", r"repair"))],
      [("user", GO_ON), ("assistant", SHOWN)]),
+    # Set beside kad's skill (decision 26): a limit named for one activity may be about the whole product.
+    ("06-a-limit-worded-for-one-activity", "A limit that names one activity: under the limits as worded, and asked about.",
+     {"000_problem.md": TOOLS_PROBLEM.replace("- Nothing may cost more than 20 a month to run.",
+                                              "- Texting a member about a reservation must cost us nothing.")}, {}, GO_ON,
+     [WRITTEN, *SEVERAL, *MARKS, PLAIN,
+      in_map("the-limit-is-under-the-limits", problem.section(r"holds", r"cost|nothing|free")),
+      not_in_map("the-limit-is-no-activity", activity_with(r"cost us nothing|\bcosts? nothing|free of charge")),
+      says("asks-which-was-meant", r"(cost|texting|texts?)[\s\S]{0,400}\?|\?[\s\S]{0,400}(cost|texting)")], None),
 ]
 
 
