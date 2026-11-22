@@ -4,8 +4,8 @@
 agreed by the owner (decisions 25 to 27). Tested: the text of 84
 lines that walks each item against eight kinds of gap
 (`eval/requirements-skill-kinds.md`) passes 70 of 70 on Sonnet 5.5
-as read and raises 89% of the known gaps. The owner has not yet
-said whether it holds.
+as read and raises 89% of the known gaps. The owner has said the
+stage holds (decision 28).
 
 ## What it is
 

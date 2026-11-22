@@ -29,20 +29,15 @@ design are recorded under `next-plugin/validation/`.
 
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 49 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 49 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
+| `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 84 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of eight kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
 ## Where the work stands (2026-11-22)
 
-Stages 0 to 2 hold. Next, in this order:
+Stages 0 to 3 hold. Next, in this order:
 
-1. **Stage 3, requirements.** Its conditions, bar and cost ceiling
-   are agreed (decision 25) and its test is in
-   `steps/03-requirements/README.md`, with its result: the text of
-   84 lines, which walks each item against eight kinds of gap,
-   passes 70 of 70 on Sonnet 5.5 as read. It waits for the owner's
-   word that it holds. A slice's
-   requirements are a checkable list, each item with a short name of
-   its own, that the acceptance criteria and the scope map both use
-   (decision 23). The stage script counts what is checked.
+1. **A pause the owner asked for** (decision 28): the tests of
+   stages 0 to 3 looked over for gaps, and the four stages run end
+   to end on a few real examples.
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
    or between them. It needs a new row in the routing table and a

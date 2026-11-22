@@ -198,6 +198,17 @@ asking is listed apart, so it can be overturned.
     it is dropped for the stages after is asked when the next one is
     proposed.
 
+## 2026-11-22: the requirements stage holds
+
+28. **The requirements stage holds with the text of 84 lines in
+    `steps/03-requirements/eval/requirements-skill-kinds.md`, on the
+    session's model, Sonnet 5.5** (the owner, on the result in
+    `steps/03-requirements/README.md`: 70 of 70 as read, 89% of the
+    known gaps raised). Before the check-in stage is begun, the
+    owner wants a pause for two things: the tests of stages 0 to 3
+    looked over for gaps, and the four stages run end to end on a
+    few real examples.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
