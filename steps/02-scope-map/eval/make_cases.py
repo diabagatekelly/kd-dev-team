@@ -63,12 +63,15 @@ PLAIN = not_in_map("nothing-of-the-build",
                    problem.SOLUTION + r"|\b\d+\s*(days?|weeks?|sprints?|hours?|points?)\b|acceptance criteri|given[^\n]*when[^\n]*then")
 ASKS = says("asks-the-user", r"\?")
 STOPS_THERE = {"type": "regex", "name": "writes-no-later-document", "target": "trace", "match": "not_contains",
-               "pattern": r'file_path\\?"\s*:\s*\\?"[^"]*(00[2-9]_|01\d_)[^"]*'}
+               "pattern": r'"name"\s*:\s*"(?:Write|Edit)"[\s\S]{0,80}?file_path\\?"\s*:\s*\\?"[^"]*'
+                          r'_(requirements|research|slice|questions|answers|design)'}
 CHANGES_THE_MAP = {"type": "regex", "name": "changes-the-map", "target": "trace",
                    "pattern": r'"name"\s*:\s*"(Write|Edit)"[\s\S]{0,400}?001_scope-map'}
 LEAVES_THE_MAP = [{"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0},
                   {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0}]
-ALWAYS = [STOPS_THERE, startup.NO_ROW_NUMBERS]
+# A map has rows of its own, so only the table is kept from the user here, not the word "row".
+ALWAYS = [STOPS_THERE, never_says("keeps-the-routing-table-out", r"\brouting table\b")]
+GO_ON = "Go on to the next stage."
 
 TOOLS_PROBLEM = """# Problem: Lending at the tool library
 
@@ -151,29 +154,29 @@ SHOWN = ("I've drawn the scope map from the problem document. Five things a user
 # (name, description, documents when the session started, documents added since, prompt, checks, said before)
 SCENARIOS = [
     ("01-a-large-problem", "A problem of several activities: a map of them, marked, one now; ask once.",
-     {"000_problem.md": TOOLS_PROBLEM}, {}, "what's next",
+     {"000_problem.md": TOOLS_PROBLEM}, {}, GO_ON,
      [WRITTEN, *SEVERAL, *MARKS, PLAIN, ASKS,
       not_in_map("the-limit-is-no-activity", activity_with(r"20 a month|\bcost|budget|own phones"))], None),
     ("02-a-small-problem", "A problem that is one activity: one row, said to be one.",
-     {"000_problem.md": ROTA_PROBLEM}, {}, "what's next",
+     {"000_problem.md": ROTA_PROBLEM}, {}, GO_ON,
      [WRITTEN, in_map("marks-the-activities", marked(1)), not_in_map("no-map-invented", marked(3)), PLAIN,
       says("says-it-is-one", r"\bone\b|single|small|only")], None),
     ("03-a-limit-and-an-open-question", "A limit on everything and an open question: neither becomes an activity.",
-     {"000_problem.md": LEAGUE_PROBLEM}, {}, "what's next",
+     {"000_problem.md": LEAGUE_PROBLEM}, {}, GO_ON,
      [WRITTEN, *MARKS, PLAIN,
       not_in_map("the-limit-is-no-activity", activity_with(r"details may be seen|only by|privacy|who (can|may) see")),
       in_map("the-limit-is-kept", r"own coach|secretary"),
       not_in_map("the-open-question-is-no-activity", activity_with(r"referee")),
       in_map("the-open-question-is-kept", r"referee")], None),
     ("04-a-technology-floated", "A technology named in passing: not in the map.",
-     {"000_problem.md": TOOLS_PROBLEM}, {}, "what's next? I was thinking Airtable for this, by the way.",
+     {"000_problem.md": TOOLS_PROBLEM}, {}, GO_ON + " I was thinking Airtable for this, by the way.",
      [WRITTEN, *SEVERAL, *MARKS, PLAIN, not_in_map("the-floated-technology-is-left-out", r"airtable")], None),
     ("05-the-users-correction", "The second turn: the user drops one activity and puts another first.",
      {"000_problem.md": TOOLS_PROBLEM}, {"001_scope-map.md": TOOLS_MAP},
      "Repairs aren't part of this, a different group handles them. And returns matter most: start there.",
      [CHANGES_THE_MAP, *MARKS, in_map("returns-are-now", activity_with(r"return").replace("now|next|later", "now")),
       not_in_map("repairs-are-no-activity", activity_with(r"repair"))],
-     [("user", "what's next"), ("assistant", SHOWN)]),
+     [("user", GO_ON), ("assistant", SHOWN)]),
     ("06-a-slice-that-contradicts-the-map", "A slice done that found otherwise: the map changes, and why is said.",
      PLANNED, {},
      "Slice 1 is done. What we found building it: borrowing and returning are one thing at the desk, the "
