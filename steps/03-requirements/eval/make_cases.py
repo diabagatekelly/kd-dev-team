@@ -7,8 +7,8 @@ adds nothing for this stage (`bare`), kad's `requirements-refinement` as it stan
 this repository's own text (`text`, from `requirements-skill.md`).
 
 kad's skill asks before it writes, so its arm's prompt carries the user's answer to its
-questions: "go by the documents". (Given as a second turn after a fixed first reply, the pilot's
-sessions wrote the document without invoking the skill at all.)
+questions, "go by the documents", and names the skill, as kad's orchestrator does: left to its
+description, the pilot's sessions on Haiku never invoked it.
 
 Usage: python3 -I make_cases.py ARM      (rewrites plugin-ARM/ beside this file; not kept in git)
 """
@@ -297,8 +297,8 @@ def main(arm):
         raise SystemExit("arm: bare, kad or text")
     cleanup = startup._Cleanup()
     for name, description, before, added, prompt, graders, earlier in SCENARIOS:
-        if arm == "kad" and not earlier:   # its questions answered beforehand, so that it writes
-            prompt += KAD_ANSWER
+        if arm == "kad":   # named, as kad's orchestrator names it; its questions answered beforehand
+            prompt += " Use the requirements-refinement skill." + ("" if earlier else KAD_ANSWER)
         machine = startup.standin_machine.Machine(cleanup)
         machine.inside_vm()
         machine.repository(startup.REMOTE)
