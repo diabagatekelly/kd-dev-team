@@ -184,8 +184,12 @@ SCENARIOS = [
      "have not joined yet, so they have to be signed up on the spot before they can take anything.",
      [{"type": "file_exists", "name": "writes-the-changed-map-as-a-new-document", "path": SECOND},
       in_map("marks-the-activities", marked(1), SECOND),
-      not_in_map("joining-is-no-longer-later", activity_with(r"join|sign").replace("now|next|later", "later"),
-                 SECOND),
+      in_map("borrowing-and-returning-are-one", r"(?:^|\n)[^\n]*borrow[^\n]*return[^\n]*" + mark("now|next|later")
+             + r"|(?:^|\n)[^\n]*(?:lend|loan)[^\n]*return[^\n]*" + mark("now|next|later"), SECOND),
+      # Signing up on the spot reaches the map: inside the borrowing row, or as joining brought forward.
+      in_map("joining-on-the-spot-is-in-the-map",
+             r"(?:^|\n)[^\n]*borrow[^\n]*(?:join|sign)[^\n]*|" + activity_with(r"join|sign").replace("now|next|later", "now|next"),
+             SECOND),
       in_map("the-first-map-is-kept", r"Borrow a tool"), says("says-what-changed", r"join|sign")], None),
     ("07-a-slice-that-does-not", "A slice done that found nothing new: the map holds and is left alone.",
      PLANNED, {},

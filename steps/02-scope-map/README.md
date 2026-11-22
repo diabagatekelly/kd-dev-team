@@ -80,6 +80,26 @@ on the text that passes. A model holds when it passes every run of
 the gate and its maps read at least as well as kad's. Ceiling: $25,
 after a pilot on Haiku whose real cost is reported first.
 
+## The pilot (2026-11-22)
+
+Haiku 5.5, each of the seven scenarios once on the three arms, run
+twice: 42 runs, $0.17. For the setup, not the result:
+
+- **Asked "what's next", a session names the scope map and offers to
+  draw it;** it does not start. That is startup doing what its table
+  says. The scenarios now begin with "Go on to the next stage."
+- A check took a file being read for a file being written, and the
+  check that keeps the routing table's row numbers from the user
+  fired on the map's own rows: both corrected.
+- The check on the slice that contradicts the map wanted joining
+  moved earlier; a run that folded signing up on the spot into the
+  borrowing row is as good an answer, and the check now takes both.
+- On the second run our text passed 5 of 7, kad's skill and the bare
+  model 0 of 7 (neither marks now, next and later, which nothing
+  tells them to). kad's steps on the large problem are parts of a
+  system ("member register", "tool catalogue"); our text's rows are
+  things a user does.
+
 ## What a pass does not show
 
 A map is tested on made-up problems of a page; whether it stays true

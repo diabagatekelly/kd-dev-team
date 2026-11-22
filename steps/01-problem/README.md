@@ -153,6 +153,10 @@ cheapest that holds.
 three models $7.20; our text, two versions, $2.33; the ten-run
 passes $3.88).
 
+**Numbered documents, checked (2026-11-22).** With the document
+renamed `000_problem.md` (decision 21), the text on Sonnet, three
+runs a scenario: 18 of 18, $1.10. Cost so far: $14.56 of $30.
+
 ## What a pass does not show
 
 The scenarios stand for points in a conversation of at most two

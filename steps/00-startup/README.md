@@ -355,7 +355,12 @@ document ("its document: planning/problem.md"), found necessary by
 the problem stage's pilot. All 18 scenarios were run again on Sonnet,
 three runs each: 54 of 54, $2.55.
 
-**Cost of the whole test so far:** $27.78 of the $76 ceiling.
+**Numbered documents, checked (2026-11-22).** The documents were
+renamed (decision 21) and a fully planned slice now sends the
+session back to the scope map. All 18 scenarios on Sonnet, three
+runs each: 54 of 54, $2.55.
+
+**Cost of the whole test so far:** $30.33 of the $76 ceiling.
 
 ## What a pass does not show
 
