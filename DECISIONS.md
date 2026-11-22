@@ -153,6 +153,15 @@ asking is listed apart, so it can be overturned.
     item checked. Where the check-in and the tracking of the list
     sit in the routing is not decided yet.
 
+## 2026-11-22: the drawing of the scope map holds
+
+24. **The scope-map stage holds as the drawing of the map, with the
+    text of 49 lines in `steps/02-scope-map/eval/scope-map-skill.md`,
+    on the session's model, Sonnet 5.5** (the owner, on the result in
+    `steps/02-scope-map/README.md`: 50 of 50 at the gate and as
+    read). The re-read after a slice is not part of it: it is the
+    check-in stage of decision 23, built after requirements.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

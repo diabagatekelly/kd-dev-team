@@ -27,6 +27,38 @@ design are recorded under `next-plugin/validation/`.
 |---|---|
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch) and `report.sh` (the one report a session is given). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
+| `steps/01-problem/eval/problem-skill.md` | stage 1's text, 49 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
+| `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 49 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
+
+## Where the work stands (2026-11-22)
+
+Stages 0 to 2 hold. Next, in this order:
+
+1. **Stage 3, requirements.** Its conditions, bar and cost ceiling
+   are put to the owner before anything is built. A slice's
+   requirements are a checkable list, each item with a short name of
+   its own, that the acceptance criteria and the scope map both use
+   (decision 23). The stage script counts what is checked.
+2. **The check-in after a merge** (decision 23): is the slice done, is
+   a new "now" due, does a new issue belong to this slice, the next
+   or between them. It needs a new row in the routing table and a
+   reading of merged pull requests by the scripts. Its two first
+   scenarios (a slice that contradicts the map, one that does not)
+   were written for stage 2 and taken out; they are in the history of
+   `steps/02-scope-map/eval/make_cases.py`. A map changed there is a
+   new numbered version, the earlier one kept (decision 21).
+
+How a stage is run: the scenarios are built by the stage's
+`eval/make_cases.py ARM` and run inside the evaluation VM by
+`steps/00-startup/eval/run-pass.sh` with `ARM_PLUGIN` pointing at the
+stage's arm, after `setup-vm.sh`. kad's skill, where it is an arm, is
+copied into the VM by hand and never committed.
+
+Owed, none of it blocking: a PowerShell twin of the scripts; one real
+check of the VM and its install on each kind of machine, with the
+owner present; the plugin installed inside a newly made VM; what of
+the planning folder's memory survives a VM being destroyed.
+
 ## What came across from the earlier work
 
 None of it is adopted; each is a candidate or a tool for testing one.

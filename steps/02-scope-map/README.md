@@ -1,7 +1,8 @@
 # Stage 2, the scope map: the test, set before anything is built or run
 
 **State, 2026-11-22:** the drawing of the map is tested, ten runs a
-scenario, and waits for the owner's word. The re-read after a slice
+scenario, and the owner has said it holds, on Sonnet 5.5 with the
+text of 49 lines (decision 24). The re-read after a slice
 (condition 9, second half) has moved to a check-in stage of its own,
 built after requirements (decision 23).
 
