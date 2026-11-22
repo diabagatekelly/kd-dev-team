@@ -36,7 +36,9 @@ Stages 0 to 2 hold. Next, in this order:
 
 1. **Stage 3, requirements.** Its conditions, bar and cost ceiling
    are agreed (decision 25) and its test is in
-   `steps/03-requirements/README.md`; it is being run. A slice's
+   `steps/03-requirements/README.md`, with its result: the text of
+   64 lines passes 60 of 60 on Sonnet 5.5. It waits for the owner's
+   word that it holds. A slice's
    requirements are a checkable list, each item with a short name of
    its own, that the acceptance criteria and the scope map both use
    (decision 23). The stage script counts what is checked.

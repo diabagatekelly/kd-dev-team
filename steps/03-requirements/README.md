@@ -1,8 +1,9 @@
 # Stage 3, requirements: the test, set before anything is built or run
 
 **State, 2026-11-22:** the conditions, the bar and the ceiling are
-agreed by the owner (decision 25). The pilot has run; the full pass
-has not.
+agreed by the owner (decision 25). Tested: the text of 64 lines on
+Sonnet 5.5 passes 60 of 60 at the gate and as read. The owner has
+not yet said whether it holds.
 
 ## What it is
 
@@ -101,7 +102,7 @@ documents".
 
 Arms: the bare model (startup and the two earlier stages as adopted,
 no text for this stage); kad's skill; a text of our own, as short as
-holds (`eval/requirements-skill.md`, 60 lines to begin with). Models:
+holds (`eval/requirements-skill.md`, 60 lines to begin with, 64 tuned). Models:
 Haiku 5.5, Sonnet 5.5, Opus 5.5; three runs a scenario, then ten on
 the text that passes. A model holds when it passes every run of the
 gate (60 of 60 at ten runs) and its lists read at least as well as
@@ -126,6 +127,89 @@ arm three times over: 30 runs, $0.16. For the setup, not the result:
   a correction, asked again and wrote nothing.
 - A check on a document that was never written fails with the rest,
   so a run that writes nothing shows many failures for one cause.
+
+## The first full pass (2026-11-22)
+
+Three runs of the six scenarios, 18 runs a cell; passes of the gate,
+and in brackets with the box-and-name checks set aside:
+
+| Arm | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| Bare | 2 (2) | 3 (7) | 2 (4) |
+| kad's skill (269 lines) | 0 (7) | 0 (4) | not run |
+| Our text, first (60 lines) | 17 | 18 | not run |
+| Our text, tuned (64 lines) | 13 | 18 | not run |
+
+**The gate.** No model holds bare, with or without the box and the
+name: most bare runs ask nothing and list no outside system, and on
+Haiku and Opus the floated technology is kept in every run. kad's
+skill, given a correction, asked again and wrote nothing in all six
+runs. Our first text's one miss on Haiku is real: the floated
+technology carried into the document as a question to confirm.
+
+**Read against kad's on Sonnet, on the fixed points** (our 18 lists
+in full; four of kad's in full, the rest by length).
+
+- *Every item the user's.* Ours: nearly; on the one-row problem two
+  items were made from the reason and the cost ("send in much less
+  than the hour", "include the two new staff"), and one list made
+  the privacy limit an item ("the secretary can see every child").
+  kad's adds nothing to the scope, which it gives as one to three
+  bullets restating the map's row.
+- *Covers the activity; each one thing to say yes or no to.* Ours:
+  two to five items, each from a line of the problem document.
+  kad's bullets are the row again and could not be checked off one
+  by one. Ours is closer to the condition; kad's was not written to.
+- *Limits and the open question.* Both say what a limit forces.
+  kad's goes further (the privacy limit means knowing which coach
+  has which team) and sometimes into design ("reachable over a
+  network"). Both leave the fee question open and say what its
+  answer changes.
+- *The inventory.* Both name the provider and the lasting thing;
+  both sometimes list what is used today (the wall chart, the paper
+  ledger).
+- *At a glance.* Ours 130 to 220 words, kad's 250 to 620.
+- **Where kad's is better:** it writes down the planner's own
+  questions, some of them good ("in time": by when?). Ours records
+  only the problem document's open questions.
+
+**Tuned on that reading** (60 to 64 lines): a reason, a measure or a
+limit gives no item; a floated technology is left out of the whole
+document; what is used today is not in the inventory.
+
+## Ten runs of the tuned text (2026-11-22)
+
+| Model | Gate | Cost |
+|---|---|---|
+| Sonnet 5.5 | 60 of 60 | $4.48 |
+| Haiku 5.5 | 53 of 60 | $0.31 |
+
+- **Sonnet, as read** (every item, inventory and open question of
+  the sixty tallied by script, the unusual ones read): 60 of 60 meet
+  the conditions. Lists run two to five items. No item comes from
+  another row, a limit, the cost or the open question; the fee
+  question is under "Not yet confirmed" in ten of ten with what its
+  answer changes; the inventory is the provider and the season
+  ticket in ten of ten, and email in ten of ten. Two things to know:
+  three of the ten lists for the one-row problem have an item that
+  is a step on the way ("the manager can give the product next
+  week's shifts"), which the gate does not see; and names differ
+  from run to run (`see-who-has`, `who-has-tool`), which is fine
+  within a document and means a list is not regenerated once
+  something points at it.
+- **Haiku does not hold:** seven failures, among them a reply that
+  asks nothing, the open question not asked, a list of one item for
+  the season ticket, and a correction made without the text.
+
+**What holds.** The tuned text on Sonnet 5.5. It is carried because
+no model holds without it.
+
+**Cost of the stage:** $13.66 of $30 (pilot $0.16; first pass $7.26;
+the tuned text $1.45; ten runs $4.79).
+
+**Not re-run:** the startup report now carries the count line when a
+requirements document exists; stage 0's scenarios that have one were
+not run again with it.
 
 ## What a pass does not show
 
