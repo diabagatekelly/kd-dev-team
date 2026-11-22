@@ -7,12 +7,4 @@ Machine
 - the command that would install it (not run): brew trust docker/tap && brew install docker/tap/sbx
 - Homebrew, which that command uses: installed
 
-Tracker
-- repository: someone/something on GitHub
-- open pull requests: 0
-- open issues: 0
-
-Documents
-- planning folder: planning (chosen earlier for this project)
-- found: problem (problem.md), scope (scope.md), requirements (requirements.md)
-- next stage by the documents: research
+The tracker and the documents are read inside the project's VM, not here.

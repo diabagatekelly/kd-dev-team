@@ -6,12 +6,4 @@ Machine
 - VM tool (Docker Sandboxes, `sbx`): installed (v0.54.0)
 - signed in to the VM tool: no (`sbx login` signs in; it opens a browser and cannot be run by a script)
 
-Tracker
-- repository: someone/something on GitHub
-- open pull requests: 0
-- open issues: 0
-
-Documents
-- planning folder: planning (chosen earlier for this project)
-- found: problem (problem.md), scope (scope.md), requirements (requirements.md)
-- next stage by the documents: research
+The tracker and the documents are read inside the project's VM, not here.

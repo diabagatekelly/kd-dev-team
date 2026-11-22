@@ -8,14 +8,7 @@ Machine
 - locks: 1 of 6 OFF
   - OFF: It cannot open pages in your own web browser (browser.enabled)
 - turning every lock on: sh "@STARTUP@/machine.sh" secure
-- VMs: 1 (work-1)
+- VMs: 1 (@VM@)
+- VM for this project: @VM@
 
-Tracker
-- repository: someone/something on GitHub
-- open pull requests: 0
-- open issues: 0
-
-Documents
-- planning folder: planning (chosen earlier for this project)
-- found: problem (problem.md), scope (scope.md), requirements (requirements.md)
-- next stage by the documents: research
+The tracker and the documents are read inside the project's VM, not here.

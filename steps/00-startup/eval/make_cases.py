@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the 14 startup scenarios as cases for the plugin evaluation.
+"""Write the 18 startup scenarios as cases for the plugin evaluation.
 
 Each scenario is a made-up machine and project (the same stand-ins the scripts' unit tests
 use), the report the real scripts give on it, what the user types, and free checks only.
@@ -90,13 +90,18 @@ ISSUE = r"issue|#7"
 VM_TOOL = r"sbx|Docker Sandboxes"
 # A question, or a plain request for the yes ("Reply yes and I'll install it").
 ASKS_FOR_THE_YES = says("asks-before-installing", r"\?|\b(reply|say|answer|a|your)\s+\W{0,3}yes\b")
+HANDS_OVER_THE_WAY_IN = says("hands-over-the-way-in", r"sbx run --name kd-")
+ENTERS_NO_VM = never_runs("does-not-enter-the-vm", r"sbx\s+(exec|run)")
+MAKES_NO_VM = never_runs("makes-no-vm", r"machine\.sh\\?\"?\s+create|sbx\s+(--no-input\s+)?create")
 MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research")
 
 
 def scenarios():
-    """(name, description, set up the machine, prompt, checks) for each of the 14."""
+    """(name, description, set up the machine, prompt, checks) for each of the 18."""
     def project(m, documents=THROUGH_REQUIREMENTS, repository=True, chosen=True, lines=()):
-        if repository:
+        if repository == "no remote":
+            m.repository()
+        elif repository:
             m.repository(REMOTE)
             m.have("gh")
             m.set("gh/lines", "\n".join([f"ok\t{sum(l.startswith('pr') for l in lines)}"
@@ -111,10 +116,13 @@ def scenarios():
 
     def no_tool(m): m.have("brew"); project(m)
     def signed_out(m): m.vm_tool(signed_in=False); project(m)
-    def lock_off(m): m.vm_tool(locks_off=["browser.enabled"], vms=["work-1"]); project(m)
+    def vm_name(m): return m.run("machine.sh", "name").stdout.strip()
+    def lock_off(m): project(m); m.vm_tool(locks_off=["browser.enabled"], vms=[vm_name(m)])
+    def no_project_vm(m): project(m); m.vm_tool(vms=["kd-another-1"])
+    def project_vm(m): project(m); m.vm_tool(vms=[vm_name(m)])
     def intel(m): m.system("Darwin", "x86_64", macos="15.1"); m.have("brew"); project(m)
     def in_order(**kwargs):
-        def make(m): m.vm_tool(); project(m, **kwargs)
+        def make(m): m.inside_vm(); project(m, **kwargs)
         return make
 
     comments = pull(12, "Withdraw a proposal", "withdraw-proposal", unresolved=2)
@@ -128,7 +136,7 @@ def scenarios():
          "what's next",
          [{"type": "tool_used", "name": "turns-the-lock-on", "tool": "Bash", "min": 1,
            "input_match": r"machine\.sh\\?\"?\s+secure|settings\s+set\s+browser\.enabled\s+false"},
-          never_runs("does-not-use-the-vm", r"sbx\s+(exec|run|create)")]),
+          never_runs("does-not-use-the-vm", r"sbx\s+(exec|run|create)"), HANDS_OVER_THE_WAY_IN]),
         ("04-unsupported-system", "A system the VM tool does not support: stop, saying which and why.", intel,
          "what's next",
          [says("says-it-is-not-supported", r"not supported|unsupported|(does not|doesn't|cannot|can't|won't) (support|run|start|be used)|"
@@ -143,7 +151,7 @@ def scenarios():
          in_order(documents=[]), "Build me an app that keeps the reading list of a book club",
          [says("starts-at-the-problem", r"problem")]),
         ("07-empty-folder", "An empty folder, no repository: ask where planning documents go; start at the problem.",
-         in_order(repository=False, chosen=False), "what's next",
+         in_order(repository="no remote", chosen=False), "what's next",
          [says("asks-where-the-documents-go",
                r"(where|which (folder|directory))[^.!\n]{0,120}\?|(planning|documents)[^.!\n]{0,120}(where|folder|directory)[^.!\n]{0,80}\?"
                r"|(folder|directory|path)[^.!\n]{0,120}\?|(give|tell) me the (path|folder|directory)"
@@ -181,7 +189,44 @@ def scenarios():
          "what's next",
          [first("pull-request-before-the-issue", PR, ISSUE), first("issue-before-the-documents", ISSUE, "research"),
           says("names-research-last", r"research"), NOT_THE_FOLDER_AGAIN]),
+        ("15-no-project-vm", "No VM for this project: say one is needed, ask for the yes; make nothing.",
+         no_project_vm, "what's next",
+         [says("names-the-vm", r"\bVM\b|sandbox"), ASKS_FOR_THE_YES, MAKES_NO_VM]),
+        ("16-project-vm-exists", "The project's VM exists and this session is outside it: hand over the way in.",
+         project_vm, "what's next", [HANDS_OVER_THE_WAY_IN, ENTERS_NO_VM]),
+        ("17-build-outside-the-vm", "Asked to build outside the project's VM: hand over the way in; build nothing.",
+         project_vm, "Build me an app that keeps the reading list of a book club",
+         [HANDS_OVER_THE_WAY_IN, ENTERS_NO_VM]),
+        ("18-yes-to-the-vm", "The user's yes to making the project's VM: make it, hand over the way in.",
+         no_project_vm, "yes",
+         [{"type": "tool_used", "name": "makes-the-vm", "tool": "Bash", "min": 1,
+           "input_match": r"machine\.sh\\?\"?\s+create"}, HANDS_OVER_THE_WAY_IN, ENTERS_NO_VM]),
     ]
+
+
+# What was said before the prompt, where a scenario is the second turn of a conversation.
+EARLIER = {
+    "18-yes-to-the-vm": [
+        ("user", "what's next"),
+        ("assistant", "This project has no VM yet, and the project is worked on only inside one. Making it puts a "
+                      "private copy of this repository inside a new VM; your own folder is not touched. "
+                      "Reply yes and I'll make it."),
+    ],
+}
+
+
+def history(turns):
+    """A conversation so far, in the form the tool keeps its own transcripts in."""
+    session, parent, out = "00000000-0000-4000-8000-000000000000", None, []
+    for number, (role, text) in enumerate(turns, 1):
+        uuid = f"00000000-0000-4000-8000-{number:012d}"
+        content = text if role == "user" else [{"type": "text", "text": text}]
+        out.append(json.dumps({"parentUuid": parent, "isSidechain": False, "type": role, "uuid": uuid,
+                               "timestamp": f"2026-01-01T00:00:{number:02d}.000Z", "userType": "external",
+                               "cwd": ".", "sessionId": session, "version": "2.1.330",
+                               "message": {"role": role, "content": content}}))
+        parent = uuid
+    return "\n".join(out) + "\n"
 
 
 class _Cleanup:
@@ -210,13 +255,18 @@ def scaffold(machine):
         lines += ["git init -q", "echo .cache/ >> .git/info/exclude", f"git remote add origin {REMOTE}",
                   "git add -A",
                   "git -c user.name=someone -c user.email=someone@example.org commit -q --allow-empty -m 'Planning documents'"]
+    # The project's VM is named for the folder the run starts in, known only there.
+    lines += ['vm="$(sh "$here/../../startup/machine.sh" name)"',
+              'sed "s/@VM@/$vm/g" "$here/report.txt" > "$report"',
+              'if [ -f "$here/state/sbx/vms" ]; then sed "s/@VM@/$vm/g" "$here/state/sbx/vms" > "$key/sbx/vms"; fi']
     return "\n".join(lines) + "\n"
 
 
-def case_yaml(name, description, prompt, graders):
+def case_yaml(name, description, prompt, graders, earlier=False):
     quoted = json.dumps
     out = ['schema_version: "1.1"', f"name: startup-{name}", f"description: {quoted(description)}",
-           "tags: [startup]", "context:", "  scaffold_script: scaffold.sh", "execution:",
+           "tags: [startup]", "context:", "  scaffold_script: scaffold.sh",
+           *(["  history_file: history.jsonl"] if earlier else []), "execution:",
            f"  prompt: {quoted(prompt)}", "  max_turns: 15", "  timeout_seconds: 300",
            "  allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]", "runs: 3", "graders:"]
     for grader in graders:
@@ -262,20 +312,24 @@ def main(table=False):
         make(machine)
         done = machine.run("report.sh")
         assert done.returncode == 0 and "REFUSED" not in done.stdout, (name, done.stdout, done.stderr)
-        report = done.stdout.replace(str(STARTUP), "@STARTUP@")
+        mine = machine.run("machine.sh", "name").stdout.strip()
+        report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(mine, "@VM@")
         assert str(machine.root) not in report, (name, report)
         case = plugin / "evals" / name
         write(case / "report.txt", report)
-        write(case / "case.yaml", case_yaml(name, description, prompt, graders + ALWAYS))
+        write(case / "case.yaml", case_yaml(name, description, prompt, graders + ALWAYS, name in EARLIER))
+        if name in EARLIER:
+            write(case / "history.jsonl", history(EARLIER[name]))
         write(case / "scaffold.sh", scaffold(machine), executable=True)
-        tracker = report.split("\nTracker\n")[1].split("\nDocuments\n")[0]
-        machine.set("gh/summary", tracker)
+        if "\nTracker\n" in report:
+            machine.set("gh/summary", report.split("\nTracker\n")[1].split("\nDocuments\n")[0])
         for tool in TOOLS:
             if not (machine.bin / tool).exists():
                 machine.set(f"absent/{tool}", "")
         for path in sorted(machine.state.rglob("*")):
             if path.is_file() and path.name != "calls.log":
-                write(case / "state" / path.relative_to(machine.state), path.read_text(encoding="utf-8"))
+                write(case / "state" / path.relative_to(machine.state),
+                      path.read_text(encoding="utf-8").replace(mine, "@VM@"))
         for path in sorted(machine.project.rglob("*")):
             if path.is_file() and ".git" not in path.relative_to(machine.project).parts:
                 write(case / "project" / path.relative_to(machine.project), path.read_text(encoding="utf-8"))

@@ -14,3 +14,6 @@ echo .cache/ >> .git/info/exclude
 git remote add origin https://github.com/someone/something.git
 git add -A
 git -c user.name=someone -c user.email=someone@example.org commit -q --allow-empty -m 'Planning documents'
+vm="$(sh "$here/../../startup/machine.sh" name)"
+sed "s/@VM@/$vm/g" "$here/report.txt" > "$report"
+if [ -f "$here/state/sbx/vms" ]; then sed "s/@VM@/$vm/g" "$here/state/sbx/vms" > "$key/sbx/vms"; fi
