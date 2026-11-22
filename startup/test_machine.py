@@ -232,6 +232,13 @@ class ProjectVM(unittest.TestCase):
         self.assertEqual(out.strip(), "- this session is inside a VM (Docker Sandboxes): the project is worked on here")
         self.assertEqual(self.machine.calls(), [])
 
+    def test_where_the_vm_tool_itself_is_installed_is_not_the_inside_of_a_vm(self):
+        self.machine.inside_vm()
+        self.machine.repository()
+        self.machine.vm_tool()
+        self.assertIn("- VM for this project: none", self.inspect())
+        self.assertEqual(self.machine.run("machine.sh", "create").returncode, 0)
+
     def test_a_machine_in_order_with_no_vm_for_the_project_says_how_one_is_made(self):
         self.machine.repository()
         self.machine.vm_tool(vms=["kd-another-1"])

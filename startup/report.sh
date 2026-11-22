@@ -15,7 +15,7 @@ part() {
 printf '%s\n' "kd-dev-team: startup report" \
   "Read by script at the start of this session; nothing was installed or changed."
 part Machine "$HERE/machine.sh" inspect
-if [ -e "${KD_VM_MARK:-/run/sandbox}" ]; then
+if [ "$(sh "$HERE/machine.sh" where)" = inside ]; then
   part Tracker "$HERE/tracker.sh"
   part Documents "$HERE/stage.sh" report
 else

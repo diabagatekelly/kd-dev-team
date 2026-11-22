@@ -1,14 +1,12 @@
 #!/bin/sh
 # Run inside the evaluation VM, from the repository's root: one pass of every scenario.
 #   [ARM_PLUGIN=plugin-table] [CASES='startup-0[1-5]*'] sh steps/00-startup/eval/run-pass.sh MODEL RUNS NAME CEILING_USD
-# The evaluation VM is itself a VM: the scripts a session runs are told they are outside one,
-# as in every scenario where a session runs one.
 # Leaves NAME.json and one transcript per run under /tmp/results.
 set -eu
 model=$1; runs=$2; name=$3; ceiling=$4
 mkdir -p /tmp/results/traces
 cd "$(dirname "$0")/${ARM_PLUGIN:-plugin}"
-env -u BASH_ENV -u CLAUDE_ENV_FILE KD_VM_MARK=/nowhere/outside-a-vm claude plugin eval . ${CASES:+--case "$CASES"} --model "$model" --runs "$runs" --ablation none \
+env -u BASH_ENV -u CLAUDE_ENV_FILE claude plugin eval . ${CASES:+--case "$CASES"} --model "$model" --runs "$runs" --ablation none \
   --scaffold --allow-tools Bash Write Edit --no-publish --trust-plugin --max-cost-usd "$ceiling" --keep-temp \
   --output-dir "/tmp/results/$name" --json "/tmp/results/$name.json" >/dev/null 2>&1 || true
 python3 - "$name" <<'PY'

@@ -6,6 +6,7 @@
 #   machine.sh install [--yes]  install the VM tool; without --yes, only say what would run
 #   machine.sh create           make this project's VM, a private copy of its repository; locks first
 #   machine.sh name             the name of this project's VM
+#   machine.sh where            inside or outside a VM
 #
 # Exit 3 with a line starting "REFUSED" when a tool answers in a way this script does not
 # recognise: nothing is guessed from an answer it cannot read.
@@ -17,7 +18,8 @@ have() { command -v "$1" >/dev/null 2>&1; }
 SELF="$(cd "$(dirname "$0")" && pwd)/machine.sh"
 
 # Inside a VM the tool made there is nothing of the tool to inspect: the locks are set outside.
-inside() { [ -e "${KD_VM_MARK:-/run/sandbox}" ]; }
+# The tool is never installed inside its own VMs, so where it is installed is the outside.
+inside() { [ -e "${KD_VM_MARK:-/run/sandbox}" ] && ! have sbx; }
 INSIDE="- this session is inside a VM (Docker Sandboxes): the project is worked on here"
 
 # One VM per project, named for its folder; the number keeps two folders of one name apart.
@@ -232,5 +234,6 @@ case "${1:-}" in
   install) shift; install "$@" ;;
   create) create ;;
   name) vm_name ;;
-  *) sed -n '4,8p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
+  where) if inside; then say inside; else say outside; fi ;;
+  *) sed -n '4,9p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
 esac
