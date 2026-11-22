@@ -157,6 +157,16 @@ passes $3.88).
 renamed `000_problem.md` (decision 21), the text on Sonnet, three
 runs a scenario: 18 of 18, $1.10. Cost so far: $14.56 of $30.
 
+## After the end-to-end runs (2026-11-22)
+
+A terse user's short answers were being written up as the whole
+problem, and a user who gave one limit was never asked for the rest.
+The text (51 lines) now asks one last question of an account that
+came answer by answer: whether anything else goes wrong today, or
+limits what can be done. Scenario 07 was added. With every adopted
+text loaded, all seven scenarios on Sonnet, three runs each: 21 of
+21, $1.31; scenario 07 alone, ten runs: 10 of 10.
+
 ## What a pass does not show
 
 The scenarios stand for points in a conversation of at most two

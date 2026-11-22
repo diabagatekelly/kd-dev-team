@@ -362,6 +362,19 @@ runs each: 54 of 54, $2.55.
 
 **Cost of the whole test so far:** $30.33 of the $76 ceiling.
 
+## After the end-to-end runs (2026-11-22)
+
+Running the stages together (`../../e2e/README.md`) changed startup:
+`stage.sh` prints the command that records the planning folder and
+the command that reads the documents again, each carrying the
+plugin's data folder; and the routing table has a row for a report
+that could not be read, records the folder the user names, reads the
+documents again when a stage is finished, suggests nothing of the
+product, and does not improvise a stage that is not built (44
+lines). Three scenarios were added (19 to 21). With every adopted
+text loaded, all 21 scenarios on Sonnet, three runs each: 63 of 63,
+$3.18.
+
 ## What a pass does not show
 
 Three runs at 42 of 42 show a model is reliable on these scenarios,

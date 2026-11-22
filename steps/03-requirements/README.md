@@ -356,6 +356,20 @@ which did not hold on the shorter text.
 **Cost of the stage:** $33.27 recorded, and a pass stopped part way
 that left no record (under $2 by estimate).
 
+## After the end-to-end runs (2026-11-22)
+
+Two changes to the text (86 lines), each from a run
+(`../../e2e/README.md`): who is named by their role, never "I" or
+"you"; and a ninth kind in the walk, **does**: what the person does
+and is shown, where the item's verb does not say (practise, manage,
+review). A list for "practise the verses I get wrong" had asked
+seven questions and not that one. Scenario 08 and the check
+`form-who-is-named-by-role` were added. With every adopted text
+loaded, the eight scenarios on Sonnet, three runs each: 24 of 24,
+$2.02. Scenario 08 alone, ten runs: 7 of 10 by the check and 10 of
+10 as read (all ten ask what practising is; three in wordings the
+check did not know, since widened and not run again).
+
 ## What a pass does not show
 
 The scenarios are made-up problems of a page and at most two turns.

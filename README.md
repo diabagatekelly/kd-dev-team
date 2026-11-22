@@ -27,17 +27,28 @@ design are recorded under `next-plugin/validation/`.
 |---|---|
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch) and `report.sh` (the one report a session is given). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
-| `steps/01-problem/eval/problem-skill.md` | stage 1's text, 49 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
+| `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
+| `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 49 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
-| `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 84 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of eight kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
+| `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 86 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
 ## Where the work stands (2026-11-22)
 
 Stages 0 to 3 hold. Next, in this order:
 
-1. **A pause the owner asked for** (decision 28): the tests of
-   stages 0 to 3 looked over for gaps, and the four stages run end
-   to end on a few real examples.
+1. **A pause the owner asked for** (decision 28), under way: the
+   tests of stages 0 to 3 looked over for gaps, and the four stages
+   run end to end on four examples with a scripted user (`e2e/`).
+   Every problem a run meets becomes a test, an evaluation or a
+   change to a text (decision 29); the table is in `e2e/README.md`.
+   As it stands: every stage's scenarios pass with everything
+   adopted loaded (123 runs on Sonnet), and all four examples reach
+   the requirements with their documents numbered in order. Still
+   owed from the look over the tests: the problem and scope-map
+   texts set beside kad's skills part by part; an example that
+   stops and starts again in a new session; the plugin made
+   installable and run once in a real VM; a guard for the owner's
+   own files.
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
    or between them. It needs a new row in the routing table and a

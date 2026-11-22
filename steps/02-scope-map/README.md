@@ -202,6 +202,14 @@ without the text.
 
 Cost of the stage: $17.18 of $25.
 
+## After the end-to-end runs (2026-11-22)
+
+The text is unchanged. With every adopted text loaded, the five
+scenarios on Sonnet, three runs each: 15 of 15, $1.12. In the
+end-to-end runs each map was drawn from the problem document the
+session itself had written, and took the user's change of what comes
+first.
+
 ## What a pass does not show
 
 A map is tested on made-up problems of a page; whether it stays true

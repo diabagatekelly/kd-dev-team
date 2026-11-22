@@ -341,7 +341,9 @@ SCENARIOS = [
       in_list("asks-what-the-verb-means",
               section(NOT_CONFIRMED, r"what[^\n]{0,80}practi[sc][^\n]{0,80}(is|means?|looks?|consists?|involves?|do(es)?\b)|"
                                      r"practi[sc][^\n]{0,60}(look like|consist|take the form|mean\b|means\b|involve)|"
-                                     r"what (does|would|will|should) (a|the) (learner|person|user)[^\n]{0,40}(do|see|shown)"))], None),
+                                     r"what (does|would|will|should) (a|the) (learner|person|user)[^\n]{0,40}(do|see|shown)|"
+                                     # or any question it files under the kind: the ten runs asked it in ten wordings
+                                     r"\bdoes\b\*{0,2}\s*[(:)]|[(,]\s*\*{0,2}does\*{0,2}\)|,\s*does\*\*"))], None),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
          "scope-map": ROOT / "steps/02-scope-map/eval/scope-map-skill.md"}
