@@ -106,7 +106,28 @@ class Stage(unittest.TestCase):
         out = self.report()
         self.assertIn("- every planning document of slice-001 exists", out)
         self.assertIn("- next stage by the documents: scope map, re-read with the user before the next slice "
-                      "(its document: planning/001_scope-map.md)", out)
+                      "(a changed map is a new document, planning/013_scope-map-v002.md; "
+                      "001_scope-map.md is kept)", out)
+
+    def test_a_document_takes_the_next_number_in_the_folder_whatever_came_before(self):
+        self.chosen("000_problem.md", "001_scope-map.md", "002_scope-map-v002.md")
+        out = self.report()
+        self.assertIn("scope map (002_scope-map-v002.md)", out)
+        self.assertIn("- next stage by the documents: requirements (its document: planning/003_requirements.md)", out)
+
+    def test_a_document_is_found_by_its_name_not_its_number(self):
+        self.chosen("000_problem.md", "001_scope-map.md", "005_requirements.md", "007_research/a.md")
+        out = self.report()
+        self.assertIn("requirements (005_requirements.md)", out)
+        self.assertIn("- next stage by the documents: slice (its document: planning/slice-001/008_slice.md)", out)
+
+    def test_the_third_map_is_numbered_after_everything_there(self):
+        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md",
+                    *[f"slice-001/{name}.md" for name in
+                      ("004_slice", "005_questions", "006_answers", "007_open-facts", "008_design", "009_screens",
+                       "010_stack", "011_readiness", "012_owner-list")], "013_scope-map-v002.md")
+        self.assertIn("(a changed map is a new document, planning/014_scope-map-v003.md; "
+                      "013_scope-map-v002.md is kept)", self.report())
 
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()

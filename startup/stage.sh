@@ -27,23 +27,33 @@ remember() {
 }
 
 # One line per stage, in pipeline order: its name, then the document that shows it was done.
-# A stage from "slice" on is read in the latest slice's folder.
+# A document is found by its name; the number before it is its place in the order the
+# folder's documents were made. A stage from "slice" on is read in the latest slice's folder.
 stages() {
   cat <<'STAGES'
-problem|000_problem.md
-scope map|001_scope-map.md
-requirements|002_requirements.md
-research|003_research/
-slice|SLICE/004_slice.md
-questions|SLICE/005_questions.md
-answers|SLICE/006_answers.md
-tests of open facts|SLICE/007_open-facts.md
-design|SLICE/008_design.md
-screens|SLICE/009_screens.md
-stack and repository|SLICE/010_stack.md
-readiness|SLICE/011_readiness.md
-the owner's list|SLICE/012_owner-list.md
+problem|problem.md
+scope map|scope-map*.md
+requirements|requirements.md
+research|research/
+slice|SLICE/slice.md
+questions|SLICE/questions.md
+answers|SLICE/answers.md
+tests of open facts|SLICE/open-facts.md
+design|SLICE/design.md
+screens|SLICE/screens.md
+stack and repository|SLICE/stack.md
+readiness|SLICE/readiness.md
+the owner's list|SLICE/owner-list.md
 STAGES
+}
+
+# The latest numbered entry of that name in a folder, or nothing.
+numbered() { (cd "$1" 2>/dev/null && ls -d [0-9][0-9][0-9]_$2 2>/dev/null | sort | tail -1) | sed 's|/$||'; }
+
+# The number the next document takes: one past the highest in the folder and its slices.
+next_number() {
+  (cd "$dir" && ls -d [0-9][0-9][0-9]_* slice-[0-9]*/[0-9][0-9][0-9]_* 2>/dev/null) \
+    | sed 's|.*/||' | awk '{n = substr($0, 1, 3) + 0; if (n >= max) max = n + 1} END {printf "%03d\n", max}'
 }
 
 report() {
@@ -55,20 +65,22 @@ report() {
   say "- planning folder: $folder (chosen earlier for this project)"
   slice=$(cd "$dir" && ls -d slice-[0-9]* 2>/dev/null | sort | tail -1)
   slice=${slice:-slice-001}
+  number=$(next_number)
   found=""; missing=""; next=""; disorder=""
   while IFS='|' read -r name document; do
-    case "$document" in SLICE/*) document="$slice/${document#SLICE/}" ;; esac
+    case "$document" in SLICE/*) under="$slice/"; document=${document#SLICE/} ;; *) under="" ;; esac
+    is=$(numbered "$dir/$under" "${document%/}")
     case "$document" in
-      */) [ -n "$(ls "$dir/$document" 2>/dev/null)" ] && there=yes || there=no ;;
-      *) [ -f "$dir/$document" ] && there=yes || there=no ;;
+      */) [ -n "$is" ] && [ -n "$(ls "$dir/$under$is" 2>/dev/null)" ] && there=yes || there=no; is="$is/" ;;
+      *) [ -n "$is" ] && there=yes || there=no ;;
     esac
     if [ "$there" = yes ]; then
-      found="${found:+$found, }$name ($document)"
-      [ -z "$missing" ] || disorder="${disorder}- out of order: $name ($document) exists but nothing was found for: $missing
+      found="${found:+$found, }$name ($under$is)"
+      [ -z "$missing" ] || disorder="${disorder}- out of order: $name ($under$is) exists but nothing was found for: $missing
 "
     else
       missing="${missing:+$missing, }$name"
-      [ -n "$next" ] || next="$name (its document: $folder/$document)"
+      [ -n "$next" ] || next="$name (its document: $folder/$under${number}_$(say "$document" | sed 's/\*//'))"
     fi
   done <<STAGES
 $(stages)
@@ -77,8 +89,11 @@ STAGES
   [ -z "$disorder" ] || printf '%s' "$disorder"
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # The big picture is re-read each time a slice is fully planned: it may no longer hold.
+  # A changed map is a new document, so the folder shows when the picture changed.
+  map=$(numbered "$dir" 'scope-map*.md')
+  version=$(( $(cd "$dir" && ls [0-9][0-9][0-9]_scope-map*.md 2>/dev/null | wc -l) + 1 ))
   say "- every planning document of $slice exists"
-  say "- next stage by the documents: scope map, re-read with the user before the next slice (its document: $folder/001_scope-map.md)"
+  say "- next stage by the documents: scope map, re-read with the user before the next slice (a changed map is a new document, $folder/${number}_scope-map-v$(printf '%03d' "$version").md; $map is kept)"
 }
 
 case "${1:-}" in

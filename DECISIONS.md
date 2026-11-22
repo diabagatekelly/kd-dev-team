@@ -124,6 +124,10 @@ asking is listed apart, so it can be overturned.
 21. **Planning documents are numbered in the order they are made:**
     `000_problem.md`, `001_scope-map.md` and so on (the owner), so
     the sequence shows in the folder.
+    A document takes the next number in the folder when it is made,
+    and is found by its name. A map changed after a slice is a new
+    document, such as `013_scope-map-v002.md`, and the earlier map
+    is kept, so the folder shows when the picture changed.
 22. **Stage 2 is the product manager's map, kept alive** (the owner,
     who wants the big picture to go back to after slice 1 and knows
     it will change). After the client describes the product, the
@@ -166,15 +170,14 @@ asking is listed apart, so it can be overturned.
   the same tests, is owed for Windows without it and is written in the
   session on that machine.
 - Startup's scripts (`startup/`), 2026-11-21:
-  - A stage is found by its document in the planning folder, numbered
-    (decision 21): `000_problem.md`, `001_scope-map.md`,
-    `002_requirements.md`, a file in `003_research/`, then in the
-    latest `slice-NNN/` folder `004_slice.md`, `005_questions.md`,
-    `006_answers.md`, `007_open-facts.md`, `008_design.md`,
-    `009_screens.md`, `010_stack.md`, `011_readiness.md`,
-    `012_owner-list.md`. The owner gave the first two; the rest
-    follow the same rule (the stage's number less one) and stand
-    until the stage that writes each is built.
+  - A stage is found by its document's name in the planning folder
+    (decision 21): `problem`, `scope-map`, `requirements`, a file in
+    `research/`, then in the latest `slice-NNN/` folder `slice`,
+    `questions`, `answers`, `open-facts`, `design`, `screens`,
+    `stack`, `readiness`, `owner-list`. Numbers run on through the
+    slice folders, so a first slice's documents are 004 to 012.
+    Names other than the owner's first two stand until the stage
+    that writes each is built.
   - When every document of a slice exists, the next stage named is
     the scope map, re-read with the user before the next slice.
   - The planning folder is remembered in the plugin's own data folder,

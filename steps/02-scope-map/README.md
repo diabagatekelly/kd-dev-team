@@ -35,10 +35,13 @@ re-read with the user each time a slice is done.
 8. **Show it and ask once** whether anything is missing, unwanted or
    in the wrong order: what is in and out is the user's.
 9. **Change it when a slice taught otherwise.** Re-read after a
-   slice, with what the slice found, it revises the map (an activity
-   split, joined, added, dropped or moved) and says what changed and
-   why; where nothing contradicts it, it says the map holds and
-   changes nothing.
+   slice, with what the slice found, it writes the changed map as a
+   new document under the next number (`013_scope-map-v002.md`: an
+   activity split, joined, added, dropped or moved), keeps the
+   earlier one, and says what changed and why; where nothing
+   contradicts it, it says the map holds and writes nothing. A
+   correction the user makes when first shown the map is made in
+   the map itself: nothing has been built on it yet.
 10. **Stop there:** no requirements, no slice.
 
 ## Two measures, as for the problem stage

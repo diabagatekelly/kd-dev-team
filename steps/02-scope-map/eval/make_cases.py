@@ -30,15 +30,16 @@ problem = load("problem_cases", ROOT / "steps/01-problem/eval/make_cases.py")
 says, never_says, write = startup.says, startup.never_says, startup.write
 
 MAP = "planning/001_scope-map.md"
+SECOND = "planning/013_scope-map-v002.md"   # a map changed after a slice is a new document
 KAD = [HERE / "kad-skill.md", ROOT.parent / "kad-dev-team-plugin/skills/scope-map/SKILL.md"]
 
 
-def in_map(name, pattern):
-    return {"type": "regex", "name": name, "target": {"source": "file", "path": MAP}, "flags": "i", "pattern": pattern}
+def in_map(name, pattern, path=MAP):
+    return {"type": "regex", "name": name, "target": {"source": "file", "path": path}, "flags": "i", "pattern": pattern}
 
 
-def not_in_map(name, pattern):
-    return {**in_map(name, pattern), "match": "not_contains"}
+def not_in_map(name, pattern, path=MAP):
+    return {**in_map(name, pattern, path), "match": "not_contains"}
 
 
 # An activity is a line that carries one of the three marks, set off as a cell, in brackets or in bold.
@@ -178,9 +179,11 @@ SCENARIOS = [
      "Slice 1 is done. What we found building it: borrowing and returning are one thing at the desk, the "
      "volunteer does both in the same minute on the same ledger line. And half the people who come to borrow "
      "have not joined yet, so they have to be signed up on the spot before they can take anything.",
-     [CHANGES_THE_MAP, in_map("marks-the-activities", marked(1)),
-      not_in_map("joining-is-no-longer-later", activity_with(r"join|sign").replace("now|next|later", "later")),
-      says("says-what-changed", r"join|sign")], None),
+     [{"type": "file_exists", "name": "writes-the-changed-map-as-a-new-document", "path": SECOND},
+      in_map("marks-the-activities", marked(1), SECOND),
+      not_in_map("joining-is-no-longer-later", activity_with(r"join|sign").replace("now|next|later", "later"),
+                 SECOND),
+      in_map("the-first-map-is-kept", r"Borrow a tool"), says("says-what-changed", r"join|sign")], None),
     ("07-a-slice-that-does-not", "A slice done that found nothing new: the map holds and is left alone.",
      PLANNED, {},
      "Slice 1 is done. Nothing surprised us: borrowing works at the desk the way we thought it would.",

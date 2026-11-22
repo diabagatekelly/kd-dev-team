@@ -43,9 +43,10 @@ unwanted or in the wrong order: what is in, what is out and what
 comes first are the user's. Apply their correction to the document.
 
 **Re-reading after a slice.** Set what the slice found against the
-rows. Where it contradicts them, change the rows (split, join, add,
-drop, move), and say what changed and why. Where nothing contradicts
-them, say the map holds and change nothing.
+rows. Where it contradicts them, write the changed map as the new
+document the startup report names (split, join, add, drop or move
+rows), leave the earlier map as it is, and say what changed and why.
+Where nothing contradicts them, say the map holds and write nothing.
 
 **Stop there.** Save it as the document the startup report names for
 this stage. No requirements and no slice.
