@@ -78,7 +78,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - This repository is public: methods, scripts, prompts, and results as
   counts and costs. Nothing that quotes a real project is kept here.
 - Every script has unit tests, written first. Run them with
-  `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/` and
-  `startup/`.
+  `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
+  `startup/` and `steps/03-requirements/eval/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.

@@ -250,6 +250,55 @@ the user can answer and whose answer changes the list, not filler
 and not design. The text also takes the scope map's rule that a step
 on the way is not an item. It is 72 lines.
 
+## The questions by a walk, not by chance: the test, set before it runs (2026-11-22)
+
+**Why.** The list drives what follows: research starts from its
+inventory, the slice and its criteria from its items, and "done" is
+every box checked. The later stages deepen what is on the list; they
+do not find what is missing from it. So the planner's questions are
+the cheap place to find a gap, the owner is willing to answer them
+(the cap of three is gone), and the owner asked for a more
+deterministic way to arrive at them (decision 27).
+
+**The first three runs with free-form questions** (21 of 21 at the
+gate, $1.67): four to six questions a list, most of them the user's
+alone to answer and bearing on an item; some filler ("roughly how
+many children?") and some on the how ("how is a subscriber told?").
+Which questions were raised differed from run to run.
+
+**Three arms**, the text otherwise the same:
+
+- `free` (74 lines): the planner notes what the documents leave
+  unsaid, as it comes.
+- `kinds` (84 lines): every item is walked against eight kinds of
+  gap (who; who else; which, one or several; when; from where; what
+  a word covers; putting a mistake right; what comes across from
+  today).
+- `grid` (89 lines): the same walk, written into the document as a
+  table, a row an item and a cell a kind (`said`, `-` or `?`), so a
+  script can see that every item was walked.
+
+**The measure, free** (`eval/gaps.py`, unit-tested): 26 gaps over
+the four scenarios that draw a list from made-up documents, each
+something those documents leave unsaid that would add, remove or
+change an item. Eighteen were raised by some free-form run; eight
+were found by walking the kinds by hand before any run of the other
+two arms, so the measure does not only reward what free-form already
+finds. A gap counts as raised when a question under "Not yet
+confirmed" speaks to it, by pattern. Ten runs a scenario on Sonnet
+5.5: how many of the 260 are raised, and how many gaps are raised in
+at least eight runs of ten.
+
+**The bar.** The gate as before, 70 of 70. A heavier arm is carried
+over a lighter one only if it raises at least ten points more of the
+gaps, or makes at least three more of them reliable (eight runs of
+ten), and its questions read no worse: the user's alone to answer,
+bearing on an item, no more filler. The patterns are loose, so the
+count is a guide and the reading decides a close call.
+
+**Cost.** The owner has dropped the ceiling for this stage (decision
+27); the cost is still reported. About $5.50 an arm.
+
 ## What a pass does not show
 
 The scenarios are made-up problems of a page and at most two turns.

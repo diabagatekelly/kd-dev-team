@@ -20,4 +20,4 @@ jobs:
         shell: bash
         run: |
           py=python3; command -v python3 >/dev/null || py=python
-          for d in library briefs judge startup; do (cd "$d" && "$py" -I -m unittest -q) || exit 1; done
+          for d in library briefs judge startup steps/03-requirements/eval; do (cd "$d" && "$py" -I -m unittest -q) || exit 1; done

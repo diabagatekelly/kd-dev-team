@@ -184,6 +184,20 @@ asking is listed apart, so it can be overturned.
     to be left out with the reason; for stage 3 the table is in
     `steps/03-requirements/README.md`.
 
+## 2026-11-22: questions by a walk; thoroughness before cost
+
+27. **The planner's questions are arrived at by a fixed walk where
+    that finds more, and the owner will answer them** (the owner:
+    "I'm not opposed to answering questions so we have a good
+    understanding of what we are building"; and, asked whether to
+    test a grid of gap kinds on a raised ceiling: "Yes, and we can
+    drop the budget, it's more important to me that we make this
+    plugin well tested and make this planning really solid to
+    support clean bug-less building"). The ceiling is dropped for
+    stage 3; a pilot and the real cost are still reported. Whether
+    it is dropped for the stages after is asked when the next one is
+    proposed.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

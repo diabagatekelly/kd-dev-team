@@ -4,7 +4,9 @@
 Every scenario starts inside the project's VM with a problem document and a scope map in the
 planning folder, startup's report and table and the two earlier stages' texts as adopted. An arm
 adds nothing for this stage (`bare`), kad's `requirements-refinement` as it stands (`kad`) or
-this repository's own text (`text`, from `requirements-skill.md`).
+this repository's own text: `free` (the planner's questions as they come), `kinds` (every item
+walked against eight kinds of gap) or `grid` (the walk written down as a table), each from
+`requirements-skill-ARM.md`.
 
 kad's skill asks before it writes, so its arm's prompt carries the user's answer to its
 questions, "go by the documents", and names the skill, as kad's orchestrator does: left to its
@@ -325,13 +327,13 @@ def main(arm):
     if arm == "kad":
         source = next(path for path in KAD if path.exists())
         write(plugin / "skills" / "requirements-refinement" / "SKILL.md", source.read_text(encoding="utf-8"))
-    elif arm == "text":
+    elif arm in ("free", "kinds", "grid"):
         write(plugin / "skills" / "requirements" / "SKILL.md",
-              (HERE / "requirements-skill.md").read_text(encoding="utf-8"))
+              (HERE / f"requirements-skill-{arm}.md").read_text(encoding="utf-8"))
     elif arm == "bare":
         used = []
     else:
-        raise SystemExit("arm: bare, kad or text")
+        raise SystemExit("arm: bare, kad, free, kinds or grid")
     cleanup = startup._Cleanup()
     for name, description, before, added, prompt, graders, earlier in SCENARIOS:
         if arm == "kad":   # named, as kad's orchestrator names it; its questions answered beforehand
