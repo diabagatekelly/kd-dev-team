@@ -1,0 +1,13 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- system: macOS 15.1 on arm64 (supported by the VM tool)
+- VM tool (Docker Sandboxes, `sbx`): installed (v0.54.0)
+- signed in to the VM tool: yes
+- locks: all 6 on
+- VMs: 1 (kd-another-1)
+- VM for this project: none
+- making it (a private copy of this repository, inside a new VM): sh "@STARTUP@/machine.sh" create
+
+The tracker and the documents are read inside the project's VM, not here.

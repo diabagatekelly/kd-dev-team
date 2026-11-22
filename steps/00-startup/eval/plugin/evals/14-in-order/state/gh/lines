@@ -1,0 +1,3 @@
+ok	1	1
+pr	12	withdraw-proposal	false	MERGEABLE	-	SUCCESS	2	0	Withdraw a proposal
+issue	7	bug,high	Two members adding at once lose one of the books

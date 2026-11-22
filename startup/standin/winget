@@ -1,0 +1,3 @@
+#!/bin/sh
+# Stand-in for an installer, for tests: installs nothing, records the call.
+{ printf '%s %s\n' "$(basename "$0")" "$*" >> "${STANDIN_STATE:?}/calls.log"; } 2>/dev/null || :

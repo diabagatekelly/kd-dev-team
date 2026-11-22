@@ -1,0 +1,16 @@
+#!/bin/sh
+# Stand-in for uname, for tests: the system is whatever $STANDIN_STATE/sys says.
+S="${STANDIN_STATE:?}/sys"
+flags=$(printf '%s' "${*:--s}" | tr -d ' -')
+out=""
+case "$flags" in *[!asmrnpv]*) echo "stand-in uname: no answer for: $*" >&2; exit 2 ;; esac
+case "$flags" in *a*) flags=snrm ;; esac
+for flag in s n r m; do
+  case "$flags" in *$flag*)
+    case $flag in
+      s) part=$(cat "$S/kernel") ;; n) part=this-machine ;; r) part=$(cat "$S/release") ;; m) part=$(cat "$S/arch") ;;
+    esac
+    out="${out:+$out }$part" ;;
+  esac
+done
+printf '%s\n' "$out"

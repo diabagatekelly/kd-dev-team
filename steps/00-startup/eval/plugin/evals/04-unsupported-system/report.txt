@@ -1,0 +1,8 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- system: macOS 15.1 on x86_64: NOT supported by the VM tool (on macOS it needs Apple silicon)
+- VM tool (Docker Sandboxes, `sbx`): no version of it runs on this system
+
+The tracker and the documents are read inside the project's VM, not here.

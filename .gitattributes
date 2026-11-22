@@ -1,0 +1,4 @@
+# Shell scripts must keep Unix line ends on every system, or the shell cannot read them.
+*.sh text eol=lf
+*.jq text eol=lf
+startup/standin/* text eol=lf

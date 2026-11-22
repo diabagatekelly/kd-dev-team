@@ -1,0 +1,69 @@
+#!/bin/sh
+# Stand-in for the VM tool, for tests: answers from the files under $STANDIN_STATE/sbx
+# in the real tool's words (v0.54), and writes every call to $STANDIN_STATE/calls.log.
+S="${STANDIN_STATE:?}/sbx"
+{ printf 'sbx %s\n' "$*" >> "$STANDIN_STATE/calls.log"; } 2>/dev/null
+# Where the state cannot be written (a session's shell in an evaluation run), a change of
+# setting is kept in a file of the shell's own instead, so the next reading sees it.
+SETTINGS="$S/settings"; KEPT=/tmp/.standin-sbx-settings
+if [ ! -w "$S" ] && [ -f "$KEPT" ]; then SETTINGS=$KEPT; fi
+garbled() { [ -f "$S/garble" ] && grep -qx "$1" "$S/garble"; }
+signed_out() {
+  [ -f "$S/signed_out" ] || return 1
+  echo "Error: not signed in to Docker. Run 'sbx login' to sign in." >&2; exit 1
+}
+[ "${1:-}" = "--no-input" ] && shift
+case "${1:-} ${2:-}" in
+  "create "*)
+    signed_out
+    if garbled create; then echo "Error: the daemon did not answer" >&2; exit 1; fi
+    name=""; while [ $# -gt 0 ]; do [ "$1" = "--name" ] && name=${2:-}; shift; done
+    if [ -w "$S" ]; then
+      printf '%s\n' "$name" >> "$S/vms"
+      if [ -d .git ]; then echo "the repository root"; else echo "not a repository root"; fi > "$S/created_in"
+    fi
+    echo "  ✓ Created sandbox $name" ;;
+  "version "*)
+    if garbled version; then echo "Docker Sandboxes, build nine"; else echo "sbx version v0.54.0 4bec4a5ce093"; fi ;;
+  "ls -q")
+    signed_out
+    if garbled ls; then echo "Error: the daemon did not answer" >&2; exit 1; fi
+    [ -f "$S/vms" ] && cat "$S/vms"; exit 0 ;;
+  "settings ls")
+    signed_out
+    if garbled settings; then echo "KEY VALUE"; echo "browser.enabled maybe bool"; exit 0; fi
+    echo "KEY                    VALUE   TYPE   SOURCE    RESTART   DESCRIPTION"
+    while read -r key value; do
+      printf '%-22s %-7s bool   default             Allow something\n' "$key" "$value"
+    done < "$SETTINGS" ;;
+  "settings set")
+    if [ -w "$S" ]; then to="$S/settings"; else to=$KEPT; fi
+    awk -v k="$3" -v v="$4" '$1==k {print k, v; next} {print}' "$SETTINGS" > "$to.new" && mv "$to.new" "$to" ;;
+  "policy ls")
+    signed_out
+    echo "POLICY             SOURCE   APPLIES TO   SUMMARY"
+    [ -f "$S/deny_by_default" ] && echo "default-deny-all   local    all          network: deny when no rule decides"
+    echo "local-policy       local    all          network: some allow" ;;
+  "policy init") { : > "$S/deny_by_default"; } 2>/dev/null || : ;;
+  "policy inspect")
+    echo "Policy:      local-policy"; echo
+    echo "RULES IN THIS POLICY"
+    echo "DECISION   RESOURCE              TYPE               METHOD   PATH   PROTOCOLS   RULE   STATUS"
+    echo "allow      **                    filesystem:read    -        -      -           -      active"
+    [ -f "$S/hosts" ] && while read -r host; do
+      printf 'allow      %-21s network            -        -      tcp         -      active\n' "$host"
+    done < "$S/hosts"
+    exit 0 ;;
+  "policy allow")
+    [ -w "$S" ] || exit 0
+    printf '%s\n' "$4" | tr ',' '\n' >> "$S/hosts"; sort -u "$S/hosts" -o "$S/hosts" ;;
+  "login "*) echo "Opening a browser to sign in to Docker..."; rm -f "$S/signed_out" 2>/dev/null || : ;;
+  "ls "*)
+    signed_out
+    if [ -s "$S/vms" ]; then
+      echo "NAME      AGENT    STATUS    WORKSPACE"
+      while read -r name; do printf '%-9s claude   stopped   .\n' "$name"; done < "$S/vms"
+    else echo "No sandboxes found"; fi ;;
+  "run "*|"exec "*|"rm "*|"stop "*) signed_out ;;
+  *) echo "stand-in sbx: no answer for: $*" >&2; exit 2 ;;
+esac

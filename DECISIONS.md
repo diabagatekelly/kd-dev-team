@@ -73,6 +73,95 @@ asking is listed apart, so it can be overturned.
     cost is reported first. Whether the adopted model gets ten more
     runs per scenario is decided on the first result.
 
+## 2026-11-21: how closely a session's words are held to the test
+
+16. **Wording has room, so long as it conveys what is intended** (the
+    owner, on the pilot, where three scenarios failed only on a closing
+    offer such as "Shall I draft it?"). A closing offer to go on with
+    the thing named is not a question outside the four. A check is on
+    what the session did and conveyed, not on its exact words.
+
+## 2026-11-21: startup holds
+
+17. **Startup holds with Sonnet 5.5 and the routing table** (the
+    owner, on the result in `steps/00-startup/README.md`). No model
+    held on the report alone. With the table, over ten runs a
+    scenario, Sonnet passed 140 of 140 and Haiku 136 of 140 with
+    three real slips, so the table is carried and Sonnet is the
+    cheapest model that holds. Opus was not run with the table.
+
+## 2026-11-21: planning happens inside the VM
+
+19. **A planning session runs inside the project's VM** (the owner,
+    on finding that startup named the next stage and stopped outside
+    one). Startup, outside, makes the project's VM with the user's
+    yes and hands over the one command that continues inside it;
+    everything from the problem onward happens there. Startup was
+    reopened for it; the result is in `steps/00-startup/README.md`.
+    The owner has said the reopened step holds, with Sonnet 5.5 and
+    the table of ten rows.
+
+## 2026-11-21: how the problem stage is measured
+
+18. **The problem stage: free checks as a gate against drift; quality
+    read by the planner, with reasons** (the owner, wary of a model
+    judge after kad's noisy one). The mark is what kad's
+    `problem-framing-doc` produced, which the owner liked: at least
+    that good, with the least text that holds. The text is tuned
+    until it gets there. The test is in `steps/01-problem/README.md`.
+
+## 2026-11-21: the problem stage holds
+
+20. **The problem stage holds with the text of 49 lines in
+    `steps/01-problem/eval/problem-skill.md`, on the session's model,
+    Sonnet 5.5** (the owner, on the result in
+    `steps/01-problem/README.md`). It holds on Haiku too; the stage
+    is not pinned to it, because the saving is small and this is the
+    stage that talks with the user most.
+
+## 2026-11-22: numbered documents; the scope map as a living picture
+
+21. **Planning documents are numbered in the order they are made:**
+    `000_problem.md`, `001_scope-map.md` and so on (the owner), so
+    the sequence shows in the folder.
+    A document takes the next number in the folder when it is made,
+    and is found by its name. A map changed after a slice is a new
+    document, such as `013_scope-map-v002.md`, and the earlier map
+    is kept, so the folder shows when the picture changed.
+22. **Stage 2 is the product manager's map, kept alive** (the owner,
+    who wants the big picture to go back to after slice 1 and knows
+    it will change). After the client describes the product, the
+    product manager acts next: the map is the handful of things a
+    user does, in the user's order, each one line, marked now, next
+    or later. It is not a plan made once: it is re-read with the
+    user each time a slice is done, and changed when the slice
+    taught otherwise. The client's part: what is in, what is out,
+    which activity comes first. The test is in
+    `steps/02-scope-map/README.md`.
+
+## 2026-11-22: a slice is checked off, not guessed at
+
+23. **Whether a slice is done is decided at a check-in when work is
+    merged, not by the scope map alone** (the owner, on the first
+    full pass, where the map had no way to say an activity was
+    finished). The check-in is informed by the merged work and by
+    issues filed during the build that fit neither the slice in hand
+    nor the next. Given new information, the map's part is to say
+    whether it belongs to the slice in hand, to the next, or between
+    them. A slice's requirements are a checkable list, used for the
+    acceptance criteria and for the map, so that "done" is every
+    item checked. Where the check-in and the tracking of the list
+    sit in the routing is not decided yet.
+
+## 2026-11-22: the drawing of the scope map holds
+
+24. **The scope-map stage holds as the drawing of the map, with the
+    text of 49 lines in `steps/02-scope-map/eval/scope-map-skill.md`,
+    on the session's model, Sonnet 5.5** (the owner, on the result in
+    `steps/02-scope-map/README.md`: 50 of 50 at the gate and as
+    read). The re-read after a slice is not part of it: it is the
+    check-in stage of decision 23, built after requirements.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -95,5 +184,50 @@ asking is listed apart, so it can be overturned.
 - At startup only issues that carry a severity are ranked; others are
   counted and shown.
 - The language of the scripts is settled by test: it must run on a
-  fresh Windows machine and a Mac with nothing extra installed.
+  fresh Windows machine and a Mac with nothing extra installed. No one
+  language does (2026-11-21, from the tools' documentation): a Mac has
+  a shell and no PowerShell; Windows has PowerShell, and a shell only
+  where Git for Windows is installed, which the tool recommends but
+  does not require. The scripts are in plain shell, tested on macOS,
+  Linux and Windows with Git for Windows; a PowerShell twin, held to
+  the same tests, is owed for Windows without it and is written in the
+  session on that machine.
+- Startup's scripts (`startup/`), 2026-11-21:
+  - A stage is found by its document's name in the planning folder
+    (decision 21): `problem`, `scope-map`, `requirements`, a file in
+    `research/`, then in the latest `slice-NNN/` folder `slice`,
+    `questions`, `answers`, `open-facts`, `design`, `screens`,
+    `stack`, `readiness`, `owner-list`. Numbers run on through the
+    slice folders, so a first slice's documents are 004 to 012.
+    Names other than the owner's first two stand until the stage
+    that writes each is built.
+  - When every document of a slice exists, the next stage named is
+    the scope map, re-read with the user before the next slice.
+  - The planning folder is remembered in the plugin's own data folder,
+    by the project's root, so nothing is written in the project.
+  - An issue is ranked when a label of it says critical, high, blocker
+    or blocking.
+  - A pull request has comments to address when a review thread is
+    unresolved, changes are requested, or someone else has commented
+    since its last commit; it is ready to merge when it has none of
+    those, is not a draft, has no conflict, no failing or running
+    check and no review still required.
+  - A system is supported when the VM tool's install page lists it:
+    macOS 14 or later on Apple silicon, Windows 11 on Intel or AMD,
+    Ubuntu 24.04 or later. Linux inside Windows (WSL) is not listed and
+    is treated as not supported.
+  - On Linux the install asks for an administrator's password, so the
+    script hands the command to the user and does not run it.
 - This repository's layout.
+- One VM per project, named `kd-`, the folder's name and a number
+  made from its path, so two folders of one name never share a VM.
+  Always a private copy of the repository, never the user's folder.
+- Making the VM makes the folder a git repository first where it is
+  not one (`git init`, nothing committed): the VM tool copies a
+  repository, and the yes covers both.
+- Outside the VM the tracker and the documents are not read at all;
+  the report says they are read inside.
+- A session knows it is inside a VM by the folder the VM tool mounts
+  there, and only where the VM tool itself is not installed.
+- Put off: installing the plugin inside a new VM, and what of the
+  planning folder's memory survives a VM being destroyed.

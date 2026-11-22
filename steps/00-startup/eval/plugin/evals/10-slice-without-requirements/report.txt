@@ -1,0 +1,16 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- this session is inside a VM (Docker Sandboxes): the project is worked on here
+
+Tracker
+- repository: someone/something on GitHub
+- open pull requests: 0
+- open issues: 0
+
+Documents
+- planning folder: planning (chosen earlier for this project)
+- found: problem (000_problem.md), scope map (001_scope-map.md), slice (slice-001/004_slice.md)
+- out of order: slice (slice-001/004_slice.md) exists but nothing was found for: requirements, research
+- next stage by the documents: requirements (its document: planning/005_requirements.md)
