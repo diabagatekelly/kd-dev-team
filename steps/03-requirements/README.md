@@ -1,7 +1,7 @@
 # Stage 3, requirements: the test, set before anything is built or run
 
 **State, 2026-11-22:** the conditions, the bar and the ceiling are
-agreed by the owner (decision 25). Tested: the text of 64 lines on
+agreed by the owner (decision 25). Tested: the text of 63 lines on
 Sonnet 5.5 passes 60 of 60 at the gate and as read. The owner has
 not yet said whether it holds.
 
@@ -102,7 +102,7 @@ documents".
 
 Arms: the bare model (startup and the two earlier stages as adopted,
 no text for this stage); kad's skill; a text of our own, as short as
-holds (`eval/requirements-skill.md`, 60 lines to begin with, 64 tuned). Models:
+holds (`eval/requirements-skill.md`, 60 lines to begin with, 63 tuned). Models:
 Haiku 5.5, Sonnet 5.5, Opus 5.5; three runs a scenario, then ten on
 the text that passes. A model holds when it passes every run of the
 gate (60 of 60 at ten runs) and its lists read at least as well as
@@ -138,7 +138,7 @@ and in brackets with the box-and-name checks set aside:
 | Bare | 2 (2) | 3 (7) | 2 (4) |
 | kad's skill (269 lines) | 0 (7) | 0 (4) | not run |
 | Our text, first (60 lines) | 17 | 18 | not run |
-| Our text, tuned (64 lines) | 13 | 18 | not run |
+| Our text, tuned (63 lines) | 13 | 18 | not run |
 
 **The gate.** No model holds bare, with or without the box and the
 name: most bare runs ask nothing and list no outside system, and on
@@ -173,7 +173,7 @@ in full; four of kad's in full, the rest by length).
   questions, some of them good ("in time": by when?). Ours records
   only the problem document's open questions.
 
-**Tuned on that reading** (60 to 64 lines): a reason, a measure or a
+**Tuned on that reading** (60 to 63 lines): a reason, a measure or a
 limit gives no item; a floated technology is left out of the whole
 document; what is used today is not in the inventory.
 
