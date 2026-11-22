@@ -383,13 +383,14 @@ SCENARIOS = [
                                      r"practi[sc][^\n]{0,60}(look like|consist|take the form|mean\b|means\b|involve)|"
                                      r"what (does|would|will|should) (a|the) (learner|person|user)[^\n]{0,40}(do|see|shown)|"
                                      # or any question it files under the kind: the ten runs asked it in ten wordings
-                                     r"\bdoes\b\*{0,2}\s*[(:)]|[(,]\s*\*{0,2}does\*{0,2}\)|,\s*does\*\*"))], None),
+                                     r"\bdoes\b\*{0,2}\s*[(:)]|[(,]\s*\*{0,2}does\*{0,2}\)|,\s*does\*\*|"
+                                     r"practi[sc]e by\b|what \W?practi[sc]e\W? must"))], None),
     # Found by an end-to-end run: the two ways a teacher tests today were written as items, while
     # the question of what practising should be stood open under them.
     ("09-today-is-not-what-is-wanted", "How it is done today, and an open question on what is wanted: no item from either.",
      {"000_problem.md": TESTED_PROBLEM, "001_scope-map.md": TESTED_MAP}, {}, GO_ON,
      [WRITTEN, *between(1, 6), *FORM, PLAIN, FEW, ASKS,
-      not_in_list("no-item-from-how-it-is-done-today", item_with(r"\bgaps?\b|fill|sentence|says? a word|gives? the word")),
+      not_in_list("no-item-from-how-it-is-done-today", item_with(r"\bgaps?\b|\bfill|sentence|says? a word")),
       in_list("the-open-question-is-kept-open", section(NOT_CONFIRMED, r"practi[sc]"))], None),
     # Found by an end-to-end run: in a project with code, the session read none of it and asked the
     # user whether the register already holds the singers and their voice parts, which it does.

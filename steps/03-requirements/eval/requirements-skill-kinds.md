@@ -28,8 +28,9 @@ Each open question this activity leans on and each question of your own, with wh
 Each by its everyday name, a line each. Or "none".
 ```
 
-**The items.** Read the problem document and the scope map. Where the
-project already has code, read what it does for this activity too:
+**The items.** Read the problem document and the scope map, then
+look at what else the project holds. Where it already has code, read
+what that does for this activity:
 what the code shows is never asked of the user, and what already
 works is said under "Out for now", not listed as an item. Read
 nothing else. An item is one thing a user needs to be able to do in the "now"
