@@ -73,6 +73,8 @@ PLAIN = not_in_list("nothing-of-the-build",
                                        r"given[^\n]*when[^\n]*then|thin path")
 INVENTORY = r"outside systems|lasting things"
 ASKS = says("asks-the-user", r"\?")
+# The problem's open question and at most three of the planner's own.
+FEW = not_in_list("at-most-four-questions", section(r"not yet confirmed", r"(?:[-*] [^\n]*\n+){5}"))
 WROTE = r'"name"\s*:\s*"(?:Write|Edit)"[\s\S]{0,80}?file_path\\?"\s*:\s*\\?"[^"]*'
 STOPS_THERE = {"type": "regex", "name": "writes-no-later-document", "target": "trace", "match": "not_contains",
                "pattern": WROTE + r"_(research|slice|questions|answers|design)"}
@@ -249,17 +251,17 @@ OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
 SCENARIOS = [
     ("01-the-now-row-of-a-large-problem", "The now row of four: a list for it, nothing from the other rows.",
      {"000_problem.md": TOOLS_PROBLEM, "001_scope-map.md": TOOLS_MAP}, {}, GO_ON,
-     [WRITTEN, *between(2, 8), *FORM, PLAIN, ASKS,
+     [WRITTEN, *between(2, 8), *FORM, PLAIN, FEW, ASKS,
       not_in_list("no-item-from-another-row", item_with(OTHER_ROWS)),
       in_list("the-limit-is-kept", r"phones?"), not_in_list("the-limit-is-no-item", item_with(r"20 a month|\bcosts?\b")),
       in_list("has-the-inventory", INVENTORY)], None),
     ("02-a-one-row-problem", "A problem of one activity: a short list.",
      {"000_problem.md": ROTA_PROBLEM, "001_scope-map.md": ROTA_MAP}, {}, GO_ON,
-     [WRITTEN, *between(1, 5), *FORM, PLAIN, ASKS,
+     [WRITTEN, *between(1, 5), *FORM, PLAIN, FEW, ASKS,
       in_list("the-outside-system-is-listed", section(INVENTORY, r"e-?mail"))], None),
     ("03-a-limit-and-an-open-question-it-leans-on", "The limit said as what it forces; the question still open, and asked.",
      {"000_problem.md": LEAGUE % FEE, "001_scope-map.md": LEAGUE_MAP % FEE}, {}, GO_ON,
-     [WRITTEN, *between(2, 8), *FORM, PLAIN,
+     [WRITTEN, *between(2, 8), *FORM, PLAIN, FEW,
       in_list("the-limit-is-kept", r"coach[\s\S]*secretary|secretary[\s\S]*coach"),
       not_in_list("the-open-question-is-no-item", item_with(r"\bfees?\b|\bpay")),
       in_list("the-open-question-is-kept-open", section(r"confirmed|open|question", r"\bfees?\b|\bpay")),
@@ -268,12 +270,12 @@ SCENARIOS = [
     ("04-a-technology-floated-and-a-question-it-does-not-touch", "Neither the technology nor the far question in the list.",
      {"000_problem.md": LEAGUE % REFEREES, "001_scope-map.md": LEAGUE_MAP % REFEREES}, {},
      GO_ON + " We could just use Google Forms for this, by the way.",
-     [WRITTEN, *between(2, 8), *FORM, PLAIN, ASKS,
+     [WRITTEN, *between(2, 8), *FORM, PLAIN, FEW, ASKS,
       not_in_list("the-floated-technology-is-left-out", r"google|\bforms\b"),
       not_in_list("the-far-question-is-no-item", item_with(r"referee"))], None),
     ("05-an-outside-system-and-a-lasting-thing", "A payment provider and a season ticket: both in the inventory.",
      {"000_problem.md": THEATRE_PROBLEM, "001_scope-map.md": THEATRE_MAP}, {}, GO_ON,
-     [WRITTEN, *between(2, 8), *FORM, PLAIN, ASKS,
+     [WRITTEN, *between(2, 8), *FORM, PLAIN, FEW, ASKS,
       in_list("the-outside-system-is-listed", section(INVENTORY, r"payright")),
       in_list("the-lasting-thing-is-listed", section(INVENTORY, r"season ticket|subscription")),
       not_in_list("no-item-from-another-row", item_with(r"single ticket|one night|\bseats?\b"))], None),

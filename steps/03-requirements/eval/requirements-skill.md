@@ -52,8 +52,10 @@ is left out.
 build from them, and note what the documents leave unsaid that would
 add, remove or change an item: who exactly, by when, how many, what
 a word of the user's covers. Only what the user alone can answer:
-never how it is built, nor what a document or a test can settle. A
-few, under "Not yet confirmed", none settled by an item.
+never how it is built or how someone is told, nor what a document or
+a test can settle, nor a number asked for its own sake. At most
+three, the ones whose answers would change the list most, under "Not
+yet confirmed"; none settled by an item.
 
 **Outside systems and lasting things.** A system outside the product
 that this activity talks to, and a thing the product keeps track of
