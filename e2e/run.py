@@ -142,6 +142,31 @@ def picked_from(text):
     return picked
 
 
+def tool_calls(record):
+    """What a session did, from the tool's own record of it: each tool call as its name and the
+    file, text or command it was given, shortened."""
+    calls = []
+    for line in record.splitlines():
+        try:
+            message = json.loads(line).get("message") or {}
+        except ValueError:
+            continue
+        if message.get("role") != "assistant" or not isinstance(message.get("content"), list):
+            continue
+        for part in message["content"]:
+            if part.get("type") == "tool_use":
+                given = part.get("input") or {}
+                what = given.get("file_path") or given.get("skill") or given.get("pattern") or given.get("command") or ""
+                calls.append(f"{part.get('name')}: {str(what).splitlines()[0][:160] if what else ''}".rstrip())
+    return calls
+
+
+def record_of(session, home):
+    """The tool's record of a session, wherever under its projects folder it was kept, or nothing."""
+    found = sorted(pathlib.Path(home, ".claude", "projects").glob(f"*/{session}.jsonl")) if session else []
+    return found[0].read_text(encoding="utf-8", errors="replace") if found else ""
+
+
 def present(planning):
     """Which of the three documents exist in the planning folder, by name."""
     names = [path.name for path in planning.glob("*.md")] if planning.is_dir() else []
@@ -197,12 +222,15 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     (out / "transcript.md").write_text("\n\n".join(
         f"**User:** {turn['user']}\n\n**Session:** {turn['session']}" for turn in turns) + "\n", encoding="utf-8")
     (out / "turns.json").write_text(json.dumps(turns, indent=2) + "\n", encoding="utf-8")
+    calls = tool_calls(record_of(session, os.environ.get("HOME", "")))
+    (out / "tools.txt").write_text("\n".join(calls) + "\n", encoding="utf-8")
     documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
     summary = {"example": example.name, "model": model, "ended": ended, "session": session,
                "session_turns": len(turns),
                "questions_put": sum(turn["session"].count("?") for turn in turns),
                "asked_and_not_covered": sum((turn.get("picked") or {}).get("uncovered") or 0 for turn in turns),
                "cost_usd": round(cost, 4),
+               "tool_calls": len(calls),
                # Each document under the number and name the stage script gives it, so the next session finds it.
                "numbered_in_order": [path.name for path in documents]
                == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],

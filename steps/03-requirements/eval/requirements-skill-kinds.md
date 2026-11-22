@@ -28,12 +28,17 @@ Each open question this activity leans on and each question of your own, with wh
 Each by its everyday name, a line each. Or "none".
 ```
 
-**The items.** Read the problem document and the scope map, nothing
-else. An item is one thing a user needs to be able to do in the "now"
+**The items.** Read the problem document and the scope map. Where the
+project already has code, read what it does for this activity too:
+what the code shows is never asked of the user, and what already
+works is said under "Out for now", not listed as an item. Read
+nothing else. An item is one thing a user needs to be able to do in the "now"
 activity, said so that someone can later answer yes or no to "can
 they?". Who is named by their role, never "I", "me" or "you". It ends in something that user wanted: a step on the way is
 not an item. It comes from what the user said or it is not there: nothing
-such a product usually has. The other rows of the map give no items;
+such a product usually has, and nothing taken from how it is done
+today unless the user asked to keep it. The other rows of the map
+give no items;
 nor does the reason for doing it now, or a measure of how fast or
 how often. What, never how: no technology, screen, design, estimate
 or wording of a test. One the user floats in passing is left out of
@@ -45,8 +50,9 @@ Every box is written unchecked: checking is not this stage's.
 
 **Limits and open questions.** A limit is no item and adds none: say
 what it forces here. An open question this activity leans on goes under "Not
-yet confirmed" and is not settled by an item; one it does not touch
-is left out.
+yet confirmed" and is not settled by an item: an item that would
+assume its answer is not written until it is answered. One it does
+not touch is left out.
 
 **Your own questions.** Walk every item against each of these:
 

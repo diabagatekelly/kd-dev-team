@@ -279,6 +279,46 @@ WORDS_MAP = """# Scope map: The words I keep getting wrong
 ## Open
 - None.
 """
+TESTED_PROBLEM = WORDS_PROBLEM.replace(
+    "- Reading the list helps for a day or two.",
+    "- The teacher tests us: she reads a sentence with a gap and we fill it, or she says a word and we give the word "
+    "we confuse it with. That shows me where I slip.\n- Reading the list helps for a day or two."
+).replace("## Open questions\n- None.", "## Open questions\n- What practising on my own should be. I have only seen how the teacher tests us.")
+TESTED_MAP = WORDS_MAP.replace("## Open\n- None.", "## Open\n- What practising on my own should be. I have only seen how the teacher tests us.")
+# A project that already has code: the small register of the third end-to-end example.
+CHOIR = ROOT / "e2e/examples/03-an-existing-codebase/project"
+CHOIR_FILES = {"../" + path.relative_to(CHOIR).as_posix(): path.read_text(encoding="utf-8")
+               for path in sorted(CHOIR.rglob("*")) if path.is_file()}
+CHOIR_PROBLEM = """# Problem: Singers' advance notice of missed rehearsals
+
+## The problem
+- We are about 45 singers in four voice parts, and we rehearse every Thursday.
+- A singer who will miss a rehearsal texts me, tells a friend, or says nothing, so I find out on the night that the tenors are three short, and by then I can't rearrange the programme.
+
+## Why now
+- The spring concert is in ten weeks, and two of the pieces can't be sung with fewer than four tenors.
+
+## Constraints
+- Singers mustn't need a password, because several are in their eighties.
+- The register is on a small computer at the church hall that the section leaders use.
+
+## Open questions
+- None.
+"""
+CHOIR_MAP = """# Scope map: Singers' advance notice of missed rehearsals
+
+| # | What the user does | What it covers | When |
+|---|---|---|---|
+| 1 | A singer tells us in advance that they'll miss a rehearsal | The notice reaches us before the Thursday | now |
+| 2 | We see who will be away, by voice part, before the rehearsal | We know ahead that the tenors are three short | next |
+
+## Holds for every activity
+- Singers mustn't need a password, because several are in their eighties.
+- The register is on a small computer at the church hall that the section leaders use.
+
+## Open
+- None.
+"""
 OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
 # (name, description, documents when the session started, documents added since, prompt, checks, said before)
 SCENARIOS = [
@@ -344,6 +384,24 @@ SCENARIOS = [
                                      r"what (does|would|will|should) (a|the) (learner|person|user)[^\n]{0,40}(do|see|shown)|"
                                      # or any question it files under the kind: the ten runs asked it in ten wordings
                                      r"\bdoes\b\*{0,2}\s*[(:)]|[(,]\s*\*{0,2}does\*{0,2}\)|,\s*does\*\*"))], None),
+    # Found by an end-to-end run: the two ways a teacher tests today were written as items, while
+    # the question of what practising should be stood open under them.
+    ("09-today-is-not-what-is-wanted", "How it is done today, and an open question on what is wanted: no item from either.",
+     {"000_problem.md": TESTED_PROBLEM, "001_scope-map.md": TESTED_MAP}, {}, GO_ON,
+     [WRITTEN, *between(1, 6), *FORM, PLAIN, FEW, ASKS,
+      not_in_list("no-item-from-how-it-is-done-today", item_with(r"\bgaps?\b|fill|sentence|says? a word|gives? the word")),
+      in_list("the-open-question-is-kept-open", section(NOT_CONFIRMED, r"practi[sc]"))], None),
+    # Found by an end-to-end run: in a project with code, the session read none of it and asked the
+    # user whether the register already holds the singers and their voice parts, which it does.
+    ("10-a-project-with-code", "The project already has code: read what it does; ask nothing it shows.",
+     {"000_problem.md": CHOIR_PROBLEM, "001_scope-map.md": CHOIR_MAP, **CHOIR_FILES}, {}, GO_ON,
+     [WRITTEN, *between(1, 6), *FORM, PLAIN, FEW, ASKS,
+      {"type": "regex", "name": "reads-the-code", "target": "trace",
+       "pattern": r'"name"\s*:\s*"(Read|Bash|Grep)"[\s\S]{0,400}?register\.py'},
+      not_in_list("asks-nothing-the-code-shows",
+                  section(NOT_CONFIRMED, r"(singers|voice parts?)[^\n]{0,80}(come from|already (in|held|kept)|kept in|held in)[^\n]{0,40}register|"
+                                         r"does the register (already )?(hold|keep|record|have)")),
+      not_in_list("no-item-for-what-already-works", item_with(r"\btick|who came|came to"))], None),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
          "scope-map": ROOT / "steps/02-scope-map/eval/scope-map-skill.md"}

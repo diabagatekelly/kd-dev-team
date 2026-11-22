@@ -30,7 +30,8 @@ evaluation VM, after `steps/00-startup/eval/setup-vm.sh`:
     python3 -I e2e/make_plugin.py
     python3 -I e2e/run.py e2e/examples/01-a-one-line-idea --out /tmp/e2e/01-run1
 
-A run leaves `transcript.md`, `turns.json`, `summary.json` (turns,
+A run leaves `transcript.md`, `turns.json`, `tools.txt` (every tool
+call the session made), `summary.json` (turns,
 questions put, how many were asked that no topic covers, whether the
 documents are numbered in order, cost, how it ended) and the project with its planning documents. The
 examples are made-up and may be quoted here; raw runs go to the
@@ -71,3 +72,6 @@ stage working as meant.
 | A check for "suggests the product" fired on a session saying "I won't suggest what the product might be"; three other checks failed good answers | the pass over every stage | the four checks corrected in the case builders |
 | "Give me the path" has no question mark; the driver took it for nothing asked and the user said "Go on." until the run was ended as stuck | example 3, second scripted run | every message goes to the sorter: `test_a_request_with_no_question_mark_still_reaches_the_sorter` |
 | For "practise the verses I get wrong" the list had three items and seven questions, and none asked what practising is: what the person does and is shown | example 4, second scripted run | requirements text: a ninth kind, **does**; requirements scenario `08-a-verb-that-does-not-say` |
+| The two ways a teacher tests today ("carry on a verse", "name the surah") were written as items, while the question of what practising should be stood open beneath them | example 4, third scripted run | requirements text (nothing from how it is done today; an item that would assume an open question's answer waits); requirements scenario `09-today-is-not-what-is-wanted` |
+| In a project that already had code the session read none of it, and asked the user whether the register holds the singers and their voice parts, which the code shows | example 3, third scripted run, read in full | requirements text (where the project has code, read what it does for this activity; ask nothing it shows; what already works is no item); requirements scenario `10-a-project-with-code` |
+| A run kept no record of what the session did, so whether it had read the code could only be found by hand | example 3 | the driver writes `tools.txt`, every tool call of the session: three unit tests |

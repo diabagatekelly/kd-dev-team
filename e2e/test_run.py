@@ -120,6 +120,31 @@ class TheExamples(unittest.TestCase):
                 self.assertTrue(set(brief.shown) <= set(run.DOCUMENTS))
 
 
+class WhatASessionDid(unittest.TestCase):
+    RECORD = "\n".join(json.dumps(line) for line in [
+        {"message": {"role": "user", "content": "hello"}},
+        {"message": {"role": "assistant", "content": [
+            {"type": "text", "text": "Reading."},
+            {"type": "tool_use", "name": "Read", "input": {"file_path": "/p/register.py"}},
+            {"type": "tool_use", "name": "Bash", "input": {"command": "cat > a.md <<'EOF'\nmany lines\nEOF"}}]}},
+        {"message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Skill", "input": {"skill": "x:problem"}}]}},
+    ]) + "\nnot json\n"
+
+    def test_each_tool_call_is_listed_with_what_it_was_given(self):
+        self.assertEqual(run.tool_calls(self.RECORD), ["Read: /p/register.py", "Bash: cat > a.md <<'EOF'", "Skill: x:problem"])
+
+    def test_no_record_lists_nothing(self):
+        self.assertEqual(run.tool_calls(""), [])
+        self.assertEqual(run.record_of("s-1", tempfile.mkdtemp()), "")
+        self.assertEqual(run.record_of(None, tempfile.mkdtemp()), "")
+
+    def test_a_record_is_found_under_the_projects_folder(self):
+        home = pathlib.Path(tempfile.mkdtemp())
+        (home / ".claude" / "projects" / "-tmp-x").mkdir(parents=True)
+        (home / ".claude" / "projects" / "-tmp-x" / "s-1.jsonl").write_text(self.RECORD)
+        self.assertEqual(run.record_of("s-1", home), self.RECORD)
+
+
 class Run(unittest.TestCase):
     def setUp(self):
         self.folder = pathlib.Path(tempfile.mkdtemp())
