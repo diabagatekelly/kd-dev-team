@@ -12,7 +12,8 @@ import shutil
 import subprocess
 import sys
 
-import make_plugin
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))   # found beside this file under -I
+import make_plugin  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 # stage folder, the arguments that build its adopted arm, the plugin that leaves
