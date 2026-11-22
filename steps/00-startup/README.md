@@ -227,7 +227,7 @@ in every run of 14. Nothing in the report says that work happens only
 in a VM, so the bare arm could not know it: that is what the table
 adds.
 
-**The table arm: the report and `eval/routing-table.md` (32 lines).**
+**The table arm: the report and `eval/routing-table.md` (33 lines).**
 Run on Haiku only, the cheapest rung, on all 14 scenarios (more than
 the test asked: the plugin would carry the table in every session, so
 a model holds only if it passes all 42 with it).
