@@ -90,6 +90,15 @@ asking is listed apart, so it can be overturned.
     three real slips, so the table is carried and Sonnet is the
     cheapest model that holds. Opus was not run with the table.
 
+## 2026-11-21: how the problem stage is measured
+
+18. **The problem stage: free checks as a gate against drift; quality
+    read by the planner, with reasons** (the owner, wary of a model
+    judge after kad's noisy one). The mark is what kad's
+    `problem-framing-doc` produced, which the owner liked: at least
+    that good, with the least text that holds. The text is tuned
+    until it gets there. The test is in `steps/01-problem/README.md`.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
