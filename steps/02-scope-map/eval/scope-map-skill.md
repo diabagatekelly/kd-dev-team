@@ -27,14 +27,16 @@ Each open question of the problem document, still open.
 
 **Drawing it.** Read the problem document and nothing else. A row is
 something a user does and would name themselves, never a part of
-what gets built. A problem that is one activity gets one row, and you
+what gets built; rows keep the user's order whatever their mark. A problem that is one activity gets one row, and you
 say so. Exactly one row is "now": by the document, the one that
 hurts most or that the rest lean on. No technology, design, estimate,
 date or acceptance criterion, including one the user floats in
 passing.
 
 **Limits and open questions.** A limit on the whole problem goes
-under "Holds for every activity", never in a row. An open question
+under "Holds for every activity", never in a row; why it is done
+now is a reason, not a limit, and stays in the problem document. An
+open question
 stays under "Open": do not settle it by adding a row or leaving one
 out.
 
@@ -45,7 +47,8 @@ comes first are the user's. Apply their correction to the document.
 **Re-reading after a slice.** Set what the slice found against the
 rows. Where it contradicts them, write the changed map as the new
 document the startup report names (split, join, add, drop or move
-rows), leave the earlier map as it is, and say what changed and why.
+rows), leave the earlier map as it is, and end the new one with what
+changed and why, a line a change.
 Where nothing contradicts them, say the map holds and write nothing.
 
 **Stop there.** Save it as the document the startup report names for

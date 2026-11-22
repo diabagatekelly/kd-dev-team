@@ -156,7 +156,9 @@ SCENARIOS = [
     ("01-a-large-problem", "A problem of several activities: a map of them, marked, one now; ask once.",
      {"000_problem.md": TOOLS_PROBLEM}, {}, GO_ON,
      [WRITTEN, *SEVERAL, *MARKS, PLAIN, ASKS,
-      not_in_map("the-limit-is-no-activity", activity_with(r"20 a month|\bcost|budget|own phones"))], None),
+      not_in_map("the-limit-is-no-activity", activity_with(r"20 a month|\bcost|budget|own phones")),
+      # Why it is done now is a reason, not a limit: it is no bullet under the limits.
+      not_in_map("the-reason-for-now-is-no-limit", r"(?:^|\n)\s*[-*][^\n]*(?:spring|twice)")], None),
     ("02-a-small-problem", "A problem that is one activity: one row, said to be one.",
      {"000_problem.md": ROTA_PROBLEM}, {}, GO_ON,
      [WRITTEN, in_map("marks-the-activities", marked(1)), not_in_map("no-map-invented", marked(3)), PLAIN,
@@ -184,8 +186,8 @@ SCENARIOS = [
      "have not joined yet, so they have to be signed up on the spot before they can take anything.",
      [{"type": "file_exists", "name": "writes-the-changed-map-as-a-new-document", "path": SECOND},
       in_map("marks-the-activities", marked(1), SECOND),
-      in_map("borrowing-and-returning-are-one", r"(?:^|\n)[^\n]*borrow[^\n]*return[^\n]*" + mark("now|next|later")
-             + r"|(?:^|\n)[^\n]*(?:lend|loan)[^\n]*return[^\n]*" + mark("now|next|later"), SECOND),
+      in_map("borrowing-and-returning-are-one", r"(?:^|\n)[^\n]*(?:borrow|lend|loan)[^\n]*(?:return|back)[^\n]*" + mark("now|next|later"),
+             SECOND),
       # Signing up on the spot reaches the map: inside the borrowing row, or as joining brought forward.
       in_map("joining-on-the-spot-is-in-the-map",
              r"(?:^|\n)[^\n]*borrow[^\n]*(?:join|sign)[^\n]*|" + activity_with(r"join|sign").replace("now|next|later", "now|next"),
