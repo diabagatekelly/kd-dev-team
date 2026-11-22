@@ -139,6 +139,20 @@ asking is listed apart, so it can be overturned.
     which activity comes first. The test is in
     `steps/02-scope-map/README.md`.
 
+## 2026-11-22: a slice is checked off, not guessed at
+
+23. **Whether a slice is done is decided at a check-in when work is
+    merged, not by the scope map alone** (the owner, on the first
+    full pass, where the map had no way to say an activity was
+    finished). The check-in is informed by the merged work and by
+    issues filed during the build that fit neither the slice in hand
+    nor the next. Given new information, the map's part is to say
+    whether it belongs to the slice in hand, to the next, or between
+    them. A slice's requirements are a checkable list, used for the
+    acceptance criteria and for the map, so that "done" is every
+    item checked. Where the check-in and the tracking of the list
+    sit in the routing is not decided yet.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
