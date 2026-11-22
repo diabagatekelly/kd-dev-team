@@ -50,6 +50,8 @@ is left out.
 
 **Your own questions.** Walk every item against each of these:
 
+- **does**: what the person does and is shown, where the item's verb
+  does not say (practise, manage, review, handle);
 - **who**: who exactly does it, and who may not;
 - **who else**: who else must see or do something for it to work;
 - **which**: how the thing is told apart; one at a time or several;

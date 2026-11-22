@@ -37,7 +37,8 @@ Reply with one line of JSON and nothing else:
 "uncovered": the number of separate questions in the message that no topic covers, \
 "asks": true if the message asks the person anything at all or waits for their approval, else false}
 
-A question counts only if the message puts it to the person and waits for the answer: something \
+A question counts only if the message puts it to the person and waits for the answer, with or \
+without a question mark ("I need the folder from you" asks for the folder): something \
 the assistant states, proposes or says it will do is not a question, and neither is a topic it \
 merely mentions. A key is listed once. Use only keys from the list. When unsure whether a topic \
 covers a question, count the question as uncovered.
@@ -184,12 +185,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         appeared = present(planning) - seen
         seen |= appeared
-        if "?" in reply:
-            sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
-            cost += spent
-            turn["picked"] = picked_from(sorted_)
-        else:   # nothing was asked: no model is consulted
-            turn["picked"] = {"asked": [], "uncovered": 0, "asks": False}
+        sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
+        cost += spent
+        turn["picked"] = picked_from(sorted_)
         turn["appeared"] = sorted(appeared)
         said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
         same = same + 1 if said == turn["user"] else 0

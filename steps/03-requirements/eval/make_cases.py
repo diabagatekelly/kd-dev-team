@@ -250,6 +250,35 @@ LEAGUE_SHOWN = ("I've written the requirements for registering a child. Two item
                 "registering, or does paying stay with the treasurer? And by when does a coach need the list: by a "
                 "date before the season, or as each child registers? Is anything missing, unwanted or not for now?")
 NOT_CONFIRMED = r"confirmed|open|question"
+WORDS_PROBLEM = """# Problem: The words I keep getting wrong
+
+## The problem
+- I am learning Portuguese from a course book and a weekly class.
+- The same words trip me up every week: pairs that look or sound alike, which I swap without noticing.
+- I find out when the teacher corrects me in class. I write the pair in the back of my notebook and never look at it again.
+- Reading the list helps for a day or two. Nothing makes me tell the words apart when I am actually speaking.
+
+## Why now
+- Nothing is forcing it.
+
+## Constraints
+- None stated yet.
+
+## Open questions
+- None.
+"""
+WORDS_MAP = """# Scope map: The words I keep getting wrong
+
+| # | What the user does | What it covers | When |
+|---|---|---|---|
+| 1 | Practise the words I get wrong | A learner practises telling apart the words they themselves confuse | now |
+
+## Holds for every activity
+- None stated yet.
+
+## Open
+- None.
+"""
 OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
 # (name, description, documents when the session started, documents added since, prompt, checks, said before)
 SCENARIOS = [
@@ -304,6 +333,15 @@ SCENARIOS = [
       in_list("the-other-question-stays", section(NOT_CONFIRMED, r"by when|in time|date|as each")),
       says("asks-the-other-question-again", r"(by when|in time|date|as each)[\s\S]*\?|\?[\s\S]*(by when|in time|date|as each)")],
      [("user", GO_ON), ("assistant", LEAGUE_SHOWN)]),
+    # Found by an end-to-end run: an activity whose verb says nothing of what the person does
+    # ("practise") got a list and seven questions, none of them what practising is.
+    ("08-a-verb-that-does-not-say", "An activity named by a verb that does not say what is done: ask what it is.",
+     {"000_problem.md": WORDS_PROBLEM, "001_scope-map.md": WORDS_MAP}, {}, GO_ON,
+     [WRITTEN, *between(1, 6), *FORM, PLAIN, FEW, ASKS,
+      in_list("asks-what-the-verb-means",
+              section(NOT_CONFIRMED, r"what[^\n]{0,80}practi[sc][^\n]{0,80}(is|means?|looks?|consists?|involves?|do(es)?\b)|"
+                                     r"practi[sc][^\n]{0,60}(look like|consist|take the form|mean\b|means\b|involve)|"
+                                     r"what (does|would|will|should) (a|the) (learner|person|user)[^\n]{0,40}(do|see|shown)"))], None),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
          "scope-map": ROOT / "steps/02-scope-map/eval/scope-map-skill.md"}

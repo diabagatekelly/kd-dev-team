@@ -191,14 +191,15 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["ended"], "stuck: the user had only the same thing to say")
         self.assertEqual(summary["session_turns"], 3)   # said twice, and about to be said a third time
 
-    def test_a_message_with_no_question_is_not_sent_to_the_sorter(self):
+    def test_a_request_with_no_question_mark_still_reaches_the_sorter(self):
+        # Found by an end-to-end run: "give me the path" was taken for nothing asked, and the user said "Go on."
         fake = self.folder / "fake.py"
-        fake.write_text(FAKE.replace('reply = f"Turn {n}. Is that right?"', 'reply = f"Turn {n}. Done."'))
+        fake.write_text(FAKE.replace('reply = f"Turn {n}. Is that right?"', 'reply = f"Turn {n}. Give me the path."'))
         (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
         run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 2, command=(sys.executable, str(fake)))
         calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
-        self.assertEqual([call for call in calls if "--system-prompt" in call], [])
-        self.assertEqual(json.loads((self.folder / "out" / "turns.json").read_text())[0]["picked"]["asks"], False)
+        self.assertEqual(len([call for call in calls if "--system-prompt" in call]), 2)
+        self.assertEqual(json.loads((self.folder / "out" / "turns.json").read_text())[0]["picked"]["asked"], ["today"])
 
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
