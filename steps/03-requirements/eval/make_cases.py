@@ -6,8 +6,9 @@ planning folder, startup's report and table and the two earlier stages' texts as
 adds nothing for this stage (`bare`), kad's `requirements-refinement` as it stands (`kad`) or
 this repository's own text (`text`, from `requirements-skill.md`).
 
-kad's skill asks before it writes, so its arm is given a second turn: its questions as a fixed
-first reply, and the user answering "go by the documents".
+kad's skill asks before it writes, so its arm's prompt carries the user's answer to its
+questions: "go by the documents". (Given as a second turn after a fixed first reply, the pilot's
+sessions wrote the document without invoking the skill at all.)
 
 Usage: python3 -I make_cases.py ARM      (rewrites plugin-ARM/ beside this file; not kept in git)
 """
@@ -213,14 +214,9 @@ SHOWN = ("I've written the requirements for borrowing and returning a tool. Four
          "which member took which tool (record-a-loan); record that a tool came back (record-a-return); see who "
          "has a given tool now (see-who-has-it); and see every tool that has not come back "
          "(list-overdue-tools). Is anything missing, unwanted or not for now?")
-# kad's skill asks before it writes: its five questions, as a fixed first reply, and the user's answer.
-KAD_ASKED = ("I've read the problem document and the scope map. Before I write the requirements for this step: "
-             "who specifically benefits from this piece? What are they trying to accomplish here, in their own "
-             "terms? Why this, why now: is there a priority or a trade-off you care about? What is the simplest "
-             "version that would still feel like real progress to you? And were there other approaches you "
-             "considered or rejected, and why?")
-KAD_ANSWER = ("Go by the documents: who benefits and what they need are as the problem document and the scope map "
-              "say. No priority beyond what is written there. The simplest version is whatever covers this "
+# kad's skill asks before it writes: the user's answer to its five questions, given with the request.
+KAD_ANSWER = (" To save you asking: who benefits and what they need are as the problem document and the scope "
+              "map say. No priority beyond what is written there. The simplest version is whatever covers this "
               "activity. No other approach was considered. Write it up.")
 
 OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
@@ -301,8 +297,8 @@ def main(arm):
         raise SystemExit("arm: bare, kad or text")
     cleanup = startup._Cleanup()
     for name, description, before, added, prompt, graders, earlier in SCENARIOS:
-        if arm == "kad" and not earlier:   # its questions asked and answered, then the document
-            prompt, earlier = KAD_ANSWER, [("user", prompt), ("assistant", KAD_ASKED)]
+        if arm == "kad" and not earlier:   # its questions answered beforehand, so that it writes
+            prompt += KAD_ANSWER
         machine = startup.standin_machine.Machine(cleanup)
         machine.inside_vm()
         machine.repository(startup.REMOTE)

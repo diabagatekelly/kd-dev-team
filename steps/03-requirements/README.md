@@ -92,9 +92,9 @@ model, on these points, fixed before any is read:
 - short enough to take in at a glance.
 
 kad's skill has no boxes and no names: on those the mark is the
-condition itself. It also asks before it writes, so its arm is given
-a second turn: its five questions as a fixed first reply, and the
-user answering "go by the documents".
+condition itself. It also asks before it writes, so its arm's prompt
+carries the user's answer to its five questions: "go by the
+documents".
 
 ## Arms, models, bar, cost
 
