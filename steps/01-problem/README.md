@@ -73,6 +73,23 @@ themselves are made-up and may be quoted here.
   conditions), after a pilot on Haiku whose real cost is reported
   first.
 
+## The pilot (2026-11-21)
+
+Haiku 5.5, each of the six scenarios once, the bare arm and kad's
+skill: 12 runs, $0.05. The bare arm passed 3 of 6 and kad's skill 4
+of 6. The pilot is for the setup, not the result:
+
+- The setup works: the skill is invoked, the second turn follows the
+  saved first turn, documents are written and read by the checks.
+- **Nothing told a session what the document is called.** Bare, it
+  wrote `01-problem.md`; with kad's skill, a name of its own. Every
+  check on the document then failed, and the script that finds the
+  next stage would not have found it. The report now names the
+  document with the stage ("its document: planning/problem.md"),
+  by script, for every arm.
+- Bare Haiku wrote the document where it should have asked (the
+  floated solution) and put two problems in one document.
+
 ## What a pass does not show
 
 The scenarios stand for points in a conversation of at most two

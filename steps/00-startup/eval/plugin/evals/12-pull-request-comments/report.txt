@@ -13,4 +13,4 @@ Tracker
 Documents
 - planning folder: planning (chosen earlier for this project)
 - found: problem (problem.md), scope (scope.md), requirements (requirements.md)
-- next stage by the documents: research
+- next stage by the documents: research (its document: planning/research/)

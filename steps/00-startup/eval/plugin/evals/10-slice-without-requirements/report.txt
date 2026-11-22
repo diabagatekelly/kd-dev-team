@@ -13,4 +13,4 @@ Documents
 - planning folder: planning (chosen earlier for this project)
 - found: problem (problem.md), scope (scope.md), slice (slice-001/slice.md)
 - out of order: slice (slice-001/slice.md) exists but nothing was found for: requirements, research
-- next stage by the documents: requirements
+- next stage by the documents: requirements (its document: planning/requirements.md)

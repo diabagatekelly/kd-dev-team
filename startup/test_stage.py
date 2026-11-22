@@ -54,6 +54,13 @@ class Stage(unittest.TestCase):
         self.assertIn("- found: no planning document", out)
         self.assertIn("- next stage by the documents: problem", out)
 
+    def test_the_next_stage_is_named_with_the_document_it_writes(self):
+        self.chosen()
+        self.assertIn("- next stage by the documents: problem (its document: planning/problem.md)", self.report())
+        self.chosen(*THROUGH_REQUIREMENTS, "research/a.md", folder="docs/plan")
+        self.assertIn("- next stage by the documents: slice (its document: docs/plan/slice-001/slice.md)",
+                      self.report())
+
     def test_a_problem_alone_makes_scope_next(self):
         self.chosen("problem.md")
         out = self.report()

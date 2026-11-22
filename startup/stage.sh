@@ -68,7 +68,7 @@ report() {
 "
     else
       missing="${missing:+$missing, }$name"
-      [ -n "$next" ] || next=$name
+      [ -n "$next" ] || next="$name (its document: $folder/$document)"
     fi
   done <<STAGES
 $(stages)
