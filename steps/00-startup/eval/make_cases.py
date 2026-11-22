@@ -252,6 +252,10 @@ def main(table=False):
           executable=True)
     if table:
         shutil.copy(HERE / "routing-table.md", plugin / "hooks" / "routing-table.md")
+    # The scripts the report names: without them the command a report gives would not exist.
+    (plugin / "startup").mkdir()
+    for script in [*STARTUP.glob("*.sh"), STARTUP / "tracker.jq"]:
+        shutil.copy(script, plugin / "startup" / script.name)
     cleanup = _Cleanup()
     for name, description, make, prompt, graders in scenarios():
         machine = standin_machine.Machine(cleanup)
