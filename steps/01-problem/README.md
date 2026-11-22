@@ -1,9 +1,11 @@
 # Stage 1, the problem: the test, set before anything is built or run
 
-**State, 2026-11-21:** the conditions, the gate and how quality is
-read are set below (the owner, decision 18). Nothing is built. The
-stage runs inside the project's VM (decision 19), so its scenarios
-start from the report a session is given there.
+**State, 2026-11-21:** tested. No model holds bare; with a text of
+49 lines (`eval/problem-skill.md`) Haiku passes 60 of 60 and Sonnet
+59 of 60 by the checks over ten runs a scenario, and its documents
+read at least as well as those of kad's skill (the result is near
+the end). Whether the stage holds is the owner's to say. The stage
+runs inside the project's VM (decision 19).
 
 ## What the stage must do
 
@@ -89,6 +91,66 @@ of 6. The pilot is for the setup, not the result:
   by script, for every arm.
 - Bare Haiku wrote the document where it should have asked (the
   floated solution) and put two problems in one document.
+
+## The result (2026-11-21)
+
+**The gate, three runs a scenario (18 runs an arm and model).**
+
+| Arm | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| Bare | 9 | 8 | 10 |
+| kad's skill (72 lines) | 15 | 18 | 18 |
+| Our text, first version | 18 | 18 | not run |
+| Our text, second version (49 lines) | 18 | 18 | not run |
+
+No model holds bare. Given a floated solution and no reason, every
+bare run of nine wrote the document where it should have asked; and
+every bare run of nine put two problems in one document. kad's skill
+on Haiku failed three runs: one document under a name of its own,
+two holding both problems.
+
+**Ten runs a scenario, our second version.**
+
+| Model | By the checks | As read | Cost |
+|---|---|---|---|
+| Haiku 5.5 | 60 of 60 | 60 of 60 | $0.23 |
+| Sonnet 5.5 | 59 of 60 | 60 of 60 | $3.65 |
+
+Sonnet's one miss asked its question as a statement ("I need to know
+how your club organises the weekend runs today, and what goes
+wrong"), which the check's question mark did not see.
+
+**The reading.** kad's nine documents on Sonnet and our text's
+eighteen of the three-run passes on Haiku and Sonnet were read in
+full, against the six points; the sixty of the ten-run passes were
+scanned by script (the four headings, the length, words of
+conclusion or solution, the count of open questions) and the ones it
+flagged were read.
+
+| Point | Bare (Sonnet) | kad's skill (Sonnet) | Our text, second version |
+|---|---|---|---|
+| Every statement the user's | no: sections of its own ("who is affected", "what solved looks like") | mostly: four of nine add a conclusion of the writer's to "why now" ("every extra class adds more chances to overbook") | yes in those read; one title implies a cause the user did not give |
+| The current way, concretely | yes | yes | yes |
+| Nothing invented | no: a year put on "March", a deadline made a limit | two small things ("payments are taken separately from booking", a date) | nothing found |
+| No solution | none as a plan; goals that lean on one | none | none |
+| Open questions a slice waits on | the user's, and a paragraph on each | the user's; in three of nine, one to four of the writer's own, some useful (why the double bookings happened), some filler (how many bookings a year) | the user's only |
+| One page, quick to take in | no: 320 to 470 words | yes: 105 to 200 words | yes: 110 to 150 words |
+
+So our text reads at least as well as kad's and keeps closer to what
+the user said. The one real difference is a choice: kad's skill lets
+the writer add open questions of its own; ours records only what the
+user said is unknown, on the view that a question the planner has is
+asked, not parked in a document. The first version of our text
+already passed the gate; the second was tuned on the reading alone
+(cause kept with effect in one bullet, the user's own voice, no
+conclusion drawn from their facts).
+
+**What holds.** Our text holds on Haiku and on Sonnet. Haiku is the
+cheapest that holds.
+
+**Cost:** $13.46 of the $30 ceiling (pilot $0.05; bare and kad's on
+three models $7.20; our text, two versions, $2.33; the ten-run
+passes $3.88).
 
 ## What a pass does not show
 

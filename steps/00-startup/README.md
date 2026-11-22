@@ -350,7 +350,12 @@ kind of machine with the owner present; installing the plugin inside
 a new VM and signing the model in there, without which the session
 inside has no report.
 
-**Cost of the whole test so far:** $25.23 of the $76 ceiling.
+**A later change, checked.** The report now names the next stage's
+document ("its document: planning/problem.md"), found necessary by
+the problem stage's pilot. All 18 scenarios were run again on Sonnet,
+three runs each: 54 of 54, $2.55.
+
+**Cost of the whole test so far:** $27.78 of the $76 ceiling.
 
 ## What a pass does not show
 
