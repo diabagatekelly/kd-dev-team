@@ -5,8 +5,8 @@ tests on three systems) and both arms have run (the result is at the
 end). No model holds on the report alone; with the routing table
 Haiku passes 41 of 42 by the checks and 42 of 42 as read. Over ten
 runs a scenario with the table, Haiku passes 136 of 140 (three real
-slips) and Sonnet 140 of 140. Whether the step holds is the owner's
-to say.
+slips) and Sonnet 140 of 140. The owner has said the step holds with
+Sonnet 5.5 and the table (decision 17).
 
 ## The question
 

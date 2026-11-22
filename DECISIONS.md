@@ -81,6 +81,15 @@ asking is listed apart, so it can be overturned.
     the thing named is not a question outside the four. A check is on
     what the session did and conveyed, not on its exact words.
 
+## 2026-11-21: startup holds
+
+17. **Startup holds with Sonnet 5.5 and the routing table** (the
+    owner, on the result in `steps/00-startup/README.md`). No model
+    held on the report alone. With the table, over ten runs a
+    scenario, Sonnet passed 140 of 140 and Haiku 136 of 140 with
+    three real slips, so the table is carried and Sonnet is the
+    cheapest model that holds. Opus was not run with the table.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
