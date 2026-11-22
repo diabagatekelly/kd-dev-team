@@ -90,6 +90,15 @@ asking is listed apart, so it can be overturned.
     three real slips, so the table is carried and Sonnet is the
     cheapest model that holds. Opus was not run with the table.
 
+## 2026-11-21: planning happens inside the VM
+
+19. **A planning session runs inside the project's VM** (the owner,
+    on finding that startup named the next stage and stopped outside
+    one). Startup, outside, makes the project's VM with the user's
+    yes and hands over the one command that continues inside it;
+    everything from the problem onward happens there. Startup was
+    reopened for it; the result is in `steps/00-startup/README.md`.
+
 ## 2026-11-21: how the problem stage is measured
 
 18. **The problem stage: free checks as a gate against drift; quality
@@ -152,3 +161,15 @@ asking is listed apart, so it can be overturned.
   - On Linux the install asks for an administrator's password, so the
     script hands the command to the user and does not run it.
 - This repository's layout.
+- One VM per project, named `kd-`, the folder's name and a number
+  made from its path, so two folders of one name never share a VM.
+  Always a private copy of the repository, never the user's folder.
+- Making the VM makes the folder a git repository first where it is
+  not one (`git init`, nothing committed): the VM tool copies a
+  repository, and the yes covers both.
+- Outside the VM the tracker and the documents are not read at all;
+  the report says they are read inside.
+- A session knows it is inside a VM by the folder the VM tool mounts
+  there, and only where the VM tool itself is not installed.
+- Put off: installing the plugin inside a new VM, and what of the
+  planning folder's memory survives a VM being destroyed.

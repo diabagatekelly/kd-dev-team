@@ -1,10 +1,9 @@
 # Stage 1, the problem: the test, set before anything is built or run
 
 **State, 2026-11-21:** the conditions, the gate and how quality is
-read are set below (the owner, decision 18). Nothing is built. One
-thing is open and the owner's: whether a planning session runs on the
-user's own machine or inside the VM, which decides where this stage's
-document is written and so how its scenarios are set up.
+read are set below (the owner, decision 18). Nothing is built. The
+stage runs inside the project's VM (decision 19), so its scenarios
+start from the report a session is given there.
 
 ## What the stage must do
 

@@ -6,7 +6,9 @@ end). No model holds on the report alone; with the routing table
 Haiku passes 41 of 42 by the checks and 42 of 42 as read. Over ten
 runs a scenario with the table, Haiku passes 136 of 140 (three real
 slips) and Sonnet 140 of 140. The owner has said the step holds with
-Sonnet 5.5 and the table (decision 17).
+Sonnet 5.5 and the table (decision 17). Reopened the same day to
+give each project its VM (decision 19): 180 of 180 on Sonnet over
+ten runs of 18 scenarios.
 
 ## The question
 
@@ -310,6 +312,45 @@ and 14 were sampled and read: each did what its scenario asks, and
 none of the unsupported-system answers suggested another machine.
 
 **Cost of the whole test so far:** $15.89 of the $76 ceiling.
+
+## Reopened: the project's VM (2026-11-21)
+
+The owner reopened the step (decision 19). As adopted, startup named
+the next stage and stopped: nothing made a VM for the project or
+moved the session into one, though no file of the project may be
+written outside a VM. No scenario had reached that, because each
+ended at naming the next thing.
+
+**What changed.** Each project has one VM, named for its folder.
+Outside it the report is of the machine only, and ends with how the
+VM is made (with the user's yes; a private copy of the repository,
+the folder made a repository first if it is not one) or the one
+command that continues inside it, which is the user's to run. Inside
+it the machine is not inspected, and the tracker and the documents
+are read. The table has two more rows (37 lines). Four scenarios
+were added, 18 in all: no VM for the project; a VM that exists;
+asked to build outside it; and the user's yes, as the second turn of
+a conversation. The scenarios that name a next stage (6 to 14) now
+take place inside the VM.
+
+| | Runs passed | Cost |
+|---|---|---|
+| One run a scenario, Sonnet 5.5 | 17 of 18 | $0.85 |
+| Ten runs a scenario, Sonnet 5.5 | 180 of 180 | $8.49 |
+
+The one failure of the first pass was the setup's: the evaluation
+runs inside a VM, so the script that makes a VM refused there. The
+script now takes the VM tool's presence as the outside, with a unit
+test. In the ten-run pass no check failed; the answers of scenarios
+3, 5, 6, 7 and 15 to 18 were sampled and read, and each did what its
+scenario asks. Haiku and Opus were not run on the new table.
+
+**Not tested, and owed:** making a real VM from the script on each
+kind of machine with the owner present; installing the plugin inside
+a new VM and signing the model in there, without which the session
+inside has no report.
+
+**Cost of the whole test so far:** $25.23 of the $76 ceiling.
 
 ## What a pass does not show
 
