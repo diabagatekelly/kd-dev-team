@@ -14,6 +14,7 @@ Usage, inside the evaluation VM:
 """
 import argparse
 import json
+import os
 import pathlib
 import shutil
 import subprocess
@@ -51,9 +52,29 @@ def section(brief, heading):
     return "\n".join(out).strip()
 
 
-def ask(command, prompt, cwd, extra):
+def path_without(absent, path, bin_folder):
+    """A PATH on which the tools named in `absent` are not found.
+
+    The evaluation VM keeps its stand-in tools in one folder with the tool under test, and a
+    script asks whether a tool is installed by looking for it on the PATH. Every folder that
+    holds an absent tool is left out, and what else it held is linked from `bin_folder`.
+    """
+    kept = []
+    bin_folder.mkdir(parents=True, exist_ok=True)
+    for folder in dict.fromkeys(path.split(os.pathsep)):
+        here = pathlib.Path(folder)
+        if not any((here / tool).exists() for tool in absent):
+            kept.append(folder)
+            continue
+        for entry in here.iterdir():
+            if entry.name not in absent and not (bin_folder / entry.name).exists():
+                (bin_folder / entry.name).symlink_to(entry)
+    return os.pathsep.join([str(bin_folder), *kept])
+
+
+def ask(command, prompt, cwd, extra, env=None):
     """One headless call; its reply, its session and its cost."""
-    done = subprocess.run([*command, "-p", prompt, "--output-format", "json", *extra], cwd=cwd,
+    done = subprocess.run([*command, "-p", prompt, "--output-format", "json", *extra], cwd=cwd, env=env,
                           capture_output=True, text=True, timeout=1500)
     try:
         answer = json.loads(done.stdout)
@@ -90,17 +111,19 @@ def run(example, out, plugin, model, user_model, max_turns, command=("claude",))
         subprocess.run(["git", *step], cwd=project, check=True, capture_output=True)
     with (project / ".git" / "info" / "exclude").open("a", encoding="utf-8") as exclude:
         exclude.write(".cache/\n")
+    absent = [path.name for path in (machine / "absent").iterdir()] if (machine / "absent").is_dir() else []
+    env = {**os.environ, "PATH": path_without(absent, os.environ.get("PATH", ""), out / "bin")}
     session_extra = ["--model", model, "--plugin-dir", str(plugin), "--dangerously-skip-permissions"]
     user_extra = ["--model", user_model, "--system-prompt", USER + brief, "--tools", "", "--no-session-persistence"]
     turns, session, said, ended = [], None, opening, "the turns ran out"
     for _ in range(max_turns):
         had_list = written(project / folder)
-        reply, session, cost = ask(command, said, project, session_extra + (["--resume", session] if session else []))
+        reply, session, cost = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
         turns += [("user", said, 0.0), ("assistant", reply, cost)]
         if had_list:
             ended = "the list was shown and the user's answers taken"
             break
-        said, _, cost = ask(command, conversation(turns), nowhere, user_extra)
+        said, _, cost = ask(command, conversation(turns), nowhere, user_extra, env)
         turns[-1] = ("assistant", reply, turns[-1][2] + cost)   # the user's cost is kept with the turn it answers
         if said.strip().strip(".") == "DONE":
             ended = "the user had nothing more to say"

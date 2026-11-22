@@ -76,6 +76,16 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["ended"], "the user had nothing more to say")
         self.assertEqual(summary["session_turns"], 1)
 
+    def test_an_absent_tool_is_off_the_path_and_its_neighbours_stay(self):
+        tools, other = self.folder / "tools", self.folder / "other"
+        for folder, names in ((tools, ("sbx", "gh", "claude")), (other, ("ls",))):
+            folder.mkdir()
+            for name in names:
+                (folder / name).write_text("#!/bin/sh\n")
+        path = run.path_without(["sbx"], f"{tools}{run.os.pathsep}{other}", self.folder / "bin").split(run.os.pathsep)
+        self.assertEqual(path, [str(self.folder / "bin"), str(other)])
+        self.assertEqual(sorted(entry.name for entry in (self.folder / "bin").iterdir()), ["claude", "gh"])
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")
