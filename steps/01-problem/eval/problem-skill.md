@@ -18,10 +18,10 @@ The way things are done today and what goes wrong, with the user's own figures.
 What makes it worth solving instead of leaving alone.
 
 ## Constraints
-The hard limits the user stated.
+The hard limits the user stated. Where none is known yet: "None stated yet."
 
 ## Open questions
-What the user said they do not know yet.
+What the user said they do not know yet, limits included.
 ```
 
 **Before writing.** Where the user has not spoken to one of the four
@@ -35,9 +35,11 @@ or used (the kind of product, its screens, its sign-in, its
 technology) and write none of it. An idea the user floats is not a
 constraint: leave it out, or keep it as an open question.
 
-**Only what the user said.** No figure, reason, limit, goal or measure
-of success of your own, and no further sections. One page, short
-bullets.
+**Only what the user said.** No figure, reason, limit, goal, measure
+of success or question of your own, no conclusion drawn from their
+facts, and no further sections. One page; a bullet for each point,
+with cause and effect kept together as the user gave them. It is the
+user's own document: write "we", never "the user".
 
 **Two problems.** If the account holds two problems, each solvable
 without the other, say so and ask whether each gets its own document
