@@ -12,7 +12,7 @@ planning
 ## Answers
 | Key | When the assistant asks about | The user says |
 |---|---|---|
-| folder | where the planning documents are or should go | Planning is fine. |
+| folder | where the planning documents are or should go | Put them in a folder called planning. |
 | today | how absences are handled today, what the choir does now | We're about 45 singers in four voice parts and we rehearse every Thursday. A singer who'll miss one texts me, or tells a friend, or says nothing. |
 | wrong | what goes wrong, what it costs | I find out on the night that the tenors are three short, and by then I can't rearrange the programme. |
 | anything-else | whether anything else goes wrong, whether that is everything | One more thing. A singer who misses three rehearsals in a row without a word is asked whether they're still coming. The secretary works that out by hand today. |

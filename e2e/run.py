@@ -14,7 +14,8 @@ What the user says, in this order:
 - else, when nothing was asked, the brief's line for going on.
 
 A run ends after the session's first turn that began with a requirements document in the planning
-folder (so the user's answers to its questions have been taken once), or at --max-turns.
+folder (so the user's answers to its questions have been taken once), when the user would say the
+same thing a third time running, or at --max-turns.
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
@@ -36,8 +37,10 @@ Reply with one line of JSON and nothing else:
 "uncovered": the number of separate questions in the message that no topic covers, \
 "asks": true if the message asks the person anything at all or waits for their approval, else false}
 
-A question counts only if the person is expected to answer it. A key is listed once. Use only keys \
-from the list. When unsure whether a topic covers a question, count the question as uncovered.
+A question counts only if the message puts it to the person and waits for the answer: something \
+the assistant states, proposes or says it will do is not a question, and neither is a topic it \
+merely mentions. A key is listed once. Use only keys from the list. When unsure whether a topic \
+covers a question, count the question as uncovered.
 
 # The topics
 
@@ -169,7 +172,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     sorter_extra = ["--model", sorter_model, "--system-prompt", SORTER + brief.topic_list(), "--tools", "",
                     "--no-session-persistence"]
     planning = project / brief.folder
-    turns, session, said, ended, seen, cost = [], None, brief.opening, "the turns ran out", set(), 0.0
+    turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
     for _ in range(max_turns):
         had_list = "requirements" in present(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
@@ -181,10 +184,18 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         appeared = present(planning) - seen
         seen |= appeared
-        sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
-        cost += spent
-        turn["picked"], turn["appeared"] = picked_from(sorted_), sorted(appeared)
+        if "?" in reply:
+            sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
+            cost += spent
+            turn["picked"] = picked_from(sorted_)
+        else:   # nothing was asked: no model is consulted
+            turn["picked"] = {"asked": [], "uncovered": 0, "asks": False}
+        turn["appeared"] = sorted(appeared)
         said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
+        same = same + 1 if said == turn["user"] else 0
+        if same == 2:   # said twice running, and this would be the third time
+            ended = "stuck: the user had only the same thing to say"
+            break
     (out / "transcript.md").write_text("\n\n".join(
         f"**User:** {turn['user']}\n\n**Session:** {turn['session']}" for turn in turns) + "\n", encoding="utf-8")
     (out / "turns.json").write_text(json.dumps(turns, indent=2) + "\n", encoding="utf-8")

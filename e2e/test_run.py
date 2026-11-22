@@ -180,6 +180,26 @@ class Run(unittest.TestCase):
         self.assertEqual(path, [str(self.folder / "bin"), str(other)])
         self.assertEqual(sorted(entry.name for entry in (self.folder / "bin").iterdir()), ["claude", "gh"])
 
+    def test_it_ends_when_the_user_has_only_the_same_thing_to_say(self):
+        (self.example / "brief.md").write_text(BRIEF.replace("| scope-map | Put the second one first. |", "")
+                                               .replace("At most 1.", ""))
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace("if n == 3:", "if n == 99:"))
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 20,
+                          command=(sys.executable, str(fake)))
+        self.assertEqual(summary["ended"], "stuck: the user had only the same thing to say")
+        self.assertEqual(summary["session_turns"], 3)   # said twice, and about to be said a third time
+
+    def test_a_message_with_no_question_is_not_sent_to_the_sorter(self):
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace('reply = f"Turn {n}. Is that right?"', 'reply = f"Turn {n}. Done."'))
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 2, command=(sys.executable, str(fake)))
+        calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
+        self.assertEqual([call for call in calls if "--system-prompt" in call], [])
+        self.assertEqual(json.loads((self.folder / "out" / "turns.json").read_text())[0]["picked"]["asks"], False)
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")

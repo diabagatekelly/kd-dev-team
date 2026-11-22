@@ -14,7 +14,7 @@ planning
 ## Answers
 | Key | When the assistant asks about | The user says |
 |---|---|---|
-| folder | where the planning documents are or should go | Planning is fine. |
+| folder | where the planning documents are or should go | Put them in a folder called planning. |
 | what-they-are | what mutashabihat are, what the difficulty is | They are verses, or parts of verses, in different places that are worded almost the same, with a word or an ending that differs. Reciting from memory, I slide from one into the other without noticing. |
 | today | how it is done today, how they study or review now | I find out when a teacher or a listener stops me. I mark the place in my own copy and keep some pairs in a notebook. There are printed books that list these verses and I own one, but it's something to look things up in, not something to practise with. |
 | wrong | what goes wrong, what does not work | Reading the two side by side helps for a few days. What never gets practised is telling them apart from memory, at the moment I reach one. |

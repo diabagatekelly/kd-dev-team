@@ -177,6 +177,12 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: problem (its document: docs/planning/000_problem.md)",
                       self.report())
 
+    def test_a_full_path_inside_the_project_is_recorded_as_the_folder_inside_it(self):
+        # Found by the end-to-end runs: a session gave the folder by its full path and was refused.
+        done = self.machine.run("stage.sh", "remember", (self.machine.project / "planning").as_posix())
+        self.assertEqual(done.returncode, 0, done.stdout)
+        self.assertIn("- planning folder: planning (chosen earlier for this project)", self.report())
+
     def test_a_folder_outside_the_project_is_refused(self):
         self.assertEqual(self.machine.run("stage.sh", "remember", "../elsewhere").returncode, 3)
         self.assertEqual(self.machine.run("stage.sh", "remember", "/tmp/elsewhere").returncode, 3)

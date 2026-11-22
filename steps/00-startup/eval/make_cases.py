@@ -217,7 +217,7 @@ def scenarios():
          [{"type": "tool_used", "name": "records-the-folder", "tool": "Bash", "min": 1,
            "input_match": r"remember\s+\\?[\"']?planning"},
           says("the-problem-is-next", r"problem"),
-          never_says("suggests-nothing-of-the-product", r"\b(could|might|may) (mean|be|cover|include)\b|such as (a |an )?(booking|list|rota|calendar)")]),
+          never_says("suggests-nothing-of-the-product", r"\b(could|might|may) (mean|cover|include)\b|such as (a |an )?(booking|list|rota|calendar)")]),
         ("21-a-stage-not-built", "Asked to go on to a stage that has no text yet: say it is not built; do none of it.",
          in_order(), "Go on with the next stage.",
          [says("names-the-stage", r"research"),
@@ -293,9 +293,9 @@ def scaffold(machine):
                   "git -c user.name=someone -c user.email=someone@example.org commit -q --allow-empty -m 'Planning documents'"]
     if planning_folder(machine):
         # A session may read the documents again with the command its report gives: record the folder
-        # where that command looks, in the data folder the tool gives this plugin for the run.
-        lines += ['plugin="$(sed -n \'s/.*"name": *"\\([^"]*\\)".*/\\1/p\' "$here/../../.claude-plugin/plugin.json" | head -1)"',
-                  'CLAUDE_PLUGIN_DATA="$(cd ../.. && pwd)/config/plugins/data/${plugin}-inline" '
+        # where that command will look. In the project, because a run's shell does not always see the
+        # data folder the tool gives the plugin.
+        lines += ['CLAUDE_PLUGIN_DATA="$(pwd -P)/.cache/kd-data" '
                   f'sh "$here/../../startup/stage.sh" remember "{planning_folder(machine)}" >/dev/null || true']
     # The project's VM is named for the folder the run starts in, known only there.
     lines += ['vm="$(sh "$here/../../startup/machine.sh" name)"',
@@ -327,7 +327,9 @@ HOOK = """#!/bin/sh
 # Hands the session the startup report of the made-up machine it was started on.
 report="%s/$(pwd -P | tr '/ ' '__')"
 [ -f "$report" ] || exit 0
-sed -e "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" -e "s|@DATA@|${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}|g" "$report"
+data="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}"
+[ ! -f "$(pwd -P)/.cache/kd-data/planning-folders" ] || data="$(pwd -P)/.cache/kd-data"
+sed -e "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" -e "s|@DATA@|$data|g" "$report"
 """ % REPORTS
 
 

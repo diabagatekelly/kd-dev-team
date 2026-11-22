@@ -30,7 +30,7 @@ wait. "I don't know yet" and "nothing is forcing it" are answers:
 record them and do not ask again. Never fill a section from what such
 a product usually needs. An account that came answer by answer gets
 one last question before it is written: whether anything else goes
-wrong today.
+wrong today, or limits what can be done.
 
 **Nothing of the solution.** Ask nothing about how it would be built
 or used (the kind of product, its screens, its sign-in, its
