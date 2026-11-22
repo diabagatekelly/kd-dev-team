@@ -88,12 +88,10 @@ STAGES
   say "- found: ${found:-no planning document}"
   [ -z "$disorder" ] || printf '%s' "$disorder"
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
-  # The big picture is re-read each time a slice is fully planned: it may no longer hold.
-  # A changed map is a new document, so the folder shows when the picture changed.
-  map=$(numbered "$dir" 'scope-map*.md')
-  version=$(( $(cd "$dir" && ls [0-9][0-9][0-9]_scope-map*.md 2>/dev/null | wc -l) + 1 ))
+  # A slice fully planned goes to the build; whether it is done is decided at a check-in when
+  # its work is merged (decision 23), which is not built yet.
   say "- every planning document of $slice exists"
-  say "- next stage by the documents: scope map, re-read with the user before the next slice (a changed map is a new document, $folder/${number}_scope-map-v$(printf '%03d' "$version").md; $map is kept)"
+  say "- next stage by the documents: none, $slice is planned and ready to build"
 }
 
 case "${1:-}" in

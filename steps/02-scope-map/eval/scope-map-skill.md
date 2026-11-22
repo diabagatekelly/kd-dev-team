@@ -1,6 +1,6 @@
 ---
 name: scope-map
-description: Draw or re-read the scope map, the product manager's picture of the whole product. Use when the startup report names "scope map" as the next stage, when the user corrects the map, or when a slice is done and the map is to be re-read.
+description: Draw the scope map, the product manager's picture of the whole product. Use when the startup report names "scope map" as the next stage, or when the user corrects the map.
 ---
 
 # The scope map
@@ -43,13 +43,6 @@ out.
 **Then ask once.** Show the rows and ask whether anything is missing,
 unwanted or in the wrong order: what is in, what is out and what
 comes first are the user's. Apply their correction to the document.
-
-**Re-reading after a slice.** Set what the slice found against the
-rows. Where it contradicts them, write the changed map as the new
-document the startup report names (split, join, add, drop or move
-rows), leave the earlier map as it is, and end the new one with what
-changed and why, a line a change.
-Where nothing contradicts them, say the map holds and write nothing.
 
 **Stop there.** Save it as the document the startup report names for
 this stage. No requirements and no slice.

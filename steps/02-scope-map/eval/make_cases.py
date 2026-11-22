@@ -30,7 +30,6 @@ problem = load("problem_cases", ROOT / "steps/01-problem/eval/make_cases.py")
 says, never_says, write = startup.says, startup.never_says, startup.write
 
 MAP = "planning/001_scope-map.md"
-SECOND = "planning/013_scope-map-v002.md"   # a map changed after a slice is a new document
 KAD = [HERE / "kad-skill.md", ROOT.parent / "kad-dev-team-plugin/skills/scope-map/SKILL.md"]
 
 
@@ -67,8 +66,6 @@ STOPS_THERE = {"type": "regex", "name": "writes-no-later-document", "target": "t
                           r'_(requirements|research|slice|questions|answers|design)'}
 CHANGES_THE_MAP = {"type": "regex", "name": "changes-the-map", "target": "trace",
                    "pattern": r'"name"\s*:\s*"(Write|Edit)"[\s\S]{0,400}?001_scope-map'}
-LEAVES_THE_MAP = [{"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0},
-                  {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0}]
 # A map has rows of its own, so only the table is kept from the user here, not the word "row".
 ALWAYS = [STOPS_THERE, never_says("keeps-the-routing-table-out", r"\brouting table\b")]
 GO_ON = "Go on to the next stage."
@@ -140,11 +137,6 @@ TOOLS_MAP = """# Scope map: Lending at the tool library
 ## Open
 - None.
 """
-SLICE = {f"slice-001/{name}": "A document.\n" for name in
-         ["004_slice.md", "005_questions.md", "006_answers.md", "007_open-facts.md", "008_design.md",
-          "009_screens.md", "010_stack.md", "011_readiness.md", "012_owner-list.md"]}
-PLANNED = {"000_problem.md": TOOLS_PROBLEM, "001_scope-map.md": TOOLS_MAP, "002_requirements.md": "A document.\n",
-           "003_research/a.md": "A document.\n", **SLICE}
 SHOWN = ("I've drawn the scope map from the problem document. Five things a user does: join and pay the yearly "
          "fee (later); reserve a tool (next); borrow a tool (now); return a tool (next); report and track a "
          "repair (later). Two limits hold for all of them: the volunteers have only their own phones, and "
@@ -179,24 +171,6 @@ SCENARIOS = [
      [CHANGES_THE_MAP, *MARKS, in_map("returns-are-now", activity_with(r"return").replace("now|next|later", "now")),
       not_in_map("repairs-are-no-activity", activity_with(r"repair"))],
      [("user", GO_ON), ("assistant", SHOWN)]),
-    ("06-a-slice-that-contradicts-the-map", "A slice done that found otherwise: the map changes, and why is said.",
-     PLANNED, {},
-     "Slice 1 is done. What we found building it: borrowing and returning are one thing at the desk, the "
-     "volunteer does both in the same minute on the same ledger line. And half the people who come to borrow "
-     "have not joined yet, so they have to be signed up on the spot before they can take anything.",
-     [{"type": "file_exists", "name": "writes-the-changed-map-as-a-new-document", "path": SECOND},
-      in_map("marks-the-activities", marked(1), SECOND),
-      in_map("borrowing-and-returning-are-one", r"(?:^|\n)[^\n]*(?:borrow|lend|loan)[^\n]*(?:return|back)[^\n]*" + mark("now|next|later"),
-             SECOND),
-      # Signing up on the spot reaches the map: inside the borrowing row, or as joining brought forward.
-      in_map("joining-on-the-spot-is-in-the-map",
-             r"(?:^|\n)[^\n]*borrow[^\n]*(?:join|sign)[^\n]*|" + activity_with(r"join|sign").replace("now|next|later", "now|next"),
-             SECOND),
-      in_map("the-first-map-is-kept", r"Borrow a tool"), says("says-what-changed", r"join|sign")], None),
-    ("07-a-slice-that-does-not", "A slice done that found nothing new: the map holds and is left alone.",
-     PLANNED, {},
-     "Slice 1 is done. Nothing surprised us: borrowing works at the desk the way we thought it would.",
-     [*LEAVES_THE_MAP, says("says-the-map-holds", r"holds|still|stands|unchanged|no change|nothing (to|needs)")], None),
 ]
 
 
