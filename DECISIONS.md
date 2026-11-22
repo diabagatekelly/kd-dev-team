@@ -98,6 +98,8 @@ asking is listed apart, so it can be overturned.
     yes and hands over the one command that continues inside it;
     everything from the problem onward happens there. Startup was
     reopened for it; the result is in `steps/00-startup/README.md`.
+    The owner has said the reopened step holds, with Sonnet 5.5 and
+    the table of ten rows.
 
 ## 2026-11-21: how the problem stage is measured
 
