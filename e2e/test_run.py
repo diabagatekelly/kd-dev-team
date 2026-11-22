@@ -7,25 +7,117 @@ import unittest
 
 import run
 
-BRIEF = "# A brief\n\n## Opening\nI want a thing.\n\n## What you know\n- It is for the club.\n\n## Planning folder\nplans\n"
-# A stand-in for the tool: as the session it writes the list on its second turn; as the user it
-# says "Yes." once and then DONE if asked again.
+BRIEF = """# A brief
+
+## Opening
+I want a thing.
+
+## Planning folder
+plans
+
+## Answers
+| Key | When the assistant asks about | The user says |
+|---|---|---|
+| today | how it is done today | On paper. |
+| limits | a budget, a deadline | Ten a month. |
+| who | who it is for | The club. |
+
+## Not known
+I don't know that yet.
+
+## Nothing asked
+Carry on.
+
+## When a document is first shown
+| Document | The user says |
+|---|---|
+| scope-map | Put the second one first. |
+
+## Answers to the requirements' questions
+At most 1.
+"""
+# A stand-in for the tool. As the session it writes the map on its second turn and the list on its
+# third; as the sorter it answers with whatever the test put in sorter.json.
 FAKE = textwrap.dedent('''
     import json, pathlib, sys
     args = sys.argv[1:]
-    prompt = args[args.index("-p") + 1]
-    log = pathlib.Path(__file__).with_name("calls.jsonl")
-    with log.open("a") as out: out.write(json.dumps(args) + "\\n")
+    here = pathlib.Path(__file__).parent
+    with (here / "calls.jsonl").open("a") as out: out.write(json.dumps(args) + "\\n")
     if "--system-prompt" in args:
-        reply = "DONE" if prompt.count("YOU:") >= @LIMIT@ else "Yes."
+        reply = (here / "sorter.json").read_text()
     else:
         count = pathlib.Path("count"); n = int(count.read_text()) + 1 if count.exists() else 1
         count.write_text(str(n))
-        if n == 2:
-            pathlib.Path("plans").mkdir(exist_ok=True); pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")
+        pathlib.Path("plans").mkdir(exist_ok=True)
+        if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map")
+        if n == 3: pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")
         reply = f"Turn {n}. Is that right?"
     print(json.dumps({"result": reply, "session_id": "s-1", "total_cost_usd": 0.01}))
 ''')
+
+
+class TheBrief(unittest.TestCase):
+    def setUp(self):
+        self.brief = run.Brief(BRIEF)
+
+    def test_a_section_of_the_brief_is_read_by_its_heading(self):
+        self.assertEqual(run.section(BRIEF, "opening"), "I want a thing.")
+        self.assertEqual(run.section(BRIEF, "not there"), "")
+
+    def test_the_brief_is_read_whole(self):
+        self.assertEqual(self.brief.folder, "plans")
+        self.assertEqual(self.brief.topics["limits"], ("a budget, a deadline", "Ten a month."))
+        self.assertEqual(self.brief.limit, 1)
+        self.assertEqual(self.brief.topic_list().splitlines()[0], "- today: how it is done today")
+
+    def test_the_answers_come_word_for_word_in_the_order_asked(self):
+        self.assertEqual(self.brief.reply({"asked": ["who", "today"], "uncovered": 0}, set(), False),
+                         "The club. On paper.")
+
+    def test_a_topic_asked_twice_is_answered_once_and_an_unknown_key_is_dropped(self):
+        self.assertEqual(self.brief.reply({"asked": ["who", "who", "made-up"], "uncovered": 0}, set(), False), "The club.")
+
+    def test_what_no_topic_covers_gets_the_not_known_line_once(self):
+        self.assertEqual(self.brief.reply({"asked": ["today"], "uncovered": 3}, set(), False),
+                         "On paper. I don't know that yet.")
+        self.assertEqual(self.brief.reply({"asked": [], "uncovered": 2}, set(), False), "I don't know that yet.")
+
+    def test_nothing_asked_gets_the_line_for_going_on(self):
+        self.assertEqual(self.brief.reply({"asked": [], "uncovered": 0, "asks": False}, set(), False), "Carry on.")
+
+    def test_a_document_first_shown_gets_its_own_line_whatever_was_asked(self):
+        self.assertEqual(self.brief.reply({"asked": ["who"], "uncovered": 1}, {"scope-map"}, False),
+                         "Put the second one first.")
+        self.assertEqual(self.brief.reply({"asked": ["who"], "uncovered": 0}, {"problem"}, False), "The club.")
+
+    def test_the_requirements_questions_are_answered_only_as_far_as_the_brief_allows(self):
+        self.assertEqual(self.brief.reply({"asked": ["who", "today", "limits"], "uncovered": 2}, {"requirements"}, True),
+                         "The club.")
+        self.assertEqual(self.brief.reply({"asked": ["who"], "uncovered": 2}, {"requirements"}, True),
+                         "The club. I don't know that yet.")
+
+    def test_a_brief_without_the_optional_parts_has_plain_defaults(self):
+        brief = run.Brief("## Opening\nHello.\n")
+        self.assertEqual((brief.folder, brief.not_known, brief.go_on, brief.limit), ("planning", "I don't know yet.", "Go on.", None))
+
+    def test_what_the_sorter_said_is_read_or_counted_as_one_thing_uncovered(self):
+        self.assertEqual(run.picked_from('Here: {"asked": ["who"], "uncovered": 0, "asks": true}')["asked"], ["who"])
+        self.assertEqual(run.picked_from("no idea"), {"asked": [], "uncovered": 1, "asks": True, "unread": True})
+        self.assertTrue(run.picked_from('{"asked": "who"}')["unread"])
+
+
+class TheExamples(unittest.TestCase):
+    def test_every_example_has_a_brief_the_script_can_speak_from(self):
+        examples = sorted((pathlib.Path(run.__file__).parent / "examples").glob("*/brief.md"))
+        self.assertGreaterEqual(len(examples), 4)
+        for path in examples:
+            text = path.read_text(encoding="utf-8")
+            brief = run.Brief(text)
+            with self.subTest(path.parent.name):
+                self.assertTrue(brief.opening)
+                self.assertTrue({"folder", "confirm"} <= set(brief.topics))
+                self.assertTrue(all(len(row) == 3 and all(row) for row in run.rows(run.section(text, "Answers"))))
+                self.assertTrue(set(brief.shown) <= set(run.DOCUMENTS))
 
 
 class Run(unittest.TestCase):
@@ -36,46 +128,47 @@ class Run(unittest.TestCase):
         (self.example / "project" / "README.md").write_text("An app.\n")
         (self.example / "brief.md").write_text(BRIEF)
 
-    def go(self, limit=99, turns=10):
+    def go(self, sorter='{"asked": ["today"], "uncovered": 0, "asks": true}', turns=10):
         fake = self.folder / "fake.py"
-        fake.write_text(FAKE.replace("@LIMIT@", str(limit)))
-        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "u", turns,
+        fake.write_text(FAKE)
+        (self.folder / "sorter.json").write_text(sorter)
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", turns,
                           command=(sys.executable, str(fake)))
         calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
         return summary, calls
 
-    def test_a_section_of_the_brief_is_read_by_its_heading(self):
-        self.assertEqual(run.section(BRIEF, "opening"), "I want a thing.")
-        self.assertEqual(run.section(BRIEF, "not there"), "")
-
     def test_it_ends_after_the_turn_that_took_the_answers_to_the_list(self):
-        summary, calls = self.go()
+        summary, _ = self.go()
         self.assertEqual(summary["ended"], "the list was shown and the user's answers taken")
-        self.assertEqual(summary["session_turns"], 3)
-        self.assertEqual(summary["documents"], ["plans/002_requirements.md"])
+        self.assertEqual(summary["session_turns"], 4)
+        self.assertEqual(summary["documents"], ["plans/001_scope-map.md", "plans/002_requirements.md"])
         self.assertFalse(summary["numbered_in_order"])
-        self.assertEqual(summary["questions_put"], 3)
-        self.assertAlmostEqual(summary["cost_usd"], 0.05)
+        self.assertEqual(summary["questions_put"], 4)
+        self.assertAlmostEqual(summary["cost_usd"], 0.07)
 
-    def test_the_session_opens_with_the_brief_and_is_resumed_after(self):
+    def test_the_user_says_only_what_the_brief_holds(self):
+        _, calls = self.go()
+        said = [call[call.index("-p") + 1] for call in calls if "--system-prompt" not in call]
+        self.assertEqual(said, ["I want a thing.", "On paper.", "Put the second one first.", "On paper."])
+
+    def test_the_session_is_resumed_and_the_sorter_sees_the_topics_and_no_tools(self):
         _, calls = self.go()
         sessions = [call for call in calls if "--system-prompt" not in call]
-        self.assertEqual(sessions[0][sessions[0].index("-p") + 1], "I want a thing.")
         self.assertNotIn("--resume", sessions[0])
         self.assertEqual(sessions[1][sessions[1].index("--resume") + 1], "s-1")
-        self.assertEqual(sessions[1][sessions[1].index("-p") + 1], "Yes.")
+        sorter = [call for call in calls if "--system-prompt" in call][0]
+        self.assertIn("- limits: a budget, a deadline", sorter[sorter.index("--system-prompt") + 1])
+        self.assertNotIn("Ten a month.", sorter[sorter.index("--system-prompt") + 1])
+        self.assertEqual(sorter[sorter.index("--tools") + 1], "")
+        self.assertEqual(sorter[sorter.index("-p") + 1], "Turn 1. Is that right?")
 
-    def test_the_user_has_the_brief_no_tools_and_the_conversation_so_far(self):
-        _, calls = self.go()
-        user = [call for call in calls if "--system-prompt" in call][0]
-        self.assertIn("It is for the club.", user[user.index("--system-prompt") + 1])
-        self.assertEqual(user[user.index("--tools") + 1], "")
-        self.assertIn("THE ASSISTANT: Turn 1. Is that right?", user[user.index("-p") + 1])
-
-    def test_it_ends_when_the_user_has_nothing_more_to_say(self):
-        summary, _ = self.go(limit=1)
-        self.assertEqual(summary["ended"], "the user had nothing more to say")
-        self.assertEqual(summary["session_turns"], 1)
+    def test_what_was_picked_is_kept_beside_each_turn(self):
+        summary, _ = self.go(sorter='{"asked": [], "uncovered": 2, "asks": true}')
+        turns = json.loads((self.folder / "out" / "turns.json").read_text())
+        self.assertEqual(turns[0]["picked"]["uncovered"], 2)
+        self.assertEqual(turns[1]["appeared"], ["scope-map"])
+        self.assertEqual(turns[1]["user"], "I don't know that yet.")
+        self.assertEqual(summary["asked_and_not_covered"], 6)
 
     def test_an_absent_tool_is_off_the_path_and_its_neighbours_stay(self):
         tools, other = self.folder / "tools", self.folder / "other"

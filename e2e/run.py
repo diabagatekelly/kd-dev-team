@@ -1,44 +1,48 @@
 #!/usr/bin/env python3
-"""Run one example end to end: a planning session and a stand-in for its user, turn by turn.
+"""Run one example end to end: a planning session and a scripted user, turn by turn.
 
-The session is the tool run headless in the example's project with the assembled plugin; the
-user is a second, tool-less session that answers from the example's brief and nothing else. The
-stand-in is not a judge: what a run shows is read afterwards, in its transcript and documents.
+The session is the tool run headless in the example's project with the assembled plugin. The user
+is a script: every word it says is written beforehand in the example's brief. A model is used for
+one thing only, to say which of the brief's topics the session's message asks about; it never
+writes an answer, and what it picked is kept beside each turn so a wrong pick can be seen.
 
-A run ends after the session's first turn that began with a requirements document in the
-planning folder (so the user's answers to its questions have been taken once), when the user
-has nothing left to say, or at --max-turns.
+What the user says, in this order:
+- when a document has just appeared for the first time, the line the brief gives for that moment;
+- else the brief's answers to the topics asked about, in the order asked (after the requirements
+  are first shown, only as many as the brief allows), and the brief's "not known" line once for
+  anything asked that no topic covers;
+- else, when nothing was asked, the brief's line for going on.
+
+A run ends after the session's first turn that began with a requirements document in the planning
+folder (so the user's answers to its questions have been taken once), or at --max-turns.
 
 Usage, inside the evaluation VM:
-    python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--user-model M] [--max-turns N]
+    python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
 """
 import argparse
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
-import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
-USER = """You are playing a person who is talking to a planning assistant about something they \
-want. You are not an assistant and you never offer help. Everything you know is in the brief below.
+SORTER = """You sort questions; you never answer them. You are given a message from a planning \
+assistant to a person, and a list of topics, each a key and what it covers.
 
-- Answer only what you were asked, in one to four plain sentences, the way this person talks.
-- Volunteer nothing you were not asked for.
-- Asked something the brief does not cover, or marks as not known, say you do not know or have \
-not thought about it. Never make a fact up.
-- Where the brief says how you behave at some point (a change of mind, an answer you skip), do \
-exactly that at that point.
-- If the assistant stops without asking anything, say: Go on.
-- When the assistant has nothing more to ask and the brief leaves you nothing more to say, \
-reply with the single word DONE.
+Reply with one line of JSON and nothing else:
+{"asked": [the keys of the topics the message asks the person about, in the order it asks them], \
+"uncovered": the number of separate questions in the message that no topic covers, \
+"asks": true if the message asks the person anything at all or waits for their approval, else false}
 
-You will be given the conversation so far. Reply with the person's next message and nothing else.
+A question counts only if the person is expected to answer it. A key is listed once. Use only keys \
+from the list. When unsure whether a topic covers a question, count the question as uncovered.
 
-# The brief
+# The topics
 
 """
+DOCUMENTS = ("problem", "scope-map", "requirements")
 
 
 def section(brief, heading):
@@ -50,6 +54,45 @@ def section(brief, heading):
         elif inside:
             out.append(line)
     return "\n".join(out).strip()
+
+
+def rows(text):
+    """The rows of a markdown table as lists of cells, without its heading and rule."""
+    found = [[cell.strip() for cell in line.strip().strip("|").split("|")]
+             for line in text.splitlines() if line.strip().startswith("|")]
+    return [row for row in found[2:] if any(row)]
+
+
+class Brief:
+    """Everything the user will ever say, read from the example's brief."""
+
+    def __init__(self, text):
+        self.opening = section(text, "Opening")
+        self.folder = section(text, "Planning folder") or "planning"
+        self.topics = {key: (covers, says) for key, covers, says in rows(section(text, "Answers"))}
+        self.not_known = section(text, "Not known") or "I don't know yet."
+        self.go_on = section(text, "Nothing asked") or "Go on."
+        self.shown = {name: says for name, says in rows(section(text, "When a document is first shown"))}
+        limit = section(text, "Answers to the requirements' questions")
+        self.limit = int(re.search(r"\d+", limit).group()) if re.search(r"\d+", limit) else None
+
+    def topic_list(self):
+        return "\n".join(f"- {key}: {covers}" for key, (covers, _) in self.topics.items())
+
+    def reply(self, picked, appeared, limited):
+        """The user's next message: from what was picked, the documents that just appeared, and
+        whether the requirements have just been shown (when only `limit` answers are given)."""
+        for name in DOCUMENTS:
+            if name in appeared and name in self.shown:
+                return self.shown[name]
+        asked = [key for key in dict.fromkeys(picked.get("asked") or []) if key in self.topics]
+        skipped = 0
+        if limited and self.limit is not None:
+            asked, skipped = asked[:self.limit], len(asked[self.limit:])
+        parts = [self.topics[key][1] for key in asked]
+        if picked.get("uncovered") and not (limited and self.limit is not None and skipped):
+            parts.append(self.not_known)
+        return " ".join(parts) if parts else self.go_on
 
 
 def path_without(absent, path, bin_folder):
@@ -83,17 +126,26 @@ def ask(command, prompt, cwd, extra, env=None):
     return answer.get("result") or "", answer.get("session_id"), answer.get("total_cost_usd") or 0.0
 
 
-def written(planning):
-    return planning.is_dir() and any(planning.glob("[0-9][0-9][0-9]_requirements*.md"))
+def picked_from(text):
+    """What the sorter said, or "one thing asked that no topic covers" when it cannot be read."""
+    found = re.search(r"\{[\s\S]*\}", text or "")
+    try:
+        picked = json.loads(found.group()) if found else None
+    except ValueError:
+        picked = None
+    if not isinstance(picked, dict) or not isinstance(picked.get("asked", []), list):
+        return {"asked": [], "uncovered": 1, "asks": True, "unread": True}
+    return picked
 
 
-def conversation(turns):
-    return "\n\n".join(f"{'YOU' if who == 'user' else 'THE ASSISTANT'}: {text}" for who, text, _ in turns)
+def present(planning):
+    """Which of the three documents exist in the planning folder, by name."""
+    names = [path.name for path in planning.glob("*.md")] if planning.is_dir() else []
+    return {name for name in DOCUMENTS if any(name in file for file in names)}
 
 
-def run(example, out, plugin, model, user_model, max_turns, command=("claude",)):
-    brief = (example / "brief.md").read_text(encoding="utf-8")
-    opening, folder = section(brief, "Opening"), section(brief, "Planning folder") or "planning"
+def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",)):
+    brief = Brief((example / "brief.md").read_text(encoding="utf-8"))
     project, nowhere = out / "project", out / "nowhere"
     shutil.rmtree(out, ignore_errors=True)
     nowhere.mkdir(parents=True)
@@ -114,31 +166,38 @@ def run(example, out, plugin, model, user_model, max_turns, command=("claude",))
     absent = [path.name for path in (machine / "absent").iterdir()] if (machine / "absent").is_dir() else []
     env = {**os.environ, "PATH": path_without(absent, os.environ.get("PATH", ""), out / "bin")}
     session_extra = ["--model", model, "--plugin-dir", str(plugin), "--dangerously-skip-permissions"]
-    user_extra = ["--model", user_model, "--system-prompt", USER + brief, "--tools", "", "--no-session-persistence"]
-    turns, session, said, ended = [], None, opening, "the turns ran out"
+    sorter_extra = ["--model", sorter_model, "--system-prompt", SORTER + brief.topic_list(), "--tools", "",
+                    "--no-session-persistence"]
+    planning = project / brief.folder
+    turns, session, said, ended, seen, cost = [], None, brief.opening, "the turns ran out", set(), 0.0
     for _ in range(max_turns):
-        had_list = written(project / folder)
-        reply, session, cost = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
-        turns += [("user", said, 0.0), ("assistant", reply, cost)]
+        had_list = "requirements" in present(planning)
+        reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
+        cost += spent
+        turn = {"user": said, "session": reply}
+        turns.append(turn)
         if had_list:
             ended = "the list was shown and the user's answers taken"
             break
-        said, _, cost = ask(command, conversation(turns), nowhere, user_extra, env)
-        turns[-1] = ("assistant", reply, turns[-1][2] + cost)   # the user's cost is kept with the turn it answers
-        if said.strip().strip(".") == "DONE":
-            ended = "the user had nothing more to say"
-            break
+        appeared = present(planning) - seen
+        seen |= appeared
+        sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
+        cost += spent
+        turn["picked"], turn["appeared"] = picked_from(sorted_), sorted(appeared)
+        said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
     (out / "transcript.md").write_text("\n\n".join(
-        f"**{'User' if who == 'user' else 'Session'}:** {text}" for who, text, _ in turns) + "\n", encoding="utf-8")
+        f"**User:** {turn['user']}\n\n**Session:** {turn['session']}" for turn in turns) + "\n", encoding="utf-8")
+    (out / "turns.json").write_text(json.dumps(turns, indent=2) + "\n", encoding="utf-8")
+    documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
     summary = {"example": example.name, "model": model, "ended": ended, "session": session,
-               "session_turns": sum(1 for who, _, _ in turns if who == "assistant"),
-               "questions_put": sum(text.count("?") for who, text, _ in turns if who == "assistant"),
-               "cost_usd": round(sum(cost for _, _, cost in turns), 4),
+               "session_turns": len(turns),
+               "questions_put": sum(turn["session"].count("?") for turn in turns),
+               "asked_and_not_covered": sum((turn.get("picked") or {}).get("uncovered") or 0 for turn in turns),
+               "cost_usd": round(cost, 4),
                # Each document under the number and name the stage script gives it, so the next session finds it.
-               "numbered_in_order": [path.name for path in sorted((project / folder).glob("*.md"))]
-               == ["000_problem.md", "001_scope-map.md", "002_requirements.md"] if (project / folder).is_dir() else False,
-               "documents": sorted(str(path.relative_to(project)) for path in (project / folder).rglob("*.md"))
-               if (project / folder).is_dir() else []}
+               "numbered_in_order": [path.name for path in documents]
+               == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],
+               "documents": [str(path.relative_to(project)) for path in documents]}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary
 
@@ -149,8 +208,8 @@ if __name__ == "__main__":
     parser.add_argument("--out", type=pathlib.Path, required=True)
     parser.add_argument("--plugin", type=pathlib.Path, default=HERE / "plugin")
     parser.add_argument("--model", default="claude-sonnet-5-5")
-    parser.add_argument("--user-model", default="claude-sonnet-5-5")
+    parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
     given = parser.parse_args()
     print(json.dumps(run(given.example.resolve(), given.out.resolve(), given.plugin.resolve(), given.model,
-                         given.user_model, given.max_turns), indent=2))
+                         given.sorter_model, given.max_turns), indent=2))

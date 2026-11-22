@@ -1,6 +1,7 @@
 # The allotment society's waiting list
 
-A vague idea from someone who knows the problem well but offers nothing unasked.
+A one-line idea from someone who knows the problem well and offers nothing unasked: the secretary
+of an allotment society, a volunteer, short with words, not technical.
 
 ## Opening
 I want an app for our allotment society.
@@ -8,32 +9,34 @@ I want an app for our allotment society.
 ## Planning folder
 planning
 
-## Who you are
-The secretary of an allotment society: a volunteer, practical, short with words, not technical.
-Asked where the planning documents should go, say: a folder called planning is fine.
+## Answers
+| Key | When the assistant asks about | The user says |
+|---|---|---|
+| folder | where the planning documents are or should go | A folder called planning is fine. |
+| today | how things are done today, what the society does now | We have 84 plots and about 40 people waiting for one. The waiting list is a paper notebook I keep at home, and people phone me to ask where they are on it. |
+| wrong | what goes wrong, what it costs | I spend about an evening a week on the phone telling people where they are on the list. |
+| anything-else | whether anything else goes wrong, whether that is everything | Yes. When a plot comes free the committee is meant to offer it to whoever is first. Twice last year it went to someone's friend, and there was a row at the annual meeting. |
+| why-now | why now, what makes it worth solving | The council owns the land, and it has said the lease renewal in March depends on us showing that plots are given out fairly. |
+| limits | hard limits: budget, deadline, rules, who looks after it | We can spend 10 pounds a month at most. The committee are five volunteers, none of us technical. Many members are elderly and several have no smartphone. |
+| unknowns | what is not known yet, open questions | I don't know whether collecting the plot rent should be part of this. The treasurer collects it by cheque once a year and hasn't said. |
+| who | who it is for, who would use it | The committee, and the people on the waiting list. |
+| confirm | whether a document or a list is right, or anything is missing, unwanted or in the wrong order | That's right, nothing to add. |
+| rent | whether rent or fees are part of it | I don't know. The treasurer hasn't said. |
+| look-up | whether someone may look a place up for a person with no smartphone | I could look it up for them, but I'd rather not be doing that every week. |
+| own-place | whether a person sees only their own place or the whole list with names | Only their own place. I wouldn't want people's names shown to everyone. |
+| notebook | whether the notebook's order comes across, who keeps the list up to date | The order should come across just as it is in the notebook. I keep the list. |
+| how-built | how it should be built, what technology, what kind of app | I have no idea, that's not my field. |
 
-## What you know
-- The society has 84 plots. About 40 people are waiting for one.
-- The waiting list is a paper notebook you keep at home. People phone you to ask where they are on it.
-- When a plot comes free the committee is supposed to offer it to whoever is first. Twice last year
-  it went to someone's friend, and there was a row at the annual meeting.
-- You spend an evening a week on calls from people asking where they are on the list.
-- Why now: the council, which owns the land, has said the lease renewal in March depends on the
-  society showing that plots are given out fairly.
-- Limits: the committee are five volunteers, none technical. The society can spend 10 a month at most.
-  Many members are elderly and several have no smartphone.
-- Plot rent is collected once a year by cheque by the treasurer.
+## Not known
+I don't know.
 
-## What you do not know
-- Whether collecting the rent should be part of this. The treasurer has not said.
-- How many people join the waiting list in a year.
-- Anything about how it should be built. If asked, say you have no idea and it is not your field.
+## Nothing asked
+Go on.
 
-## How you behave
-- Your first answers are short. Give a fact only when a question asks for it.
-- When you are shown a map of activities, whatever it puts first, say that what matters most to
-  you is a person on the waiting list being able to see where they stand, and ask for that first.
-  If it is already first, agree.
-- When you are shown the requirements and asked several questions at once, answer the first two
-  you are asked and say nothing about the others.
-- If the same question comes again, answer it.
+## When a document is first shown
+| Document | The user says |
+|---|---|
+| scope-map | What matters most to me is a person on the waiting list being able to see where they stand. I'd want that first. |
+
+## Answers to the requirements' questions
+At most 2 when the list is first shown; the others are passed over in silence.

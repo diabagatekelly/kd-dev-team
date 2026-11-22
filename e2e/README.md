@@ -5,15 +5,20 @@ session goes from a first message through every adopted stage, each
 stage reading what the one before actually wrote, in a conversation
 as long as it takes (decision 28).
 
-- `examples/NAME/brief.md`: who the user is, their first message,
-  what they know and do not know, and how they behave (a change of
-  mind, an answer skipped). `examples/NAME/project/`, where there is
-  one, is the project the session starts in.
+- `examples/NAME/brief.md`: every word the user will say. Their
+  first message; a table of topics, each with what it covers and the
+  answer, word for word; the line for what no topic covers; the line
+  said when a document is first shown (a change of mind, an addition);
+  and how many of the requirements' questions are answered at first.
+  `examples/NAME/project/`, where there is one, is the project the
+  session starts in.
 - `run.py`: runs one example. The session is the tool run headless
-  with the assembled plugin; the user is a second session with no
-  tools that answers from the brief and nothing else. The stand-in
-  user is not a judge: a run is read afterwards, in its transcript
-  and its documents.
+  with the assembled plugin. The user is a script: it says only what
+  the brief holds. A model is used for one thing, to say which of the
+  brief's topics the session's message asks about; it never writes an
+  answer, and what it picked is kept beside each turn in
+  `turns.json`, so a wrong pick can be seen. Nothing here judges a
+  run: it is read afterwards, in its transcript and its documents.
 - `make_plugin.py`: assembles everything adopted so far into one
   plugin (rebuilt each time, not kept in git).
 - `machine/`: the made-up machine the stand-in tools answer as:
@@ -25,8 +30,9 @@ evaluation VM, after `steps/00-startup/eval/setup-vm.sh`:
     python3 -I e2e/make_plugin.py
     python3 -I e2e/run.py e2e/examples/01-a-one-line-idea --out /tmp/e2e/01-run1
 
-A run leaves `transcript.md`, `summary.json` (turns, questions put,
-cost, how it ended) and the project with its planning documents. The
+A run leaves `transcript.md`, `turns.json`, `summary.json` (turns,
+questions put, how many were asked that no topic covers, whether the
+documents are numbered in order, cost, how it ended) and the project with its planning documents. The
 examples are made-up and may be quoted here; raw runs go to the
 audit repository under `e2e/runs`.
 
@@ -53,6 +59,6 @@ scenario or a change to a text that is then tested again (decision
 
 Seen and left: the first list of requirements had one item and four
 questions, and grew to three items from the answers, which is the
-stage working as meant. The stand-in user, asked what it did not
-know, said "nothing" though its brief held an unknown: a limit of
-the stand-in, not of the plugin.
+stage working as meant.
+
+| The user was a second model answering from a prose brief: asked what it did not know, it said "nothing" though the brief held an unknown, and its wording changed from run to run | example 1, second run; the owner | the user is a script that says only the brief's own words (`Brief.reply`, ten unit tests); a model only sorts the question into the brief's topics |

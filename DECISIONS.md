@@ -303,8 +303,10 @@ asking is listed apart, so it can be overturned.
   REFUSED) stops the session: it says what was not read and does
   nothing else, not even the planning conversation, until the report
   reads (routing table, row 0; found by the first end-to-end run).
-- In an end-to-end run the user is a second, tool-less session
-  answering from a written brief; it is a stand-in, not a judge.
+- In an end-to-end run the user is a script that says only the
+  words written in the example's brief (the owner asked for a user
+  that does not drift); a model only says which of the brief's
+  topics a message asks about, and its pick is kept with the turn.
 - The requirements list (`steps/03-requirements/`), 2026-11-22:
   - An item is a line `- [ ] **its-name**: ...`; a name is lower case
     words joined by hyphens.
