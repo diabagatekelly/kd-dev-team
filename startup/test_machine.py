@@ -195,5 +195,140 @@ class Install(unittest.TestCase):
         self.assertEqual([c for c in self.machine.calls() if c.startswith("brew")], [])
 
 
+
+class ProjectVM(unittest.TestCase):
+    """The one VM a project is worked on in: named for the project, made with a yes, entered by the user."""
+
+    def setUp(self):
+        self.machine = Machine(self)
+
+    def inspect(self):
+        done = self.machine.run("machine.sh", "inspect")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        return done.stdout
+
+    def name(self):
+        done = self.machine.run("machine.sh", "name")
+        self.assertEqual(done.returncode, 0, done.stderr)
+        return done.stdout.strip()
+
+    def test_the_vm_is_named_for_the_project_and_two_projects_never_share_a_name(self):
+        self.assertRegex(self.name(), r"^kd-project-[0-9]+$")
+        elsewhere = self.machine.root / "Other Place" / "project"
+        elsewhere.mkdir(parents=True)
+        other = self.machine.run("machine.sh", "name", cwd=elsewhere).stdout.strip()
+        self.assertRegex(other, r"^kd-project-[0-9]+$")
+        self.assertNotEqual(other, self.name())
+
+    def test_the_name_is_the_same_from_a_folder_below_the_repository_root(self):
+        self.machine.repository()
+        below = self.machine.project / "src"
+        below.mkdir()
+        self.assertEqual(self.machine.run("machine.sh", "name", cwd=below).stdout.strip(), self.name())
+
+    def test_inside_a_vm_the_machine_is_not_inspected(self):
+        self.machine.inside_vm()
+        out = self.inspect()
+        self.assertEqual(out.strip(), "- this session is inside a VM (Docker Sandboxes): the project is worked on here")
+        self.assertEqual(self.machine.calls(), [])
+
+    def test_a_machine_in_order_with_no_vm_for_the_project_says_how_one_is_made(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=["kd-another-1"])
+        out = self.inspect()
+        self.assertIn("- VM for this project: none", out)
+        self.assertRegex(out, r"- making it \(a private copy of this repository, inside a new VM\): "
+                              r"sh \".*machine\.sh\" create")
+
+    def test_a_folder_that_is_not_a_repository_is_said_with_what_making_the_vm_would_do(self):
+        self.machine.vm_tool()
+        out = self.inspect()
+        self.assertIn("- VM for this project: none", out)
+        self.assertRegex(out, r"- making it \(this folder becomes a git repository first; then a private copy "
+                              r"of it, inside a new VM\): sh \".*machine\.sh\" create")
+
+    def test_a_vm_for_the_project_is_named_with_the_command_that_continues_inside_it(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        out = self.inspect()
+        self.assertIn(f"- VM for this project: {self.name()}", out)
+        self.assertIn(f"- continuing inside it (the user's to run, in their own terminal): sbx run --name {self.name()}",
+                      out)
+        self.assertNotIn("create", out)
+
+    def test_with_a_lock_off_nothing_is_said_of_making_or_entering_a_vm(self):
+        self.machine.repository()
+        self.machine.vm_tool(locks_off=["browser.enabled"], vms=[self.name()])
+        out = self.inspect()
+        self.assertIn(f"- VM for this project: {self.name()}", out)
+        self.assertNotIn("sbx run", out)
+
+    def test_secure_ends_by_saying_how_the_projects_vm_is_made_or_entered(self):
+        self.machine.repository()
+        self.machine.vm_tool(locks_off=["browser.enabled"], vms=[self.name()])
+        done = self.machine.run("machine.sh", "secure")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertIn("- locks: all 6 on", done.stdout)
+        self.assertIn(f"sbx run --name {self.name()}", done.stdout)
+
+    def test_secure_that_leaves_a_lock_off_says_nothing_of_entering_a_vm(self):
+        self.machine.repository()
+        self.machine.vm_tool(hosts=["github.com", "example.org"], vms=[self.name()])
+        done = self.machine.run("machine.sh", "secure")
+        self.assertNotEqual(done.returncode, 0)
+        self.assertNotIn("sbx run", done.stdout)
+
+    def test_create_makes_a_private_copy_under_the_projects_name_and_says_how_to_continue(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        done = self.machine.run("machine.sh", "create")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertIn(f"sbx --no-input create --clone --name {self.name()} claude .", self.machine.calls())
+        self.assertIn(f"- VM for this project: {self.name()} (just made)", done.stdout)
+        self.assertIn(f"sbx run --name {self.name()}", done.stdout)
+
+    def test_create_is_run_from_the_repository_root(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        below = self.machine.project / "src"
+        below.mkdir()
+        self.machine.run("machine.sh", "create", cwd=below)
+        self.assertEqual(self.machine.read("sbx/created_in").strip(), "the repository root")
+
+    def test_create_makes_the_folder_a_repository_when_it_is_not_one(self):
+        self.machine.vm_tool()
+        done = self.machine.run("machine.sh", "create")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertTrue((self.machine.project / ".git").is_dir())
+
+    def test_create_turns_the_locks_on_first_and_makes_nothing_if_one_stays_off(self):
+        self.machine.repository()
+        self.machine.vm_tool(hosts=["github.com", "example.org"])
+        done = self.machine.run("machine.sh", "create")
+        self.assertNotEqual(done.returncode, 0)
+        self.assertIn("OFF", done.stdout)
+        self.assertEqual([c for c in self.machine.calls() if " create " in c], [])
+
+    def test_create_when_the_vm_is_there_makes_nothing(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        done = self.machine.run("machine.sh", "create")
+        self.assertEqual(done.returncode, 0)
+        self.assertEqual([c for c in self.machine.calls() if " create " in c], [])
+        self.assertIn(f"sbx run --name {self.name()}", done.stdout)
+
+    def test_create_inside_a_vm_is_refused(self):
+        self.machine.inside_vm()
+        self.assertEqual(self.machine.run("machine.sh", "create").returncode, 3)
+
+    def test_create_that_fails_is_refused_with_the_tools_words(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        self.machine.set("sbx/garble", "create")
+        done = self.machine.run("machine.sh", "create")
+        self.assertEqual(done.returncode, 3)
+        self.assertIn("the daemon did not answer", done.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

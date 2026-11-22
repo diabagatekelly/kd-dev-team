@@ -4,6 +4,8 @@
 #   machine.sh inspect          print what is there; changes nothing
 #   machine.sh secure           turn every lock on; exit 0 only when all are on
 #   machine.sh install [--yes]  install the VM tool; without --yes, only say what would run
+#   machine.sh create           make this project's VM, a private copy of its repository; locks first
+#   machine.sh name             the name of this project's VM
 #
 # Exit 3 with a line starting "REFUSED" when a tool answers in a way this script does not
 # recognise: nothing is guessed from an answer it cannot read.
@@ -13,6 +15,19 @@ say() { printf '%s\n' "$*"; }
 refuse() { say "- REFUSED: $*"; exit 3; }
 have() { command -v "$1" >/dev/null 2>&1; }
 SELF="$(cd "$(dirname "$0")" && pwd)/machine.sh"
+
+# Inside a VM the tool made there is nothing of the tool to inspect: the locks are set outside.
+inside() { [ -e "${KD_VM_MARK:-/run/sandbox}" ]; }
+INSIDE="- this session is inside a VM (Docker Sandboxes): the project is worked on here"
+
+# One VM per project, named for its folder; the number keeps two folders of one name apart.
+project_root() { git rev-parse --show-toplevel 2>/dev/null || pwd -P; }
+vm_name() {
+  root=$(project_root)
+  short=$(basename "$root" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-' | sed 's/^-*//; s/-*$//')
+  say "kd-${short:-project}-$(printf '%s' "$root" | cksum | cut -d' ' -f1)"
+}
+continue_line() { say "- continuing inside it (the user's to run, in their own terminal): sbx run --name $1"; }
 
 # What the VM tool's install page lists (docs.docker.com/ai/sandboxes/install, read 2026-11-21).
 # Sets system, supported (yes|no), why, install_cmd, installer, installer_name.
@@ -104,7 +119,24 @@ lock_lines() {
   return 1
 }
 
+# Says whether this project has its VM and, with every lock on, how it is made or entered.
+# Reads vms (the VM names) and all_on.
+project_lines() {
+  mine=$(vm_name)
+  if say "$vms" | grep -qx "$mine"; then
+    say "- VM for this project: $mine"
+    [ "$all_on" != yes ] || continue_line "$mine"
+  else
+    say "- VM for this project: none"
+    [ "$all_on" = yes ] || return 0
+    if git rev-parse --git-dir >/dev/null 2>&1; then what="a private copy of this repository, inside a new VM"
+    else what="this folder becomes a git repository first; then a private copy of it, inside a new VM"; fi
+    say "- making it ($what): sh \"$SELF\" create"
+  fi
+}
+
 inspect() {
+  if inside; then say "$INSIDE"; return 0; fi
   detect_system
   if [ "$supported" = no ]; then
     say "- system: $system: NOT supported by the VM tool ($why)"
@@ -139,6 +171,25 @@ inspect() {
     say "$vms" | grep -qv '^[A-Za-z0-9][A-Za-z0-9_.-]*$' && refuse "\`sbx ls -q\` gave a line that is not a VM's name: $vms"
     say "- VMs: $(say "$vms" | wc -l | tr -d ' ') ($(say "$vms" | tr '\n' ' ' | sed 's/ $//; s/ /, /g'))"
   fi
+  project_lines
+}
+
+# Always a private copy, never the user's folder itself; never while a lock is off.
+create() {
+  inside && refuse "this session is already inside a VM: none is made from here"
+  have sbx || refuse "the VM tool is not installed: no VM can be made"
+  vms=$(sbx ls -q 2>&1) || refuse "\`sbx ls\` failed: $vms"
+  mine=$(vm_name)
+  if say "$vms" | grep -qx "$mine"; then
+    say "- VM for this project: $mine (already there; nothing made)"; continue_line "$mine"; return 0
+  fi
+  secure >/dev/null || { say "not made: a lock is still off"; lock_lines; return 1; }
+  git rev-parse --git-dir >/dev/null 2>&1 || git init -q || refuse "\`git init\` failed in $(pwd -P)"
+  mine=$(vm_name)
+  made=$(cd "$(project_root)" && sbx --no-input create --clone --name "$mine" claude . 2>&1) \
+    || refuse "\`sbx create\` failed: $made"
+  say "- VM for this project: $mine (just made)"
+  continue_line "$mine"
 }
 
 secure() {
@@ -149,7 +200,9 @@ secure() {
   done
   case "$(sbx policy ls 2>&1)" in *default-deny-all*) ;; *) sbx policy init deny-all >/dev/null ;; esac
   sbx policy allow network "$DEFAULT_HOSTS" >/dev/null
-  lock_lines
+  lock_lines || return 1
+  vms=$(sbx ls -q 2>&1) || refuse "\`sbx ls\` failed: $vms"
+  all_on=yes; project_lines
 }
 
 install() {
@@ -177,5 +230,7 @@ case "${1:-}" in
   inspect) inspect ;;
   secure) secure ;;
   install) shift; install "$@" ;;
-  *) sed -n '4,6p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
+  create) create ;;
+  name) vm_name ;;
+  *) sed -n '4,8p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
 esac

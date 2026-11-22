@@ -45,15 +45,26 @@ class Report(unittest.TestCase):
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         return done.stdout
 
-    def test_one_report_holds_the_machine_the_tracker_and_the_documents_in_that_order(self):
-        self.machine.vm_tool()
+    def test_inside_a_vm_one_report_holds_the_machine_the_tracker_and_the_documents_in_that_order(self):
+        self.machine.inside_vm()
         out = self.report()
         self.assertTrue(out.startswith("kd-dev-team: startup report\n"))
         places = [out.index(f"\n{title}\n") for title in ("Machine", "Tracker", "Documents")]
         self.assertEqual(places, sorted(places))
-        self.assertIn("- locks: all 6 on", out)
+        self.assertIn("- this session is inside a VM", out)
         self.assertIn("- repository: none", out)
         self.assertIn("- planning folder: not chosen yet", out)
+
+    def test_outside_a_vm_the_report_is_of_the_machine_only(self):
+        self.machine.repository("https://github.com/someone/something.git")
+        self.machine.have("gh")
+        self.machine.vm_tool()
+        out = self.report()
+        self.assertIn("- locks: all 6 on", out)
+        self.assertIn("\nThe tracker and the documents are read inside the project's VM, not here.\n", out)
+        self.assertNotIn("\nTracker\n", out)
+        self.assertNotIn("planning folder", out)
+        self.assertEqual([c for c in self.machine.calls() if c.startswith("gh")], [])
 
     def test_the_report_changes_nothing(self):
         self.machine.vm_tool(locks_off=["browser.enabled"])
@@ -61,11 +72,20 @@ class Report(unittest.TestCase):
         self.assertEqual([c for c in self.machine.calls() if " set " in c or " init " in c or " allow " in c], [])
 
     def test_a_part_that_refuses_is_shown_and_the_rest_still_comes(self):
+        self.machine.inside_vm()
+        self.machine.repository("https://github.com/someone/something.git")
+        self.machine.have("gh")
+        self.machine.set("gh/lines", "not the answer expected")
+        out = self.report()
+        self.assertIn("- REFUSED:", out)
+        self.assertIn("- planning folder: not chosen yet", out)
+        self.assertIn("Startup could not read everything: see REFUSED above.", out)
+
+    def test_a_machine_that_cannot_be_read_is_refused_outside_a_vm_too(self):
         self.machine.vm_tool()
         self.machine.set("sbx/garble", "version")
         out = self.report()
         self.assertIn("- REFUSED:", out)
-        self.assertIn("- planning folder: not chosen yet", out)
         self.assertIn("Startup could not read everything: see REFUSED above.", out)
 
     def test_a_report_with_nothing_refused_does_not_say_so(self):

@@ -12,7 +12,7 @@ import tempfile
 HERE = pathlib.Path(__file__).resolve().parent
 SH = shutil.which("sh") or shutil.which("bash")
 UTILITIES = ("sh awk sed grep head tail tr cat git sort wc basename dirname mkdir rm mv ls cut "
-             "printf test").split()
+             "printf test cksum").split()
 LOCKS = ["browser.enabled", "claude.chrome", "claude.remoteControl",
          "clipboard.imagePaste", "clipboard.textCopy"]
 DEFAULT_HOSTS = ["api.anthropic.com", "claude.ai", "github.com", "platform.claude.com", "registry.npmjs.org"]
@@ -73,6 +73,10 @@ class Machine:
         if not signed_in:
             self.set("sbx/signed_out", "")
 
+    def inside_vm(self):
+        """This session is inside a VM the tool made: nothing of the tool is installed here."""
+        (self.state / "sys" / "inside-vm").mkdir(parents=True, exist_ok=True)
+
     def set(self, relative, text):
         path = self.state / relative
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -103,6 +107,7 @@ class Machine:
             "PATH": os.pathsep.join([str(self.bin), *_utilities_path()]),
             "STANDIN_STATE": str(self.state),
             "KD_OS_RELEASE": str(self.state / "sys" / "os-release"),
+            "KD_VM_MARK": str(self.state / "sys" / "inside-vm"),
             "CLAUDE_PLUGIN_DATA": self.data.as_posix(),
             "HOME": str(self.root),
         }

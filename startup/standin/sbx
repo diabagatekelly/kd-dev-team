@@ -12,7 +12,17 @@ signed_out() {
   [ -f "$S/signed_out" ] || return 1
   echo "Error: not signed in to Docker. Run 'sbx login' to sign in." >&2; exit 1
 }
+[ "${1:-}" = "--no-input" ] && shift
 case "${1:-} ${2:-}" in
+  "create "*)
+    signed_out
+    if garbled create; then echo "Error: the daemon did not answer" >&2; exit 1; fi
+    name=""; while [ $# -gt 0 ]; do [ "$1" = "--name" ] && name=${2:-}; shift; done
+    if [ -w "$S" ]; then
+      printf '%s\n' "$name" >> "$S/vms"
+      if [ -d .git ]; then echo "the repository root"; else echo "not a repository root"; fi > "$S/created_in"
+    fi
+    echo "  ✓ Created sandbox $name" ;;
   "version "*)
     if garbled version; then echo "Docker Sandboxes, build nine"; else echo "sbx version v0.54.0 4bec4a5ce093"; fi ;;
   "ls -q")
@@ -54,6 +64,6 @@ case "${1:-} ${2:-}" in
       echo "NAME      AGENT    STATUS    WORKSPACE"
       while read -r name; do printf '%-9s claude   stopped   .\n' "$name"; done < "$S/vms"
     else echo "No sandboxes found"; fi ;;
-  "create "*|"run "*|"exec "*|"rm "*|"stop "*) signed_out ;;
+  "run "*|"exec "*|"rm "*|"stop "*) signed_out ;;
   *) echo "stand-in sbx: no answer for: $*" >&2; exit 2 ;;
 esac
