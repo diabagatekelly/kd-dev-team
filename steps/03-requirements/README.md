@@ -1,7 +1,8 @@
 # Stage 3, requirements: the test, set before anything is built or run
 
 **State, 2026-11-22:** the conditions, the bar and the ceiling are
-agreed by the owner (decision 25). Nothing has run yet.
+agreed by the owner (decision 25). The pilot has run; the full pass
+has not.
 
 ## What it is
 
@@ -107,6 +108,24 @@ gate (60 of 60 at ten runs) and its lists read at least as well as
 kad's. The text is carried only if the bare model does not hold
 without it. Ceiling: $30, after a pilot on Haiku (each scenario once
 on the three arms, 18 runs) whose real cost is reported first.
+
+## The pilot (2026-11-22)
+
+Haiku 5.5, each of the six scenarios once on the three arms, kad's
+arm three times over: 30 runs, $0.16. For the setup, not the result:
+
+- **kad's skill was not invoked on Haiku when left to its
+  description,** as a second turn or as a first. Its arm's prompt now
+  names the skill, as kad's orchestrator does, and carries the
+  answer to its questions; it is then used in all six.
+- Our text passed 6 of 6. The bare model and kad's skill passed
+  none, and apart from the box and the name: the bare model asked
+  nothing in four of six, kept a floated technology, listed no
+  outside system, and on the user's correction rewrote the list
+  under names of its own; kad's skill, given a floated technology or
+  a correction, asked again and wrote nothing.
+- A check on a document that was never written fails with the rest,
+  so a run that writes nothing shows many failures for one cause.
 
 ## What a pass does not show
 
