@@ -119,6 +119,41 @@ class Stage(unittest.TestCase):
         self.assertIn("requirements (005_requirements.md)", out)
         self.assertIn("- next stage by the documents: slice (its document: planning/slice-001/008_slice.md)", out)
 
+    def requirements(self, text):
+        self.chosen("000_problem.md", "001_scope-map.md")
+        (self.machine.project / "planning" / "002_requirements.md").write_text(text, encoding="utf-8")
+        return self.report()
+
+    def test_the_requirements_are_counted_and_the_checked_ones_too(self):
+        out = self.requirements("# Requirements: borrow a tool\n\n"
+                                "- [x] **record-a-loan**: A volunteer records who took which tool.\n"
+                                "- [ ] **see-who-has-it**: A volunteer sees who has a tool.\n"
+                                "* [X] **loans-of-a-member**: A volunteer sees what a member has out.\n\n"
+                                "## Out for now\n- Reserving a tool.\n")
+        self.assertIn("- requirements (002_requirements.md): 3 items, 2 checked", out)
+        self.assertNotIn("no name", out)
+        self.assertNotIn("twice", out)
+
+    def test_a_requirement_with_no_name_of_its_own_is_said_by_its_line(self):
+        out = self.requirements("- [ ] **record-a-loan**: A volunteer records a loan.\n"
+                                "- [ ] A volunteer sees who has a tool.\n"
+                                "- [ ] **Sees Loans**: A volunteer sees the loans.\n")
+        self.assertIn("- requirements (002_requirements.md): 3 items, 0 checked", out)
+        self.assertIn("- a requirement with no short name of its own: line 2, line 3", out)
+
+    def test_a_name_used_twice_is_said_once(self):
+        out = self.requirements("- [ ] **record-a-loan**: One.\n- [x] **record-a-loan**: Two.\n"
+                                "- [ ] **record-a-loan**: Three.\n")
+        self.assertIn("- a requirement's name used more than once: record-a-loan\n", out)
+
+    def test_a_requirements_document_with_no_box_counts_none(self):
+        out = self.requirements("# Requirements\n\nA member adds a book.\n- a plain bullet\n")
+        self.assertIn("- requirements (002_requirements.md): 0 items, 0 checked", out)
+
+    def test_nothing_is_counted_before_the_requirements_exist(self):
+        self.chosen("000_problem.md", "001_scope-map.md")
+        self.assertNotIn("items", self.report())
+
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()
         (self.machine.project / "planning").rmdir()

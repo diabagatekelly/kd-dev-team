@@ -56,6 +56,26 @@ next_number() {
     | sed 's|.*/||' | awk '{n = substr($0, 1, 3) + 0; if (n >= max) max = n + 1} END {printf "%03d\n", max}'
 }
 
+# The requirements as a list to check off (decision 23): how many items, how many checked, and
+# any item the acceptance criteria could not point to. An item is a line "- [ ] **its-name**: ...".
+count() {
+  awk -v title="$2" '
+    /^[ \t]*[-*] \[[ xX]\]/ {
+      items++; line = $0; sub(/^[ \t]*[-*] \[/, "", line)
+      if (substr(line, 1, 1) != " ") checked++
+      rest = substr(line, 3); sub(/^[ \t]*/, "", rest); name = ""
+      if (substr(rest, 1, 2) == "**") { rest = substr(rest, 3); end = index(rest, "**"); if (end > 1) name = substr(rest, 1, end - 1) }
+      sub(/:$/, "", name)
+      if (name !~ /^[a-z0-9]+(-[a-z0-9]+)*$/) nameless = nameless (nameless == "" ? "" : ", ") "line " NR
+      else if (++seen[name] == 2) twice = twice (twice == "" ? "" : ", ") name
+    }
+    END {
+      printf "- requirements (%s): %d items, %d checked\n", title, items, checked
+      if (nameless != "") print "- a requirement with no short name of its own: " nameless
+      if (twice != "") print "- a requirement\047s name used more than once: " twice
+    }' "$1"
+}
+
 report() {
   folder=""
   [ -f "$store" ] && folder=$(awk -F'\t' -v r="$root" '$1 == r {print $2}' "$store" | tail -1)
@@ -86,6 +106,8 @@ report() {
 $(stages)
 STAGES
   say "- found: ${found:-no planning document}"
+  list=$(numbered "$dir" "requirements.md")
+  [ -z "$list" ] || count "$dir/$list" "$list"
   [ -z "$disorder" ] || printf '%s' "$disorder"
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; whether it is done is decided at a check-in when

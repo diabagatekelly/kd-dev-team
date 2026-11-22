@@ -162,6 +162,18 @@ asking is listed apart, so it can be overturned.
     read). The re-read after a slice is not part of it: it is the
     check-in stage of decision 23, built after requirements.
 
+## 2026-11-22: how the requirements stage is measured
+
+25. **Stage 3 is the user's own list for the map's "now" activity,
+    drafted first and shown once** (the owner, on the proposal in
+    `steps/03-requirements/README.md`): a checkable list, each item
+    with a box and a short name, and the outside systems and lasting
+    things that research starts from. It is light on purpose: the
+    requirements that come from the library of failures and the state
+    tables stay where the design has them, in the questions and
+    answers stages after research and the slice. Measured as stages 1
+    and 2 were (decision 18); ceiling $30.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -171,6 +183,13 @@ asking is listed apart, so it can be overturned.
   often): with the answers stage.
 - **A measure for each of the problem, scope, requirements, slice,
   design and screens stages:** agreed when each is reached.
+- **How an answer of the answers stage attaches to the checkable
+  list** (a criterion under the named item it belongs to, or an item
+  of its own): with the answers stage. Stage 3 owes it only names
+  that do not change.
+- **A dependency the user did not name** (a library the design or
+  the stack picks) has no way back to research in the order as
+  written: with the design and stack stages.
 
 ## Chosen without asking; the owner can overturn any of these
 
@@ -229,5 +248,17 @@ asking is listed apart, so it can be overturned.
   the report says they are read inside.
 - A session knows it is inside a VM by the folder the VM tool mounts
   there, and only where the VM tool itself is not installed.
+- The requirements list (`steps/03-requirements/`), 2026-11-22:
+  - An item is a line `- [ ] **its-name**: ...`; a name is lower case
+    words joined by hyphens.
+  - A limit of the whole problem is not a box: it holds for every
+    item, and the criteria carry it.
+  - The stage writes every box unchecked; checking belongs to the
+    check-in after a merge.
+  - The list is for the "now" row only; a later "now" gets a list of
+    its own, decided with the check-in.
+  - The stage script reports the count on every startup report once
+    the document exists; it does not read the inventory until the
+    research stage needs it.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
