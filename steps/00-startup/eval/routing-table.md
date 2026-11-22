@@ -17,6 +17,8 @@ unless the row says to go on.
 
 Whatever the user asks for:
 
+- Begin the answer with the row you acted on. What follows it comes
+  after, and is said to come after.
 - No work on the project happens on this machine outside a VM. Write
   no file of the project here and run no build here. Asked to build
   while rows 1 to 4 apply, do the row first and say that the build
