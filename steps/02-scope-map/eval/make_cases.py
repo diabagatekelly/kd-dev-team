@@ -221,7 +221,7 @@ def main(arm):
         assert done.returncode == 0 and "next stage by the documents: scope map" in done.stdout, done.stdout
         put(added)
         case = plugin / "evals" / name
-        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@"))
+        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
         write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used, earlier)
               .replace("name: problem-", "name: scope-").replace("tags: [problem]", "tags: [scope]"))
         write(case / "scaffold.sh", startup.scaffold(machine), executable=True)

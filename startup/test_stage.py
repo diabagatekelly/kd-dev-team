@@ -154,15 +154,45 @@ class Stage(unittest.TestCase):
         self.chosen("000_problem.md", "001_scope-map.md")
         self.assertNotIn("items", self.report())
 
+    # Found by the first end-to-end run: a session asked for the folder and never recorded it, so
+    # every document went unnumbered and unfound; and a session that finished a stage had no way
+    # to learn the next one's document.
+    def test_an_unchosen_folder_comes_with_the_command_that_records_it(self):
+        out = self.report()
+        self.assertRegex(out, r'- to record the folder the user names \(it is made if it is not there\): '
+                              r'.*sh ".*stage\.sh" remember FOLDER')
+        self.assertIn("then read the documents again", out)
+
+    def test_a_command_the_report_gives_reaches_the_same_record_as_the_report(self):
+        # A session runs these commands in its own shell, which is not told where the plugin keeps its data.
+        out = self.report()
+        self.assertIn(f'CLAUDE_PLUGIN_DATA="{self.machine.data.as_posix()}" sh "', out)
+        self.chosen("000_problem.md")
+        self.assertIn(f'read the documents again: CLAUDE_PLUGIN_DATA="{self.machine.data.as_posix()}" sh "', self.report())
+
+    def test_remembering_a_folder_that_is_not_there_makes_it(self):
+        done = self.machine.run("stage.sh", "remember", "docs/planning")
+        self.assertEqual(done.returncode, 0, done.stdout)
+        self.assertTrue((self.machine.project / "docs" / "planning").is_dir())
+        self.assertIn("- next stage by the documents: problem (its document: docs/planning/000_problem.md)",
+                      self.report())
+
+    def test_a_folder_outside_the_project_is_refused(self):
+        self.assertEqual(self.machine.run("stage.sh", "remember", "../elsewhere").returncode, 3)
+        self.assertEqual(self.machine.run("stage.sh", "remember", "/tmp/elsewhere").returncode, 3)
+
+    def test_the_report_says_how_the_documents_are_read_again(self):
+        self.chosen("000_problem.md")
+        self.assertRegex(self.report(), r'- after a stage is finished, read the documents again: .*sh ".*stage\.sh" report')
+
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()
         (self.machine.project / "planning").rmdir()
         self.assertIn("- planning folder: planning (chosen earlier for this project) no longer exists",
                       self.report())
 
-    def test_remembering_a_folder_that_does_not_exist_is_refused(self):
-        done = self.machine.run("stage.sh", "remember", "nowhere")
-        self.assertEqual(done.returncode, 3)
+    def test_remembering_no_folder_is_refused(self):
+        self.assertEqual(self.machine.run("stage.sh", "remember").returncode, 3)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,8 @@
 # Which planning stage comes next, by the documents that exist in the project's planning folder.
 #
 #   stage.sh report            print the folder, the documents found and the next stage; changes nothing
-#   stage.sh remember FOLDER   record FOLDER as this project's planning folder (asked once per project)
+#   stage.sh remember FOLDER   record FOLDER, inside the project, as its planning folder (asked once per
+#                              project); the folder is made if it is not there
 #
 # The folder is remembered outside the project, in the plugin's own data folder, keyed by the
 # project's root. Exit 3 with a line starting "REFUSED" when it cannot go on.
@@ -12,13 +13,18 @@ say() { printf '%s\n' "$*"; }
 refuse() { say "- REFUSED: $*"; exit 3; }
 
 root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$(pwd -P)
+# A session runs the commands this script prints in a shell of its own, which is not told where the
+# plugin keeps its data: each printed command carries it.
+SELF="sh \"$(cd "$(dirname "$0")" && pwd)/stage.sh\""
+[ -z "${CLAUDE_PLUGIN_DATA:-}" ] || SELF="CLAUDE_PLUGIN_DATA=\"$CLAUDE_PLUGIN_DATA\" $SELF"
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
 
 remember() {
   [ -n "${1:-}" ] || refuse "no folder was named"
-  [ -d "$(inside "$1")" ] || refuse "the folder $1 does not exist in $root"
+  case "$1" in /*|[A-Za-z]:*|..|../*|*/..|*/../*) refuse "the planning folder is a folder inside the project: $1 is not" ;; esac
+  mkdir -p "$(inside "$1")" || refuse "cannot make the folder $1 in $root"
   mkdir -p "$(dirname "$store")" || refuse "cannot write to $(dirname "$store")"
   [ -f "$store" ] || : > "$store"
   awk -F'\t' -v r="$root" '$1 != r' "$store" > "$store.new" && printf '%s\t%s\n' "$root" "$1" >> "$store.new" \
@@ -79,7 +85,12 @@ count() {
 report() {
   folder=""
   [ -f "$store" ] && folder=$(awk -F'\t' -v r="$root" '$1 == r {print $2}' "$store" | tail -1)
-  if [ -z "$folder" ]; then say "- planning folder: not chosen yet for this project"; return 0; fi
+  if [ -z "$folder" ]; then
+    say "- planning folder: not chosen yet for this project"
+    say "- to record the folder the user names (it is made if it is not there): $SELF remember FOLDER"
+    say "  then read the documents again: $SELF report"
+    return 0
+  fi
   dir=$(inside "$folder")
   if [ ! -d "$dir" ]; then say "- planning folder: $folder (chosen earlier for this project) no longer exists"; return 0; fi
   say "- planning folder: $folder (chosen earlier for this project)"
@@ -105,6 +116,7 @@ report() {
   done <<STAGES
 $(stages)
 STAGES
+  say "- after a stage is finished, read the documents again: $SELF report"
   say "- found: ${found:-no planning document}"
   list=$(numbered "$dir" "requirements.md")
   [ -z "$list" ] || count "$dir/$list" "$list"
@@ -119,5 +131,5 @@ STAGES
 case "${1:-}" in
   report) report ;;
   remember) remember "${2:-}" ;;
-  *) sed -n '4,5p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
+  *) sed -n '4,6p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
 esac

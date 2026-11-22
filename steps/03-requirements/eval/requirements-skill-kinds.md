@@ -31,7 +31,7 @@ Each by its everyday name, a line each. Or "none".
 **The items.** Read the problem document and the scope map, nothing
 else. An item is one thing a user needs to be able to do in the "now"
 activity, said so that someone can later answer yes or no to "can
-they?". It ends in something that user wanted: a step on the way is
+they?". Who is named by their role, never "I", "me" or "you". It ends in something that user wanted: a step on the way is
 not an item. It comes from what the user said or it is not there: nothing
 such a product usually has. The other rows of the map give no items;
 nor does the reason for doing it now, or a measure of how fast or

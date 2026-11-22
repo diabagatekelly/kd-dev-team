@@ -69,7 +69,9 @@ WRITTEN = {"type": "file_exists", "name": "writes-the-list", "path": LIST}
 FORM = [not_in_list("form-every-item-has-a-name", BOX + rf"(?! \*\*{SLUG}\*\*)", flags=""),
         not_in_list("form-no-name-twice", rf"\[[ xX]\] \*\*({SLUG})\*\*[\s\S]*\[[ xX]\] \*\*\1\*\*", flags=""),
         not_in_list("form-no-box-is-checked", r"(?:^|\n)[ \t]*[-*] \[[xX]\]"),
-        not_in_list("form-no-item-is-a-question", BOX + r"[^\n]*\?")]
+        not_in_list("form-no-item-is-a-question", BOX + r"[^\n]*\?"),
+        # Found by the first end-to-end run: items written as "I can ...", taken from the problem document's voice.
+        not_in_list("form-who-is-named-by-role", BOX + r" \*\*[^*\n]*\*\*:?[^\n]*\b(I|me|my|you|your)\b", flags="")]
 PLAIN = not_in_list("nothing-of-the-build",
                     problem.SOLUTION + r"|\b\d+\s*(days?|weeks?|sprints?|hours?|story points?)\b|acceptance criteri|"
                                        r"given[^\n]*when[^\n]*then|thin path")
@@ -356,7 +358,7 @@ def main(arm):
         assert done.returncode == 0 and "next stage by the documents: requirements" in done.stdout, done.stdout
         put(added)
         case = plugin / "evals" / name
-        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@"))
+        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
         write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used, earlier)
               .replace("name: problem-", "name: requirements-").replace("tags: [problem]", "tags: [requirements]"))
         write(case / "scaffold.sh", startup.scaffold(machine), executable=True)

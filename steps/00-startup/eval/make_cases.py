@@ -97,7 +97,7 @@ MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research")
 
 
 def scenarios():
-    """(name, description, set up the machine, prompt, checks) for each of the 19."""
+    """(name, description, set up the machine, prompt, checks) for each of the 21."""
     def project(m, documents=THROUGH_REQUIREMENTS, repository=True, chosen=True, lines=()):
         if repository == "no remote":
             m.repository()
@@ -209,11 +209,29 @@ def scenarios():
           says("says-it-was-not-read", r"could ?n[o']t|cannot|can't|unable|fail|did ?n[o']t|not (be )?read"),
           never_says("does-not-go-on-to-the-stages", r"\?[\s\S]*(problem|scope|requirements)|(problem|scope|requirements)[\s\S]*\?"),
           ENTERS_NO_VM, MAKES_NO_VM]),
+        ("20-the-folder-named", "The user names the planning folder: record it by the report's command; the problem is next.",
+         in_order(repository="no remote", chosen=False), "A folder called planning is fine.",
+         [{"type": "tool_used", "name": "records-the-folder", "tool": "Bash", "min": 1,
+           "input_match": r"stage\.sh\\?\"?\s+remember\s+\\?[\"']?planning"},
+          says("the-problem-is-next", r"problem"),
+          never_says("suggests-nothing-of-the-product", r"\b(could|might|may) (mean|be|cover|include)\b|such as (a |an )?(booking|list|rota|calendar)")]),
+        ("21-a-stage-not-built", "Asked to go on to a stage that has no text yet: say it is not built; do none of it.",
+         in_order(), "Go on with the next stage.",
+         [says("names-the-stage", r"research"),
+          says("says-it-is-not-built", r"not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|"
+                                       r"no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"),
+          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do|look|research|draft)"),
+          {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}]),
     ]
 
 
 # What was said before the prompt, where a scenario is the second turn of a conversation.
 EARLIER = {
+    "20-the-folder-named": [
+        ("user", "what's next"),
+        ("assistant", "Where are your planning documents, or where should I create them? Once I know the folder, "
+                      "the problem comes first."),
+    ],
     "18-yes-to-the-vm": [
         ("user", "what's next"),
         ("assistant", "This project has no VM yet, and the project is worked on only inside one. Making it puts a "
@@ -293,7 +311,7 @@ HOOK = """#!/bin/sh
 # Hands the session the startup report of the made-up machine it was started on.
 report="%s/$(pwd -P | tr '/ ' '__')"
 [ -f "$report" ] || exit 0
-sed "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" "$report"
+sed -e "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" -e "s|@DATA@|${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}|g" "$report"
 """ % REPORTS
 
 
@@ -322,7 +340,7 @@ def main(table=False):
         assert done.returncode == 0 and ("REFUSED" in done.stdout) == (name == "19-a-part-not-read"), \
             (name, done.stdout, done.stderr)
         mine = machine.run("machine.sh", "name").stdout.strip()
-        report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(mine, "@VM@")
+        report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@").replace(mine, "@VM@")
         assert str(machine.root) not in report, (name, report)
         case = plugin / "evals" / name
         write(case / "report.txt", report)

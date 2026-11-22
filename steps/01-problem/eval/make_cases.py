@@ -121,6 +121,21 @@ SCENARIOS = [
                                  r"separate|distinct|unrelated|split|(its|their) own (document|doc)|second problem"),
       {"type": "tool_used", "name": "one-document-does-not-hold-both", "tool": "Write", "min": 0, "max": 0,
        "input_match": r"(steriliser[\s\S]*on hold|on hold[\s\S]*steriliser)"}], None),
+    # Found by the first end-to-end run: a terse user's thin answers were written up as the whole problem.
+    ("07-answer-by-answer", "An account given one short answer at a time: one last question before writing.",
+     "Nothing yet that I can think of.",
+     [*WRITES_NOTHING, says("asks-whether-anything-else-goes-wrong",
+                            r"(anything|something|what) else[^?]{0,80}\?|else (that )?goes wrong[^?]{0,40}\?|"
+                            r"is that (everything|all)[^?]{0,60}\?|(any|what) other[^?]{0,80}\?"),
+      NO_SOLUTION_ASKED],
+     [("user", "I want an app for our allotment society."),
+      ("assistant", "What does your allotment society do today, and what goes wrong with it?"),
+      ("user", "We have 84 plots and about 40 people waiting. The waiting list is a paper notebook I keep at home."),
+      ("assistant", "Why does this need solving now?"),
+      ("user", "The council says our lease renewal in March depends on showing plots are given out fairly."),
+      ("assistant", "Is there a hard limit on what we do, such as a budget or a deadline?"),
+      ("user", "We can spend 10 a month at most."),
+      ("assistant", "Is there anything you don't know yet that matters here?")]),
 ]
 
 
@@ -171,7 +186,7 @@ def main(arm):
         done = machine.run("report.sh")
         assert done.returncode == 0 and "next stage by the documents: problem" in done.stdout, done.stdout
         case = plugin / "evals" / name
-        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@"))
+        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
         write(case / "case.yaml", case_yaml(name, description, prompt, graders + ALWAYS + used, earlier))
         write(case / "scaffold.sh", startup.scaffold(machine), executable=True)
         if earlier:

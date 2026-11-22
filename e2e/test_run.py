@@ -53,6 +53,7 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["ended"], "the list was shown and the user's answers taken")
         self.assertEqual(summary["session_turns"], 3)
         self.assertEqual(summary["documents"], ["plans/002_requirements.md"])
+        self.assertFalse(summary["numbered_in_order"])
         self.assertEqual(summary["questions_put"], 3)
         self.assertAlmostEqual(summary["cost_usd"], 0.05)
 

@@ -134,6 +134,9 @@ def run(example, out, plugin, model, user_model, max_turns, command=("claude",))
                "session_turns": sum(1 for who, _, _ in turns if who == "assistant"),
                "questions_put": sum(text.count("?") for who, text, _ in turns if who == "assistant"),
                "cost_usd": round(sum(cost for _, _, cost in turns), 4),
+               # Each document under the number and name the stage script gives it, so the next session finds it.
+               "numbered_in_order": [path.name for path in sorted((project / folder).glob("*.md"))]
+               == ["000_problem.md", "001_scope-map.md", "002_requirements.md"] if (project / folder).is_dir() else False,
                "documents": sorted(str(path.relative_to(project)) for path in (project / folder).rglob("*.md"))
                if (project / folder).is_dir() else []}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
