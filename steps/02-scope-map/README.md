@@ -100,6 +100,59 @@ twice: 42 runs, $0.17. For the setup, not the result:
   system ("member register", "tool catalogue"); our text's rows are
   things a user does.
 
+## The first full pass (2026-11-22)
+
+Three runs of the seven scenarios, 21 runs a cell; passes of the gate:
+
+| Arm | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| Bare | 6 | 6 | 4 |
+| kad's skill | 0 | 1 | not run |
+| Our text, first | 21 | 19 | not run |
+| Our text, tuned | 20 | 20 | not run |
+
+Cost so far, the pilot included: $9.60 of $25.
+
+**The gate.** The bare model and kad's skill fail mostly on what
+nothing tells them to do: mark now, next and later, and ask. Their
+other failures are real: a map of three to six sections for the
+one-activity problem (kad's skill writes no map there and sends the
+problem on), the floated technology written in, a changed map
+written over the first.
+
+**Read against kad's, on the fixed points.**
+
+- *Covers the problem and nothing beyond.* Ours: four rows for the
+  lending problem, each from a line of the problem document. kad's:
+  five to seven steps, with a "tool catalogue" and "leaving the paper
+  ledger" the problem document does not ask for. Ours is closer.
+- *Something a user does, in the user's order.* Ours: "borrow and
+  return a tool", "reserve a tool". kad's: "membership", "repairs",
+  ordered by what the build needs first. Ours meets the point; kad's
+  was not written to.
+- *"Now" is sensible and the user's call.* Every map of ours starts
+  where the document says it hurts most, says why in the reply, and
+  asks. kad's has an order and no start.
+- *The limit and the open question.* Both arms keep them out of the
+  rows. kad's files the open question under "out of scope", which
+  half decides it; ours leaves it open.
+- *At a glance.* Ours runs 130 to 190 words, kad's 180 to 290, the
+  bare model's 290 to 470.
+
+**Tuned after the first reading** (the text went from 49 to 55
+lines): the reason for doing it now was being listed as a limit; rows
+were sometimes sorted by mark, not by the user's order; a changed map
+now ends with what changed, a line a change. One check wanted the
+word "return" and failed "lend and take back a tool": widened.
+
+**What does not hold yet: the re-read after a slice.** Two of the
+six tuned runs of the slice that contradicts the map failed, and for
+one reason. The map has no way to say an activity is finished: with
+slice 1 built, Sonnet marked the row "done in slice 1" on its own,
+and Haiku stopped to ask how two rows could both be "now". The
+condition as written (one "now", three marks) does not cover a map
+after its first slice. That is put to the owner before the ten runs.
+
 ## What a pass does not show
 
 A map is tested on made-up problems of a page; whether it stays true
