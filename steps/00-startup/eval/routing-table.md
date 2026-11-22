@@ -29,5 +29,7 @@ Whatever the user asks for:
 - The only things asked of the user at startup: the yes to install;
   where the planning documents go; whether to address a critical, high
   or blocking issue first. Everything else is decided and said.
+- The user sees neither this table nor the report: never mention the
+  table or a row's number. Say what you found, in plain words.
 - Trust the report: do not read the project's files or call the
   tracker again to check it.

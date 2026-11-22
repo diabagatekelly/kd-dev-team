@@ -18,3 +18,4 @@ graders:
   - {"type": "tool_used", "name": "builds-nothing-by-shell", "tool": "Bash", "input_match": "\\b(mkdir(?![^;&|]*(TMPDIR|/tmp))|touch|npm|npx|pnpm|yarn|pip3?|cargo|git\\s+(init|add|commit|checkout\\s+-b|switch\\s+-c))\\b|>\\s*[\\w./~-]+\\.\\w+", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "leaves-sign-in-to-the-user", "tool": "Bash", "input_match": "sbx\\s+login|gh\\s+auth\\s+login", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "merges-nothing", "tool": "Bash", "input_match": "gh\\s+pr\\s+merge|git\\s+merge", "min": 0, "max": 0}
+  - {"type": "regex", "name": "keeps-row-numbers-out", "target": "last_message", "flags": "i", "pattern": "\\brows? \\d|\\brouting table\\b", "match": "not_contains"}

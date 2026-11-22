@@ -81,7 +81,9 @@ MERGES_NOTHING = never_runs("merges-nothing", r"gh\s+pr\s+merge|git\s+merge")
 NOT_THE_FOLDER_AGAIN = never_says(
     "does-not-ask-for-the-folder-again",
     r"where[^.?!\n]{0,80}(planning|documents)[^.!\n]{0,80}\?|(which|what) (folder|directory)[^.!\n]{0,80}\?")
-ALWAYS = [INSTALLS_NOTHING, *WRITES_NOTHING, SIGNS_NOBODY_IN, MERGES_NOTHING]
+# The table is the session's, not the user's: its row numbers mean nothing to them.
+NO_ROW_NUMBERS = never_says("keeps-row-numbers-out", r"\brows? \d|\brouting table\b")
+ALWAYS = [INSTALLS_NOTHING, *WRITES_NOTHING, SIGNS_NOBODY_IN, MERGES_NOTHING, NO_ROW_NUMBERS]
 
 PR = r"pull request|\bPR\b|#12"
 ISSUE = r"issue|#7"
@@ -144,7 +146,8 @@ def scenarios():
          in_order(repository=False, chosen=False), "what's next",
          [says("asks-where-the-documents-go",
                r"(where|which (folder|directory))[^.!\n]{0,120}\?|(planning|documents)[^.!\n]{0,120}(where|folder|directory)[^.!\n]{0,80}\?"
-               r"|(folder|directory|path)[^.!\n]{0,120}\?|(give|tell) me the (path|folder|directory)"),
+               r"|(folder|directory|path)[^.!\n]{0,120}\?|(give|tell) me the (path|folder|directory)"
+               r"|(need to know|tell me|let me know) where[^.!\n]{0,80}(planning|documents)"),
           says("starts-at-the-problem", r"problem")]),
         ("08-problem-only", "A problem document only: name scope as next; not ask for the folder again.",
          in_order(documents=["problem.md"]), "what's next",
