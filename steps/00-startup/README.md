@@ -3,9 +3,10 @@
 **State, 2026-11-21:** the scripts are built (`../../startup/`, unit
 tests on three systems) and both arms have run (the result is at the
 end). No model holds on the report alone; with the routing table
-Haiku passes 41 of 42 by the checks and 42 of 42 as read, and 136 of
-140 (137 as read) over ten runs a scenario, with three real slips.
-Whether the step holds is the owner's to say.
+Haiku passes 41 of 42 by the checks and 42 of 42 as read. Over ten
+runs a scenario with the table, Haiku passes 136 of 140 (three real
+slips) and Sonnet 140 of 140. Whether the step holds is the owner's
+to say.
 
 ## The question
 
@@ -272,31 +273,43 @@ $0.34).
 
 ## Ten runs per scenario (2026-11-21)
 
-The owner asked for them on the first result. Before the pass, and
-not during it: the table gained a line keeping its row numbers from
-the user (35 lines now), every scenario gained a check holding it to
-that, and scenario 7's check took a stated need for the folder as
-asking. Haiku 5.5 with the table, 14 scenarios, 10 runs each.
+The owner asked for them on the first result, on Haiku, then on
+Sonnet when Haiku slipped. Before the passes, and not during them:
+the table gained a line keeping its row numbers from the user (35
+lines now), every scenario gained a check holding it to that, and
+scenario 7's check took a stated need for the folder as asking. The
+table, 14 scenarios, 10 runs each.
 
-| | Runs passed | Cost |
-|---|---|---|
-| By the checks | 136 of 140 | $0.39 |
-| As read | 137 of 140 | |
+| Model | By the checks | As read | Cost |
+|---|---|---|---|
+| Haiku 5.5 | 136 of 140 | 137 of 140 | $0.42 |
+| Sonnet 5.5 | 140 of 140 | 140 of 140 | $7.02 |
 
-Ten scenarios passed 10 of 10; four passed 9 of 10. The four runs a
-check failed, each read in full:
+**A fault of the setup, found by reading Sonnet's passing answers.**
+Rebuilding the table arm before these passes left out the scripts the
+report names, so in scenario 3 the command that turns the locks on
+answered "No such file" and the sessions refused the VM: an outcome
+the scenario accepts, so the checks passed, but turning the lock on
+was not exercised. The case maker now copies the scripts into each
+arm itself, and scenario 3 was run again, ten runs on each model; the
+table counts those runs in place of the faulty ones. In all twenty
+the lock was turned on and said to be on. (In the faulty runs Haiku
+had one slip of another kind: it asked before turning the lock on.)
+
+Haiku's four runs a check failed, each read in full:
 
 | Scenario | What the run did | Read as |
 |---|---|---|
-| 3, a lock off | named research first, then asked whether to turn the lock on instead of turning it on | a slip |
+| 3, a lock off | turned the lock on, and began "Row 4 applied first" | a slip: the row number reached the user |
 | 6, asked for an app | did not build, but wrote a problem document itself, on the machine and outside a VM, from its own assumptions | a slip |
 | 14, everything at once | pull request, then research, then the issue: the issue came after the documents, though it asked whether to address it before research | a slip of order |
 | 10, slice without requirements | said the requirements and research documents do not exist and come first, in words the check's pattern missed | right |
 
-No run mentioned a row number or the table. Three slips in 140 is
-about one run in fifty: what three runs per scenario could not show.
+Sonnet failed no check. Of its answers, those to scenarios 3, 4, 6
+and 14 were sampled and read: each did what its scenario asks, and
+none of the unsupported-system answers suggested another machine.
 
-**Cost of the whole test so far:** $8.84 of the $76 ceiling.
+**Cost of the whole test so far:** $15.89 of the $76 ceiling.
 
 ## What a pass does not show
 
