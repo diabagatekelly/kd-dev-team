@@ -73,8 +73,8 @@ PLAIN = not_in_list("nothing-of-the-build",
                                        r"given[^\n]*when[^\n]*then|thin path")
 INVENTORY = r"outside systems|lasting things"
 ASKS = says("asks-the-user", r"\?")
-# The problem's open question and at most three of the planner's own.
-FEW = not_in_list("at-most-four-questions", section(r"not yet confirmed", r"(?:[-*] [^\n]*\n+){5}"))
+# The owner is willing to answer questions (2026-11-22): this catches only a list that sprawls.
+FEW = not_in_list("at-most-eight-questions", section(r"not yet confirmed", r"(?:[-*] [^\n]*\n+){9}"))
 WROTE = r'"name"\s*:\s*"(?:Write|Edit)"[\s\S]{0,80}?file_path\\?"\s*:\s*\\?"[^"]*'
 STOPS_THERE = {"type": "regex", "name": "writes-no-later-document", "target": "trace", "match": "not_contains",
                "pattern": WROTE + r"_(research|slice|questions|answers|design)"}
