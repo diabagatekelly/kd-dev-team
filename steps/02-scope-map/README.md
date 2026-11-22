@@ -182,7 +182,24 @@ Ten runs a scenario, 50 a model:
   order, one "now" where the document says it hurts most, the limits
   and the open question in their sections, and no Airtable.
 
-Cost of the stage: $13.39 of $25.
+**The two-row map, fixed.** A map that splits one activity into a
+step of the build and the rest would send a slice on that delivers
+nothing the user wanted. The text now says a row ends in something
+the user wanted and a step on the way is not a row (49 lines), and
+the gate for the one-activity problem is one row exactly. All five
+scenarios again, ten runs each:
+
+| Model | Gate | Cost |
+|---|---|---|
+| Haiku 5.5 | 49 of 50 | $0.24 |
+| Sonnet 5.5 | 50 of 50 | $3.55 |
+
+Sonnet, as read: 50 of 50. Every map of the one-activity problem is
+one row, sending the rota to the staff; no row on any map is a step
+of the build. Haiku's one failure is again the user's correction made
+without the text.
+
+Cost of the stage: $17.18 of $25.
 
 ## What a pass does not show
 
