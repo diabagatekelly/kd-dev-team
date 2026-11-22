@@ -32,23 +32,26 @@ Each by its everyday name, a line each. Or "none".
 else. An item is one thing a user needs to be able to do in the "now"
 activity, said so that someone can later answer yes or no to "can
 they?". It comes from what the user said or it is not there: nothing
-such a product usually has. The other rows of the map give no items.
-What, never how: no technology, screen, design, estimate or wording
-of a test, including one the user floats in passing.
+such a product usually has. The other rows of the map give no items;
+nor does the reason for doing it now, or a measure of how fast or
+how often. What, never how: no technology, screen, design, estimate
+or wording of a test. One the user floats in passing is left out of
+the whole document.
 
 **Names.** Two to four plain words, lower case, joined by hyphens,
 each used once. A name once written is never changed or reused.
 Every box is written unchecked: checking is not this stage's.
 
-**Limits and open questions.** A limit is no item: say what it
-forces here. An open question this activity leans on goes under "Not
+**Limits and open questions.** A limit is no item and adds none: say
+what it forces here. An open question this activity leans on goes under "Not
 yet confirmed" and is not settled by an item; one it does not touch
 is left out.
 
 **Outside systems and lasting things.** A system outside the product
 that this activity talks to, and a thing the product keeps track of
-over time (a loan, a booking), only as the documents name them. The
-research stage starts from this list.
+over time (a loan, a booking), only as the documents name them. What
+is used today and would be replaced is neither. The research stage
+starts from this list.
 
 **Then ask once.** Show the items and ask whether anything is
 missing, unwanted or not for now, with any question under "Not yet
