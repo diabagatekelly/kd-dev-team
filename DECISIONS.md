@@ -174,6 +174,16 @@ asking is listed apart, so it can be overturned.
     answers stages after research and the slice. Measured as stages 1
     and 2 were (decision 18); ceiling $30.
 
+## 2026-11-22: the planner's own questions are written down
+
+26. **The requirements list holds the planner's own questions, and
+    nothing kad's skills did at a stage is lost unnoticed** (the
+    owner, on stage 3's result: such questions "could point to
+    things I didn't think of"). Each stage's text is set beside
+    kad's skill part by part, and each part is kept, added or said
+    to be left out with the reason; for stage 3 the table is in
+    `steps/03-requirements/README.md`.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -187,6 +197,13 @@ asking is listed apart, so it can be overturned.
   list** (a criterion under the named item it belongs to, or an item
   of its own): with the answers stage. Stage 3 owes it only names
   that do not change.
+- **A file of the owner's that a stage reads** (a sheet, an export, a
+  screenshot): kad listed it in `sources.md`, read its shape and
+  never its rows, and scanned for its values. Not carried yet;
+  brought to the owner as a piece of its own before any stage is
+  used on a real project.
+- **Approaches the user considered and rejected:** kad's skill asked
+  and recorded them; no stage here does yet.
 - **A dependency the user did not name** (a library the design or
   the stack picks) has no way back to research in the order as
   written: with the design and stack stages.

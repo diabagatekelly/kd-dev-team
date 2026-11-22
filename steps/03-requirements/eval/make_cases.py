@@ -66,7 +66,8 @@ def between(low, high):
 WRITTEN = {"type": "file_exists", "name": "writes-the-list", "path": LIST}
 FORM = [not_in_list("form-every-item-has-a-name", BOX + rf"(?! \*\*{SLUG}\*\*)", flags=""),
         not_in_list("form-no-name-twice", rf"\[[ xX]\] \*\*({SLUG})\*\*[\s\S]*\[[ xX]\] \*\*\1\*\*", flags=""),
-        not_in_list("form-no-box-is-checked", r"(?:^|\n)[ \t]*[-*] \[[xX]\]")]
+        not_in_list("form-no-box-is-checked", r"(?:^|\n)[ \t]*[-*] \[[xX]\]"),
+        not_in_list("form-no-item-is-a-question", BOX + r"[^\n]*\?")]
 PLAIN = not_in_list("nothing-of-the-build",
                     problem.SOLUTION + r"|\b\d+\s*(days?|weeks?|sprints?|hours?|story points?)\b|acceptance criteri|"
                                        r"given[^\n]*when[^\n]*then|thin path")
@@ -219,6 +220,30 @@ KAD_ANSWER = (" To save you asking: who benefits and what they need are as the p
               "map say. No priority beyond what is written there. The simplest version is whatever covers this "
               "activity. No other approach was considered. Write it up.")
 
+LEAGUE_LIST = """# Requirements: Register a child for the season
+
+- [ ] **register-child**: A parent can register their child for the season.
+- [ ] **coach-sees-list**: A coach can see the list of children registered to their team.
+
+## Out for now
+- Hearing of a fixture change and reporting a match result: other rows of the scope map.
+
+## Limits that apply
+- A child's details may be seen only by that child's own coach and the league secretary: a coach's list holds only the children of their own team, and no one else sees a child's details.
+
+## Not yet confirmed
+- Whether a parent pays the season's fee when registering, or paying stays with the treasurer. If paying is part of registering, an item for paying is added.
+- By when a coach needs the list: by a date before the season, or as each child registers. It changes what "in time" means in coach-sees-list.
+
+## Outside systems and lasting things
+- a child's registration for the season
+"""
+LEAGUE_SHOWN = ("I've written the requirements for registering a child. Two items: a parent can register their child "
+                "for the season (register-child), and a coach can see the list of children registered to their team "
+                "(coach-sees-list). Two things are not yet confirmed. Does a parent pay the season's fee when "
+                "registering, or does paying stay with the treasurer? And by when does a coach need the list: by a "
+                "date before the season, or as each child registers? Is anything missing, unwanted or not for now?")
+NOT_CONFIRMED = r"confirmed|open|question"
 OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
 # (name, description, documents when the session started, documents added since, prompt, checks, said before)
 SCENARIOS = [
@@ -262,6 +287,16 @@ SCENARIOS = [
       not_in_list("the-dropped-item-is-gone", item_with(r"overdue|not come back")),
       in_list("the-new-item-is-there", item_with(r"wrong member|correct|put right|fix|amend|chang"))],
      [("user", GO_ON), ("assistant", SHOWN)]),
+    ("07-an-answer-to-one-question-of-two", "The second turn: one question answered, the other passed over and asked again.",
+     {"000_problem.md": LEAGUE % FEE, "001_scope-map.md": LEAGUE_MAP % FEE}, {"002_requirements.md": LEAGUE_LIST},
+     "Paying stays with the treasurer. Nothing else to add or take out.",
+     [CHANGES_THE_LIST, *FORM,
+      in_list("the-names-are-unchanged", r"\*\*register-child\*\*[\s\S]*\*\*coach-sees-list\*\*"),
+      not_in_list("the-answered-question-is-closed", section(NOT_CONFIRMED, r"whether a parent pays")),
+      not_in_list("the-answer-adds-no-item", item_with(r"\bfees?\b|\bpay")),
+      in_list("the-other-question-stays", section(NOT_CONFIRMED, r"by when|in time|date|as each")),
+      says("asks-the-other-question-again", r"(by when|in time|date|as each)[\s\S]*\?|\?[\s\S]*(by when|in time|date|as each)")],
+     [("user", GO_ON), ("assistant", LEAGUE_SHOWN)]),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
          "scope-map": ROOT / "steps/02-scope-map/eval/scope-map-skill.md"}

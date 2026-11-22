@@ -211,6 +211,45 @@ the tuned text $1.45; ten runs $4.79).
 requirements document exists; stage 0's scenarios that have one were
 not run again with it.
 
+## Set beside kad's skill, and the planner's own questions (2026-11-22)
+
+The owner, on the result: kad's skills worked well at these stages,
+so nothing of theirs should be lost unnoticed, and the list should
+write down the planner's own questions, which can point at what the
+owner had not thought of (decision 26). kad's
+`requirements-refinement`, part by part:
+
+| What kad's skill does | Here |
+|---|---|
+| Asks five questions before writing | Drafts, shows, asks once (decision 25) |
+| Asks nothing the documents answer | Kept (condition 1) |
+| Each constraint: what it forces here, or why not | Kept (condition 7) |
+| A constraint that forces something nobody scoped is a finding, and asked | **Was missing; added** (condition 13) |
+| Each open question the unit leans on, with what its answer changes | Kept (condition 8) |
+| The planner's own questions under "Not yet confirmed" | **Was missing; added** (condition 13) |
+| An answer that skips a question does not answer it; ask again only what was passed over | **Was untested; added** (condition 14, scenario 7) |
+| Outside systems and lasting things, names only | Kept (condition 9) |
+| No thin path, no criteria, no chunking | Kept (conditions 4 and 11) |
+| "Why this, why now", the simplest version that feels like progress, approaches rejected | **Not carried:** the map's "now" holds the priority and the slice stage owns the simplest version; approaches rejected have no home yet |
+| A file of the owner's is described, never quoted (`sources.md`, a scan) | **Not carried yet:** a mechanism of its own with a script, wanted by every stage that reads such a file |
+| Revise in place until something is built on it, then supersede | **Not carried yet:** belongs with the check-in stage (decisions 21 and 23) |
+
+Added to what the stage must do:
+
+13. **Write down the planner's own questions:** what the documents
+    leave unsaid that would add, remove or change an item, and what
+    a limit forces that nobody asked for. Only what the user alone
+    can answer, never how it is built; each with what its answer
+    would change; none settled by an item.
+14. **An answer settles only what it speaks to:** a question it
+    passes over stays in the document and is asked again.
+
+A seventh scenario (the user answers one question of two) and one
+more point for the reading: the planner's questions are ones only
+the user can answer and whose answer changes the list, not filler
+and not design. The text also takes the scope map's rule that a step
+on the way is not an item. It is 72 lines.
+
 ## What a pass does not show
 
 The scenarios are made-up problems of a page and at most two turns.
