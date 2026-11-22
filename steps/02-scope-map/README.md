@@ -1,7 +1,9 @@
 # Stage 2, the scope map: the test, set before anything is built or run
 
-**State, 2026-11-22:** the shape is the owner's (decision 22); the
-conditions below are proposed with it and nothing is built.
+**State, 2026-11-22:** the drawing of the map is tested, ten runs a
+scenario, and waits for the owner's word. The re-read after a slice
+(condition 9, second half) has moved to a check-in stage of its own,
+built after requirements (decision 23).
 
 ## What it is
 
@@ -152,6 +154,35 @@ slice 1 built, Sonnet marked the row "done in slice 1" on its own,
 and Haiku stopped to ask how two rows could both be "now". The
 condition as written (one "now", three marks) does not cover a map
 after its first slice. That is put to the owner before the ten runs.
+
+## The stage split, and ten runs of the drawing (2026-11-22)
+
+The owner's answer to the re-read (decision 23): whether a slice is
+done is decided at a check-in when work is merged, from a checkable
+list of requirements, not by the map alone. That cannot be tested
+before requirements exist, so this stage is the drawing of the map:
+the first five scenarios, and a text of 48 lines without the re-read
+paragraph. The stage script no longer sends a planned slice back to
+the map.
+
+Ten runs a scenario, 50 a model:
+
+| Model | Gate | Cost |
+|---|---|---|
+| Haiku 5.5 | 49 of 50 | $0.24 |
+| Sonnet 5.5 | 50 of 50 | $3.55 |
+
+- **Haiku's one failure is real:** on the user's correction it edited
+  the map without the text and left two rows "now".
+- **Sonnet, as read:** 49 of 50. One map for the one-activity problem
+  has two rows, the first "gets the rota from the wall chart into the
+  system", which is a part of what gets built; the gate allows two
+  rows and passed it. The other nine have one row. On the other four
+  scenarios every map has rows a user would name, in the user's
+  order, one "now" where the document says it hurts most, the limits
+  and the open question in their sections, and no Airtable.
+
+Cost of the stage: $13.39 of $25.
 
 ## What a pass does not show
 
