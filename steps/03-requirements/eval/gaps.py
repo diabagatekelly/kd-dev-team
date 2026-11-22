@@ -59,7 +59,7 @@ def raised(scenario, document):
 
 
 def count(text):
-    return len(re.findall(r"(?m)^\s*[-*] ", text))
+    return len(re.findall(r"(?m)^\s*(?:[-*]|\d+\.) ", text))
 
 
 def final_document(trace):

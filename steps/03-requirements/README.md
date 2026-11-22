@@ -1,9 +1,11 @@
 # Stage 3, requirements: the test, set before anything is built or run
 
 **State, 2026-11-22:** the conditions, the bar and the ceiling are
-agreed by the owner (decision 25). Tested: the text of 63 lines on
-Sonnet 5.5 passes 60 of 60 at the gate and as read. The owner has
-not yet said whether it holds.
+agreed by the owner (decisions 25 to 27). Tested: the text of 84
+lines that walks each item against eight kinds of gap
+(`eval/requirements-skill-kinds.md`) passes 70 of 70 on Sonnet 5.5
+as read and raises 89% of the known gaps. The owner has not yet
+said whether it holds.
 
 ## What it is
 
@@ -298,6 +300,61 @@ count is a guide and the reading decides a close call.
 
 **Cost.** The owner has dropped the ceiling for this stage (decision
 27); the cost is still reported. About $5.50 an arm.
+
+## The walk: the result (2026-11-22)
+
+Sonnet 5.5, ten runs of the seven scenarios, 70 runs an arm:
+
+| Arm | Gate | Gate, as read | Gaps raised (of 260) | Gaps raised in 8 runs of 10 or more (of 26) | Questions a list | Words | Cost |
+|---|---|---|---|---|---|---|---|
+| `free` | 69 | 70 | 139 (53%) | 10 | 3 to 5 | 199 to 369 | $5.57 |
+| `kinds` | 65 | 70 | 233 (89%) | 20 | 5 to 9 | 292 to 453 | $5.94 |
+| `grid` | 66 | 69 | 219 (84%) | 19 | 4 to 10 | 303 to 512 | $6.43 |
+
+**The gate's failures, read.** Three of `kinds`' and three of
+`grid`'s were the check on the floated technology firing on the
+"paper forms" of the problem document; no document of either arm
+names the technology, and the check now looks for its name alone.
+The other two of `kinds` and the one of `free` are a limit's
+consequence said in a word of the build ("nothing they must open,
+install or sign in to"): a true statement of what the limit forces,
+passed as read (decision 16). `grid`'s last one is real: a list with
+no outside system named.
+
+**The walk finds what chance does not.** Free-form raises the same
+few gaps every time (what "in time" means, who places a child in a
+team, the whole rota or one's own shifts) and others rarely: a loan
+recorded wrongly put right, 0 runs of 10; a change after the rota is
+sent, 2; one subscriber with several season tickets, 1. With the
+walk those are 10, 10 and 10. Of the eight gaps found by hand before
+the run, the walk raises five reliably and free-form none.
+
+**`kinds` is carried over `free`:** 36 points more of the gaps and
+ten more of them reliable, against a bar of ten points or three.
+**`grid` is not carried over `kinds`:** it raises no more (84%
+against 89%), its documents are longer, and its table gave the
+planner nothing the walk had not. What it would add is a script's
+proof that every item was walked; the count of gaps says the walk
+happens without it.
+
+**The questions, as read** (a list in full from each of three
+scenarios, the counts of all seventy by script). Each carries its
+kind and the item it bears on, and says what its answer would
+change. Nearly all are the user's alone to answer: "may members
+record their own loans, or only volunteers?", "if a payment is
+taken twice, or a subscriber renews by mistake, what must be
+possible?", "does 'never returned' include a tool a member says is
+lost?". A few sit near the line of the how ("do the staff's email
+addresses already exist somewhere?"). No "how many" asked for its
+own sake. The cost is length: six or seven questions put to the
+user in one reply, which the owner has said they will answer.
+
+**What holds, by the bar:** the `kinds` text, 84 lines, on Sonnet
+5.5. Not run again after the check was corrected; not run on Haiku,
+which did not hold on the shorter text.
+
+**Cost of the stage:** $33.27 recorded, and a pass stopped part way
+that left no record (under $2 by estimate).
 
 ## What a pass does not show
 

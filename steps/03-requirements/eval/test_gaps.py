@@ -33,6 +33,7 @@ class Gaps(unittest.TestCase):
     def test_the_questions_are_counted(self):
         self.assertEqual(gaps.count(gaps.questions(LIST)), 2)
         self.assertEqual(gaps.count("Nothing."), 0)
+        self.assertEqual(gaps.count("1. By when?\n2. Who else?\n"), 2)
 
 
 if __name__ == "__main__":

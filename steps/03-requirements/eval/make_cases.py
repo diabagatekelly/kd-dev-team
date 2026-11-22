@@ -76,7 +76,7 @@ PLAIN = not_in_list("nothing-of-the-build",
 INVENTORY = r"outside systems|lasting things"
 ASKS = says("asks-the-user", r"\?")
 # The owner is willing to answer questions (2026-11-22): this catches only a list that sprawls.
-FEW = not_in_list("at-most-eight-questions", section(r"not yet confirmed", r"(?:[-*] [^\n]*\n+){9}"))
+FEW = not_in_list("at-most-ten-questions", section(r"not yet confirmed", r"(?:(?:[-*]|\d+\.) [^\n]*\n+){11}"))
 WROTE = r'"name"\s*:\s*"(?:Write|Edit)"[\s\S]{0,80}?file_path\\?"\s*:\s*\\?"[^"]*'
 STOPS_THERE = {"type": "regex", "name": "writes-no-later-document", "target": "trace", "match": "not_contains",
                "pattern": WROTE + r"_(research|slice|questions|answers|design)"}
@@ -273,7 +273,7 @@ SCENARIOS = [
      {"000_problem.md": LEAGUE % REFEREES, "001_scope-map.md": LEAGUE_MAP % REFEREES}, {},
      GO_ON + " We could just use Google Forms for this, by the way.",
      [WRITTEN, *between(2, 8), *FORM, PLAIN, FEW, ASKS,
-      not_in_list("the-floated-technology-is-left-out", r"google|\bforms\b"),
+      not_in_list("the-floated-technology-is-left-out", r"google"),
       not_in_list("the-far-question-is-no-item", item_with(r"referee"))], None),
     ("05-an-outside-system-and-a-lasting-thing", "A payment provider and a season ticket: both in the inventory.",
      {"000_problem.md": THEATRE_PROBLEM, "001_scope-map.md": THEATRE_MAP}, {}, GO_ON,
