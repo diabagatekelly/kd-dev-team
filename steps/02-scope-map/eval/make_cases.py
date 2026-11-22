@@ -153,7 +153,7 @@ SCENARIOS = [
       not_in_map("the-reason-for-now-is-no-limit", r"(?:^|\n)\s*[-*][^\n]*(?:spring|twice)")], None),
     ("02-a-small-problem", "A problem that is one activity: one row, said to be one.",
      {"000_problem.md": ROTA_PROBLEM}, {}, GO_ON,
-     [WRITTEN, in_map("marks-the-activities", marked(1)), not_in_map("no-map-invented", marked(3)), PLAIN,
+     [WRITTEN, in_map("marks-the-activities", marked(1)), not_in_map("one-row-only", marked(2)), PLAIN,
       says("says-it-is-one", r"\bone\b|single|small|only")], None),
     ("03-a-limit-and-an-open-question", "A limit on everything and an open question: neither becomes an activity.",
      {"000_problem.md": LEAGUE_PROBLEM}, {}, GO_ON,

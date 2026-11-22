@@ -27,11 +27,12 @@ Each open question of the problem document, still open.
 
 **Drawing it.** Read the problem document and nothing else. A row is
 something a user does and would name themselves, never a part of
-what gets built; rows keep the user's order whatever their mark. A problem that is one activity gets one row, and you
-say so. Exactly one row is "now": by the document, the one that
-hurts most or that the rest lean on. No technology, design, estimate,
-date or acceptance criterion, including one the user floats in
-passing.
+what gets built, and it ends in something that user wanted: a step
+on the way to it is not a row. Rows keep the user's order whatever
+their mark. A problem that is one activity gets one row, and you say
+so. Exactly one row is "now": by the document, the one that hurts
+most or that the rest lean on. No technology, design, estimate, date
+or acceptance criterion, including one the user floats in passing.
 
 **Limits and open questions.** A limit on the whole problem goes
 under "Holds for every activity", never in a row; why it is done
