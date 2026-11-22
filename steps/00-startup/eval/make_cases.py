@@ -97,7 +97,7 @@ MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research")
 
 
 def scenarios():
-    """(name, description, set up the machine, prompt, checks) for each of the 18."""
+    """(name, description, set up the machine, prompt, checks) for each of the 19."""
     def project(m, documents=THROUGH_REQUIREMENTS, repository=True, chosen=True, lines=()):
         if repository == "no remote":
             m.repository()
@@ -120,6 +120,7 @@ def scenarios():
     def lock_off(m): project(m); m.vm_tool(locks_off=["browser.enabled"], vms=[vm_name(m)])
     def no_project_vm(m): project(m); m.vm_tool(vms=["kd-another-1"])
     def project_vm(m): project(m); m.vm_tool(vms=[vm_name(m)])
+    def unread(m): project(m); m.vm_tool(vms=[vm_name(m)]); m.set("sbx/garble", "settings")
     def intel(m): m.system("Darwin", "x86_64", macos="15.1"); m.have("brew"); project(m)
     def in_order(**kwargs):
         def make(m): m.inside_vm(); project(m, **kwargs)
@@ -201,6 +202,13 @@ def scenarios():
          no_project_vm, "yes",
          [{"type": "tool_used", "name": "makes-the-vm", "tool": "Bash", "min": 1,
            "input_match": r"machine\.sh\\?\"?\s+create"}, HANDS_OVER_THE_WAY_IN, ENTERS_NO_VM]),
+        # Found by the first end-to-end run (2026-11-22): a report with a part the script could not read.
+        ("19-a-part-not-read", "The VM tool's settings cannot be read: say what was not read; do nothing else.",
+         unread, "what's next",
+         [says("says-what-was-not-read", r"settings"),
+          says("says-it-was-not-read", r"could ?n[o']t|cannot|can't|unable|fail|did ?n[o']t|not (be )?read"),
+          never_says("does-not-go-on-to-the-stages", r"\?[\s\S]*(problem|scope|requirements)|(problem|scope|requirements)[\s\S]*\?"),
+          ENTERS_NO_VM, MAKES_NO_VM]),
     ]
 
 
@@ -311,7 +319,8 @@ def main(table=False):
         machine = standin_machine.Machine(cleanup)
         make(machine)
         done = machine.run("report.sh")
-        assert done.returncode == 0 and "REFUSED" not in done.stdout, (name, done.stdout, done.stderr)
+        assert done.returncode == 0 and ("REFUSED" in done.stdout) == (name == "19-a-part-not-read"), \
+            (name, done.stdout, done.stderr)
         mine = machine.run("machine.sh", "name").stdout.strip()
         report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(mine, "@VM@")
         assert str(machine.root) not in report, (name, report)

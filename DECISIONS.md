@@ -209,6 +209,15 @@ asking is listed apart, so it can be overturned.
     looked over for gaps, and the four stages run end to end on a
     few real examples.
 
+## 2026-11-22: every problem becomes a test
+
+29. **Whatever problem is met results in a test added or fixed, an
+    evaluation added or fixed, or a skill changed and tested again**
+    (the owner, during the end-to-end runs). The end-to-end examples
+    are kept and re-run as stages are added; the owner gives ideas
+    for them. Each finding and the test it became is listed in
+    `e2e/README.md`.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -290,6 +299,12 @@ asking is listed apart, so it can be overturned.
   the report says they are read inside.
 - A session knows it is inside a VM by the folder the VM tool mounts
   there, and only where the VM tool itself is not installed.
+- A startup report with a part that could not be read (a line
+  REFUSED) stops the session: it says what was not read and does
+  nothing else, not even the planning conversation, until the report
+  reads (routing table, row 0; found by the first end-to-end run).
+- In an end-to-end run the user is a second, tool-less session
+  answering from a written brief; it is a stand-in, not a judge.
 - The requirements list (`steps/03-requirements/`), 2026-11-22:
   - An item is a line `- [ ] **its-name**: ...`; a name is lower case
     words joined by hyphens.

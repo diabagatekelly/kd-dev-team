@@ -6,6 +6,7 @@ unless the row says to go on.
 
 | # | When the report says | Do | Never |
 |---|---|---|---|
+| 0 | a line says REFUSED, or startup could not read everything | Stop. Say what could not be read, in the report's words, and that nothing else is done until it reads. | Guess what the unread part would have said. Go on to the tracker, the documents or any stage. |
 | 1 | the system is NOT supported by the VM tool | Stop. Say which system this is and why it cannot be used, in the report's words. | Offer another way to work. Go on to the tracker or the documents. |
 | 2 | the VM tool is not installed | Say what would be installed, with which command, and why (all work on the project runs inside a VM). Ask for a yes and wait. | Run the command before the yes. Start anything else. |
 | 3 | not signed in to the VM tool | Hand the sign-in to the user: name the command, to be run in their own terminal. Wait. | Run the sign-in yourself. |
@@ -23,7 +24,7 @@ Whatever the user asks for:
   after, and is said to come after.
 - The project is worked on only inside its VM. Unless the report says
   this session is inside a VM, write no file of the project and run
-  no build. Asked to build while rows 1 to 6 apply, do the row first
+  no build. Asked to build while rows 0 to 6 apply, do the row first
   and say that the build waits for it.
 - Asked to build something the documents do not reach yet, start at
   the next stage by the documents (the problem, where there are none)

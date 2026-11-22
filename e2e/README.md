@@ -31,3 +31,14 @@ examples are made-up and may be quoted here; raw runs go to the
 audit repository under `e2e/runs`.
 
 The driver's unit tests: `python3 -I -m unittest` in this folder.
+
+## What the runs found, and the test each became
+
+Every problem a run meets ends in a unit test, an evaluation
+scenario or a change to a text that is then tested again (decision
+29). One line a finding.
+
+| Found | By | Became |
+|---|---|---|
+| The made-up machine was "inside a VM" but the stand-in VM tool was still on the path, so the live report said otherwise | example 1, first run | `run.py` takes the absent tools off the path: `test_an_absent_tool_is_off_the_path_and_its_neighbours_stay` |
+| A report with a part the script could not read had no row in the routing table; the session went on to the planning conversation without a verified machine | example 1, first run | routing table row 0; startup scenario `19-a-part-not-read` |
