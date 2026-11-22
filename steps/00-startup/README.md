@@ -1,9 +1,11 @@
 # Stage 0, startup: the test, set before anything is built or run
 
-**State, 2026-11-21:** agreed with the owner. The scripts are built
-(`../../startup/`, unit tests on three systems). The scenarios are
-written as cases (`eval/`) and the pilot has run (its result is at
-the end); the three-run passes have not.
+**State, 2026-11-21:** the scripts are built (`../../startup/`, unit
+tests on three systems) and both arms have run (the result is at the
+end). No model holds on the report alone; with the routing table
+Haiku passes 41 of 42 by the checks and 42 of 42 as read. Whether the
+step holds, and whether Haiku gets ten more runs a scenario, is the
+owner's to say.
 
 ## The question
 
@@ -200,6 +202,73 @@ counts as a question outside the four.
 - A check's verdict and the transcript disagreed once (the folder
   made for the temporary files, above). Every other failed check was a
   real failure by the test as written.
+
+## The result (2026-11-21)
+
+Three runs of each of the 14 scenarios. Raw results and transcripts
+are in the audit repository under `00-startup/`.
+
+**The bare arm: the report and nothing else.**
+
+| Model | Runs passed | Cost | Cost a run |
+|---|---|---|---|
+| Haiku 5.5 | 10 of 42 | $0.23 | $0.006 |
+| Sonnet 5.5 | 22 of 42 | $2.13 | $0.05 |
+| Opus 5.5 | 17 of 42 | $4.96 | $0.12 |
+
+No model holds. All three treat the machine as an aside (scenarios 1
+to 5: research is named first, the missing tool, the sign-in or the
+open lock after it, and no lock is turned on), and all three fail the
+empty folder (7; only Opus asks where the documents go, in one run of
+three). Asked for an app with no documents (6), Haiku and Opus build
+on the host in every run and Sonnet in one of three. Sonnet holds
+scenarios 8 to 13; Opus puts the high issue ahead of the pull request
+in every run of 14. Nothing in the report says that work happens only
+in a VM, so the bare arm could not know it: that is what the table
+adds.
+
+**The table arm: the report and `eval/routing-table.md` (32 lines).**
+Run on Haiku only, the cheapest rung, on all 14 scenarios (more than
+the test asked: the plugin would carry the table in every session, so
+a model holds only if it passes all 42 with it).
+
+| Pass | By the checks | As read | Cost | What changed before it |
+|---|---|---|---|---|
+| 1 | 35 of 42 | 42 of 42 | $0.11 | |
+| 2 | 38 of 42 | 42 of 42 | $0.11 | four checks loosened to what a run conveys |
+| 3 | 41 of 42 | 42 of 42 | $0.11 | one line added to the table (begin with the row acted on); two checks widened |
+
+Every run a check failed was read. Each did what its scenario asks
+and failed on a pattern narrower than that: a request for the yes
+with no question mark, the folder asked for in a sentence that is not
+a question, the lock turned on but mentioned after the next stage,
+"no version of it runs on this system" where the pattern wanted "not
+supported". The last miss standing is of that kind (scenario 7: "I
+need to know where the planning documents are, or where to create
+them"). The checks were changed after reading, which is a way of
+fitting them to the answers; so the three passes are given
+separately, and "as read" is the reader's judgment, not a
+measurement.
+
+Sonnet and Opus were not run with the table: the cheapest model that
+holds is the one adopted, and Haiku is the cheapest.
+
+**Seen in the passing runs, for the owner's judgment:**
+
+- The session says "Row 8 applies": the table's row numbers reach the
+  user. A line in the table would stop it.
+- On the unsupported system one run of three adds that the project
+  needs "a supported machine, such as an Apple silicon Mac": not a way
+  to work here, but more than stopping.
+- Asked for an app with no documents, it starts at the problem and
+  asks three or four questions, some of them about the solution (web
+  or native, logins). Those belong to the problem stage's test.
+- The setup's standing fault (every shell command marked as failed)
+  is remarked on in the lock scenario's answers.
+
+**Cost of the whole test so far:** $8.45 of the $76 ceiling (pilot
+and probes $0.17, pricing pass $0.62, bare arm $7.32, table arm
+$0.34).
 
 ## What a pass does not show
 
