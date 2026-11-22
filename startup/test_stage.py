@@ -2,7 +2,7 @@ import unittest
 
 from standin_machine import Machine
 
-THROUGH_REQUIREMENTS = ["problem.md", "scope.md", "requirements.md"]
+THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
 
 
 class Stage(unittest.TestCase):
@@ -43,10 +43,10 @@ class Stage(unittest.TestCase):
 
     def test_the_folder_is_found_from_a_folder_below_the_repository_root(self):
         self.machine.repository()
-        self.chosen("problem.md")
+        self.chosen("000_problem.md")
         below = self.machine.project / "src"
         below.mkdir()
-        self.assertIn("- found: problem (problem.md)", self.machine.run("stage.sh", "report", cwd=below).stdout)
+        self.assertIn("- found: problem (000_problem.md)", self.machine.run("stage.sh", "report", cwd=below).stdout)
 
     def test_an_empty_folder_starts_at_the_problem(self):
         self.chosen()
@@ -56,15 +56,15 @@ class Stage(unittest.TestCase):
 
     def test_the_next_stage_is_named_with_the_document_it_writes(self):
         self.chosen()
-        self.assertIn("- next stage by the documents: problem (its document: planning/problem.md)", self.report())
-        self.chosen(*THROUGH_REQUIREMENTS, "research/a.md", folder="docs/plan")
-        self.assertIn("- next stage by the documents: slice (its document: docs/plan/slice-001/slice.md)",
+        self.assertIn("- next stage by the documents: problem (its document: planning/000_problem.md)", self.report())
+        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md", folder="docs/plan")
+        self.assertIn("- next stage by the documents: slice (its document: docs/plan/slice-001/004_slice.md)",
                       self.report())
 
     def test_a_problem_alone_makes_scope_next(self):
-        self.chosen("problem.md")
+        self.chosen("000_problem.md")
         out = self.report()
-        self.assertIn("- found: problem (problem.md)", out)
+        self.assertIn("- found: problem (000_problem.md)", out)
         self.assertIn("- next stage by the documents: scope", out)
         self.assertNotIn("out of order", out)
 
@@ -78,33 +78,35 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: research", self.report())
 
     def test_research_done_makes_the_slice_next(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "research/a-dependency.md")
+        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a-dependency.md")
         self.assertIn("- next stage by the documents: slice", self.report())
 
     def test_a_slice_with_no_requirements_behind_it_is_out_of_order(self):
-        self.chosen("problem.md", "scope.md", "slice-001/slice.md")
+        self.chosen("000_problem.md", "001_scope-map.md", "slice-001/004_slice.md")
         out = self.report()
-        self.assertIn("- out of order: slice (slice-001/slice.md) exists but nothing was found for: "
+        self.assertIn("- out of order: slice (slice-001/004_slice.md) exists but nothing was found for: "
                       "requirements, research", out)
         self.assertIn("- next stage by the documents: requirements", out)
 
     def test_the_latest_slice_is_the_one_read(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "research/a.md",
+        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md",
                     *[f"slice-001/{name}.md" for name in
-                      ("slice", "questions", "answers", "open-facts", "design", "screens", "stack",
-                       "readiness", "owner-list")],
-                    "slice-002/slice.md")
+                      ("004_slice", "005_questions", "006_answers", "007_open-facts", "008_design", "009_screens",
+                       "010_stack", "011_readiness", "012_owner-list")],
+                    "slice-002/004_slice.md")
         out = self.report()
-        self.assertIn("slice (slice-002/slice.md)", out)
+        self.assertIn("slice (slice-002/004_slice.md)", out)
         self.assertIn("- next stage by the documents: questions", out)
 
-    def test_every_document_there_means_planning_is_complete_for_the_slice(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "research/a.md",
+    def test_a_slice_fully_planned_sends_the_session_back_to_the_scope_map(self):
+        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md",
                     *[f"slice-001/{name}.md" for name in
-                      ("slice", "questions", "answers", "open-facts", "design", "screens", "stack",
-                       "readiness", "owner-list")])
-        self.assertIn("- next stage by the documents: none left: every planning document of slice-001 exists",
-                      self.report())
+                      ("004_slice", "005_questions", "006_answers", "007_open-facts", "008_design", "009_screens",
+                       "010_stack", "011_readiness", "012_owner-list")])
+        out = self.report()
+        self.assertIn("- every planning document of slice-001 exists", out)
+        self.assertIn("- next stage by the documents: scope map, re-read with the user before the next slice "
+                      "(its document: planning/001_scope-map.md)", out)
 
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()

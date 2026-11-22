@@ -22,7 +22,7 @@ startup = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(startup)
 says, never_says, write = startup.says, startup.never_says, startup.write
 
-DOCUMENT = "planning/problem.md"
+DOCUMENT = "planning/000_problem.md"
 KAD = [HERE / "kad-skill.md", ROOT.parent / "kad-dev-team-plugin/skills/problem-framing-doc/SKILL.md"]
 
 

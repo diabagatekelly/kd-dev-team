@@ -24,20 +24,20 @@ REPORTS = "/tmp/startup-reports"  # read by the hook, which runs outside the she
 TOOLS = ["sbx", "gh", "brew", "winget", "sw_vers", "uname"]
 
 DOCUMENTS = {
-    "problem.md": "# The problem\n\nA book club of about twenty people keeps its reading list in a shared "
+    "000_problem.md": "# The problem\n\nA book club of about twenty people keeps its reading list in a shared "
                   "note. Entries are overwritten, nobody can tell who proposed a book, and the vote for "
                   "the next one is counted by hand.\n\n## Why now\n\nThe club has doubled in a year.\n\n"
                   "## Constraints\n\nMembers use their phones. Nobody wants another password.\n",
-    "scope.md": "# Scope\n\n1. A list every member can add a book to.\n2. A vote for the next book.\n"
+    "001_scope-map.md": "# Scope\n\n1. A list every member can add a book to.\n2. A vote for the next book.\n"
                 "3. A record of what was read and when.\n",
-    "requirements.md": "# Requirements, step 1: the list\n\nA member adds a book by its title and author. "
+    "002_requirements.md": "# Requirements, step 1: the list\n\nA member adds a book by its title and author. "
                        "Every member sees who proposed it. A member can withdraw their own proposal.\n\n"
                        "Out of scope: the vote, the record.\n\n## Depends on\n\n- a public catalogue of "
                        "books, to find a title\n\n## Lasting things\n\n- a proposal\n",
-    "slice-001/slice.md": "# Slice 1: propose a book\n\nA member proposes a book and every member sees it "
+    "slice-001/004_slice.md": "# Slice 1: propose a book\n\nA member proposes a book and every member sees it "
                           "on the list.\n",
 }
-THROUGH_REQUIREMENTS = ["problem.md", "scope.md", "requirements.md"]
+THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
 
 
 def pull(number, title, branch, unresolved=0):
@@ -158,12 +158,12 @@ def scenarios():
                r"|(need to know|tell me|let me know) where[^.!\n]{0,80}(planning|documents)"),
           says("starts-at-the-problem", r"problem")]),
         ("08-problem-only", "A problem document only: name scope as next; not ask for the folder again.",
-         in_order(documents=["problem.md"]), "what's next",
+         in_order(documents=["000_problem.md"]), "what's next",
          [says("names-scope", r"scope"), NOT_THE_FOLDER_AGAIN]),
         ("09-through-requirements", "Documents through requirements: name research as next.", in_order(),
          "what's next", [says("names-research", r"research"), NOT_THE_FOLDER_AGAIN]),
         ("10-slice-without-requirements", "A slice with no requirements behind it: say what is missing; not skip ahead.",
-         in_order(documents=["problem.md", "scope.md", "slice-001/slice.md"]), "what's next",
+         in_order(documents=["000_problem.md", "001_scope-map.md", "slice-001/004_slice.md"]), "what's next",
          [says("names-requirements-as-missing",
                r"(missing|out of order|nothing was found|no requirements|without|(has|have)(n't| not) been|"
                r"(does|do)(n't| not) exist|skipped)[\s\S]{0,200}requirements|requirements[\s\S]{0,200}"

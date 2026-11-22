@@ -119,6 +119,22 @@ asking is listed apart, so it can be overturned.
     is not pinned to it, because the saving is small and this is the
     stage that talks with the user most.
 
+## 2026-11-22: numbered documents; the scope map as a living picture
+
+21. **Planning documents are numbered in the order they are made:**
+    `000_problem.md`, `001_scope-map.md` and so on (the owner), so
+    the sequence shows in the folder.
+22. **Stage 2 is the product manager's map, kept alive** (the owner,
+    who wants the big picture to go back to after slice 1 and knows
+    it will change). After the client describes the product, the
+    product manager acts next: the map is the handful of things a
+    user does, in the user's order, each one line, marked now, next
+    or later. It is not a plan made once: it is re-read with the
+    user each time a slice is done, and changed when the slice
+    taught otherwise. The client's part: what is in, what is out,
+    which activity comes first. The test is in
+    `steps/02-scope-map/README.md`.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -150,12 +166,17 @@ asking is listed apart, so it can be overturned.
   the same tests, is owed for Windows without it and is written in the
   session on that machine.
 - Startup's scripts (`startup/`), 2026-11-21:
-  - A stage is found by its document in the planning folder:
-    `problem.md`, `scope.md`, `requirements.md`, a file in `research/`,
-    then in the latest `slice-NNN/` folder `slice.md`, `questions.md`,
-    `answers.md`, `open-facts.md`, `design.md`, `screens.md`,
-    `stack.md`, `readiness.md`, `owner-list.md`. These names stand
-    until the stage that writes each document is built.
+  - A stage is found by its document in the planning folder, numbered
+    (decision 21): `000_problem.md`, `001_scope-map.md`,
+    `002_requirements.md`, a file in `003_research/`, then in the
+    latest `slice-NNN/` folder `004_slice.md`, `005_questions.md`,
+    `006_answers.md`, `007_open-facts.md`, `008_design.md`,
+    `009_screens.md`, `010_stack.md`, `011_readiness.md`,
+    `012_owner-list.md`. The owner gave the first two; the rest
+    follow the same rule (the stage's number less one) and stand
+    until the stage that writes each is built.
+  - When every document of a slice exists, the next stage named is
+    the scope map, re-read with the user before the next slice.
   - The planning folder is remembered in the plugin's own data folder,
     by the project's root, so nothing is written in the project.
   - An issue is ranked when a label of it says critical, high, blocker

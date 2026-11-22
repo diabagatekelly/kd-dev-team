@@ -11,5 +11,5 @@ Tracker
 
 Documents
 - planning folder: planning (chosen earlier for this project)
-- found: problem (problem.md)
-- next stage by the documents: scope (its document: planning/scope.md)
+- found: problem (000_problem.md)
+- next stage by the documents: scope map (its document: planning/001_scope-map.md)

@@ -12,4 +12,4 @@ Tracker
 Documents
 - planning folder: planning (chosen earlier for this project)
 - found: no planning document
-- next stage by the documents: problem (its document: planning/problem.md)
+- next stage by the documents: problem (its document: planning/000_problem.md)

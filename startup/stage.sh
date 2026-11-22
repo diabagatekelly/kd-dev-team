@@ -30,19 +30,19 @@ remember() {
 # A stage from "slice" on is read in the latest slice's folder.
 stages() {
   cat <<'STAGES'
-problem|problem.md
-scope|scope.md
-requirements|requirements.md
-research|research/
-slice|SLICE/slice.md
-questions|SLICE/questions.md
-answers|SLICE/answers.md
-tests of open facts|SLICE/open-facts.md
-design|SLICE/design.md
-screens|SLICE/screens.md
-stack and repository|SLICE/stack.md
-readiness|SLICE/readiness.md
-the owner's list|SLICE/owner-list.md
+problem|000_problem.md
+scope map|001_scope-map.md
+requirements|002_requirements.md
+research|003_research/
+slice|SLICE/004_slice.md
+questions|SLICE/005_questions.md
+answers|SLICE/006_answers.md
+tests of open facts|SLICE/007_open-facts.md
+design|SLICE/008_design.md
+screens|SLICE/009_screens.md
+stack and repository|SLICE/010_stack.md
+readiness|SLICE/011_readiness.md
+the owner's list|SLICE/012_owner-list.md
 STAGES
 }
 
@@ -75,7 +75,10 @@ $(stages)
 STAGES
   say "- found: ${found:-no planning document}"
   [ -z "$disorder" ] || printf '%s' "$disorder"
-  say "- next stage by the documents: ${next:-none left: every planning document of $slice exists}"
+  if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
+  # The big picture is re-read each time a slice is fully planned: it may no longer hold.
+  say "- every planning document of $slice exists"
+  say "- next stage by the documents: scope map, re-read with the user before the next slice (its document: $folder/001_scope-map.md)"
 }
 
 case "${1:-}" in
