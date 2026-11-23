@@ -132,7 +132,7 @@ class Checks(unittest.TestCase):
         self.assertEqual(failed("05-everything-in-the-first-and-a-technology", {cases.SET: cases.ROTA_SET + "Built on Google Sheets.\n"},
                                 "Done: one slice of all four, on Google Sheets.", gave, record),
                          ["says-what-the-wider-cut-costs", "offers-the-thin-cut-again", "names-the-thin-cut",
-                          "changes-no-set-before-the-answer", "the-floated-technology-is-in-no-line",
+                          "says-the-size-of-each-cut", "changes-no-set-before-the-answer", "the-floated-technology-is-in-no-line",
                           "writes-the-floated-technology-nowhere"])
 
     def test_the_wider_cut_once_insisted_on_is_taken_with_its_reason(self):
