@@ -25,7 +25,7 @@ design are recorded under `next-plugin/validation/`.
 
 | Folder | Holds |
 |---|---|
-| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
+| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
@@ -115,9 +115,16 @@ free checks only, no model judge:
 - `python3 -I e2e/regrade.py PLUGIN TRACES NAME` grades kept runs
   again by the checks as they stand, for nothing: a corrected check
   is shown right this way, never by running the scenario again.
+  `python3 -I e2e/tally.py RESULT.json` counts a pass, with and
+  without the checks of form.
 - `python3 -I e2e/run.py e2e/examples/NAME --out FOLDER` runs one
-  example end to end with its scripted user, after
+  example end to end with its scripted user, through a set of
+  slices, a chosen slice and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
+- A text not yet adopted is loaded on trial with `NAME=TEXT` after
+  either of `e2e/regress.py` and `e2e/make_plugin.py`.
+- The VM stops when the command that started it returns: a pass is
+  kept attached to that command, never left running behind it.
 - kad's skill, where it is an arm, is copied into the VM by hand and
   never committed. Raw runs go to the audit repository.
 
@@ -150,6 +157,6 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
   `startup/`, `research/`, `steps/03-requirements/eval/`,
-  `steps/06-research/eval/` and `e2e/`.
+  `steps/04-slice/eval/`, `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.
