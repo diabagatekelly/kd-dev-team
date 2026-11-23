@@ -372,6 +372,34 @@ class Stage(unittest.TestCase):
         self.assertIn("- REFUSED: the set of slices (planning/003_slices.md) could not be read", done.stdout)
         self.assertNotIn("next stage", done.stdout)
 
+    # Found by an end-to-end run: a list of one item with eight questions open under it was cut into one
+    # slice that did not wait for them, the slice was merged, the box checked, and the activity called done.
+    OPEN = LIST + "\n## Not yet confirmed\n1. **Who sees a loan** (bears on record-a-loan). It may add an item.\n" \
+                  "- Whether a loan can be put right.\n  It changes record-a-loan.\n\n## Outside systems and lasting things\n- a loan\n"
+
+    def test_an_activity_is_not_done_while_a_question_of_the_list_is_open(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan, record-a-return, see-who-has-it")),
+                           list_text=self.OPEN.replace("- [ ]", "- [x]"), tracker=[])
+        self.assertNotIn("activity is done", out)
+        self.assertNotIn("the next \"now\"", out)
+        self.assertIn("- next stage by the documents: requirements (every slice cut so far is built, and 2 questions of "
+                      "planning/002_requirements.md are not yet confirmed: their answers may add to the list, and the "
+                      "activity is not done before them)", out)
+
+    def test_the_last_slice_merged_does_not_finish_an_activity_with_a_question_open(self):
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
+                           list_text=self.OPEN, slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1\tLoans"])
+        self.assertIn("  - slice 1 is built by merged work (#12)", out)
+        self.assertNotIn("the activity is done", out)
+        self.assertIn("  - with those, every slice cut so far is built, and 2 questions of the list are not yet confirmed: "
+                      "the activity is not done, and the requirements stage takes them next\n", out)
+
+    def test_a_list_with_nothing_open_says_nothing_of_questions(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan, record-a-return, see-who-has-it")),
+                           list_text=LIST.replace("- [ ]", "- [x]") + "\n## Not yet confirmed\nNothing.\n", tracker=[])
+        self.assertIn("which row of the scope map is the next \"now\"", out)
+
     def test_a_tracker_that_cannot_be_read_leaves_the_coming_back_unknown(self):
         out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1")}, tracker=["what is this"])
         self.assertIn("- whether a coming-back to the slices is due is not known: the tracker could not be read\n", out)

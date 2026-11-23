@@ -103,6 +103,9 @@ function criterion(s) { s = plain(s); sub(/:$/, "", s); gsub(/[ \t]*\/[ \t]*/, "
 function add(list, more, sep) { return list (list == "" ? "" : sep) more }
 function due_line(text) { due = due "  - " text "\n" }
 kind == "requirements" {
+  # A question still open under "Not yet confirmed": a line of a list that starts at the margin.
+  if ($0 ~ /^#+[ \t]/) { unconfirmed = tolower($0) ~ /not yet confirmed/; next }
+  if (unconfirmed && $0 ~ /^([-*]|[0-9]+[.)])[ \t]/) questions++
   if ($0 !~ /^[ \t]*[-*] \[[ xX]\]/) next
   line = $0; sub(/^[ \t]*[-*] \[/, "", line); done = substr(line, 1, 1) != " "
   name = slug(substr(line, 3))
@@ -203,11 +206,14 @@ END {
   for (i = 1; i <= issues_n; i++) if (!(issues[i] in placed)) waiting = add(waiting, "#" issues[i] " \"" title[issues[i]] "\"", ", ")
   if (waiting != "") due_line("open issues not placed yet (each is placed, by its number, in " folder "/" set "): " waiting)
   if (due != "") {
-    if (all_built && all_checked && !(all_marked && were_checked)) due_line("with those, every slice is built and every requirement checked: the activity is done")
+    if (all_built && all_checked && !(all_marked && were_checked)) {
+      if (questions) due_line("with those, every slice cut so far is built, and " questions (questions == 1 ? " question" : " questions") " of the list " (questions == 1 ? "is" : "are") " not yet confirmed: the activity is not done, and the requirements stage takes them next")
+      else due_line("with those, every slice is built and every requirement checked: the activity is done")
+    }
     printf "- a coming-back to the slices is due:\n%s", due
   }
   print "@table 1"; print "@chosen " chosen; print "@open " open_n + 0; print "@due " (due != "")
-  print "@built " any_built + 0; print "@done " (all_marked && were_checked && items_n > 0); print "@unchecked " unchecked()
+  print "@built " any_built + 0; print "@done " (all_marked && were_checked && items_n > 0); print "@unchecked " unchecked(); print "@questions " questions + 0
 }
 function unchecked(    i, n) { for (i = 1; i <= items_n; i++) if (!checked[items[i]]) n++; return n + 0 }
 # "#13, #12" as "#12, #13": the pull requests in the order they were opened.
@@ -314,6 +320,8 @@ STAGES
       say "- next stage by the documents: slice (the set is to be written as that table, in $folder/$set)"; return 0
     elif [ "$(told due)" = 1 ]; then
       say "- next stage by the documents: slice, the coming-back (before anything else is planned)"; return 0
+    elif [ "$(told done)" = 1 ] && [ "$(told questions)" != 0 ]; then
+      say "- next stage by the documents: requirements (every slice cut so far is built, and $(told questions) questions of $folder/$list are not yet confirmed: their answers may add to the list, and the activity is not done before them)"; return 0
     elif [ "$(told done)" = 1 ]; then
       say "- next stage by the documents: none: every slice of this activity is built and every requirement checked; which row of the scope map is the next \"now\" is the user's to say"; return 0
     elif [ -z "$chosen" ] && [ "$(told open)" != 0 ]; then

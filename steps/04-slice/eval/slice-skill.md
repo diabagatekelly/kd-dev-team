@@ -73,7 +73,9 @@ number is never changed or reused. Every state is written `open`.
 **The order.** "Builds on" holds the slices a slice cannot be shown
 without, or `nothing`. A slice whose item leans on a question under
 "Not yet confirmed" cannot be started until it is answered: say so
-under "Where to start". Recommend one start: the slice that shows a
+under "Where to start". Where part of an item can be cut so that it
+does not lean on the question, the part that waits is a row of its
+own, with the item in it, that cannot be started. Recommend one start: the slice that shows a
 person the most for the least, and that the others build on.
 
 **Then ask once.** Show the set, say which slice you recommend and
