@@ -9,3 +9,5 @@ Tracker
 
 Documents
 - planning folder: not chosen yet for this project
+- to record the folder the user names (it is made if it is not there): CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" remember FOLDER
+  then read the documents again: CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" report

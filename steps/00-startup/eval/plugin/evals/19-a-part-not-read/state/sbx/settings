@@ -1,0 +1,5 @@
+browser.enabled false
+claude.chrome false
+claude.remoteControl false
+clipboard.imagePaste false
+clipboard.textCopy false

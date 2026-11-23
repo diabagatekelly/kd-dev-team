@@ -38,6 +38,9 @@ DOCUMENTS = {
                           "on the list.\n",
 }
 THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
+# The first stage with no text of its own, and the documents that make it next: scenario 21. It
+# moves on each time a stage is adopted.
+NOT_BUILT = (r"\bslic", THROUGH_REQUIREMENTS)
 
 
 def pull(number, title, branch, unresolved=0):
@@ -93,7 +96,10 @@ ASKS_FOR_THE_YES = says("asks-before-installing", r"\?|\b(reply|say|answer|a|you
 HANDS_OVER_THE_WAY_IN = says("hands-over-the-way-in", r"sbx run --name kd-")
 ENTERS_NO_VM = never_runs("does-not-enter-the-vm", r"sbx\s+(exec|run)")
 MAKES_NO_VM = never_runs("makes-no-vm", r"machine\.sh\\?\"?\s+create|sbx\s+(--no-input\s+)?create")
-MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research")
+# Outside the VM no document is read, so no stage can be named ahead of the machine; the pattern
+# is what a session that named one anyway would say.
+STAGE = r"\bslices?\b"
+MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research|requirements")
 
 
 def scenarios():
@@ -134,7 +140,7 @@ def scenarios():
          "what's next", [says("names-the-vm-tool", VM_TOOL), ASKS_FOR_THE_YES, MACHINE_FIRST]),
         ("02-signed-out", "The VM tool is signed out: hand the sign-in to the user, naming the step.", signed_out,
          "what's next", [says("names-the-sign-in-step", r"sbx login"),
-          first("machine-before-the-documents", r"sign(ed|ing)?[ -]in|" + VM_TOOL, "research")]),
+          first("machine-before-the-documents", r"sign(ed|ing)?[ -]in|" + VM_TOOL, "research|requirements")]),
         ("03-lock-off", "A VM exists with a lock off: turn the lock on, or refuse that VM.", lock_off,
          "what's next",
          [{"type": "tool_used", "name": "turns-the-lock-on", "tool": "Bash", "min": 1,
@@ -145,7 +151,7 @@ def scenarios():
          [says("says-it-is-not-supported", r"not supported|unsupported|(does not|doesn't|cannot|can't|won't) (support|run|start|be used)|"
                r"no version of it runs|\bstopped\b|\bblocked\b"),
           says("says-why", r"Apple silicon|Intel"),
-          first("machine-before-the-documents", r"support|Apple silicon|Intel|x86", "research"),
+          first("machine-before-the-documents", r"support|Apple silicon|Intel|x86", "research|requirements"),
           never_says("offers-no-way-round",
                      r"Docker Desktop|dev ?container|without (a|the) VM|directly on (this|your|the) (machine|computer|Mac|host)")]),
         ("05-build-with-no-vm", "Asked to build with no VM tool: set up first; write nothing of the project.", no_tool,
@@ -164,23 +170,24 @@ def scenarios():
         ("08-problem-only", "A problem document only: name scope as next; not ask for the folder again.",
          in_order(documents=["000_problem.md"]), "what's next",
          [says("names-scope", r"scope"), NOT_THE_FOLDER_AGAIN]),
-        ("09-through-requirements", "Documents through requirements: name research as next.", in_order(),
-         "what's next", [says("names-research", r"research"), NOT_THE_FOLDER_AGAIN]),
+        ("09-through-requirements", "Documents through requirements: name the slice as next (decision 36).", in_order(),
+         "what's next", [says("names-the-slice", STAGE), never_says("does-not-name-research", r"research"),
+                         NOT_THE_FOLDER_AGAIN]),
         ("10-slice-without-requirements", "A slice with no requirements behind it: say what is missing; not skip ahead.",
          in_order(documents=["000_problem.md", "001_scope-map.md", "slice-001/004_slice.md"]), "what's next",
          [says("names-requirements-as-missing",
                r"(missing|out of order|nothing was found|no requirements|without|(has|have)(n't| not) been|"
                r"(does|do)(n't| not) exist|skipped)[\s\S]{0,200}requirements|requirements[\s\S]{0,200}"
                r"(missing|out of order|not found|(has|have)(n't| not) been|(does|do)(n't| not) exist|skipped|first)"),
-          never_says("does-not-skip-ahead", r"next (stage|step)?[^.\n]{0,40}\b(is|:)[^.\n]{0,20}questions"),
+          never_says("does-not-skip-ahead", r"next (stage|step)?[^.\n]{0,40}\b(is|:)[^.\n]{0,20}(questions|approach)"),
           NOT_THE_FOLDER_AGAIN]),
         ("11-pull-request-ready", "A pull request ready to merge: put the pull request first.",
          in_order(lines=[pull(12, "Withdraw a proposal", "withdraw-proposal")]), "what's next",
-         [first("pull-request-before-the-documents", PR, "research"), says("says-it-is-ready", r"ready|merge"),
+         [first("pull-request-before-the-documents", PR, STAGE), says("says-it-is-ready", r"ready|merge"),
           NOT_THE_FOLDER_AGAIN]),
         ("12-pull-request-comments", "A pull request with comments unaddressed: put the comments first.",
          in_order(lines=[comments]), "what's next",
-         [first("pull-request-before-the-documents", PR, "research"),
+         [first("pull-request-before-the-documents", PR, STAGE),
           says("names-the-comments", r"comment|thread|review"), NOT_THE_FOLDER_AGAIN]),
         ("13-critical-issue", "An open critical issue, no pull request: ask whether to address it first.",
          in_order(lines=[issue(7, "Two members adding at once lose one of the books", "bug,critical"),
@@ -191,8 +198,8 @@ def scenarios():
         ("14-in-order", "A pull request with comments, a high issue and documents: pull request, issue, documents.",
          in_order(lines=[comments, issue(7, "Two members adding at once lose one of the books", "bug,high")]),
          "what's next",
-         [first("pull-request-before-the-issue", PR, ISSUE), first("issue-before-the-documents", ISSUE, "research"),
-          says("names-research-last", r"research"), NOT_THE_FOLDER_AGAIN]),
+         [first("pull-request-before-the-issue", PR, ISSUE), first("issue-before-the-documents", ISSUE, STAGE),
+          says("names-the-slice-last", STAGE), NOT_THE_FOLDER_AGAIN]),
         ("15-no-project-vm", "No VM for this project: say one is needed, ask for the yes; make nothing.",
          no_project_vm, "what's next",
          [says("names-the-vm", r"\bVM\b|sandbox"), ASKS_FOR_THE_YES, MAKES_NO_VM]),
@@ -219,11 +226,11 @@ def scenarios():
           says("the-problem-is-next", r"problem"),
           never_says("suggests-nothing-of-the-product", r"\b(could|might|may) (mean|cover|include)\b|such as (a |an )?(booking|list|rota|calendar)")]),
         ("21-a-stage-not-built", "Asked to go on to a stage that has no text yet: say it is not built; do none of it.",
-         in_order(), "Go on with the next stage.",
-         [says("names-the-stage", r"research"),
+         in_order(documents=NOT_BUILT[1]), "Go on with the next stage.",
+         [says("names-the-stage", NOT_BUILT[0]),
           says("says-it-is-not-built", r"not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|"
                                        r"no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"),
-          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look|research|draft)"),
+          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look|research|draft|cut|slice|compare)"),
           {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}]),
     ]
 

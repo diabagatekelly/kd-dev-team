@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: startup-09-through-requirements
-description: "Documents through requirements: name research as next."
+description: "Documents through requirements: name the slice as next (decision 36)."
 tags: [startup]
 context:
   scaffold_script: scaffold.sh
@@ -11,7 +11,8 @@ execution:
   allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]
 runs: 3
 graders:
-  - {"type": "regex", "name": "names-research", "target": "last_message", "flags": "i", "pattern": "research"}
+  - {"type": "regex", "name": "names-the-slice", "target": "last_message", "flags": "i", "pattern": "\\bslices?\\b"}
+  - {"type": "regex", "name": "does-not-name-research", "target": "last_message", "flags": "i", "pattern": "research", "match": "not_contains"}
   - {"type": "regex", "name": "does-not-ask-for-the-folder-again", "target": "last_message", "flags": "i", "pattern": "where[^.?!\\n]{0,80}(planning|documents)[^.!\\n]{0,80}\\?|(which|what) (folder|directory)[^.!\\n]{0,80}\\?", "match": "not_contains"}
   - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}

@@ -38,16 +38,19 @@ remember() {
   say "- planning folder: $1 (recorded for $root)"
 }
 
-# One line per stage, in pipeline order: its name, then the document that shows it was done.
-# A document is found by its name; the number before it is its place in the order the
-# folder's documents were made. A stage from "slice" on is read in the latest slice's folder.
+# One line per stage, in pipeline order (decision 36): its name, then the document that shows it
+# was done. A document is found by its name; the number before it is its place in the order the
+# folder's documents were made. The slice stage has two: the set of slices, then the chosen
+# slice's own, in the folder of that slice's number in the set. Every stage after it is read there.
 stages() {
   cat <<'STAGES'
 problem|problem.md
 scope map|scope-map*.md
 requirements|requirements.md
-research|research/
+the set of slices|slices*.md
 slice|SLICE/slice.md
+approach|SLICE/approach.md
+research|SLICE/research/
 questions|SLICE/questions.md
 answers|SLICE/answers.md
 tests of open facts|SLICE/open-facts.md
@@ -88,6 +91,136 @@ count() {
     }' "$1"
 }
 
+# The set of slices, counted (the slice stage's condition 22), and whether a coming-back is due
+# (its conditions 14 and 15). Read, in this order: the requirements; every earlier version of the
+# set; the set; each slice's own document; what the tracker says of merged work and open issues.
+# Lines that start with "@" are for this script; the rest are the report's.
+LEDGER='
+function trim(s) { gsub(/^[ \t\r]+|[ \t\r]+$/, "", s); return s }
+function plain(s) { gsub(/[`*]/, "", s); return trim(s) }
+function slug(s) { s = plain(s); return match(s, /^[a-z0-9]+(-[a-z0-9]+)*/) ? substr(s, 1, RLENGTH) : "" }
+function criterion(s) { s = plain(s); sub(/:$/, "", s); gsub(/[ \t]*\/[ \t]*/, " / ", s); return trim(s) }
+function add(list, more, sep) { return list (list == "" ? "" : sep) more }
+function due_line(text) { due = due "  - " text "\n" }
+kind == "requirements" {
+  if ($0 !~ /^[ \t]*[-*] \[[ xX]\]/) next
+  line = $0; sub(/^[ \t]*[-*] \[/, "", line); done = substr(line, 1, 1) != " "
+  name = slug(substr(line, 3))
+  if (name != "" && !(name in item)) { item[name] = 1; checked[name] = done; items[++items_n] = name }
+  next
+}
+kind == "earlier" || kind == "set" {
+  line = $0
+  while (match(line, /#[0-9]+/)) { placed[substr(line, RSTART + 1, RLENGTH - 1) + 0] = 1; line = substr(line, RSTART + RLENGTH) }
+  if (kind == "earlier" || $0 !~ /^[ \t]*\|/) next
+  n = split($0, cell, "|")
+  for (i = 1; i <= n; i++) cell[i] = plain(cell[i])
+  if (!table) {
+    c_number = c_items = c_state = 0
+    for (i = 2; i <= n; i++) {
+      low = tolower(cell[i])
+      if (low == "#") c_number = i; else if (low ~ /^items?$/) c_items = i; else if (low ~ /^state$/) c_state = i
+    }
+    if (c_number && c_items && c_state) table = 1
+    next
+  }
+  if (cell[c_number] !~ /^[0-9]+$/) next
+  s = cell[c_number] + 0; rows[++rows_n] = s; low = tolower(cell[c_state])
+  if (low ~ /^built/) { state[s] = "built"; built_n++ }
+  else if (low ~ /^chosen/) { state[s] = "chosen"; chosen_n++; chosen_all = add(chosen_all, "slice " s, ", "); if (!chosen) chosen = s }
+  else if (low ~ /^open/) { state[s] = "open"; open_n++ }
+  else { state[s] = "?"; unknown = add(unknown, "slice " s, ", ") }
+  m = split(cell[c_items], each, ",")
+  for (i = 1; i <= m; i++) {
+    name = slug(each[i]); if (name == "") continue
+    covers[name] = add(covers[name], s, " ")
+    if (!(name in item)) stray = add(stray, name " (slice " s ")", ", ")
+  }
+  next
+}
+kind == "slice" {
+  if ($0 ~ /^#+[ \t]/) { criteria = tolower($0) ~ /criteri/; next }
+  if (!criteria || $0 !~ /^[ \t]*[-*] (\[[ xX]\] )?\*\*/) next
+  line = $0; sub(/^[^*]*\*\*/, "", line); id = criterion(substr(line, 1, index(line, "**") - 1))
+  number += 0; holds[number, id] = 1; held[number] = add(held[number], id, "\t"); held_n[number]++
+  name = id; sub(/ \/ .*$/, "", name)
+  if (!(name in item)) nameless[number] = add(nameless[number], "line " FNR, ", ")
+  next
+}
+kind == "work" {
+  n = split($0, field, "\t")
+  if (field[1] == "issue") { issues[++issues_n] = field[2] + 0; title[field[2] + 0] = field[3]; next }
+  if (field[1] != "merged") next
+  names = trim(field[3]); s = chosen
+  if (match(tolower(names), /^slice[ \t]*[0-9]+[ \t]*:/)) {
+    s = substr(names, 1, RLENGTH); gsub(/[^0-9]/, "", s); s += 0; names = substr(names, RLENGTH + 1)
+  }
+  m = split(names, each, ",")
+  for (i = 1; i <= m; i++) {
+    id = criterion(each[i]); if (id == "") continue
+    if (id !~ / \/ /) { if (id in item) outright[id] = add(outright[id], "#" field[2], ", "); else lost = add(lost, id " (#" field[2] ")", ", "); continue }
+    if (s != "" && (s, id) in holds) { named[s, id] = 1; if (index(", " by[s] ",", ", #" field[2] ",") == 0) by[s] = add(by[s], "#" field[2], ", ") }
+    else lost = add(lost, id (s == "" ? "" : " of slice " s) " (#" field[2] ")", ", ")
+  }
+  next
+}
+END {
+  if (!table) {
+    print "- the set of slices (" set ") has no table this script can read: its columns are # | Slice | Items | Builds on | State"
+    print "@table 0"; exit
+  }
+  printf "- slices (%s): %d slices, %d built, %d chosen, %d open\n", set, rows_n, built_n, chosen_n, open_n
+  if (unknown != "") print "- a slice whose state is not built, chosen or open: " unknown
+  if (chosen_n > 1) print "- more than one slice is chosen: " chosen_all " (the first is read)"
+  for (i = 1; i <= items_n; i++) if (!(items[i] in covers)) homeless = add(homeless, items[i], ", ")
+  if (homeless != "") print "- a requirement in no slice: " homeless
+  if (stray != "") print "- a slice names an item the requirements do not hold: " stray
+  if (chosen && held_n[chosen]) {
+    printf "- slice %d (%s): %d %s\n", chosen, document, held_n[chosen], (held_n[chosen] == 1 ? "criterion" : "criteria")
+    if (nameless[chosen] != "") print "- a criterion that names no item of the requirements: " nameless[chosen]
+  }
+  # What merged work builds: a slice, when every criterion of its document is named.
+  for (r = 1; r <= rows_n; r++) {
+    s = rows[r]; now[s] = state[s]; if (state[s] == "built" || !held_n[s]) continue
+    n = split(held[s], each, "\t"); got = 0; missing = ""
+    for (i = 1; i <= n; i++) if ((s, each[i]) in named) got++; else missing = add(missing, each[i], ", ")
+    if (got == n) { now[s] = "built"; any_built = 1; due_line("slice " s " is built by merged work (" sorted(by[s]) "): mark it built in " folder "/" set) }
+    else if (got) print "- merged work (" sorted(by[s]) ") names " got " of the " n " criteria of slice " s ": not built yet; still to come: " missing
+  }
+  if (lost != "") print "- merged work names what no slice\047s document holds: " lost
+  all_built = rows_n > 0; all_marked = rows_n > 0
+  for (r = 1; r <= rows_n; r++) { if (now[rows[r]] != "built") all_built = 0; if (state[rows[r]] != "built") all_marked = 0; else any_built = 1 }
+  all_checked = 1; were_checked = 1
+  for (i = 1; i <= items_n; i++) {
+    name = items[i]; if (checked[name]) continue
+    were_checked = 0
+    n = split(covers[name], each, " "); whole = n > 0
+    for (j = 1; j <= n; j++) if (now[each[j]] != "built") whole = 0
+    if (whole) due_line("every slice of " name " is built: check its box in " folder "/" list)
+    else if (name in outright) due_line("merged work names " name " as complete (" outright[name] "): check its box in " folder "/" list)
+    else all_checked = 0
+  }
+  for (i = 1; i <= issues_n; i++) if (!(issues[i] in placed)) waiting = add(waiting, "#" issues[i] " \"" title[issues[i]] "\"", ", ")
+  if (waiting != "") due_line("open issues not placed yet: " waiting)
+  if (due != "") {
+    if (all_built && all_checked && !(all_marked && were_checked)) due_line("with those, every slice is built and every requirement checked: the activity is done")
+    printf "- a coming-back to the slices is due:\n%s", due
+  }
+  print "@table 1"; print "@chosen " chosen; print "@open " open_n + 0; print "@due " (due != "")
+  print "@built " any_built + 0; print "@done " (all_marked && were_checked && items_n > 0); print "@unchecked " unchecked()
+}
+function unchecked(    i, n) { for (i = 1; i <= items_n; i++) if (!checked[items[i]]) n++; return n + 0 }
+# "#13, #12" as "#12, #13": the pull requests in the order they were opened.
+function sorted(list,    n, each, i, j, t) {
+  n = split(list, each, ", ")
+  for (i = 2; i <= n; i++) for (j = i; j > 1 && substr(each[j], 2) + 0 < substr(each[j - 1], 2) + 0; j--) { t = each[j]; each[j] = each[j - 1]; each[j - 1] = t }
+  list = ""; for (i = 1; i <= n; i++) list = add(list, each[i], ", ")
+  return list
+}'
+
+# What the ledger says of one thing this script needs, from its "@" lines.
+told() { printf '%s\n' "$ledger" | awk -v key="@$1" '$1 == key { print $2 }'; }
+
 report() {
   folder=""
   [ -f "$store" ] && folder=$(awk -F'\t' -v r="$root" '$1 == r {print $2}' "$store" | tail -1)
@@ -100,12 +233,40 @@ report() {
   dir=$(inside "$folder")
   if [ ! -d "$dir" ]; then say "- planning folder: $folder (chosen earlier for this project) no longer exists"; return 0; fi
   say "- planning folder: $folder (chosen earlier for this project)"
-  slice=$(cd "$dir" && ls -d slice-[0-9]* 2>/dev/null | sort | tail -1)
-  slice=${slice:-slice-001}
   number=$(next_number)
+  list=$(numbered "$dir" "requirements.md")
+  set=$(numbered "$dir" "slices*.md")
+  ledger=""; chosen=""; slice=""
+  if [ -n "$set" ]; then
+    # The tracker is asked only once there is a set: nothing is checked off or placed before it.
+    work=$(sh "$(dirname "$0")/tracker.sh" work 2>/dev/null) && unread="" || unread=yes
+    [ -z "$unread" ] || work=""
+    set -- kind=requirements
+    [ -z "$list" ] || set -- "$@" "$dir/$list"
+    set -- "$@" kind=earlier
+    for earlier in $(cd "$dir" && ls -d [0-9][0-9][0-9]_slices*.md 2>/dev/null | sort); do
+      [ "$earlier" = "$set" ] || set -- "$@" "$dir/$earlier"
+    done
+    set -- "$@" kind=set "$dir/$set" kind=slice
+    for each in $(cd "$dir" && ls -d slice-[0-9]* 2>/dev/null | sort); do
+      own=$(numbered "$dir/$each" "slice.md")
+      [ -z "$own" ] || set -- "$@" "number=${each#slice-}" "$dir/$each/$own"
+    done
+    # The chosen slice is known only once the set is read: its document is named afterwards.
+    ledger=$(printf '%s\n' "$work" | awk -v set="$set" -v list="$list" -v folder="$folder" -v document="@DOCUMENT@" "$LEDGER" "$@" kind=work -) \
+      && [ -n "$ledger" ] || refuse "the set of slices ($folder/$set) could not be read by this script"
+    chosen=$(told chosen)
+    [ -z "$chosen" ] || slice=$(printf 'slice-%03d' "$chosen")
+  else
+    slice=$(cd "$dir" && ls -d slice-[0-9]* 2>/dev/null | sort | tail -1)
+    slice=${slice:-slice-001}
+  fi
   found=""; missing=""; next=""; disorder=""
   while IFS='|' read -r name document; do
-    case "$document" in SLICE/*) under="$slice/"; document=${document#SLICE/} ;; *) under="" ;; esac
+    case "$document" in
+      SLICE/*) [ -n "$slice" ] || continue; under="$slice/"; document=${document#SLICE/} ;;
+      *) under="" ;;
+    esac
     is=$(numbered "$dir/$under" "${document%/}")
     case "$document" in
       */) [ -n "$is" ] && [ -n "$(ls "$dir/$under$is" 2>/dev/null)" ] && there=yes || there=no; is="$is/" ;;
@@ -117,7 +278,13 @@ report() {
 "
     else
       missing="${missing:+$missing, }$name"
-      [ -n "$next" ] || next="$name (its document: $folder/$under${number}_$(say "$document" | sed 's/\*//'))"
+      [ -z "$next" ] || continue
+      case "$name" in
+        "the set of slices")
+          next="slice (its document: $folder/${number}_slices.md, the set of slices; once the user has chosen one, its own document: $folder/slice-NNN/$(say "$number" | awk '{ printf "%03d", $1 + 1 }')_slice.md, NNN the slice's number in the set)" ;;
+        slice) next="slice (its document: $folder/$under${number}_slice.md${chosen:+, the criteria of slice $chosen})" ;;
+        *) next="$name (its document: $folder/$under${number}_$(say "$document" | sed 's/\*//'))" ;;
+      esac
     fi
   done <<STAGES
 $(stages)
@@ -126,14 +293,39 @@ STAGES
   say "- a file of the user's (a sheet, an export) is never opened here: the user runs, in a terminal on their own"
   say "  machine, this plugin's \`sh startup/source.sh describe FILE\`, and pastes what it prints"
   say "- found: ${found:-no planning document}"
-  list=$(numbered "$dir" "requirements.md")
   [ -z "$list" ] || count "$dir/$list" "$list"
+  if [ -n "$ledger" ]; then
+    own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
+    printf '%s\n' "$ledger" | grep -v '^@' | sed "s|@DOCUMENT@|$slice/$own|"
+    [ -z "$unread" ] || say "- whether a coming-back to the slices is due is not known: the tracker could not be read"
+    if [ "$(told table)" = 1 ]; then
+      if [ "$(told built)" = 1 ]; then
+        versions=$(cd "$dir" && ls -d [0-9][0-9][0-9]_slices*.md 2>/dev/null | wc -l)
+        say "- a changed set is a new document, the earlier one left as it is: $folder/${number}_slices-v$(printf '%03d' $((versions + 1))).md"
+      else
+        say "- a changed set is corrected in place ($folder/$set): no slice is built from it yet"
+      fi
+    fi
+  fi
   [ -z "$disorder" ] || printf '%s' "$disorder"
+  if [ -n "$ledger" ] && [ -z "$missing" ] || { [ -n "$ledger" ] && [ -z "$chosen" ]; } || [ "$(told due)" = 1 ]; then
+    # Past the set, what comes next is the set's to say before the documents'.
+    if [ "$(told table)" = 0 ]; then
+      say "- next stage by the documents: slice (the set is to be written as that table, in $folder/$set)"; return 0
+    elif [ "$(told due)" = 1 ]; then
+      say "- next stage by the documents: slice, the coming-back (before anything else is planned)"; return 0
+    elif [ "$(told done)" = 1 ]; then
+      say "- next stage by the documents: none: every slice of this activity is built and every requirement checked; which row of the scope map is the next \"now\" is the user's to say"; return 0
+    elif [ -z "$chosen" ] && [ "$(told open)" != 0 ]; then
+      say "- next stage by the documents: slice (the user chooses where to start; the chosen slice's own document: $folder/slice-NNN/${number}_slice.md, NNN its number in the set)"; return 0
+    elif [ -z "$chosen" ]; then
+      say "- next stage by the documents: slice (every slice of the set is built and $(told unchecked) of the requirements are not checked: the set does not cover the list)"; return 0
+    fi
+  fi
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
-  # A slice fully planned goes to the build; whether it is done is decided at a check-in when
-  # its work is merged (decision 23), which is not built yet.
-  say "- every planning document of $slice exists"
-  say "- next stage by the documents: none, $slice is planned and ready to build"
+  # A slice fully planned goes to the build; it is built when merged work names its criteria.
+  say "- every planning document of slice ${chosen:-${slice#slice-}} exists"
+  say "- next stage by the documents: none, slice ${chosen:-${slice#slice-}} is planned and ready to build"
 }
 
 case "${1:-}" in

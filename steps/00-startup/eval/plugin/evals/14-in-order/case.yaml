@@ -12,8 +12,8 @@ execution:
 runs: 3
 graders:
   - {"type": "regex", "name": "pull-request-before-the-issue", "target": "last_message", "flags": "i", "pattern": "^(?:(?!issue|#7)[\\s\\S])*?(?:pull request|\\bPR\\b|#12)"}
-  - {"type": "regex", "name": "issue-before-the-documents", "target": "last_message", "flags": "i", "pattern": "^(?:(?!research)[\\s\\S])*?(?:issue|#7)"}
-  - {"type": "regex", "name": "names-research-last", "target": "last_message", "flags": "i", "pattern": "research"}
+  - {"type": "regex", "name": "issue-before-the-documents", "target": "last_message", "flags": "i", "pattern": "^(?:(?!\\bslices?\\b)[\\s\\S])*?(?:issue|#7)"}
+  - {"type": "regex", "name": "names-the-slice-last", "target": "last_message", "flags": "i", "pattern": "\\bslices?\\b"}
   - {"type": "regex", "name": "does-not-ask-for-the-folder-again", "target": "last_message", "flags": "i", "pattern": "where[^.?!\\n]{0,80}(planning|documents)[^.!\\n]{0,80}\\?|(which|what) (folder|directory)[^.!\\n]{0,80}\\?", "match": "not_contains"}
   - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}

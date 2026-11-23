@@ -1,8 +1,41 @@
+import pathlib
+import shutil
 import unittest
 
 from standin_machine import Machine
 
 THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
+REMOTE = "https://github.com/someone/something.git"
+LIST = """# Requirements: Borrow and return a tool
+
+- [ ] **record-a-loan**: A volunteer can record which member took which tool.
+- [ ] **record-a-return**: A volunteer can record that a tool came back.
+- [ ] **see-who-has-it**: A volunteer can see who has a given tool now.
+
+## Out for now
+- Reserving a tool.
+"""
+THE_REST = ["approach", "research/a", "questions", "answers", "open-facts", "design", "screens", "stack", "readiness",
+            "owner-list"]
+
+
+def row(number, state, items, name="Do a thing", on="nothing"):
+    return f"| {number} | {name} | {items} | {on} | {state} |\n"
+
+
+def the_set(*rows, more=""):
+    return ("# Slices: Borrow and return a tool\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
+            + "".join(rows) + "\n## Where to start\nSlice 1.\n" + more)
+
+
+def the_slice(*criteria, number=1):
+    return (f"# Slice {number}: Do a thing\n\n## Thin path\nA volunteer does it.\n\n## Criteria\n"
+            + "".join(f"- **{name}**: Given a state, when one action, then an outcome.\n" for name in criteria)
+            + "\n## Needs from outside\nnone\n\n## Left for later\n- **not a criterion**: usable without it.\n")
+
+
+THREE = the_set(row(1, "open", "record-a-loan"), row(2, "open", "record-a-return", on="1"),
+                row(3, "open", "see-who-has-it", on="1"))
 
 
 class Stage(unittest.TestCase):
@@ -57,9 +90,10 @@ class Stage(unittest.TestCase):
     def test_the_next_stage_is_named_with_the_document_it_writes(self):
         self.chosen()
         self.assertIn("- next stage by the documents: problem (its document: planning/000_problem.md)", self.report())
-        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md", folder="docs/plan")
-        self.assertIn("- next stage by the documents: slice (its document: docs/plan/slice-001/004_slice.md)",
-                      self.report())
+        self.chosen(*THROUGH_REQUIREMENTS, folder="docs/plan")
+        self.assertIn("- next stage by the documents: slice (its document: docs/plan/003_slices.md, the set of "
+                      "slices; once the user has chosen one, its own document: docs/plan/slice-NNN/004_slice.md, "
+                      "NNN the slice's number in the set)", self.report())
 
     def test_a_problem_alone_makes_scope_next(self):
         self.chosen("000_problem.md")
@@ -68,44 +102,277 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: scope", out)
         self.assertNotIn("out of order", out)
 
-    def test_documents_through_requirements_make_research_next(self):
+    # The order of the stages (decision 36): the slice follows the requirements; the approach and
+    # research follow the slice.
+    def test_documents_through_requirements_make_the_slice_next(self):
         self.chosen(*THROUGH_REQUIREMENTS)
-        self.assertIn("- next stage by the documents: research", self.report())
-
-    def test_an_empty_research_folder_is_not_research_done(self):
-        self.chosen(*THROUGH_REQUIREMENTS)
-        (self.machine.project / "planning" / "research").mkdir()
-        self.assertIn("- next stage by the documents: research", self.report())
-
-    def test_research_done_makes_the_slice_next(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a-dependency.md")
-        self.assertIn("- next stage by the documents: slice", self.report())
+        out = self.report()
+        self.assertIn("- next stage by the documents: slice (its document: planning/003_slices.md", out)
+        self.assertNotIn("research", out)
 
     def test_a_slice_with_no_requirements_behind_it_is_out_of_order(self):
         self.chosen("000_problem.md", "001_scope-map.md", "slice-001/004_slice.md")
         out = self.report()
         self.assertIn("- out of order: slice (slice-001/004_slice.md) exists but nothing was found for: "
-                      "requirements, research", out)
+                      "requirements, the set of slices", out)
         self.assertIn("- next stage by the documents: requirements", out)
 
-    def test_the_latest_slice_is_the_one_read(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md",
-                    *[f"slice-001/{name}.md" for name in
-                      ("004_slice", "005_questions", "006_answers", "007_open-facts", "008_design", "009_screens",
-                       "010_stack", "011_readiness", "012_owner-list")],
-                    "slice-002/004_slice.md")
-        out = self.report()
-        self.assertIn("slice (slice-002/004_slice.md)", out)
-        self.assertIn("- next stage by the documents: questions", out)
+    def planned(self, set_text, documents=(), list_text=LIST, slices=None, tracker=None):
+        """A project with its list, a set of slices, each slice's own document by its number, and
+        what the tracker answers."""
+        self.chosen("000_problem.md", "001_scope-map.md", *documents)
+        folder = self.machine.project / "planning"
+        (folder / "002_requirements.md").write_text(list_text, encoding="utf-8")
+        (folder / "003_slices.md").write_text(set_text, encoding="utf-8")
+        for number, text in (slices or {}).items():
+            (folder / f"slice-{number:03d}").mkdir(exist_ok=True)
+            (folder / f"slice-{number:03d}" / "004_slice.md").write_text(text, encoding="utf-8")
+        if tracker is not None:
+            self.machine.repository(REMOTE)
+            self.machine.have("gh")
+            self.machine.set("gh/lines", "\n".join(["ok\t0\t0", *tracker]))
+        return self.report()
+
+    def test_a_set_with_no_slice_chosen_waits_for_the_users_choice(self):
+        out = self.planned(THREE)
+        self.assertIn("- found: problem (000_problem.md), scope map (001_scope-map.md), requirements "
+                      "(002_requirements.md), the set of slices (003_slices.md)\n", out)
+        self.assertIn("- next stage by the documents: slice (the user chooses where to start; the chosen slice's "
+                      "own document: planning/slice-NNN/004_slice.md, NNN its number in the set)", out)
+
+    def test_a_chosen_slice_with_no_document_gets_one_in_the_folder_of_its_number(self):
+        out = self.planned(the_set(row(1, "open", "record-a-loan"), row(2, "chosen", "record-a-return, see-who-has-it")))
+        self.assertIn("- next stage by the documents: slice (its document: planning/slice-002/004_slice.md, "
+                      "the criteria of slice 2)", out)
+
+    def test_the_approach_follows_the_slice_and_research_the_approach(self):
+        chosen = the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it"))
+        out = self.planned(chosen, slices={1: the_slice("record-a-loan / 1")})
+        self.assertIn("slice (slice-001/004_slice.md)", out)
+        self.assertIn("- next stage by the documents: approach (its document: planning/slice-001/005_approach.md)", out)
+        self.machine.document("slice-001/005_approach.md")
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/)",
+                      self.report())
+        self.machine.document("slice-001/006_research/a-dependency.md")
+        self.assertIn("- next stage by the documents: questions", self.report())
+
+    def test_an_empty_research_folder_is_not_research_done(self):
+        self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
+                     slices={1: the_slice("record-a-loan / 1")})
+        self.machine.document("slice-001/005_approach.md")
+        (self.machine.project / "planning" / "slice-001" / "006_research").mkdir()
+        self.assertIn("- next stage by the documents: research", self.report())
+
+    def test_the_chosen_slice_is_the_one_read_whatever_other_folders_exist(self):
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan"), row(2, "built", "record-a-return"),
+                                   row(3, "open", "see-who-has-it")),
+                           documents=[f"slice-002/{5 + place:03d}_{name}.md" for place, name in enumerate(THE_REST)],
+                           list_text=LIST.replace("- [ ] **record-a-return**", "- [x] **record-a-return**"),
+                           slices={1: the_slice("record-a-loan / 1"), 2: the_slice("record-a-return / 1", number=2)})
+        self.assertIn("slice (slice-001/004_slice.md)", out)
+        self.assertIn("- next stage by the documents: approach (its document: planning/slice-001/", out)
 
     def test_a_slice_fully_planned_is_ready_to_build(self):
-        self.chosen(*THROUGH_REQUIREMENTS, "003_research/a.md",
-                    *[f"slice-001/{name}.md" for name in
-                      ("004_slice", "005_questions", "006_answers", "007_open-facts", "008_design", "009_screens",
-                       "010_stack", "011_readiness", "012_owner-list")])
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
+                           documents=[f"slice-001/{5 + place:03d}_{name}.md" for place, name in enumerate(THE_REST)],
+                           slices={1: the_slice("record-a-loan / 1")})
+        self.assertIn("- every planning document of slice 1 exists", out)
+        self.assertIn("- next stage by the documents: none, slice 1 is planned and ready to build", out)
+
+    # The set of slices is counted (condition 22 of the slice stage).
+    def test_the_slices_are_counted_by_their_states(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan"), row(2, "**chosen**", "`record-a-return`"),
+                                   row(3, "Open", "see-who-has-it"), row(4, "open (waits for an answer)", "see-who-has-it")))
+        self.assertIn("- slices (003_slices.md): 4 slices, 1 built, 1 chosen, 2 open\n", out)
+        self.assertNotIn("no slice", out)
+        self.assertNotIn("does not hold", out)
+
+    def test_an_item_in_no_slice_is_said(self):
+        out = self.planned(the_set(row(1, "open", "record-a-loan")))
+        self.assertIn("- a requirement in no slice: record-a-return, see-who-has-it\n", out)
+
+    def test_an_item_the_requirements_do_not_hold_is_said_with_its_slice(self):
+        out = self.planned(the_set(row(1, "open", "record-a-loan, record-a-return, see-who-has-it, reserve-a-tool")))
+        self.assertIn("- a slice names an item the requirements do not hold: reserve-a-tool (slice 1)\n", out)
+
+    def test_a_state_it_does_not_know_is_said(self):
+        out = self.planned(the_set(row(1, "open", "record-a-loan, record-a-return"), row(2, "nearly", "see-who-has-it")))
+        self.assertIn("- a slice whose state is not built, chosen or open: slice 2\n", out)
+
+    def test_a_set_with_no_table_it_can_read_is_said(self):
+        out = self.planned("# Slices\n\n1. Record a loan (record-a-loan)\n")
+        self.assertIn("- the set of slices (003_slices.md) has no table this script can read: its columns are "
+                      "# | Slice | Items | Builds on | State", out)
+        self.assertIn("- next stage by the documents: slice (the set is to be written as that table", out)
+
+    def test_two_slices_chosen_at_once_is_said(self):
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return"), row(2, "chosen", "see-who-has-it")))
+        self.assertIn("- more than one slice is chosen: slice 1, slice 2 (the first is read)\n", out)
+
+    def test_the_latest_version_of_the_set_is_the_one_read(self):
+        self.planned(THREE)
+        (self.machine.project / "planning" / "005_slices-v002.md").write_text(
+            the_set(row(1, "built", "record-a-loan"), row(4, "open", "record-a-return, see-who-has-it")), encoding="utf-8")
         out = self.report()
-        self.assertIn("- every planning document of slice-001 exists", out)
-        self.assertIn("- next stage by the documents: none, slice-001 is planned and ready to build", out)
+        self.assertIn("- slices (005_slices-v002.md): 2 slices, 1 built, 0 chosen, 1 open\n", out)
+
+    def test_the_criteria_of_the_chosen_slice_are_counted(self):
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
+                           slices={1: the_slice("record-a-loan / 1", "record-a-loan/2", "see-who-has-it / 1")})
+        self.assertIn("- slice 1 (slice-001/004_slice.md): 3 criteria\n", out)
+        self.assertNotIn("names no item", out)
+
+    def test_documents_are_numbered_on_past_seven(self):
+        # 008 and 009 are no numbers to a shell that reads a leading zero as base eight.
+        self.chosen("000_problem.md", "001_scope-map.md", *[f"00{n}_scope-map-v00{n}.md" for n in range(2, 8)],
+                    "008_requirements.md")
+        self.assertIn("slice (its document: planning/009_slices.md, the set of slices; once the user has chosen "
+                      "one, its own document: planning/slice-NNN/010_slice.md", self.report())
+
+    def test_a_slice_marked_built_with_its_box_unchecked_has_the_box_due(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan"), row(2, "open", "record-a-return, see-who-has-it")),
+                           tracker=[])
+        self.assertIn("  - every slice of record-a-loan is built: check its box in planning/002_requirements.md", out)
+
+    def test_a_criterion_that_names_no_item_is_said_by_its_line(self):
+        out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
+                           slices={1: the_slice("record-a-loan / 1", "lend-a-tool / 1", "a refusal")})
+        self.assertIn("- slice 1 (slice-001/004_slice.md): 3 criteria\n", out)
+        self.assertIn("- a criterion that names no item of the requirements: line 8, line 9\n", out)
+
+    # A changed set (condition 20): corrected in place until a slice is built from it.
+    def test_a_changed_set_is_corrected_in_place_until_a_slice_is_built_from_it(self):
+        out = self.planned(THREE)
+        self.assertIn("- a changed set is corrected in place (planning/003_slices.md): no slice is built from it yet\n", out)
+
+    def test_a_changed_set_is_a_new_version_once_a_slice_is_built(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan"), row(2, "chosen", "record-a-return, see-who-has-it")),
+                           slices={1: the_slice("record-a-loan / 1"), 2: the_slice("record-a-return / 1", number=2)})
+        self.assertIn("- a changed set is a new document, the earlier one left as it is: planning/005_slices-v002.md\n", out)
+
+    # The coming-back (conditions 14 and 15): due by what merged work names and by issues not placed.
+    BUILDING = the_set(row(1, "chosen", "record-a-loan"), row(2, "open", "record-a-return, see-who-has-it", on="1"))
+
+    def test_with_nothing_merged_and_no_issue_no_coming_back_is_due(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")}, tracker=[])
+        self.assertNotIn("coming-back", out)
+        self.assertIn("- next stage by the documents: approach", out)
+
+    def test_merged_work_naming_every_criterion_of_a_slice_makes_a_coming_back_due(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1, record-a-loan/2\tRecord a loan"])
+        self.assertIn("- a coming-back to the slices is due:\n"
+                      "  - slice 1 is built by merged work (#12): mark it built in planning/003_slices.md\n"
+                      "  - every slice of record-a-loan is built: check its box in planning/002_requirements.md\n", out)
+        self.assertIn("- next stage by the documents: slice, the coming-back (before anything else is planned)", out)
+        self.assertNotIn("activity is done", out)
+        self.assertIn("a changed set is a new document", out)
+
+    def test_criteria_named_without_their_slice_are_those_of_the_chosen_one(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["merged\t12\trecord-a-loan / 1\tRecord a loan"])
+        self.assertIn("  - slice 1 is built by merged work (#12)", out)
+
+    def test_two_merges_that_together_name_every_criterion_build_the_slice(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")},
+                           tracker=["merged\t13\tslice 1: record-a-loan / 2\tThe refusal",
+                                    "merged\t12\tslice 1: record-a-loan / 1\tRecord a loan"])
+        self.assertIn("  - slice 1 is built by merged work (#12, #13)", out)
+
+    def test_merged_work_naming_part_of_a_slice_is_said_and_nothing_is_due(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1\tRecord a loan"])
+        self.assertIn("- merged work (#12) names 1 of the 2 criteria of slice 1: not built yet; still to come: "
+                      "record-a-loan / 2\n", out)
+        self.assertNotIn("coming-back", out)
+
+    def test_a_criterion_merged_work_names_that_the_slice_does_not_hold_is_said(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1, record-a-loan / 7\tRecord a loan"])
+        self.assertIn("- merged work names what no slice's document holds: record-a-loan / 7 of slice 1 (#12)\n", out)
+
+    def test_an_item_is_checked_only_when_every_slice_of_it_is_built(self):
+        both = the_set(row(1, "chosen", "record-a-loan"), row(2, "open", "record-a-loan, record-a-return, see-who-has-it"))
+        out = self.planned(both, slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1\tRecord a loan"])
+        self.assertIn("  - slice 1 is built by merged work (#12)", out)
+        self.assertNotIn("check its box", out)
+
+    def test_an_item_merged_work_names_outright_has_its_box_checked(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")},
+                           tracker=["merged\t12\tsee-who-has-it\tA list of loans"])
+        self.assertIn("  - merged work names see-who-has-it as complete (#12): check its box in "
+                      "planning/002_requirements.md\n", out)
+
+    def test_work_already_taken_in_makes_nothing_due(self):
+        taken = the_set(row(1, "built", "record-a-loan"), row(2, "open", "record-a-return, see-who-has-it"))
+        out = self.planned(taken, list_text=LIST.replace("- [ ] **record-a-loan**", "- [x] **record-a-loan**"),
+                           slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1\tRecord a loan"])
+        self.assertNotIn("coming-back", out)
+        self.assertNotIn("merged work", out)
+        self.assertIn("- next stage by the documents: slice (the user chooses where to start", out)
+
+    def test_an_open_issue_the_set_has_not_placed_makes_a_coming_back_due(self):
+        placed = the_set(row(1, "chosen", "record-a-loan"), row(2, "open", "record-a-return, see-who-has-it"),
+                         more="\n## Issues\n- #14: slice 2, it is about returns.\n")
+        out = self.planned(placed, slices={1: the_slice("record-a-loan / 1")},
+                           tracker=["issue\t14\tbug\tA return is lost", "issue\t15\t-\tLoans show twice",
+                                    "issue\t140\t-\tA typo"])
+        self.assertIn('- a coming-back to the slices is due:\n  - open issues not placed yet: #15 "Loans show twice", '
+                      '#140 "A typo"\n', out)
+        self.assertIn("- next stage by the documents: slice, the coming-back", out)
+
+    def test_an_issue_placed_in_an_earlier_version_of_the_set_stays_placed(self):
+        earlier = the_set(row(1, "built", "record-a-loan"), more="\n## Issues\n- #15: slice 1.\n")
+        self.planned(earlier, tracker=["issue\t15\t-\tLoans show twice"])
+        (self.machine.project / "planning" / "004_slices-v002.md").write_text(
+            the_set(row(1, "built", "record-a-loan"), row(2, "open", "record-a-return, see-who-has-it")), encoding="utf-8")
+        self.assertNotIn("not placed", self.report())
+
+    def test_issues_are_not_placed_before_there_is_a_set(self):
+        self.chosen(*THROUGH_REQUIREMENTS)
+        self.machine.repository(REMOTE)
+        self.machine.have("gh")
+        self.machine.set("gh/lines", "ok\t0\t1\nissue\t15\t-\tLoans show twice")
+        out = self.report()
+        self.assertNotIn("coming-back", out)
+        self.assertEqual([call for call in self.machine.calls() if call.startswith("gh")], [])
+
+    def test_the_last_slice_merged_is_said_to_finish_the_activity(self):
+        last = the_set(row(1, "built", "record-a-loan"), row(2, "chosen", "record-a-return, see-who-has-it"))
+        out = self.planned(last, list_text=LIST.replace("- [ ] **record-a-loan**", "- [x] **record-a-loan**"),
+                           slices={1: the_slice("record-a-loan / 1"),
+                                   2: the_slice("record-a-return / 1", "see-who-has-it / 1", number=2)},
+                           tracker=["merged\t12\tslice 1: record-a-loan / 1\tRecord a loan",
+                                    "merged\t16\tslice 2: record-a-return / 1, see-who-has-it / 1\tReturns"])
+        self.assertIn("  - slice 2 is built by merged work (#16): mark it built", out)
+        self.assertIn("  - every slice of record-a-return is built: check its box", out)
+        self.assertIn("  - every slice of see-who-has-it is built: check its box", out)
+        self.assertIn("  - with those, every slice is built and every requirement checked: the activity is done\n", out)
+
+    def test_an_activity_with_everything_built_and_checked_is_done(self):
+        out = self.planned(the_set(row(1, "built", "record-a-loan, record-a-return, see-who-has-it")),
+                           list_text=LIST.replace("- [ ]", "- [x]"), tracker=[])
+        self.assertIn("- next stage by the documents: none: every slice of this activity is built and every "
+                      "requirement checked; which row of the scope map is the next \"now\" is the user's to say", out)
+
+    def test_a_set_the_script_fails_on_is_refused_not_passed_over(self):
+        # Found while the script was written: a fault in reading the set left the report silent and wrong.
+        self.planned(THREE)
+        real = pathlib.Path(shutil.which("awk")).as_posix()
+        (self.machine.bin / "awk").write_text(
+            f'#!/bin/sh\ncase "$*" in *kind=work*) exit 2 ;; esac\nexec "{real}" "$@"\n', encoding="utf-8", newline="\n")
+        (self.machine.bin / "awk").chmod(0o755)
+        done = self.machine.run("stage.sh", "report")
+        self.assertEqual(done.returncode, 3, done.stdout)
+        self.assertIn("- REFUSED: the set of slices (planning/003_slices.md) could not be read", done.stdout)
+        self.assertNotIn("next stage", done.stdout)
+
+    def test_a_tracker_that_cannot_be_read_leaves_the_coming_back_unknown(self):
+        out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1")}, tracker=["what is this"])
+        self.assertIn("- whether a coming-back to the slices is due is not known: the tracker could not be read\n", out)
+        self.assertIn("- next stage by the documents: approach", out)
 
     def test_a_document_takes_the_next_number_in_the_folder_whatever_came_before(self):
         self.chosen("000_problem.md", "001_scope-map.md", "002_scope-map-v002.md")
@@ -114,10 +381,11 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: requirements (its document: planning/003_requirements.md)", out)
 
     def test_a_document_is_found_by_its_name_not_its_number(self):
-        self.chosen("000_problem.md", "001_scope-map.md", "005_requirements.md", "007_research/a.md")
+        self.chosen("000_problem.md", "001_scope-map.md", "005_requirements.md")
         out = self.report()
         self.assertIn("requirements (005_requirements.md)", out)
-        self.assertIn("- next stage by the documents: slice (its document: planning/slice-001/008_slice.md)", out)
+        self.assertIn("- next stage by the documents: slice (its document: planning/006_slices.md, the set of "
+                      "slices; once the user has chosen one, its own document: planning/slice-NNN/007_slice.md", out)
 
     def requirements(self, text):
         self.chosen("000_problem.md", "001_scope-map.md")

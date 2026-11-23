@@ -17,6 +17,10 @@ def issue(number, title="A fault", labels="-"):
     return "\t".join(["issue", str(number), labels, title])
 
 
+def merged(number, names, title="A slice built"):
+    return "\t".join(["merged", str(number), names, title])
+
+
 class Tracker(unittest.TestCase):
     def setUp(self):
         self.machine = Machine(self)
@@ -107,6 +111,37 @@ class Tracker(unittest.TestCase):
     def test_more_issues_than_were_fetched_is_said(self):
         self.assertIn("- open issues: 240 (the first 1 read)", self.read(issue(9), issues=240))
 
+    # The coming-back of the slice stage (decision 37): what merged work says it completes.
+    def test_merged_work_that_names_what_it_completes_is_shown(self):
+        out = self.read(merged(12, "slice 2: record-a-loan / 1, record-a-loan / 2", "Record a loan"))
+        self.assertIn("- merged pull requests that name what they complete: 1", out)
+        self.assertIn('  - #12 "Record a loan": slice 2: record-a-loan / 1, record-a-loan / 2', out)
+        self.assertIn("- open pull requests: 0", out)
+
+    def test_with_no_merged_work_nothing_is_said_of_it(self):
+        self.assertNotIn("merged", self.read(pull(4)))
+
+    def test_the_work_is_given_to_the_stage_script_a_line_each(self):
+        self.read(merged(12, "slice 2: record-a-loan / 1"), issue(14, "Loans show twice", "bug"), pull(4))
+        done = self.machine.run("tracker.sh", "work")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertEqual(done.stdout.splitlines(), ["merged\t12\tslice 2: record-a-loan / 1", "issue\t14\tLoans show twice"])
+
+    def test_where_no_tracker_is_read_the_work_is_nothing(self):
+        done = self.machine.run("tracker.sh", "work")
+        self.assertEqual((done.returncode, done.stdout), (0, ""))
+        self.machine.repository(REMOTE)
+        self.assertEqual(self.machine.run("tracker.sh", "work").stdout, "")
+
+    def test_work_that_cannot_be_read_is_refused(self):
+        self.machine.repository(REMOTE)
+        self.machine.have("gh")
+        self.machine.set("gh/lines", "ok\t0\t0\n" + "merged\ttwelve\tslice 2: a / 1\tA title")
+        for mode in ((), ("work",)):
+            done = self.machine.run("tracker.sh", *mode)
+            self.assertEqual(done.returncode, 3, done.stdout)
+            self.assertIn("REFUSED", done.stdout)
+
     def test_a_word_it_does_not_know_is_refused(self):
         self.machine.repository(REMOTE)
         self.machine.have("gh")
@@ -142,6 +177,10 @@ ANSWER = {"data": {"repository": {
             {"createdAt": "2026-01-03T00:00:00Z", "author": {"login": "reviewer"}},
             {"createdAt": "2026-01-03T00:00:00Z", "author": None},
             {"createdAt": "2026-01-03T00:00:00Z", "author": {"login": "writer"}}]}}]},
+    "merged": {"nodes": [
+        {"number": 3, "title": "Record a loan", "body": "What it does.\r\n\r\ncompletes:  slice 2: record-a-loan / 1,\trecord-a-loan / 2 \r\nMore."},
+        {"number": 2, "title": "A tidy-up", "body": "Nothing named."},
+        {"number": 1, "title": "No body", "body": None}]},
     "issues": {"totalCount": 2, "nodes": [
         {"number": 7, "title": "Data lost", "labels": {"nodes": [{"name": "bug"}, {"name": "critical"}]}},
         {"number": 9, "title": "A typo", "labels": {"nodes": []}}]}}}}
@@ -156,6 +195,7 @@ class Filter(unittest.TestCase):
         self.assertEqual(done.stdout.splitlines(), [
             "ok\t1\t2",
             "pr\t4\ta-branch\tfalse\tMERGEABLE\t-\t-\t2\t2\tA change",
+            "merged\t3\tslice 2: record-a-loan / 1, record-a-loan / 2\tRecord a loan",
             "issue\t7\tbug,critical\tData lost",
             "issue\t9\t-\tA typo"])
 
