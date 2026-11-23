@@ -263,7 +263,9 @@ def main(arm):
         write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used, earlier)
               .replace("name: problem-", "name: research-").replace("tags: [problem]", "tags: [research]")
               .replace("max_turns: 20", "max_turns: 40").replace("timeout_seconds: 400", "timeout_seconds: 900"))
-        write(case / "scaffold.sh", startup.scaffold(machine), executable=True)
+        # The folder is there when the run starts: a run's shell cannot make one (the evaluation's
+        # standing fault), and a session that finds it cannot takes the whole project for read-only.
+        write(case / "scaffold.sh", startup.scaffold(machine) + f"mkdir -p {FOLDER}\n", executable=True)
         for path in sorted(machine.state.rglob("*")):
             if path.is_file() and path.name != "calls.log":
                 write(case / "state" / path.relative_to(machine.state), path.read_text(encoding="utf-8"))

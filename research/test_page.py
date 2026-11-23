@@ -61,13 +61,20 @@ class Fetch(unittest.TestCase):
         self.assertIn("answered 503", said)
         self.assertNotIn("Payments", said)
 
-    def test_a_page_that_cannot_be_saved_is_still_printed_and_said_not_to_be_saved(self):
+    def test_a_page_that_cannot_be_saved_where_asked_is_kept_elsewhere_and_printed(self):
         blocked = self.folder / "a-file"
         blocked.write_text("")
         code, said = self.fetch("200", to=blocked / "pages")
         self.assertEqual(code, 0)
-        self.assertTrue(said.startswith("- not saved"))
+        self.assertIn("could not be written", said.splitlines()[0])
+        self.assertRegex(said.splitlines()[1], r"^- saved: .*research-pages")
         self.assertIn("status pending", said)
+
+    def test_a_link_is_followed_by_where_it_leads_so_the_next_page_can_be_found(self):
+        (self.folder / "body").write_text('<p>See <a href="/refunds">Refunds</a>, <a href="https://other.example/x">this</a> '
+                                          'and <a href="#top">the top</a>.</p>')
+        said = self.fetch("200")[1]
+        self.assertIn("Refunds <https://docs.example/refunds>, this <https://other.example/x> and the top.", said)
 
     def test_something_that_is_not_an_address_is_refused(self):
         self.assertEqual(self.fetch("200", url="payments")[0], 3)
