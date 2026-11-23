@@ -282,6 +282,75 @@ class Run(unittest.TestCase):
                           command=(sys.executable, str(fake)))
         self.assertTrue(summary["numbered_in_order"])
 
+    # Carried on through the slice stage: a set, a chosen slice, one merge and the coming-back.
+    THROUGH = FAKE.replace(
+        'if n == 3: pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")',
+        'if n == 3: pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")\n'
+        '    if n == 4: pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | open |\\n")\n'
+        '    if n == 5:\n'
+        '        pathlib.Path("plans/slice-002").mkdir(exist_ok=True)\n'
+        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
+        '    if n == 6:\n'
+        '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
+        '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
+
+    def through(self, fake=None, brief=BRIEF, turns=20):
+        (self.example / "brief.md").write_text(brief)
+        script = self.folder / "fake.py"
+        script.write_text(fake or self.THROUGH)
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", turns,
+                          command=(sys.executable, str(script)), through="merge")
+        calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
+        return summary, [call for call in calls if "--system-prompt" not in call]
+
+    def test_carried_through_a_merge_it_ends_after_the_session_has_come_back_to_the_set(self):
+        summary, sessions = self.through()
+        self.assertEqual(summary["ended"], "the slice was merged and the session came back to the set")
+        self.assertEqual(summary["session_turns"], 6)
+        self.assertEqual(summary["documents"], ["plans/001_scope-map.md", "plans/002_requirements.md", "plans/003_slices.md",
+                                                "plans/slice-002/004_slice.md"])
+
+    def test_once_a_slice_is_written_its_merge_is_made_up_from_its_own_criteria(self):
+        summary, _ = self.through()
+        lines = (self.folder / "out" / "project" / ".cache" / "machine" / "gh" / "lines").read_text().splitlines()
+        self.assertEqual(lines, ["ok\t0\t0", "merged\t7\tslice 2: a / 1, a / 2\tSlice 2: Do b"])
+        self.assertEqual(summary["merged"], "slice 2: a / 1, a / 2")
+
+    def test_after_the_merge_the_user_comes_back_in_a_new_session_and_says_so(self):
+        _, sessions = self.through()
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[5], "That slice is built and merged. What's next?")
+        self.assertNotIn("--resume", sessions[5])
+        self.assertIn("--resume", sessions[4])
+        _, sessions = self.through(brief=BRIEF + "\n## After the merge\nIt's in. Now what?\n")
+        self.assertEqual(sessions[-1][sessions[-1].index("-p") + 1], "It's in. Now what?")
+
+    def test_what_the_set_and_the_list_say_at_the_end_is_kept(self):
+        summary, _ = self.through()
+        self.assertEqual(summary["slices"], {"2": "built"})
+        self.assertEqual(summary["boxes"], {"a": True})
+        early, _ = self.through(turns=5)
+        self.assertEqual((early["ended"], early["slices"], early["boxes"]), ("the turns ran out", {"2": "open"}, {"a": False}))
+
+    def test_asked_where_to_start_the_user_takes_the_recommended_slice_unless_the_brief_says_otherwise(self):
+        self.assertEqual(run.Brief(BRIEF).reply({"asked": ["start"], "uncovered": 0}, set(), False),
+                         "Start with the one you recommend.")
+        other = run.Brief(BRIEF.replace("| who | who it is for | The club. |", "| start | where to start | The last one. |"))
+        self.assertEqual(other.reply({"asked": ["start"], "uncovered": 0}, set(), False), "The last one.")
+
+    def test_documents_numbered_on_through_the_slice_are_in_order(self):
+        self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_slice.md"]))
+        self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md"]))
+        self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "004_slices.md"]))
+        self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "slices.md"]))
+        self.assertFalse(run.in_order(["001_scope-map.md", "002_requirements.md"]))
+
+    def test_a_slice_with_no_criterion_it_can_read_is_merged_as_naming_nothing(self):
+        fake = self.THROUGH.replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
+        summary, _ = self.through(fake=fake)
+        self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")

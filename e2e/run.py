@@ -16,9 +16,13 @@ What the user says, in this order:
 Where the brief says so, the user closes the session once a document has been written and comes
 back in a new one, which is given a fresh startup report and none of the conversation.
 
-A run ends after the session's first turn that began with a requirements document in the planning
-folder (so the user's answers to its questions have been taken once), when the user would say the
-same thing a third time running, or at --max-turns.
+A run goes on through the slice stage: once a slice's own document has been written, its merge is
+made up (the tracker's stand-in is given a merged pull request that names that document's
+criteria), the user comes back in a new session and says the slice is built and merged, and the
+run ends after that session's first turn: the coming-back to the set. With `--through
+requirements` it ends as it did before the slice stage existed, after the session's first turn
+that began with a requirements document in the planning folder. It also ends when the user would
+say the same thing a third time running, or at --max-turns.
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
@@ -49,7 +53,8 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice")
+MERGED = 7   # the number of the made-up pull request
 
 
 def section(brief, heading):
@@ -79,6 +84,9 @@ class Brief:
         self.topics = {key: (covers, says) for key, covers, says in rows(section(text, "Answers"))}
         # Asked whether to begin or go on, any user says yes unless their brief says otherwise.
         self.topics.setdefault("proceed", ("whether to go on, begin or continue with the next stage or step", "Yes, go on."))
+        # Asked where to start, any user takes the slice recommended unless their brief says otherwise.
+        self.topics.setdefault("start", ("where to start, which slice to begin with or build first", "Start with the one you recommend."))
+        self.merged = section(text, "After the merge") or "That slice is built and merged. What's next?"
         self.not_known = section(text, "Not known") or "I don't know yet."
         self.go_on = section(text, "Nothing asked") or "Go on."
         self.shown = {name: says for name, says in rows(section(text, "When a document is first shown"))}
@@ -190,12 +198,70 @@ def written_down(files, project, script):
 
 
 def present(planning):
-    """Which of the three documents exist in the planning folder, by name."""
+    """Which of the documents exist in the planning folder, by name: the first three, the set of
+    slices, and a slice's own document in its folder."""
     names = [path.name for path in planning.glob("*.md")] if planning.is_dir() else []
-    return {name for name in DOCUMENTS if any(name in file for file in names)}
+    found = {name for name in DOCUMENTS[:3] if any(name in file for file in names)}
+    if any(re.match(r"\d+_slices", file) for file in names):
+        found.add("slices")
+    if planning.is_dir() and any(planning.glob("slice-*/*_slice.md")):
+        found.add("slice")
+    return found
 
 
-def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",)):
+def in_order(names):
+    """Whether documents, by their file names, are numbered from 000 with no gap, in the order the
+    stages write them."""
+    stages = ["problem", "scope-map", "requirements", "slices", "slice"]
+    numbered = sorted(name for name in names if re.match(r"\d{3}_", name))
+    return (len(numbered) == len(names) and len(names) >= 3 and [int(name[:3]) for name in numbered] == list(range(len(names)))
+            and all(re.match(rf"\d{{3}}_{stage}(?:-v\d+)?\.md$", name) for name, stage in zip(numbered, stages)))
+
+
+def criteria(text):
+    """The names of a slice's criteria, as its document writes them under "Criteria"."""
+    names, inside = [], False
+    for line in text.splitlines():
+        if line.startswith("#"):
+            inside = "criteri" in line.lower()
+        elif inside:
+            found = re.match(r"\s*[-*] (?:\[[ xX]\] )?\*\*([^*]+)\*\*", line)
+            if found:
+                names.append(re.sub(r"\s*/\s*", " / ", found.group(1).strip().rstrip(":")))
+    return names
+
+
+def merge(project, planning):
+    """Make up the merge of the slice whose document was written last: the tracker's stand-in is
+    given one merged pull request that names every criterion of that document. Returns what it names."""
+    written = sorted(planning.glob("slice-*/*_slice.md"), key=lambda path: path.name)[-1]
+    text = written.read_text(encoding="utf-8", errors="replace")
+    number = int(re.sub(r"\D", "", written.parent.name) or 0)
+    names = criteria(text)
+    title = (text.splitlines() or ["A slice"])[0].lstrip("# ").strip() or "A slice"
+    named = f"slice {number}: " + ", ".join(names) if names else "nothing: no criterion was found in the slice's document"
+    lines = ["ok\t0\t0"] + ([f"merged\t{MERGED}\t{named}\t{title}"] if names else [])
+    (project / ".cache" / "machine" / "gh" / "lines").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return named
+
+
+def marks(planning):
+    """What the latest set of slices says of each slice, and whether each box of the list is checked."""
+    slices, boxes = {}, {}
+    sets = sorted(planning.glob("[0-9][0-9][0-9]_slices*.md")) if planning.is_dir() else []
+    for line in (sets[-1].read_text(encoding="utf-8", errors="replace").splitlines() if sets else []):
+        cells = [cell.strip().strip("*`").strip() for cell in line.strip().strip("|").split("|")]
+        if line.strip().startswith("|") and cells and cells[0].isdigit():
+            slices[cells[0]] = cells[-1].lower()
+    lists = sorted(planning.glob("[0-9][0-9][0-9]_requirements*.md")) if planning.is_dir() else []
+    for line in (lists[-1].read_text(encoding="utf-8", errors="replace").splitlines() if lists else []):
+        found = re.match(r"\s*[-*] \[([ xX])\] \*\*([^*]+)\*\*", line)
+        if found:
+            boxes[found.group(2)] = found.group(1) != " "
+    return slices, boxes
+
+
+def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",), through="requirements"):
     brief = Brief((example / "brief.md").read_text(encoding="utf-8"))
     project, nowhere = out / "project", out / "nowhere"
     shutil.rmtree(out, ignore_errors=True)
@@ -221,9 +287,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                     "--no-session-persistence"]
     planning = project / brief.folder
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
-    sessions = []
+    sessions, merged, back = [], "", False
     for _ in range(max_turns):
-        had_list = "requirements" in present(planning)
+        had_list = through == "requirements" and "requirements" in present(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
         cost += spent
         if session not in sessions:
@@ -232,6 +298,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         turns.append(turn)
         if had_list:
             ended = "the list was shown and the user's answers taken"
+            break
+        if back:
+            ended = "the slice was merged and the session came back to the set"
             break
         appeared = present(planning) - seen
         seen |= appeared
@@ -242,6 +311,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
         if appeared & brief.away_after:   # the user comes back another day: nothing carries over but the files
             session, said, turn["new_session_next"] = None, brief.back, True
+        if through == "merge" and "slice" in appeared:   # the slice is built and merged while the user is away
+            merged, back = merge(project, planning), True
+            session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged
         same = same + 1 if said == turn["user"] else 0
         if same == 2:   # said twice running, and this would be the third time
             ended = "stuck: the user had only the same thing to say"
@@ -266,8 +338,8 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                                           if any(path.name in call for path in (example / "files").glob("*"))]
                if (example / "files").is_dir() else [],
                # Each document under the number and name the stage script gives it, so the next session finds it.
-               "numbered_in_order": [path.name for path in documents if path.name != "sources.md"]
-               == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],
+               "numbered_in_order": in_order([path.name for path in documents if path.name != "sources.md"]),
+               "merged": merged, "slices": marks(planning)[0], "boxes": marks(planning)[1],
                "documents": [path.relative_to(project).as_posix() for path in documents]}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary
@@ -281,6 +353,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
+    parser.add_argument("--through", choices=("merge", "requirements"), default="merge")
     given = parser.parse_args()
     print(json.dumps(run(given.example.resolve(), given.out.resolve(), given.plugin.resolve(), given.model,
-                         given.sorter_model, given.max_turns), indent=2))
+                         given.sorter_model, given.max_turns, through=given.through), indent=2))

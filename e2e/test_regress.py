@@ -22,5 +22,12 @@ class Regress(unittest.TestCase):
                          ["00-startup", "01-problem", "02-scope-map", "03-requirements"])
 
 
+class Plugin(unittest.TestCase):
+    def test_a_text_not_yet_adopted_is_loaded_beside_the_adopted_ones_for_a_trial(self):
+        plugin = make_plugin.main(pathlib.Path(tempfile.mkdtemp()) / "plugin", {"trial-stage": "steps/01-problem/eval/problem-skill.md"})
+        self.assertEqual(sorted(path.name for path in (plugin / "skills").iterdir()), sorted([*make_plugin.SKILLS, "trial-stage"]))
+        self.assertTrue((plugin / "hooks" / "routing-table.md").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

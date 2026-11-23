@@ -482,5 +482,61 @@ asking is listed apart, so it can be overturned.
     for every slice.
   - kad's arm is run on the cutting scenarios only; it had nothing
     for the coming-back.
+- The slice stage as built (`startup/`, `steps/04-slice/`),
+  2026-11-23:
+  - A slice's number in the set is its name: never changed or
+    reused, and its own document is in the folder of that number
+    (`slice-002/`). The chosen slice is the row whose state is
+    `chosen`; every stage after the slice is read in its folder.
+  - The stage script names both documents of the stage at once (the
+    set, and where the chosen slice's own will go), so a session
+    that has just been given the user's choice need not read the
+    documents again.
+  - A merged pull request says what it completes on one line of its
+    description, `Completes: slice 2: item / 1, item / 2` (criteria
+    of a slice) or `Completes: item` (an item outright). The
+    delivery stage will write it; until then it is made up. The
+    latest fifty merged pull requests are read.
+  - A slice is built when merged work names every criterion of its
+    document; a box is checked when every slice that holds its item
+    is built. The script works that out and says exactly what to
+    mark and check; the session makes the marks. A command that
+    makes them itself is the next step if a session is seen to mark
+    on say-so.
+  - An issue is placed once any version of the set names it by its
+    number. Issues are placed only once a set exists. The session
+    may read one issue (`gh issue view`) and changes nothing on the
+    tracker.
+  - A coming-back that is due is named as the next stage, ahead of
+    whatever the documents would name; the routing table is not
+    changed for it.
+  - Marking a slice, checking a box and recording an issue are made
+    in the documents as they stand: only a change to the rows of the
+    set is "a changed set" (corrected in place before any slice is
+    built from it, a new numbered version after).
+  - When every slice is built and every box checked the script says
+    the activity is done and that the next "now" is the user's to
+    name; redrawing the map and a list for the new "now" wait for
+    the stages that own them.
+  - The approach's and research's documents are named in the slice's
+    folder (`slice-NNN/NNN_approach.md`, `slice-NNN/NNN_research/`)
+    until those stages are built. The paused research stage's
+    scenarios were moved there so that they still build; none was
+    run.
+  - Fourteen cases for the ten rows: rows 4, 6, 9 and 10 hold two
+    situations each, and a proposal and the yes to it are two
+    turns. The bar is every case in every run.
+  - The bare arm's routing table says this one stage is done from
+    the report alone (the table's last line would rightly stop it).
+  - On the owner's real requirements: three of kad's requirements
+    documents, each "confirmed in scope" bullet rewritten by hand as
+    one named box, nothing added (private, in the audit repository
+    under `04-slice/inputs`). The slice known to have been cut too
+    wide came from a scope change mid-build, not from a list, so it
+    cannot be given to this stage as an input.
+  - `e2e/tally.py` counts a pass with and without the checks of
+    form; `e2e/run.py` carries an example on through a set, a chosen
+    slice and one made-up merge (`--through requirements` for the
+    earlier ending).
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
