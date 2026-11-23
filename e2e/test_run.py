@@ -298,12 +298,13 @@ class Run(unittest.TestCase):
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
 
-    def through(self, fake=None, brief=BRIEF, turns=20, through="merge"):
+    def through(self, fake=None, brief=BRIEF, turns=20, through="merge", out="out"):
+        # A second run in one test takes a folder of its own: on Windows a run's repository cannot be swept away.
         (self.example / "brief.md").write_text(brief)
         script = self.folder / "fake.py"
         script.write_text(fake or self.THROUGH)
         (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
-        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", turns,
+        summary = run.run(self.example, self.folder / out, self.folder / "plugin", "m", "s", turns,
                           command=(sys.executable, str(script)), through=through)
         calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
         return summary, [call for call in calls if "--system-prompt" not in call]
@@ -331,14 +332,14 @@ class Run(unittest.TestCase):
         self.assertEqual(said[5], "That slice is built and merged. What's next?")
         self.assertNotIn("--resume", sessions[5])
         self.assertIn("--resume", sessions[4])
-        _, sessions = self.through(brief=BRIEF + "\n## After the merge\nIt's in. Now what?\n")
+        _, sessions = self.through(brief=BRIEF + "\n## After the merge\nIt's in. Now what?\n", out="again")
         self.assertEqual(sessions[-1][sessions[-1].index("-p") + 1], "It's in. Now what?")
 
     def test_what_the_set_and_the_list_say_at_the_end_is_kept(self):
         summary, _ = self.through()
         self.assertEqual(summary["slices"], {"2": "built"})
         self.assertEqual(summary["boxes"], {"a": True})
-        early, _ = self.through(turns=5)
+        early, _ = self.through(turns=5, out="early")
         self.assertEqual((early["ended"], early["slices"], early["boxes"]), ("the turns ran out", {"2": "open"}, {"a": False}))
 
     def test_a_session_that_never_marks_the_merged_slice_is_given_four_turns(self):
