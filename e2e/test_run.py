@@ -298,13 +298,13 @@ class Run(unittest.TestCase):
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
 
-    def through(self, fake=None, brief=BRIEF, turns=20):
+    def through(self, fake=None, brief=BRIEF, turns=20, through="merge"):
         (self.example / "brief.md").write_text(brief)
         script = self.folder / "fake.py"
         script.write_text(fake or self.THROUGH)
         (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
         summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", turns,
-                          command=(sys.executable, str(script)), through="merge")
+                          command=(sys.executable, str(script)), through=through)
         calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
         return summary, [call for call in calls if "--system-prompt" not in call]
 
@@ -314,6 +314,10 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["session_turns"], 6)
         self.assertEqual(summary["documents"], ["plans/001_scope-map.md", "plans/002_requirements.md", "plans/003_slices.md",
                                                 "plans/slice-002/004_slice.md"])
+
+    def test_it_can_end_once_the_chosen_slice_is_written(self):
+        summary, _ = self.through(through="slice")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["merged"]), ("the chosen slice was written", 5, ""))
 
     def test_once_a_slice_is_written_its_merge_is_made_up_from_its_own_criteria(self):
         summary, _ = self.through()

@@ -20,7 +20,7 @@ A run goes on through the slice stage: once a slice's own document has been writ
 made up (the tracker's stand-in is given a merged pull request that names that document's
 criteria), the user comes back in a new session and says the slice is built and merged, and the
 run ends once the set says that slice is built (the coming-back), or four turns after the merge
-if it never does. With `--through
+if it never does. With `--through slice` it ends once a slice's own document is written. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -317,6 +317,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
         if appeared & brief.away_after:   # the user comes back another day: nothing carries over but the files
             session, said, turn["new_session_next"] = None, brief.back, True
+        if through == "slice" and "slice" in appeared:
+            ended = "the chosen slice was written"
+            break
         if through == "merge" and "slice" in appeared:   # the slice is built and merged while the user is away
             merged, back = merge(project, planning), 0
             number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
@@ -360,7 +363,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "slice", "requirements"), default="merge")
     given = parser.parse_args()
     print(json.dumps(run(given.example.resolve(), given.out.resolve(), given.plugin.resolve(), given.model,
                          given.sorter_model, given.max_turns, through=given.through), indent=2))

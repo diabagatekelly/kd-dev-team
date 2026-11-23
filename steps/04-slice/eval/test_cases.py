@@ -1,6 +1,8 @@
 """The slice stage's checks, graded for nothing on documents written by hand: a check must pass
 the document this stage's text describes and fail the fault it is there for, before any run."""
+import contextlib
 import importlib.util
+import io
 import pathlib
 import sys
 import unittest
@@ -202,8 +204,9 @@ class Checks(unittest.TestCase):
 class Fixtures(unittest.TestCase):
     def test_every_arm_builds_and_the_report_of_each_case_names_what_the_case_expects(self):
         # main() asserts each report as it builds; kad's arm needs kad's two skills beside this repository.
-        for arm in ("bare", "text"):
-            cases.main(arm)
+        with contextlib.redirect_stdout(io.StringIO()):
+            for arm in ("bare", "text"):
+                cases.main(arm)
         self.assertEqual(len(list((HERE / "plugin-text" / "evals").iterdir())), 14)
 
 
