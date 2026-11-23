@@ -399,3 +399,144 @@ on the wider cut change the set without saying what it costs.
 | **In all** | **about $70** | **about $53** |
 
 No one pass is over $15.
+
+## The first full pass (2026-11-23): $18.73
+
+Three runs a case, 42 runs a cell (kad's on the eight cutting
+cases, 24); runs that pass every check, and in brackets with the
+checks of form set aside:
+
+| Arm | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| Bare | 6 (11) | 9 (18) | 8 (18) |
+| kad's two skills (596 lines) | 0 (3) of 24 | 3 (9) of 24 | not run |
+| Our text, first form (141 lines) | 34 (34) | 39 (39), 42 as read | not run |
+
+**No model holds bare**, form aside. On Sonnet and on Opus, in
+every run of three: asked for everything in one slice, the set is
+rewritten at once and the floated tool written into it, with no
+word of what that costs; a rule that compares records is asserted
+with no word of what makes two the same; criteria are prose with no
+starting state; told that two slices are one, a new set is written
+before the user has agreed, and the item changed in the list. Opus
+wrote the set again as a new document after a merge in 7 runs of
+9.
+
+**kad's skills fail the gate by what they were built to do:** the
+first slice is written with the set, before any choice (their own
+rule), and what a slice needs from outside is not listed. Asked
+for a wider cut, they do push back.
+
+**Our text's three failures on Sonnet were one check:** the issue no
+row covers was left out of the set until the user answered in or
+out, which is right, and the check wanted it recorded. Corrected,
+with a unit test, and graded again for nothing: 42 of 42.
+
+## Read against kad's on Sonnet, on the fixed points
+
+Our 42 documents and kad's 24, counted by script and a third of
+each read in full.
+
+- **One behaviour, whole, that a person could be shown.** Both.
+  For the rota, kad's first slice and ours are the same cut (one
+  person's shifts entered and emailed to them).
+- **Each criterion checkable by looking.** Both write a state, an
+  action and an outcome with invented values. Ours name the item
+  each belongs to, which kad's do not.
+- **Nothing of how; nothing of a later stage.** Both leave out who
+  may do it, a doubled action and a failed delivery, and say so
+  under what is left for later. kad's holds three placeholder
+  lines; ours does not need them (decision 37).
+- **The set covers the list and no more.** Ours: every item in a
+  row in every run, by script. kad's set is a numbered list inside
+  the slice with no items against it, so whether it covers the
+  list cannot be checked by script.
+- **What is left out says what the person can do meanwhile.** Both,
+  in the same two sentences. kad's are longer and sometimes find a
+  real gap (a shift that runs past midnight).
+- **At a glance.** Ours: a set of 140 to 200 words and a slice of
+  250 to 420. kad's: one document of 400 to 720.
+- **Width.** In the first pass ours was wider than kad's: 6 to 7
+  criteria for the rota's first slice against 4 to 5, with a
+  refusal for every field left empty. Tuned (below), ours is 5.
+- **Where kad's was better, and what was taken from it:** asked for
+  a wider cut it puts the two cuts side by side with their sizes.
+  Ours said the cost in words. The text now gives the size of each
+  cut, with a check. kad's also flags a decision it made for the
+  user to look at ("the full name is the key"); ours leaves such a
+  rule for later as a blocker, which is condition 6 as agreed.
+
+## Tuning, and five runs (2026-11-23)
+
+| Text | What changed | Run | Result | Cost |
+|---|---|---|---|---|
+| 145 lines | no section left empty; no criterion to look thorough; an issue no row covers placed once answered | every case five times | 69 of 70 | $6.11 |
+| 147 lines | the essential refusals stay, one for a rule; a chosen slice is marked by its whole row | the four cases with criteria five times, every case once | 34 of 34 | $3.35 |
+| 149 lines | the size of each cut when a wider one is asked for; the part of an item that waits for an answer is a row of its own | the four cases those touch five times, every case once | 34 of 34 | $3.16 |
+
+- **The one failure of 70 was real:** a session marked the row
+  below the chosen one, because the end of one row of the set was
+  the end of another. The text now says to replace the whole row.
+- **The first tuning cut too far:** told not to write a criterion to
+  look thorough, sessions wrote slices with no refusal at all ("the
+  list gives no rule that would refuse anything"). The gate passed
+  them; the reading did not. The second form keeps the essential
+  refusals.
+- **Where it stands, on Sonnet:** each of the fourteen cases has
+  passed its last five runs with the text as it was for that case,
+  and all fourteen passed once with the final text: 70 of 70 in
+  that sense. The text is 149 lines, a third of them the two
+  templates. Haiku was run on the first form only (34 of 42): it
+  gives way on the wider cut in every run.
+
+## The owner's real requirements (private): $6.02
+
+Three real lists (7, 18 and 3 items), three runs each of our text
+and of kad's skills, on Sonnet, from the slice stage on with a
+scripted user who takes the recommended start. The documents are in
+the audit repository (`04-slice/`); here, counts.
+
+| List | kad's first slice when the project was planned | kad's skills now | Our text |
+|---|---|---|---|
+| 7 items | 8 criteria | 5 to 6 | 4 to 5 criteria; a set of 5 or 6 slices |
+| 18 items | 21 criteria | 6 to 7 | 6 to 7 criteria; a set of 9 slices |
+| 3 items | 5 criteria | 3 to 5 | 3 to 4 criteria; a set of 3 or 4 slices |
+
+Every item has a home in the set in 9 runs of 9, by script. No
+first slice is wider than kad's. For the list whose slice kad cut
+at 21 criteria, ours is 7, for one behaviour (pick a category for a
+transaction and see where it rolls up), and the other seventeen
+items are in eight named rows that say what each waits for. The
+slice known as "35 criteria for one button" came from a change of
+scope during a build and has no list to give this stage.
+
+## With everything loaded, and the examples
+
+**Every earlier stage once with the slice text loaded** (Sonnet):
+startup 21 of 21, the problem 8 of 8, the scope map 6 of 6, the
+requirements 12 of 12; $3.13. Startup's scenario of a stage that is
+not built now stops at the approach.
+
+**The four examples, carried through a set, a chosen slice, a
+made-up merge and the coming-back** (`e2e/run.py`): all four got
+there; $17.37. In each the documents are numbered in order, the
+merged slice is marked built, only the box whose slices are all
+built is checked, no file of the user's was opened and no value of
+one written down.
+
+What they found (`../../e2e/README.md`):
+
+- **An activity called done with questions open.** Example 2's list
+  was one item with eight questions under it. The slice was cut so
+  as not to wait for them, merged, its box checked, and the session
+  said the activity was done. The stage script now does not call an
+  activity done while a question of the list is open, and names
+  the requirements as next (three unit tests); the text says the
+  part of an item that waits for an answer is a row of its own.
+- **A folder that is gone.** Run a second time in the same place,
+  two examples were told their planning folder no longer exists,
+  with no command to record one, and wrote every document without
+  its number. The script now gives the command (a unit test).
+- **A scripted user that loops.** Example 3 cost $7.99 the first
+  time: asked one thing its brief had no topic for, the user gave
+  its limits four times. The brief has the topic now.
