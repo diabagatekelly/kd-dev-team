@@ -347,7 +347,8 @@ not built is the slice (21) until this text is adopted. The
 requirements text says the slice and the approach start from its
 inventory, not research.
 
-**The cases.** The ten rows are fourteen cases
+**The cases.** The ten rows are fourteen cases (seventeen since the
+closing pass, at the end)
 (`eval/make_cases.py`): rows 4, 6, 9 and 10 hold two situations
 each, and a proposal and the yes to it are two turns. The bar is
 every case in every run (70 of 70 at five runs). Each check was

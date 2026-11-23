@@ -1,5 +1,11 @@
 # Stage 0, startup: the test, set before anything is built or run
 
+**Since 2026-11-23** the stage after the requirements is the slice,
+not research (decision 36): scenarios 09, 14 and 21 expect that, and
+what is written below of "research as next" is the record of the
+runs as they were made. The scenarios last ran with every text and
+script as they now stand on 2026-11-23: 21 of 21.
+
 **State, 2026-11-21:** the scripts are built (`../../startup/`, unit
 tests on three systems) and both arms have run (the result is at the
 end). No model holds on the report alone; with the routing table

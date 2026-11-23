@@ -31,6 +31,15 @@ as long as it takes (decision 28).
 - `machine/`: the made-up machine the stand-in tools answer as:
   inside the project's VM, a tracker with nothing open.
 
+A run goes through every adopted stage: the documents, a set of
+slices, the chosen slice, a made-up merge of it (the tracker's
+stand-in is given a merged pull request that names the slice's
+criteria) and the coming-back. `--from requirements` starts from the
+documents the example's last good run left
+(`examples/NAME/after/requirements/`, kept with `--keep
+requirements`), and is refused once an earlier stage's text has
+changed; each run takes a fresh `--out` place.
+
 To add an example, add a folder with a brief. To run one, inside the
 evaluation VM, after `steps/00-startup/eval/setup-vm.sh`:
 

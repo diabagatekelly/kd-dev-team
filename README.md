@@ -37,16 +37,22 @@ design are recorded under `next-plugin/validation/`.
 ## Where the work stands (2026-11-23)
 
 Stages 0 to 4 hold (startup, the problem, the scope map, the
-requirements, the slice), all on Sonnet 5.5. For stages 0 to 3: After the owner said each holds,
-all four were run together, end to end, and their texts changed from
-what those runs found (decisions 28 to 32). Where each stands:
+requirements, the slice), all on Sonnet 5.5. After the owner said
+each of the first four holds, they were run together, end to end,
+and their texts changed from what those runs found (decisions 28 to
+32). Where each stands:
 
 | Stage | Its text | Scenarios | The pass of 2026-11-23, every adopted text loaded (Sonnet) |
 |---|---|---|---|
-| 0 Startup | routing table, 52 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 19 of 20 by the checks and 20 of 20 as read |
+| 0 Startup | routing table, 53 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 19 of 20 by the checks and 20 of 20 as read |
 | 1 Problem | 51 lines | 8 | 8 of 8 once; scenarios 05, 07 and 08 five times, 15 of 15 |
 | 2 Scope map | 56 lines | 6 | 6 of 6 once; scenarios 05 and 06 five times, 10 of 10 |
 | 3 Requirements | 93 lines | 12 | 12 of 12 once; scenarios 05 and 08 to 12 five times, 29 of 30 |
+| 4 Slice | 152 lines | 17 | not in that pass: adopted later the same day (below) |
+
+With the slice adopted, every stage's scenarios ran once with every
+text and script as they now stand: 64 of 64 (startup 21, the
+problem 8, the scope map 6, the requirements 12, the slice 17).
 
 That pass is the one the texts were owed after the end-to-end runs
 changed them: 107 runs and the four examples, side by side, 18
@@ -108,7 +114,8 @@ stage's coming-back.
 
 **Watched, not changed:** in one run of five, `sources.md` said
 where the user keeps their file and not its name. The routing
-table's rule is changed only if that comes back.
+table's rule is changed only if that comes back. In one run of six
+the problem stage wrote its document before its last question.
 
 **How the work is done** (the owner's standing rules, all in
 `DECISIONS.md`): the owner is asked only what is theirs, one

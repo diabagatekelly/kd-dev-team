@@ -553,7 +553,8 @@ asking is listed apart, so it can be overturned.
     run.
   - Fourteen cases for the ten rows: rows 4, 6, 9 and 10 hold two
     situations each, and a proposal and the yes to it are two
-    turns. The bar is every case in every run.
+    turns. The bar is every case in every run. Three more were
+    added in the closing pass (decision 38): seventeen.
   - The bare arm's routing table says this one stage is done from
     the report alone (the table's last line would rightly stop it).
   - On the owner's real requirements: three of kad's requirements
@@ -577,8 +578,9 @@ asking is listed apart, so it can be overturned.
     is next, a session names it and waits.
   - Opus was run bare only, and Haiku on the first form of the text
     only: Sonnet holds with the text and is the session's model.
-  - The slice text is loaded on trial (`slice=...`) and is not in
-    the adopted list until the owner says the stage holds.
+  - The slice text was loaded on trial (`slice=...`) until the owner
+    said the stage holds (decision 39); it is in the adopted list
+    since.
   - `e2e/tally.py` counts a pass with and without the checks of
     form; `e2e/run.py` carries an example on through a set, a chosen
     slice and one made-up merge (`--through requirements` for the
