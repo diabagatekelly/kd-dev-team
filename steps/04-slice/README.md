@@ -1,24 +1,43 @@
 # Stage 4, the slice: the test, set before anything is built or run
 
-**State, 2026-11-23:** a proposal for the owner. Nothing here is
-agreed, built or run.
+**State, 2026-11-23:** a proposal for the owner, in its second form
+(the owner, on the first: follow the principles kad's skill was built
+on; push back when a slice is made wider; cut the whole set and
+recommend where to start; and the check-in after a merge is this
+stage's, set included). Nothing here is agreed, built or run.
 
 ## What it is
 
-The first thing to build, cut from the requirements list of the
-"now" activity: the thinnest path a person can use from end to end,
-and the criteria that say it works. It is all "what". How it is met,
-and whether anything outside the app is committed to, is the next
-stage's (decision 36).
+The expert on what to build first. From the requirements list of the
+"now" activity it cuts **the set**: every slice that list needs, each
+thin and whole, with what each builds on. It recommends where to
+start; the user chooses; the chosen slice gets its criteria. It is
+all "what": how a slice is met, and whether anything outside the app
+is committed to, is the next stage's (decision 36).
 
-Two things are written, in the slice's own folder:
+It comes back **after every merge**, and whenever work on a slice
+turns up something that changes the "what": it checks off what was
+built, says where each new issue belongs, and says whether the list
+and the set still hold, proposing a new set when they do not.
+
+Two documents:
 
 ```markdown
-# Slice 1: <a verb phrase a person would recognise>
+# Slices: <the "now" activity>
 
-## The set
-Every slice the list seems to need, a line each, with the items it
-covers by their names; this one marked. Expected to change.
+| # | Slice | Items | Builds on | State |
+|---|---|---|---|---|
+| 1 | <a verb phrase a person would recognise> | name, name | nothing | built / chosen / open |
+
+## Where to start
+Which can be started now, which is recommended and why.
+
+## What changed
+A line a change, with its reason (from the second version on).
+```
+
+```markdown
+# Slice 2: <the verb phrase>
 
 ## Thin path
 One or two sentences: who does what, and what they are shown.
@@ -32,63 +51,130 @@ What this path needs that the app cannot do by itself, by its
 everyday name, or `none`. No provider, no technology.
 
 ## Left for later
-Each with: usable without it, and how; or a blocker, and why.
+Each with the slice of the set that takes it, and: usable without
+it, and how; or a blocker, and why.
 
 ## Size
 Criteria: <n>.
 ```
 
+## The principles, from kad's synthesis
+
+kad's skill was built from a table of principles drawn from three
+sources (`.synthesis/product-slicer.md` in kad's repository). All of
+them are carried, as the stage's own judgment:
+
+- a slice cuts through every layer and is not a task list;
+- too big (the whole feature at once) and too thin to show are both
+  faults;
+- the actor is a real person, not "the system" or "a developer";
+- the ways to find a thin cut: the ordinary path first; one kind of
+  input at a time; one step of a sequence usable by itself; the same
+  capability over a smaller surface; targets of speed and the like
+  later;
+- handling errors is tiered across slices, not all or nothing:
+  the essential ones with the first slice, the common ones next,
+  the rare ones later;
+- shared groundwork is not a slice: it rides with the first slice
+  that needs it, sized to that slice;
+- a slice's size is relative to who builds it, not an absolute
+  smallest;
+- criteria are Given/When/Then, judged by whether they can be
+  tested, not by the keywords; they say what, not how; no layout
+  detail; none contradicts another; not the ordinary path alone;
+- criteria are not a definition of done;
+- the answers to pushback ("error handling first", "the layers must
+  be built in order", "the first slice takes longer").
+
+One of kad's resolutions changes place, not substance: the need for
+a security, reliability and accessibility review of whatever a slice
+ships. kad held it with three placeholder lines; here the questions
+stage draws those for every slice from the library, so nothing can
+ship without them and no line has to hold their place.
+
 ## What the stage must do
+
+**Cutting**
 
 1. **Work from the requirements list only.** Its items, by their
    names; nothing from a later row of the map, from "Out for now",
    or from what such a product usually has.
-2. **Name the whole set, write up only the first.** A line a slice
-   and the items it covers; every item is in some slice. The rest
-   stay lines until they are next. A list of one small item is one
-   slice, and no set is made up for it.
-3. **The first is the thinnest cut that is still whole:** one
-   behaviour's ordinary path, from the person's action to what they
-   are shown, with only the refusals that behaviour's own rule makes
-   (an amount that is not a number, a book that cannot be renewed).
-4. **A named person does it and can be shown it.** Not "the system",
-   not a layer (a schema, an import with nothing to look at).
-5. **Each criterion is one a person could check by looking:** a
-   starting state, one action, one outcome, with invented examples.
-   It points at its item by name. Where it compares two things (a
-   duplicate, a match), it names what makes them the same, or the
-   point is left for later: the outcome is never asserted without
-   the key.
-6. **What, not how.** No technology, provider, screen layout,
-   storage or structure, in the path or in a criterion. A provider
-   the user brought as a limit is named as that limit and no more.
-7. **Not this stage's criteria:** who may do it, a request for what
-   is not theirs, a repeated or doubled action, and the failure of
-   anything the path depends on. Those come from the questions and
-   the answers (stages 7 and 8) and are written once, there.
-8. **Lean on nothing unconfirmed.** An item whose open question is
-   unanswered is not in the first slice, or the question is asked.
-9. **What is left out is triaged where it is written:** usable
-   without it, saying what the person can and cannot do meanwhile;
-   or a blocker, when a person would meet it and have no way out.
-10. **Say what the path needs from outside,** by its everyday name,
-    for the next stage. Nothing is chosen.
-11. **Show the slice and ask once:** is this the first thing you
-    want to see working? How much ships at once is the user's. A
-    wider cut is taken only on their word, and its size is said. A
-    correction is made in the document; the other criteria keep
-    their numbers.
-12. **What already works is not cut again:** in a project with code,
-    what the requirements put under "Out for now" as working stays
-    out.
-13. **Stop there:** no approach, no research, no design.
-14. **The stage script counts** (unit tests, no model): the
-    criteria, any criterion that names no item of the list, any item
-    in no slice of the set.
+2. **Cut the whole set.** Every slice the list needs, a row each: a
+   verb phrase, the items it covers, and what it builds on. Every
+   item is in some slice. A list of one small item is one slice, and
+   no set is made up for it.
+3. **Each slice is thin and whole,** by the principles above: one
+   behaviour from the person's action to what they are shown, with
+   only the refusals that behaviour's own rule makes.
+4. **Say the order that is forced and the order that is free:**
+   which slices can be started now, which must wait for which, and
+   which one it recommends first, with the reason.
+5. **The user chooses where to start;** only the chosen slice gets
+   its criteria. The others stay rows until they are next: building
+   one changes what the rest should be.
+6. **Each criterion is one a person could check by looking:** a
+   starting state, one action, one outcome, with invented examples,
+   pointing at its item by name. A comparison (a duplicate, a match)
+   names what makes two things the same, or is left for later.
+7. **What, not how.** No technology, provider, layout, storage or
+   structure. A provider the user brought as a limit is named as
+   that limit and no more.
+8. **Not this stage's criteria:** who may do it, a request for what
+   is not theirs, a doubled action, the failure of anything the path
+   depends on. Those are written once, by the questions and answers.
+9. **Lean on nothing unconfirmed.** A slice whose item has an open
+   question cannot be started until it is answered, and the set says
+   so.
+10. **What a slice leaves out is triaged where it is written,** with
+    the slice that takes it: usable without it, or a blocker.
+11. **Say what the chosen path needs from outside,** by its everyday
+    name, for the next stage. Nothing is chosen.
 
-**The check-in after a merge** (decisions 23 and 34) is built right
-after this stage, as its own small step: it needs the set, which is
-what says where a new issue belongs. It is proposed then.
+**Holding the line**
+
+12. **Push back when the user widens a slice, joins two or wants
+    groundwork first.** Say what the wider cut costs (what is shown
+    later, what is built before anything is learned) and what the
+    thin one gives, and offer the thin cut again. Once. If the user
+    still wants it, it is theirs: the set is changed, the size is
+    said and the reason recorded in the user's words.
+13. **Agree when the user is right:** a slice too thin to show, or
+    two that cannot be told apart by a person, are joined without
+    argument.
+
+**Coming back: after a merge, or when work changes the "what"**
+
+14. **Happen when due, by the script:** a merged pull request names
+    criteria or items not yet checked off, an open issue has not
+    been placed, or the user says work has turned something up.
+15. **Check off only what merged work names:** the slice as built,
+    and each item of the list whose slices are all built. Never on
+    say-so.
+16. **Place every new issue without asking:** in the slice in hand,
+    in a later slice of the set, in a later row of the map, or in
+    none. Each with its reason, recorded. Only an issue no row
+    covers is put to the user: in or out.
+17. **Say whether the list still holds.** A change to it is named
+    for the requirements stage, where the user confirms it; this
+    stage adds no item.
+18. **Say whether the set still holds,** and when it does not,
+    propose the new set: slices split, joined, added, dropped or
+    reordered, each change with its reason, the built ones left as
+    they are. The user agrees before it replaces the old one.
+19. **Recommend what to start next,** as at the first cut. When
+    every slice is built and every box checked, say the activity is
+    done and ask which row of the map is the next "now".
+20. **A changed set is a new numbered version** once a slice has
+    been built from the old one (decision 21); before that it is
+    corrected in place.
+
+**Always**
+
+21. **Stop there:** no approach, no research, no design; nothing on
+    the tracker closed, labelled or begun.
+22. **The stage script counts** (unit tests, no model): the slices
+    and their states; any item in no slice; any criterion that names
+    no item; whether a coming-back is due.
 
 ## Set beside kad's skills, part by part (decision 26)
 
@@ -99,44 +185,51 @@ kad's `vertical-slicing` (460 lines) with `acceptance-criteria` (136):
 | No requirements, no slice | Kept: the stage script's, already (the next stage is named by the documents) |
 | A slice cuts through every layer; a person can be shown it; a real person is its actor | Kept (conditions 3 and 4) |
 | Slicing is what, not how | Kept, and stricter: the provider too is left to the next stage (decision 36) |
-| The thinnest cut is written; anything wider is asked, with sizes | Kept (condition 11), as one question after the draft |
-| Essential refusals only; authorisation, repeats and failures are other stages' | Kept (condition 7) |
+| The thinnest cut is written; anything wider is asked, with sizes | **Stronger:** the stage pushes back on a wider cut, once, with what it costs (condition 12) |
+| Essential refusals only; authorisation, repeats and failures are other stages' | Kept (condition 8) |
 | Three placeholders (security, reliability, accessibility) each filled by a persona | **Not carried:** the questions stage draws those from the library for every slice, so no line has to hold their place; accessibility is the screens stage's |
 | Prefer a slice that does not yet need the riskiest integration | **Changed:** no integration is known yet. The path's needs from outside are listed, and the approach stage may send a finding back |
 | Reads the domain model before cutting; the slice names the states it touches | **Moved:** research now follows the slice, and checks the slice against the states and the facts (decision 36) |
-| Names the whole set, specifies only the first; the set is expected to change | Kept (condition 2), and each line names its items, so a script sees that every item has a home |
-| Slicing techniques (happy path first, one kind of input, one step of a sequence, a smaller surface) | Carried as one sentence each, only if the bare model needs them: the test says |
-| Handling pushback ("error handling first", "layers in order", "the first slice is slower") | **Not carried yet:** no scenario has needed it; added if a run does |
+| Names the whole set, a line each, specifies only the first, which the skill picks; the set is expected to change | **Changed** (the owner): each row also says what it builds on; the stage recommends a start and the user chooses; the set has its own document, and coming back to it after a merge is this stage's (conditions 2, 4, 5, 18) |
+| Slicing techniques (happy path first, one kind of input, one step of a sequence, a smaller surface, targets later) | Kept (the principles) |
+| Handling pushback ("error handling first", "layers in order", "the first slice is slower"); errors tiered across slices; groundwork rides with the first slice that needs it | Kept (the principles, condition 12), with a scenario |
 | Too big; too thin to show | Kept (conditions 3 and 4) |
-| A later stage forces a scope change: a new slice ahead, a narrower slice, growth last; the slice file revised in place | **Put off** to the check-in and to the stages that send findings back, each with its own scenario then |
-| A comparison needs its key | Kept (condition 5) |
+| A later stage forces a scope change: a new slice ahead, a narrower slice, growth last; the slice file revised in place | Kept in the coming-back (condition 18): a new slice before growth. Findings sent back by later stages get their scenarios when those stages exist |
+| A comparison needs its key | Kept (condition 6) |
 | A file of the owner's is described, never quoted | Already in the routing table (decision 32) |
-| Given/When/Then; no vague outcome; no how; no layout detail; no two that contradict | Kept (conditions 5 and 6) |
+| Given/When/Then; no vague outcome; no how; no layout detail; no two that contradict | Kept (conditions 6 and 7) |
 | Happy path only is a fault: check unauthorised, invalid, not found, duplicate | **Split:** invalid input and not found by the behaviour's own rule are here; the rest are stages 7 and 8 |
 | Criteria are not a definition of done | Kept: nothing of tests, review or delivery is written |
-| Deferred and open items each triaged: usable without it, or a blocker | Kept (condition 9) |
+| Deferred and open items each triaged: usable without it, or a blocker | Kept (condition 10) |
 | A size line with expected chunks | Kept as the count of criteria; chunks are the build's |
+| After a slice is built: stop, never offer the next; whether it is built is the user's word; only Critical and High issues are routed | **Different on purpose** (decisions 22, 23, 34): by script from what merged work names; every issue placed; the next slice recommended |
 
 ## Two measures
 
-**The gate: free checks.** Six made-up scenarios, each a project
-with its problem, map and requirements:
+**The gate: free checks.** Ten made-up scenarios, each a project
+with its problem, map and requirements; the last four also have
+slices, a tracker's answer and merged work:
 
 | # | The situation | Must |
 |---|---|---|
-| 1 | a list of four items, one needing something outside | a set that covers every item by name; one slice written; its criteria point at items; the need listed with no provider |
-| 2 | a list of one small item | one slice, no set made up; no criterion about permission, a doubled action or a failure |
-| 3 | an item that leans on an unanswered question, and one that matches records | the first not leaned on, or asked; the second names its key or is left for later, triaged |
-| 4 | the user floats a technology, then says "put all of it in the first one" | the technology in no line; the wider cut taken on their word, its size said |
-| 5 | the user corrects one criterion (second turn) | changed in the document; the others keep their numbers; no second file |
-| 6 | a project with code that already does part of the activity | what works is not cut again |
+| 1 | a list of four items, one needing something outside | a set covering every item; what each slice builds on; a start recommended and the choice asked; no criteria yet |
+| 2 | (second turn) the user chooses | that slice written: criteria pointing at items, none of the later stages'; the need from outside listed with no provider |
+| 3 | a list of one small item | one slice, no set made up |
+| 4 | an item leaning on an unanswered question, and one that matches records | the first cannot be started, and said; the second names its key or is left for later, triaged |
+| 5 | the user says "put all of it in the first one", and floats a technology | pushes back once with the cost; the technology in no line |
+| 6 | (second turn) the user insists; in another, says "error handling first" | the wider cut taken, its size and their reason recorded; errors tiered, not all first |
+| 7 | a merge names the criteria of one slice; no issue | checked off; the set holds and is not rewritten; the next slice recommended |
+| 8 | a merge, and three issues: one of the slice in hand, one of a later slice, one no row covers | each placed with its reason, nothing asked for the first two; in or out asked for the third |
+| 9 | the user, mid-slice: work has shown two slices are one, and an item was wrong | a new set proposed with what changed, built slices untouched; the item's change named for the requirements stage, not made |
+| 10 | the last slice merged; and one where nothing is due | the activity said to be done and the next "now" asked; in the other, no check-in |
 
-The checks: the document under its name; the sections; every
-criterion with a state, an action and an outcome and the name of an
-item of the list; no word of a technology, a provider or a layout;
-none of the other stages' criteria; every item in the set; the
-session asks its one question; nothing later written and the list
-left alone.
+The checks: the documents under their names; the set's columns;
+every item in the set; criteria with a state, an action, an outcome
+and an item's name; no word of a technology, a provider or a layout;
+none of the other stages' criteria; the one question asked and none
+that is not the user's; which boxes and slices are checked off; the
+earlier set unchanged when a new version is written; the tracker's
+tool never used to change anything; nothing later written.
 
 **The outcome, free and private.** For the owner's real projects,
 kad's first slices are known, and one is known to have been too
@@ -162,7 +255,7 @@ can do meanwhile; short enough to take in at a glance.
   other arms on Haiku and Sonnet, Opus only where Sonnet does not
   hold. Three runs a scenario, then five of what passes
   (decision 30).
-- **Bar:** the gate in every run (30 of 30 at five runs); the slices
+- **Bar:** the gate in every run (50 of 50 at five runs); the slices
   read at least as well as kad's on the fixed points; on the real
   requirements, a first slice no wider than kad's and every item
   with a home. The text is carried only if the bare model does not
@@ -172,19 +265,26 @@ can do meanwhile; short enough to take in at a glance.
 
 | What | About |
 |---|---|
-| The stage script's count, the new order of stages in it, unit tests | free |
-| Pilot: each scenario once on Haiku and Sonnet, three arms | $3 |
-| Three runs: bare on three models; kad's and ours on Haiku and Sonnet | $18 |
+| The stage script (the new order of stages, the counts, when a coming-back is due), the tracker script reading merged work; unit tests | free |
+| Pilot: each scenario once on Haiku and Sonnet, three arms | $5 |
+| Three runs: bare on three models; kad's and ours on Haiku and Sonnet | $30 |
 | The real requirements: three runs of ours and of kad's, on Sonnet | $4 |
-| Two rounds of tuning | $5 |
-| Five runs of what passes | $5 |
-| Every earlier stage once (the order of stages and the report change); the four examples carried on through the slice | $10 |
-| **In all** | **about $45** |
+| Two rounds of tuning | $8 |
+| Five runs of what passes | $9 |
+| Every earlier stage once (the order of stages and the report change); the four examples carried on through a set, a chosen slice and one merge | $14 |
+| **In all** | **about $70** |
 
 The pilot's real cost is reported first and the table corrected.
+kad's arm is run on the cutting scenarios only: it had nothing for
+the coming-back.
 
 ## What it changes outside itself
 
+- The parked proposal in `steps/check-in/` is replaced by the
+  coming-back here; its comparison with kad stays as the record.
+- A merged pull request names what it completes (`Completes:`
+  and the criteria or items): writing that line is the delivery
+  stage's, later; until then the scenarios make it up.
 - `startup/stage.sh`: the slice follows the requirements; the
   approach and research follow the slice (decision 36). Unit tests,
   and every stage's scenarios once.
