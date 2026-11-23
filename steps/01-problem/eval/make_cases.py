@@ -142,7 +142,8 @@ SCENARIOS = [
      "I run a dog-walking business, four walkers and about sixty regular clients. Every month I type up an "
      "invoice for each client by hand from the walkers' paper sheets. It takes me two full days and I get two "
      "or three wrong every month. I'd like it sorted before the summer, when the work roughly doubles. We take "
-     "card payments through the service we already use, and that stays. Can you write up the problem?",
+     "card payments through the service we already use, and that stays. The one thing I don't know yet is "
+     "whether the walkers should be paid through it too. Can you write up the problem?",
      [*WRITES_NOTHING, says("asks-whether-anything-else-goes-wrong-or-limits-it",
                             r"(anything|something|what) else[^?]{0,200}\?|else (that )?goes wrong[^?]{0,200}\?|"
                             r"is that (everything|all)[^?]{0,60}\?|(any|what) other[^?]{0,80}\?"),
