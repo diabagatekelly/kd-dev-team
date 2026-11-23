@@ -23,6 +23,9 @@ Each limit of the whole problem, from the problem document.
 
 ## Open
 Each open question of the problem document, still open.
+
+## Out
+What the user has said is no part of this, in their words. Left out when there is nothing.
 ```
 
 **Drawing it.** Read the problem document and nothing else. A row is
@@ -36,14 +39,18 @@ or acceptance criterion, including one the user floats in passing.
 
 **Limits and open questions.** A limit on the whole problem goes
 under "Holds for every activity", never in a row; why it is done
-now is a reason, not a limit, and stays in the problem document. An
+now is a reason, not a limit, and stays in the problem document. A
+limit worded about one activity may be meant for the whole product:
+keep it here as the user worded it, and ask which they meant. An
 open question
 stays under "Open": do not settle it by adding a row or leaving one
 out.
 
 **Then ask once.** Show the rows and ask whether anything is missing,
 unwanted or in the wrong order: what is in, what is out and what
-comes first are the user's. Apply their correction to the document.
+comes first are the user's. Apply their correction to the document;
+what they take out goes under "Out", so its absence is not read as a
+gap.
 
 **Stop there.** Save it as the document the startup report names for
 this stage. No requirements and no slice.

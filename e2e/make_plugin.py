@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""Assemble everything adopted so far into one plugin, for the end-to-end runs.
+
+The hook gives a new session the live startup report (the scripts run in the project, not a
+canned report) and the routing table; the skills are the adopted stage texts. Nothing here is
+the released plugin: it is rebuilt from the adopted pieces each time and not kept in git.
+
+Usage: python3 -I make_plugin.py [FOLDER]      (default: plugin/ beside this file)
+"""
+import json
+import pathlib
+import shutil
+import sys
+
+HERE = pathlib.Path(__file__).resolve().parent
+ROOT = HERE.parent
+SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
+          "scope-map": "steps/02-scope-map/eval/scope-map-skill.md",
+          "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md"}
+HOOK = """#!/bin/sh
+# The startup report of this machine and project, then what to do with it.
+sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"
+cat "${CLAUDE_PLUGIN_ROOT}/hooks/routing-table.md"
+"""
+
+
+def write(path, text, executable=False):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8", newline="\n")
+    if executable:
+        path.chmod(0o755)
+
+
+def main(folder):
+    shutil.rmtree(folder, ignore_errors=True)
+    write(folder / ".claude-plugin" / "plugin.json", json.dumps(
+        {"name": "kd-dev-team-trial", "version": "0.0.1",
+         "description": "The adopted stages together, for end-to-end runs only."}, indent=2) + "\n")
+    # Only a new session is given the report: a headless run resumes its session at every turn.
+    write(folder / "hooks" / "hooks.json", json.dumps({"hooks": {"SessionStart": [{"matcher": "startup", "hooks": [
+        {"type": "command", "command": 'sh "${CLAUDE_PLUGIN_ROOT}/hooks/report.sh"'}]}]}}, indent=2) + "\n")
+    write(folder / "hooks" / "report.sh", HOOK, executable=True)
+    shutil.copy(ROOT / "steps/00-startup/eval/routing-table.md", folder / "hooks" / "routing-table.md")
+    (folder / "startup").mkdir()
+    for script in [*(ROOT / "startup").glob("*.sh"), ROOT / "startup" / "tracker.jq"]:
+        shutil.copy(script, folder / "startup" / script.name)
+    for name, source in SKILLS.items():
+        write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
+    return folder
+
+
+if __name__ == "__main__":
+    print(main(pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "plugin"))

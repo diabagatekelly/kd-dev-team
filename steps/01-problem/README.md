@@ -157,6 +157,50 @@ passes $3.88).
 renamed `000_problem.md` (decision 21), the text on Sonnet, three
 runs a scenario: 18 of 18, $1.10. Cost so far: $14.56 of $30.
 
+## After the end-to-end runs (2026-11-22)
+
+A terse user's short answers were being written up as the whole
+problem, and a user who gave one limit was never asked for the rest.
+The text (51 lines) now asks one last question of an account that
+came answer by answer: whether anything else goes wrong today, or
+limits what can be done. Scenario 07 was added. With every adopted
+text loaded, all seven scenarios on Sonnet, three runs each: 21 of
+21, $1.31; scenario 07 alone, ten runs: 10 of 10.
+
+## The last question, for every account (2026-11-22)
+
+An end-to-end example whose user closes the session and comes back
+showed that the fix above was too narrow: a full account in one
+message named one limit, the document was written at once, and two
+other limits never reached it. The text (51 lines) now gives every
+account the last question unless the user has said that is
+everything. Scenario 08 was added, and scenario 05's user now says
+so. On Sonnet, by decision 30: scenarios 05, 07 and 08 five runs
+each, 5 of 5 each; the whole stage once, 8 of 8; $1.70. (Scenario
+08's first five runs failed on the scenario, not the text: its
+account left the open questions unspoken, so that was asked first,
+as the text says. The account was completed and run again.)
+
+## Set beside kad's skill, part by part (2026-11-22, decision 26)
+
+kad's `problem-framing-doc` (72 lines):
+
+| What kad's skill does | Here |
+|---|---|
+| Asks for every section the conversation has not answered, one question at a time | Kept |
+| Never fills a section from the folder's name, the repository or what such a product usually does | Kept |
+| No solution, no decision; "use library X" is a design, not a constraint | Kept; a floated idea is left out or kept as an open question |
+| A limit the writer assumes is an open question, never a constraint | Stricter: no limit, figure or question of the writer's own at all |
+| Open questions: what must be answered before a first slice, the writer's own included | **Different on purpose:** only what the user says is unknown. The planner's own questions are written at the requirements stage, by a walk (decision 27) |
+| Names the current process, not the wished-for one | Kept |
+| No "non-goals" section; an exclusion that is not obvious is one sentence in "The problem" | Kept in effect: no further sections, and what the user says is in the document |
+| One page; a problem that outgrows it is probably several, and is flagged | Kept (two problems are said to be two) |
+| Written for skimming | Kept (a bullet a point) |
+| Where the document goes is given, not chosen | Kept: the startup report names it |
+
+Nothing of kad's is missing here. Added since, from the end-to-end
+runs: the last question for an account given answer by answer.
+
 ## What a pass does not show
 
 The scenarios stand for points in a conversation of at most two

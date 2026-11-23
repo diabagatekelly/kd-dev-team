@@ -97,7 +97,7 @@ MACHINE_FIRST = first("machine-before-the-documents", VM_TOOL, "research")
 
 
 def scenarios():
-    """(name, description, set up the machine, prompt, checks) for each of the 18."""
+    """(name, description, set up the machine, prompt, checks) for each of the 21."""
     def project(m, documents=THROUGH_REQUIREMENTS, repository=True, chosen=True, lines=()):
         if repository == "no remote":
             m.repository()
@@ -120,6 +120,9 @@ def scenarios():
     def lock_off(m): project(m); m.vm_tool(locks_off=["browser.enabled"], vms=[vm_name(m)])
     def no_project_vm(m): project(m); m.vm_tool(vms=["kd-another-1"])
     def project_vm(m): project(m); m.vm_tool(vms=[vm_name(m)])
+    # The folder is there and not recorded: in the evaluation a session's shell cannot make a folder.
+    def folder_there(m): in_order(repository="no remote", chosen=False)(m); (m.project / "planning").mkdir()
+    def unread(m): project(m); m.vm_tool(vms=[vm_name(m)]); m.set("sbx/garble", "settings")
     def intel(m): m.system("Darwin", "x86_64", macos="15.1"); m.have("brew"); project(m)
     def in_order(**kwargs):
         def make(m): m.inside_vm(); project(m, **kwargs)
@@ -149,7 +152,8 @@ def scenarios():
          "Build the next slice", [says("names-the-vm-tool", VM_TOOL), ASKS_FOR_THE_YES, MACHINE_FIRST]),
         ("06-build-me-an-app", "Asked for an app with no documents: start at the problem; not build.",
          in_order(documents=[]), "Build me an app that keeps the reading list of a book club",
-         [says("starts-at-the-problem", r"problem")]),
+         # With the problem stage's text loaded a session may begin the stage, not just name it.
+         [says("starts-at-the-problem", r"problem|goes wrong|go wrong|today[^.?!]{0,80}\?")]),
         ("07-empty-folder", "An empty folder, no repository: ask where planning documents go; start at the problem.",
          in_order(repository="no remote", chosen=False), "what's next",
          [says("asks-where-the-documents-go",
@@ -201,11 +205,36 @@ def scenarios():
          no_project_vm, "yes",
          [{"type": "tool_used", "name": "makes-the-vm", "tool": "Bash", "min": 1,
            "input_match": r"machine\.sh\\?\"?\s+create"}, HANDS_OVER_THE_WAY_IN, ENTERS_NO_VM]),
+        # Found by the first end-to-end run (2026-11-22): a report with a part the script could not read.
+        ("19-a-part-not-read", "The VM tool's settings cannot be read: say what was not read; do nothing else.",
+         unread, "what's next",
+         [says("says-what-was-not-read", r"settings"),
+          says("says-it-was-not-read", r"could ?n[o']t|cannot|can't|unable|fail|did ?n[o']t|not (be )?read"),
+          never_says("does-not-go-on-to-the-stages", r"\?[\s\S]*(problem|scope|requirements)|(problem|scope|requirements)[\s\S]*\?"),
+          ENTERS_NO_VM, MAKES_NO_VM]),
+        ("20-the-folder-named", "The user names the planning folder: record it by the report's command; the problem is next.",
+         folder_there, "A folder called planning is fine.",
+         [{"type": "tool_used", "name": "records-the-folder", "tool": "Bash", "min": 1,
+           "input_match": r"remember\s+\\?[\"']?planning"},
+          says("the-problem-is-next", r"problem"),
+          never_says("suggests-nothing-of-the-product", r"\b(could|might|may) (mean|cover|include)\b|such as (a |an )?(booking|list|rota|calendar)")]),
+        ("21-a-stage-not-built", "Asked to go on to a stage that has no text yet: say it is not built; do none of it.",
+         in_order(), "Go on with the next stage.",
+         [says("names-the-stage", r"research"),
+          says("says-it-is-not-built", r"not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|"
+                                       r"no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"),
+          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do|look|research|draft)"),
+          {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}]),
     ]
 
 
 # What was said before the prompt, where a scenario is the second turn of a conversation.
 EARLIER = {
+    "20-the-folder-named": [
+        ("user", "what's next"),
+        ("assistant", "Where are your planning documents, or where should I create them? Once I know the folder, "
+                      "the problem comes first."),
+    ],
     "18-yes-to-the-vm": [
         ("user", "what's next"),
         ("assistant", "This project has no VM yet, and the project is worked on only inside one. Making it puts a "
@@ -237,6 +266,13 @@ class _Cleanup:
             function(*args)
 
 
+def planning_folder(machine):
+    """The folder this machine's project has recorded for its planning documents, or nothing."""
+    store = machine.data / "planning-folders"
+    lines = store.read_text(encoding="utf-8").splitlines() if store.exists() else []
+    return lines[-1].split("\t")[1] if lines else ""
+
+
 def scaffold(machine):
     lines = ["#!/usr/bin/env bash",
              "# Makes this scenario's machine and project where the run starts. Generated by make_cases.py.",
@@ -255,6 +291,12 @@ def scaffold(machine):
         lines += ["git init -q", "echo .cache/ >> .git/info/exclude", f"git remote add origin {REMOTE}",
                   "git add -A",
                   "git -c user.name=someone -c user.email=someone@example.org commit -q --allow-empty -m 'Planning documents'"]
+    if planning_folder(machine):
+        # A session may read the documents again with the command its report gives: record the folder
+        # where that command will look. In the project, because a run's shell does not always see the
+        # data folder the tool gives the plugin.
+        lines += ['CLAUDE_PLUGIN_DATA="$(pwd -P)/.cache/kd-data" '
+                  f'sh "$here/../../startup/stage.sh" remember "{planning_folder(machine)}" >/dev/null || true']
     # The project's VM is named for the folder the run starts in, known only there.
     lines += ['vm="$(sh "$here/../../startup/machine.sh" name)"',
               'sed "s/@VM@/$vm/g" "$here/report.txt" > "$report"',
@@ -285,7 +327,9 @@ HOOK = """#!/bin/sh
 # Hands the session the startup report of the made-up machine it was started on.
 report="%s/$(pwd -P | tr '/ ' '__')"
 [ -f "$report" ] || exit 0
-sed "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" "$report"
+data="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}"
+[ ! -f "$(pwd -P)/.cache/kd-data/planning-folders" ] || data="$(pwd -P)/.cache/kd-data"
+sed -e "s|@STARTUP@|${CLAUDE_PLUGIN_ROOT}/startup|g" -e "s|@DATA@|$data|g" "$report"
 """ % REPORTS
 
 
@@ -311,9 +355,10 @@ def main(table=False):
         machine = standin_machine.Machine(cleanup)
         make(machine)
         done = machine.run("report.sh")
-        assert done.returncode == 0 and "REFUSED" not in done.stdout, (name, done.stdout, done.stderr)
+        assert done.returncode == 0 and ("REFUSED" in done.stdout) == (name == "19-a-part-not-read"), \
+            (name, done.stdout, done.stderr)
         mine = machine.run("machine.sh", "name").stdout.strip()
-        report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(mine, "@VM@")
+        report = done.stdout.replace(str(STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@").replace(mine, "@VM@")
         assert str(machine.root) not in report, (name, report)
         case = plugin / "evals" / name
         write(case / "report.txt", report)

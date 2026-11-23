@@ -1,0 +1,22 @@
+{
+  "singers": {
+    "Ada Lovell": "alto",
+    "Ben Okafor": "tenor",
+    "Cai Morgan": "tenor",
+    "Dee Hart": "soprano",
+    "Eli Stone": "bass"
+  },
+  "attended": {
+    "2026-02-26": [
+      "Ada Lovell",
+      "Ben Okafor",
+      "Dee Hart"
+    ],
+    "2026-03-05": [
+      "Ada Lovell",
+      "Cai Morgan",
+      "Dee Hart",
+      "Eli Stone"
+    ]
+  }
+}

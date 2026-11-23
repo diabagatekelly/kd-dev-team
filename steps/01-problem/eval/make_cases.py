@@ -106,7 +106,7 @@ SCENARIOS = [
      "and she keeps them in her own diary. When she is away nobody can say whether a date is free, and last "
      "year we double-booked the hall twice. I don't know why now, honestly: nothing is forcing it, it has "
      "annoyed the committee for years. I can't tell you the limits yet either; the committee meets on the "
-     "12th and I will know the budget after that. Write up what we have.",
+     "12th and I will know the budget after that. That is all there is for now: write up what we have.",
      [WRITTEN, in_document("holds-the-current-way", r"diary"), in_document("holds-the-cost", r"double|twice"),
       in_document("the-unknown-stays-open", section(r"open|question|unknown", r"budget|limit|committee")),
       not_in_document("invents-no-figure", r"[$£€]\s?\d|\b\d+\s?(dollars|pounds|euros)\b"),
@@ -121,6 +121,33 @@ SCENARIOS = [
                                  r"separate|distinct|unrelated|split|(its|their) own (document|doc)|second problem"),
       {"type": "tool_used", "name": "one-document-does-not-hold-both", "tool": "Write", "min": 0, "max": 0,
        "input_match": r"(steriliser[\s\S]*on hold|on hold[\s\S]*steriliser)"}], None),
+    # Found by the first end-to-end run: a terse user's thin answers were written up as the whole problem.
+    ("07-answer-by-answer", "An account given one short answer at a time: one last question before writing.",
+     "Nothing yet that I can think of.",
+     [*WRITES_NOTHING, says("asks-whether-anything-else-goes-wrong",
+                            r"(anything|something|what) else[^?]{0,200}\?|else (that )?goes wrong[^?]{0,200}\?|"
+                            r"is that (everything|all)[^?]{0,60}\?|(any|what) other[^?]{0,80}\?"),
+      NO_SOLUTION_ASKED],
+     [("user", "I want an app for our allotment society."),
+      ("assistant", "What does your allotment society do today, and what goes wrong with it?"),
+      ("user", "We have 84 plots and about 40 people waiting. The waiting list is a paper notebook I keep at home."),
+      ("assistant", "Why does this need solving now?"),
+      ("user", "The council says our lease renewal in March depends on showing plots are given out fairly."),
+      ("assistant", "Is there a hard limit on what we do, such as a budget or a deadline?"),
+      ("user", "We can spend 10 a month at most."),
+      ("assistant", "Is there anything you don't know yet that matters here?")]),
+    # Found by an end-to-end run: a full account in one message named one limit, the document was
+    # written at once, and the user's other limits (a privacy rule among them) were never asked for.
+    ("08-a-full-account-not-said-to-be-all", "A full account, not said to be everything: one last question; write nothing yet.",
+     "I run a dog-walking business, four walkers and about sixty regular clients. Every month I type up an "
+     "invoice for each client by hand from the walkers' paper sheets. It takes me two full days and I get two "
+     "or three wrong every month. I'd like it sorted before the summer, when the work roughly doubles. We take "
+     "card payments through the service we already use, and that stays. The one thing I don't know yet is "
+     "whether the walkers should be paid through it too. Can you write up the problem?",
+     [*WRITES_NOTHING, says("asks-whether-anything-else-goes-wrong-or-limits-it",
+                            r"(anything|something|what) else[^?]{0,200}\?|else (that )?goes wrong[^?]{0,200}\?|"
+                            r"is that (everything|all)[^?]{0,60}\?|(any|what) other[^?]{0,80}\?"),
+      NO_SOLUTION_ASKED], None),
 ]
 
 
@@ -171,7 +198,7 @@ def main(arm):
         done = machine.run("report.sh")
         assert done.returncode == 0 and "next stage by the documents: problem" in done.stdout, done.stdout
         case = plugin / "evals" / name
-        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@"))
+        write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
         write(case / "case.yaml", case_yaml(name, description, prompt, graders + ALWAYS + used, earlier))
         write(case / "scaffold.sh", startup.scaffold(machine), executable=True)
         if earlier:

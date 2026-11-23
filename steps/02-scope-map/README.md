@@ -202,6 +202,40 @@ without the text.
 
 Cost of the stage: $17.18 of $25.
 
+## After the end-to-end runs (2026-11-22)
+
+The text is unchanged. With every adopted text loaded, the five
+scenarios on Sonnet, three runs each: 15 of 15, $1.12. In the
+end-to-end runs each map was drawn from the problem document the
+session itself had written, and took the user's change of what comes
+first.
+
+## Set beside kad's skill, part by part (2026-11-22, decision 26)
+
+kad's `scope-map` (122 lines):
+
+| What kad's skill does | Here |
+|---|---|
+| No map for a small problem: straight to slicing | **Different on purpose:** one row, said to be one (decision 22) |
+| A step is a name and one line: no criteria, no estimate, no note on order bolted to a line | Kept |
+| No technology or approach the problem document does not name | Kept |
+| A limit on the whole problem is not a step, and is applied at each step's requirements, not "later" | Kept: "Holds for every activity", and the requirements stage says what each forces |
+| A limit is judged by what it protects, not by the step its sentence names | **Was missing; added, differently:** kad's planner decides it is a limit on the whole; here it is kept under the limits as worded and the user is asked which they meant (scenario 06) |
+| "Out of scope", where a missing step would otherwise be read as a gap | **Was missing; added:** what the user takes out goes under "Out" (a check in scenario 05) |
+| "Sequencing notes": why this order | **Not carried:** the rows keep the user's order and which is "now" is the user's call; the reason is given in the reply |
+| Steps are parts of a solution, ordered by the build | **Different on purpose:** rows are what a user does (decision 22) |
+| Revise in place until something is built on it, then a new numbered version; revise when a slice proves a boundary wrong, not on a hunch | **Not carried yet:** the check-in stage (decisions 21 and 23) |
+
+The text is 56 lines with the two additions.
+
+With the two additions (56 lines), every adopted text loaded, on
+Sonnet: the six scenarios, three runs each, 18 of 18; the user's
+correction and the limit worded for one activity, ten runs each, 10
+of 10 and 10 of 10. Read in three of them: what the user took out is
+under "Out" in their own words ("a different group handles them"),
+and the limit about texting is kept under the limits as worded, with
+the question put ("about reservations only, or every activity?").
+
 ## What a pass does not show
 
 A map is tested on made-up problems of a page; whether it stays true

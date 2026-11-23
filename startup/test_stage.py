@@ -119,15 +119,92 @@ class Stage(unittest.TestCase):
         self.assertIn("requirements (005_requirements.md)", out)
         self.assertIn("- next stage by the documents: slice (its document: planning/slice-001/008_slice.md)", out)
 
+    def requirements(self, text):
+        self.chosen("000_problem.md", "001_scope-map.md")
+        (self.machine.project / "planning" / "002_requirements.md").write_text(text, encoding="utf-8")
+        return self.report()
+
+    def test_the_requirements_are_counted_and_the_checked_ones_too(self):
+        out = self.requirements("# Requirements: borrow a tool\n\n"
+                                "- [x] **record-a-loan**: A volunteer records who took which tool.\n"
+                                "- [ ] **see-who-has-it**: A volunteer sees who has a tool.\n"
+                                "* [X] **loans-of-a-member**: A volunteer sees what a member has out.\n\n"
+                                "## Out for now\n- Reserving a tool.\n")
+        self.assertIn("- requirements (002_requirements.md): 3 items, 2 checked", out)
+        self.assertNotIn("no name", out)
+        self.assertNotIn("twice", out)
+
+    def test_a_requirement_with_no_name_of_its_own_is_said_by_its_line(self):
+        out = self.requirements("- [ ] **record-a-loan**: A volunteer records a loan.\n"
+                                "- [ ] A volunteer sees who has a tool.\n"
+                                "- [ ] **Sees Loans**: A volunteer sees the loans.\n")
+        self.assertIn("- requirements (002_requirements.md): 3 items, 0 checked", out)
+        self.assertIn("- a requirement with no short name of its own: line 2, line 3", out)
+
+    def test_a_name_used_twice_is_said_once(self):
+        out = self.requirements("- [ ] **record-a-loan**: One.\n- [x] **record-a-loan**: Two.\n"
+                                "- [ ] **record-a-loan**: Three.\n")
+        self.assertIn("- a requirement's name used more than once: record-a-loan\n", out)
+
+    def test_a_requirements_document_with_no_box_counts_none(self):
+        out = self.requirements("# Requirements\n\nA member adds a book.\n- a plain bullet\n")
+        self.assertIn("- requirements (002_requirements.md): 0 items, 0 checked", out)
+
+    def test_nothing_is_counted_before_the_requirements_exist(self):
+        self.chosen("000_problem.md", "001_scope-map.md")
+        self.assertNotIn("items", self.report())
+
+    # Found by the first end-to-end run: a session asked for the folder and never recorded it, so
+    # every document went unnumbered and unfound; and a session that finished a stage had no way
+    # to learn the next one's document.
+    def test_an_unchosen_folder_comes_with_the_command_that_records_it(self):
+        out = self.report()
+        self.assertRegex(out, r'- to record the folder the user names \(it is made if it is not there\): '
+                              r'.*sh ".*stage\.sh" remember FOLDER')
+        self.assertIn("then read the documents again", out)
+
+    def test_a_command_the_report_gives_reaches_the_same_record_as_the_report(self):
+        # A session runs these commands in its own shell, which is not told where the plugin keeps its data.
+        out = self.report()
+        self.assertIn(f'CLAUDE_PLUGIN_DATA="{self.machine.data.as_posix()}" sh "', out)
+        self.chosen("000_problem.md")
+        self.assertIn(f'read the documents again: CLAUDE_PLUGIN_DATA="{self.machine.data.as_posix()}" sh "', self.report())
+
+    def test_remembering_a_folder_that_is_not_there_makes_it(self):
+        done = self.machine.run("stage.sh", "remember", "docs/planning")
+        self.assertEqual(done.returncode, 0, done.stdout)
+        self.assertTrue((self.machine.project / "docs" / "planning").is_dir())
+        self.assertIn("- next stage by the documents: problem (its document: docs/planning/000_problem.md)",
+                      self.report())
+
+    def test_a_full_path_inside_the_project_is_recorded_as_the_folder_inside_it(self):
+        # Found by the end-to-end runs: a session gave the folder by its full path and was refused.
+        done = self.machine.run("stage.sh", "remember", (self.machine.project / "planning").as_posix())
+        self.assertEqual(done.returncode, 0, done.stdout)
+        self.assertIn("- planning folder: planning (chosen earlier for this project)", self.report())
+
+    def test_a_folder_outside_the_project_is_refused(self):
+        self.assertEqual(self.machine.run("stage.sh", "remember", "../elsewhere").returncode, 3)
+        self.assertEqual(self.machine.run("stage.sh", "remember", "/tmp/elsewhere").returncode, 3)
+
+    def test_the_report_says_how_the_documents_are_read_again(self):
+        self.chosen("000_problem.md")
+        self.assertRegex(self.report(), r'- after a stage is finished, read the documents again: .*sh ".*stage\.sh" report')
+
+    def test_the_report_says_how_a_file_of_the_users_is_described(self):
+        self.chosen("000_problem.md")
+        out = self.report()
+        self.assertIn("- a file of the user's (a sheet, an export) is never opened here", out)
+        self.assertRegex(out, r"source\.sh describe FILE")
+
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()
         (self.machine.project / "planning").rmdir()
         self.assertIn("- planning folder: planning (chosen earlier for this project) no longer exists",
                       self.report())
 
-    def test_remembering_a_folder_that_does_not_exist_is_refused(self):
-        done = self.machine.run("stage.sh", "remember", "nowhere")
-        self.assertEqual(done.returncode, 3)
+    def test_remembering_no_folder_is_refused(self):
+        self.assertEqual(self.machine.run("stage.sh", "remember").returncode, 3)
 
 
 if __name__ == "__main__":

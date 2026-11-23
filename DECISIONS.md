@@ -162,6 +162,95 @@ asking is listed apart, so it can be overturned.
     read). The re-read after a slice is not part of it: it is the
     check-in stage of decision 23, built after requirements.
 
+## 2026-11-22: how the requirements stage is measured
+
+25. **Stage 3 is the user's own list for the map's "now" activity,
+    drafted first and shown once** (the owner, on the proposal in
+    `steps/03-requirements/README.md`): a checkable list, each item
+    with a box and a short name, and the outside systems and lasting
+    things that research starts from. It is light on purpose: the
+    requirements that come from the library of failures and the state
+    tables stay where the design has them, in the questions and
+    answers stages after research and the slice. Measured as stages 1
+    and 2 were (decision 18); ceiling $30.
+
+## 2026-11-22: the planner's own questions are written down
+
+26. **The requirements list holds the planner's own questions, and
+    nothing kad's skills did at a stage is lost unnoticed** (the
+    owner, on stage 3's result: such questions "could point to
+    things I didn't think of"). Each stage's text is set beside
+    kad's skill part by part, and each part is kept, added or said
+    to be left out with the reason; for stage 3 the table is in
+    `steps/03-requirements/README.md`.
+
+## 2026-11-22: questions by a walk; thoroughness before cost
+
+27. **The planner's questions are arrived at by a fixed walk where
+    that finds more, and the owner will answer them** (the owner:
+    "I'm not opposed to answering questions so we have a good
+    understanding of what we are building"; and, asked whether to
+    test a grid of gap kinds on a raised ceiling: "Yes, and we can
+    drop the budget, it's more important to me that we make this
+    plugin well tested and make this planning really solid to
+    support clean bug-less building"). The ceiling is dropped for
+    stage 3; a pilot and the real cost are still reported. Whether
+    it is dropped for the stages after is asked when the next one is
+    proposed.
+
+## 2026-11-22: the requirements stage holds
+
+28. **The requirements stage holds with the text of 84 lines in
+    `steps/03-requirements/eval/requirements-skill-kinds.md`, on the
+    session's model, Sonnet 5.5** (the owner, on the result in
+    `steps/03-requirements/README.md`: 70 of 70 as read, 89% of the
+    known gaps raised). Before the check-in stage is begun, the
+    owner wants a pause for two things: the tests of stages 0 to 3
+    looked over for gaps, and the four stages run end to end on a
+    few real examples.
+
+## 2026-11-22: every problem becomes a test
+
+29. **Whatever problem is met results in a test added or fixed, an
+    evaluation added or fixed, or a skill changed and tested again**
+    (the owner, during the end-to-end runs). The end-to-end examples
+    are kept and re-run as stages are added; the owner gives ideas
+    for them. Each finding and the test it became is listed in
+    `e2e/README.md`.
+
+## 2026-11-22: how many runs
+
+30. **Five runs, not ten** (the owner). Five for a scenario that is
+    new or whose text has just changed, and five again before the
+    owner is asked whether a stage holds; the other scenarios of a
+    stage get one run as a check that nothing else moved, and the
+    fixes from one round of reading are batched into one pass. (The
+    owner first chose ten before a stage is put to them, and changed
+    it to five on 2026-11-23, when a ten-run pass over the four
+    stages came to about 75 minutes and $25.)
+
+## 2026-11-22: the suites stay quick and cheap
+
+31. **The tests and the end-to-end runs are not to take forever or
+    cost much: a good balance** (the owner). The balance chosen is
+    the table in `e2e/README.md`, "How much is run, and when": what
+    is free first (unit tests; kept runs graded again when a check
+    changes), then only what changed, and the wide pass only before
+    a stage is put to the owner. The owner can change any row.
+
+## 2026-11-22: a file of the user's stays on their machine
+
+32. **A file of the user's own (a sheet, an export) is never brought
+    into the project's VM** (the owner, choosing between that and
+    copying it in under a rule and a scan). The user describes it on
+    their own machine with `startup/source.sh describe`, which prints
+    its columns and counts and never a cell, and pastes that into
+    the session; the session lists the file in `sources.md` and
+    writes every example with invented values. The same script's
+    `scan`, run on the user's machine, says where a value of the file
+    has been written, never what. The real run on the owner's Mac
+    (the plugin installed, a real VM) is held off for now.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -171,6 +260,19 @@ asking is listed apart, so it can be overturned.
   often): with the answers stage.
 - **A measure for each of the problem, scope, requirements, slice,
   design and screens stages:** agreed when each is reached.
+- **How an answer of the answers stage attaches to the checkable
+  list** (a criterion under the named item it belongs to, or an item
+  of its own): with the answers stage. Stage 3 owes it only names
+  that do not change.
+- **Where the user finds `source.sh` on their own machine,** and when
+  the scan is run (before the planning pull request is merged?):
+  with the plugin's real install, which waits for the run on the
+  owner's Mac.
+- **Approaches the user considered and rejected:** kad's skill asked
+  and recorded them; no stage here does yet.
+- **A dependency the user did not name** (a library the design or
+  the stack picks) has no way back to research in the order as
+  written: with the design and stack stages.
 
 ## Chosen without asking; the owner can overturn any of these
 
@@ -229,5 +331,34 @@ asking is listed apart, so it can be overturned.
   the report says they are read inside.
 - A session knows it is inside a VM by the folder the VM tool mounts
   there, and only where the VM tool itself is not installed.
+- A startup report with a part that could not be read (a line
+  REFUSED) stops the session: it says what was not read and does
+  nothing else, not even the planning conversation, until the report
+  reads (routing table, row 0; found by the first end-to-end run).
+- In an end-to-end run the user is a script that says only the
+  words written in the example's brief (the owner asked for a user
+  that does not drift); a model only says which of the brief's
+  topics a message asks about, and its pick is kept with the turn.
+- `startup/source.sh`, 2026-11-22: it reads delimited text (.csv,
+  .tsv, .txt) and refuses a workbook, asking for the sheet saved as
+  CSV (a workbook cannot be read with what a fresh Mac and a fresh
+  Windows machine both have); a screenshot or a PDF is not read at
+  all. A value is looked for when it would tell a reader something:
+  text of five characters or more, a number with a decimal part or
+  of five digits or more; a column's name is not a value. The rule
+  for the session is said once, in the routing table, not in each
+  stage's text.
+- The requirements list (`steps/03-requirements/`), 2026-11-22:
+  - An item is a line `- [ ] **its-name**: ...`; a name is lower case
+    words joined by hyphens.
+  - A limit of the whole problem is not a box: it holds for every
+    item, and the criteria carry it.
+  - The stage writes every box unchecked; checking belongs to the
+    check-in after a merge.
+  - The list is for the "now" row only; a later "now" gets a list of
+    its own, decided with the check-in.
+  - The stage script reports the count on every startup report once
+    the document exists; it does not read the inventory until the
+    research stage needs it.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
