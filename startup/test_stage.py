@@ -120,6 +120,9 @@ class Stage(unittest.TestCase):
     def planned(self, set_text, documents=(), list_text=LIST, slices=None, tracker=None):
         """A project with its list, a set of slices, each slice's own document by its number, and
         what the tracker answers."""
+        if tracker is not None:
+            # Before the folder is recorded: on Windows a repository's root is not written as a plain folder's is.
+            self.machine.repository(REMOTE)
         self.chosen("000_problem.md", "001_scope-map.md", *documents)
         folder = self.machine.project / "planning"
         (folder / "002_requirements.md").write_text(list_text, encoding="utf-8")
@@ -128,7 +131,6 @@ class Stage(unittest.TestCase):
             (folder / f"slice-{number:03d}").mkdir(exist_ok=True)
             (folder / f"slice-{number:03d}" / "004_slice.md").write_text(text, encoding="utf-8")
         if tracker is not None:
-            self.machine.repository(REMOTE)
             self.machine.have("gh")
             self.machine.set("gh/lines", "\n".join(["ok\t0\t0", *tracker]))
         return self.report()
@@ -332,8 +334,8 @@ class Stage(unittest.TestCase):
         self.assertNotIn("not placed", self.report())
 
     def test_issues_are_not_placed_before_there_is_a_set(self):
-        self.chosen(*THROUGH_REQUIREMENTS)
         self.machine.repository(REMOTE)
+        self.chosen(*THROUGH_REQUIREMENTS)
         self.machine.have("gh")
         self.machine.set("gh/lines", "ok\t0\t1\nissue\t15\t-\tLoans show twice")
         out = self.report()
