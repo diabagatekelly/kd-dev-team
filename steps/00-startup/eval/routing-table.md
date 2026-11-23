@@ -43,7 +43,8 @@ Whatever the user asks for:
 - A file of the user's (a sheet, an export, a screenshot) is never
   opened, searched or copied here, wherever it is. Ask the user to
   describe it on their own machine, as the report says, and to paste
-  what that prints; list it in `sources.md` in the planning folder
+  what that prints: give the command in full in that reply, since
+  the user has not seen the report; list it in `sources.md` in the planning folder
   (what it is, where the user keeps it, the date, its columns as
   pasted). An example in a document is invented, and said to be: a
   real name or figure the user gives as an example is not written
