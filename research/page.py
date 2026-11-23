@@ -36,6 +36,8 @@ class _Text(html.parser.HTMLParser):
             self.skip += 1
         elif tag in BLOCKS:
             self.out.append("\n")
+        elif tag in ("td", "th"):   # a table's cells do not run together
+            self.out.append(" ")
         elif tag == "a":   # where a link leads is kept: the next page to read is found by it
             href = dict(attrs).get("href") or ""
             self.links.append("" if href.startswith(("#", "mailto:", "javascript:")) else urllib.parse.urljoin(self.base, href))

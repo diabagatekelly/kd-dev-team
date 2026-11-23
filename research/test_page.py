@@ -76,6 +76,12 @@ class Fetch(unittest.TestCase):
         said = self.fetch("200")[1]
         self.assertIn("Refunds <https://docs.example/refunds>, this <https://other.example/x> and the top.", said)
 
+    def test_the_cells_of_a_table_do_not_run_together(self):
+        (self.folder / "body").write_text("<table><tr><th>Error</th><th>Applies to</th></tr>"
+                                          "<tr><td>RATE_LIMITED</td><td>All products</td></tr></table>")
+        said = self.fetch("200")[1]
+        self.assertIn("Error Applies to\nRATE_LIMITED All products", said)
+
     def test_something_that_is_not_an_address_is_refused(self):
         self.assertEqual(self.fetch("200", url="payments")[0], 3)
 
