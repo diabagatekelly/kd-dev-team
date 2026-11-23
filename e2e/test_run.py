@@ -96,6 +96,12 @@ class TheBrief(unittest.TestCase):
         self.assertEqual(self.brief.reply({"asked": ["who"], "uncovered": 2}, {"requirements"}, True),
                          "The club. I don't know that yet.")
 
+    def test_asked_whether_to_go_on_the_user_says_yes_unless_the_brief_says_otherwise(self):
+        # Found by an end-to-end run: "Say the word and I'll start" was met with "I don't know." five times.
+        self.assertEqual(self.brief.reply({"asked": ["proceed"], "uncovered": 0}, set(), False), "Yes, go on.")
+        other = run.Brief(BRIEF.replace("| who | who it is for | The club. |", "| proceed | whether to go on | Not yet. |"))
+        self.assertEqual(other.reply({"asked": ["proceed"], "uncovered": 0}, set(), False), "Not yet.")
+
     def test_a_brief_without_the_optional_parts_has_plain_defaults(self):
         brief = run.Brief("## Opening\nHello.\n")
         self.assertEqual((brief.folder, brief.not_known, brief.go_on, brief.limit), ("planning", "I don't know yet.", "Go on.", None))

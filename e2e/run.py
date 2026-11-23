@@ -77,6 +77,8 @@ class Brief:
         self.opening = section(text, "Opening")
         self.folder = section(text, "Planning folder") or "planning"
         self.topics = {key: (covers, says) for key, covers, says in rows(section(text, "Answers"))}
+        # Asked whether to begin or go on, any user says yes unless their brief says otherwise.
+        self.topics.setdefault("proceed", ("whether to go on, begin or continue with the next stage or step", "Yes, go on."))
         self.not_known = section(text, "Not known") or "I don't know yet."
         self.go_on = section(text, "Nothing asked") or "Go on."
         self.shown = {name: says for name, says in rows(section(text, "When a document is first shown"))}
@@ -208,10 +210,13 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                     "--no-session-persistence"]
     planning = project / brief.folder
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
+    sessions = []
     for _ in range(max_turns):
         had_list = "requirements" in present(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
         cost += spent
+        if session not in sessions:
+            sessions.append(session)
         turn = {"user": said, "session": reply}
         turns.append(turn)
         if had_list:
@@ -233,7 +238,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     (out / "transcript.md").write_text("\n\n".join(
         f"**User:** {turn['user']}\n\n**Session:** {turn['session']}" for turn in turns) + "\n", encoding="utf-8")
     (out / "turns.json").write_text(json.dumps(turns, indent=2) + "\n", encoding="utf-8")
-    calls = tool_calls(record_of(session, os.environ.get("HOME", "")))
+    calls = [call for one in sessions for call in tool_calls(record_of(one, os.environ.get("HOME", "")))]
     (out / "tools.txt").write_text("\n".join(calls) + "\n", encoding="utf-8")
     documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
     summary = {"example": example.name, "model": model, "ended": ended, "session": session,
