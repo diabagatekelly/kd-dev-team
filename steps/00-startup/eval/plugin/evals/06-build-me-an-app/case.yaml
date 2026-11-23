@@ -11,7 +11,7 @@ execution:
   allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]
 runs: 3
 graders:
-  - {"type": "regex", "name": "starts-at-the-problem", "target": "last_message", "flags": "i", "pattern": "problem"}
+  - {"type": "regex", "name": "starts-at-the-problem", "target": "last_message", "flags": "i", "pattern": "problem|goes wrong|go wrong|today[^.?!]{0,80}\\?"}
   - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0}

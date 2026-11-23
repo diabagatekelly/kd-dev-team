@@ -5,7 +5,9 @@ The hook gives a new session the live startup report (the scripts run in the pro
 canned report) and the routing table; the skills are the adopted stage texts. Nothing here is
 the released plugin: it is rebuilt from the adopted pieces each time and not kept in git.
 
-Usage: python3 -I make_plugin.py [FOLDER]      (default: plugin/ beside this file)
+Usage: python3 -I make_plugin.py [FOLDER] [NAME=TEXT ...]      (default: plugin/ beside this file)
+    NAME=TEXT   a stage's text that is not adopted yet, loaded as the skill NAME for a trial: with
+                it the examples are run before the owner is asked whether the stage holds
 """
 import json
 import pathlib
@@ -16,7 +18,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
           "scope-map": "steps/02-scope-map/eval/scope-map-skill.md",
-          "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md"}
+          "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md",
+          "slice": "steps/04-slice/eval/slice-skill.md"}
 HOOK = """#!/bin/sh
 # The startup report of this machine and project, then what to do with it.
 sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"
@@ -31,7 +34,7 @@ def write(path, text, executable=False):
         path.chmod(0o755)
 
 
-def main(folder):
+def main(folder, trial=None):
     shutil.rmtree(folder, ignore_errors=True)
     write(folder / ".claude-plugin" / "plugin.json", json.dumps(
         {"name": "kd-dev-team-trial", "version": "0.0.1",
@@ -44,10 +47,12 @@ def main(folder):
     (folder / "startup").mkdir()
     for script in [*(ROOT / "startup").glob("*.sh"), ROOT / "startup" / "tracker.jq"]:
         shutil.copy(script, folder / "startup" / script.name)
-    for name, source in SKILLS.items():
+    for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder
 
 
 if __name__ == "__main__":
-    print(main(pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "plugin"))
+    given = [argument for argument in sys.argv[1:] if "=" not in argument]
+    print(main(pathlib.Path(given[0]) if given else HERE / "plugin",
+               dict(argument.split("=", 1) for argument in sys.argv[1:] if "=" in argument)))

@@ -25,8 +25,9 @@ design are recorded under `next-plugin/validation/`.
 
 | Folder | Holds |
 |---|---|
-| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
+| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
+| `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -35,17 +36,23 @@ design are recorded under `next-plugin/validation/`.
 
 ## Where the work stands (2026-11-23)
 
-Stages 0 to 3 hold (startup, the problem, the scope map, the
-requirements), all on Sonnet 5.5. After the owner said each holds,
-all four were run together, end to end, and their texts changed from
-what those runs found (decisions 28 to 32). Where each stands:
+Stages 0 to 4 hold (startup, the problem, the scope map, the
+requirements, the slice), all on Sonnet 5.5. After the owner said
+each of the first four holds, they were run together, end to end,
+and their texts changed from what those runs found (decisions 28 to
+32). Where each stands:
 
 | Stage | Its text | Scenarios | The pass of 2026-11-23, every adopted text loaded (Sonnet) |
 |---|---|---|---|
-| 0 Startup | routing table, 52 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 19 of 20 by the checks and 20 of 20 as read |
+| 0 Startup | routing table, 53 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 19 of 20 by the checks and 20 of 20 as read |
 | 1 Problem | 51 lines | 8 | 8 of 8 once; scenarios 05, 07 and 08 five times, 15 of 15 |
 | 2 Scope map | 56 lines | 6 | 6 of 6 once; scenarios 05 and 06 five times, 10 of 10 |
 | 3 Requirements | 93 lines | 12 | 12 of 12 once; scenarios 05 and 08 to 12 five times, 29 of 30 |
+| 4 Slice | 152 lines | 17 | not in that pass: adopted later the same day (below) |
+
+With the slice adopted, every stage's scenarios ran once with every
+text and script as they now stand: 64 of 64 (startup 21, the
+problem 8, the scope map 6, the requirements 12, the slice 17).
 
 That pass is the one the texts were owed after the end-to-end runs
 changed them: 107 runs and the four examples, side by side, 18
@@ -61,37 +68,54 @@ numbered in order, no file of the user's opened and no value of one
 written down. The owner has said all four stages still hold
 (decision 33).
 
-**Next, in this order** (the order of the stages changed on
-2026-11-23, decision 36: the requirements say what, a provider is a
-how, so the slices are cut first and research follows the choice of
-a dependency):
+**Stage 4, the slice, holds** (decision 39,
+`steps/04-slice/README.md`), on Sonnet 5.5 like the four before it. Built in the order the
+stages now have (decision 36): the requirements say what, the
+slices are cut from them, and a dependency is chosen after.
 
-1. **The slice (stage 4): agreed, not built** (decision 37,
-   `steps/04-slice/README.md`). The whole set of slices for the
-   "now", a recommended start, criteria for the chosen one only,
-   pushback on a wider cut, and the coming-back after every merge.
-   To do, in order: `startup/stage.sh` takes the new order of
-   stages, counts the set and says when a coming-back is due, and
-   the tracker script reads merged work (unit tests first); the ten
-   scenarios; a pilot of about $5, reported before anything else
-   runs; then the passes, about $70 in all.
-2. **The approach (stage 5):** where a dependency is committed to.
+- `startup/stage.sh` has the new order, counts the set of slices and
+  says when a coming-back is due and exactly what to mark;
+  `startup/tracker.sh` reads what merged pull requests say they
+  complete. Every earlier stage's scenarios passed once with them
+  (47 of 47), and once more with the slice text loaded (47 of 47).
+- Seventeen cases for the ten rows of the test. No model holds
+  without a text (Sonnet 9 of 42, Opus 8, Haiku 6); kad's two
+  skills pass 3 of 24, by what they were built to do. With the text
+  of 152 lines (`steps/04-slice/eval/slice-skill.md`), five runs a
+  case: Sonnet 83 of 85, and 10 of 10 on the two cases its one slip
+  touched once that was fixed; Haiku 66 of 85, giving way when the
+  user asks for a wider cut.
+- On three of the owner's real requirements lists (counted
+  privately): first slices of 4 to 5, 6 to 7 and 3 to 4 criteria
+  where kad's were 8, 21 and 5, and every item with a home in the
+  set in 9 runs of 9.
+- The four end-to-end examples go through a set, a chosen slice, a
+  made-up merge and the coming-back, and can now start from their
+  documents after the requirements (about $0.70 a run, not $2 to
+  $8).
+- Every stage's scenarios passed once with the final scripts and
+  texts (64 of 64).
+- $111 against $70 agreed: the examples cost three times the guess,
+  and the closing pass the owner asked for was $29.
+- What is tested where, for every stage from here: decision 38.
+
+**Next, in this order:**
+
+1. **The approach (stage 5):** where a dependency is committed to.
    Not proposed yet.
-3. **Research (stage 6): paused at its pilot**
-   (`steps/06-research/README.md`). A page reader and a quote check
-   with unit tests (`research/`), six scenarios on a made-up
-   provider, a first text, and one real run: $2.17 spent, about $40
-   to finish. Its gate and benchmark are run in its place, after the
-   approach.
+2. **Research (stage 6): paused at its pilot**
+   (`steps/06-research/README.md`): $2.17 spent, about $40 to
+   finish, in its new place after the approach. Its scenarios were
+   moved to the slice's folder so that they still build.
 
-`startup/stage.sh` still has the old order (research straight after
-the requirements) until the slice stage is built. The parked
-check-in proposal (`steps/check-in/README.md`) is replaced by the
-slice stage's coming-back.
+The parked check-in
+proposal (`steps/check-in/README.md`) is replaced by the slice
+stage's coming-back.
 
 **Watched, not changed:** in one run of five, `sources.md` said
 where the user keeps their file and not its name. The routing
-table's rule is changed only if that comes back.
+table's rule is changed only if that comes back. In one run of six
+the problem stage wrote its document before its last question.
 
 **How the work is done** (the owner's standing rules, all in
 `DECISIONS.md`): the owner is asked only what is theirs, one
@@ -115,9 +139,19 @@ free checks only, no model judge:
 - `python3 -I e2e/regrade.py PLUGIN TRACES NAME` grades kept runs
   again by the checks as they stand, for nothing: a corrected check
   is shown right this way, never by running the scenario again.
+  `python3 -I e2e/tally.py RESULT.json` counts a pass, with and
+  without the checks of form.
 - `python3 -I e2e/run.py e2e/examples/NAME --out FOLDER` runs one
-  example end to end with its scripted user, after
+  example end to end with its scripted user, through a set of
+  slices, a chosen slice and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
+- `--from requirements` starts an example from the documents its
+  last good run left (`--keep requirements RUN` keeps them); it is
+  refused once an earlier stage's text has changed.
+- A text not yet adopted is loaded on trial with `NAME=TEXT` after
+  either of `e2e/regress.py` and `e2e/make_plugin.py`.
+- The VM stops when the command that started it returns: a pass is
+  kept attached to that command, never left running behind it.
 - kad's skill, where it is an arm, is copied into the VM by hand and
   never committed. Raw runs go to the audit repository.
 
@@ -150,6 +184,6 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
   `startup/`, `research/`, `steps/03-requirements/eval/`,
-  `steps/06-research/eval/` and `e2e/`.
+  `steps/04-slice/eval/`, `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.

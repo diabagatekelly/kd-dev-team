@@ -1,0 +1,22 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- this session is inside a VM (Docker Sandboxes): the project is worked on here
+
+Tracker
+- repository: someone/something on GitHub
+- open pull requests: 0
+- open issues: 0
+
+Documents
+- planning folder: planning (chosen earlier for this project)
+- after a stage is finished, read the documents again: CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" report
+- a file of the user's (a sheet, an export) is never opened here: the user runs, in a terminal on their own
+  machine, this plugin's `sh startup/source.sh describe FILE`, and pastes what it prints
+- found: problem (000_problem.md), scope map (001_scope-map.md), requirements (002_requirements.md), the set of slices (003_slices.md), slice (slice-001/004_slice.md)
+- requirements (002_requirements.md): 0 items, 0 checked
+- slices (003_slices.md): 1 slice, 0 built, 1 chosen, 0 open
+- a slice names an item the requirements do not hold: propose-a-book (slice 1)
+- a changed set is corrected in place (planning/003_slices.md): no slice is built from it yet
+- next stage by the documents: approach (its document: planning/slice-001/005_approach.md)

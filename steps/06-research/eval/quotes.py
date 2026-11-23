@@ -38,12 +38,12 @@ def main(plugin, traces, name):
         scenario, _ = regrade.graders(case)
         for run in sorted(traces.glob(f"{name}-{scenario}-*.jsonl")):
             _, files, _ = regrade.replay(run.read_text(encoding="utf-8", errors="replace"), {})
-            documents = {path: text for path, text in files.items() if "003_research" in path and path.endswith(".md")}
+            documents = {path: text for path, text in files.items() if "_research/" in path and path.endswith(".md")}
             wrong = page.check(documents, served(case.parent))
             pairs = sum(len(page.PAIR.findall(text)) for text in documents.values())
             print(f"{run.stem}: {pairs} quotes, {len(wrong)} wrong")
             for line in wrong:
-                print("  " + line.split("003_research/")[-1])
+                print("  " + line.split("_research/")[-1])
 
 
 if __name__ == "__main__":

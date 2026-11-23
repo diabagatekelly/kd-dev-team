@@ -1,0 +1,13 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- this session is inside a VM (Docker Sandboxes): the project is worked on here
+
+Tracker
+- repository: a git repository with no remote named origin
+
+Documents
+- planning folder: not chosen yet for this project
+- to record the folder the user names (it is made if it is not there): CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" remember FOLDER
+  then read the documents again: CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" report

@@ -139,6 +139,10 @@ class WhatASessionDid(unittest.TestCase):
     def test_each_tool_call_is_listed_with_what_it_was_given(self):
         self.assertEqual(run.tool_calls(self.RECORD), ["Read: /p/register.py", "Bash: cat > a.md <<'EOF'", "Skill: x:problem"])
 
+    def test_a_line_of_the_record_whose_message_is_plain_text_is_passed_over(self):
+        # Found by the slice stage's pilot: one transcript held such a line and grading it again stopped there.
+        self.assertEqual(run.tool_calls(json.dumps({"type": "system", "message": "compacted"}) + "\n"), [])
+
     def test_no_record_lists_nothing(self):
         self.assertEqual(run.tool_calls(""), [])
         self.assertEqual(run.record_of("s-1", tempfile.mkdtemp()), "")
@@ -281,6 +285,138 @@ class Run(unittest.TestCase):
         summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 10,
                           command=(sys.executable, str(fake)))
         self.assertTrue(summary["numbered_in_order"])
+
+    # Carried on through the slice stage: a set, a chosen slice, one merge and the coming-back.
+    THROUGH = FAKE.replace(
+        'if n == 3: pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")',
+        'if n == 3: pathlib.Path("plans/002_requirements.md").write_text("- [ ] **a**: b")\n'
+        '    if n == 4: pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | open |\\n")\n'
+        '    if n == 5:\n'
+        '        pathlib.Path("plans/slice-002").mkdir(exist_ok=True)\n'
+        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
+        '    if n == 6:\n'
+        '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
+        '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
+
+    def through(self, fake=None, brief=BRIEF, turns=20, through="merge", out="out"):
+        # A second run in one test takes a folder of its own: on Windows a run's repository cannot be swept away.
+        (self.example / "brief.md").write_text(brief)
+        script = self.folder / "fake.py"
+        script.write_text(fake or self.THROUGH)
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / out, self.folder / "plugin", "m", "s", turns,
+                          command=(sys.executable, str(script)), through=through)
+        calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
+        return summary, [call for call in calls if "--system-prompt" not in call]
+
+    def test_carried_through_a_merge_it_ends_after_the_session_has_come_back_to_the_set(self):
+        summary, sessions = self.through()
+        self.assertEqual(summary["ended"], "the slice was merged and the session came back to the set")
+        self.assertEqual(summary["session_turns"], 6)
+        self.assertEqual(summary["documents"], ["plans/001_scope-map.md", "plans/002_requirements.md", "plans/003_slices.md",
+                                                "plans/slice-002/004_slice.md"])
+
+    def test_it_can_end_once_the_chosen_slice_is_written(self):
+        summary, _ = self.through(through="slice")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["merged"]), ("the chosen slice was written", 5, ""))
+
+    def test_once_a_slice_is_written_its_merge_is_made_up_from_its_own_criteria(self):
+        summary, _ = self.through()
+        lines = (self.folder / "out" / "project" / ".cache" / "machine" / "gh" / "lines").read_text().splitlines()
+        self.assertEqual(lines, ["ok\t0\t0", "merged\t7\tslice 2: a / 1, a / 2\tSlice 2: Do b"])
+        self.assertEqual(summary["merged"], "slice 2: a / 1, a / 2")
+
+    def test_after_the_merge_the_user_comes_back_in_a_new_session_and_says_so(self):
+        _, sessions = self.through()
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[5], "That slice is built and merged. What's next?")
+        self.assertNotIn("--resume", sessions[5])
+        self.assertIn("--resume", sessions[4])
+        _, sessions = self.through(brief=BRIEF + "\n## After the merge\nIt's in. Now what?\n", out="again")
+        self.assertEqual(sessions[-1][sessions[-1].index("-p") + 1], "It's in. Now what?")
+
+    def test_what_the_set_and_the_list_say_at_the_end_is_kept(self):
+        summary, _ = self.through()
+        self.assertEqual(summary["slices"], {"2": "built"})
+        self.assertEqual(summary["boxes"], {"a": True})
+        early, _ = self.through(turns=5, out="early")
+        self.assertEqual((early["ended"], early["slices"], early["boxes"]), ("the turns ran out", {"2": "open"}, {"a": False}))
+
+    def test_a_session_that_never_marks_the_merged_slice_is_given_four_turns(self):
+        # Found by the pilot: asked what is next after a merge, a session names the coming-back and waits for the word.
+        summary, sessions = self.through(fake=self.THROUGH.replace("if n == 6:", "if n == 7:"))
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the slice was merged and the session came back to the set", 7))
+
+    def test_asked_where_to_start_the_user_takes_the_recommended_slice_unless_the_brief_says_otherwise(self):
+        self.assertEqual(run.Brief(BRIEF).reply({"asked": ["start"], "uncovered": 0}, set(), False),
+                         "Start with the one you recommend.")
+        other = run.Brief(BRIEF.replace("| who | who it is for | The club. |", "| start | where to start | The last one. |"))
+        self.assertEqual(other.reply({"asked": ["start"], "uncovered": 0}, set(), False), "The last one.")
+
+    def test_documents_numbered_on_through_the_slice_are_in_order(self):
+        self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_slice.md"]))
+        self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md"]))
+        self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "004_slices.md"]))
+        self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "slices.md"]))
+        self.assertFalse(run.in_order(["001_scope-map.md", "002_requirements.md"]))
+
+    def test_a_slice_with_no_criterion_it_can_read_is_merged_as_naming_nothing(self):
+        fake = self.THROUGH.replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
+        summary, _ = self.through(fake=fake)
+        self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
+
+    # An example is started from its documents as its last good run left them (decision 38).
+    def kept(self):
+        plugin = self.folder / "plugin"
+        (plugin / "skills" / "problem").mkdir(parents=True, exist_ok=True)
+        (plugin / "skills" / "problem" / "SKILL.md").write_text("the problem text")
+        (plugin / "hooks").mkdir(exist_ok=True)
+        (plugin / "hooks" / "routing-table.md").write_text("the table")
+        (plugin / "skills" / "slice").mkdir(exist_ok=True)
+        (plugin / "skills" / "slice" / "SKILL.md").write_text("a later stage's text")
+        planning = self.folder / "done" / "project" / "plans"
+        (planning / "slice-002").mkdir(parents=True)
+        for name in ("000_problem.md", "001_scope-map.md", "002_requirements.md", "sources.md", "003_slices.md", "slice-002/004_slice.md"):
+            (planning / name).write_text("kept " + name)
+        return run.keep(self.folder / "done", self.example, "requirements", plugin)
+
+    def test_the_documents_of_a_good_run_are_kept_up_to_a_stage(self):
+        kept = self.kept()
+        self.assertEqual(kept, self.example / "after" / "requirements")
+        self.assertEqual(sorted(path.name for path in kept.iterdir()),
+                         ["000_problem.md", "001_scope-map.md", "002_requirements.md", "made-with.json", "sources.md"])
+
+    def test_a_run_started_from_kept_documents_begins_with_them_and_the_users_coming_back(self):
+        self.kept()
+        script = self.folder / "fake.py"
+        script.write_text(self.THROUGH)
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1,
+                          command=(sys.executable, str(script)), through="merge", start="requirements")
+        self.assertEqual((self.folder / "out" / "project" / "plans" / "002_requirements.md").read_text(), "kept 002_requirements.md")
+        self.assertFalse((self.folder / "out" / "project" / "plans" / "made-with.json").exists())
+        calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
+        self.assertEqual(calls[0][calls[0].index("-p") + 1], "Let's carry on where we left off.")
+        self.assertEqual(summary["started_from"], "requirements")
+
+    def test_kept_documents_are_refused_once_a_text_they_were_made_with_has_changed(self):
+        self.kept()
+        (self.folder / "plugin" / "skills" / "problem" / "SKILL.md").write_text("the problem text, changed")
+        with self.assertRaises(SystemExit) as refused:
+            run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1, command=("true",), start="requirements")
+        self.assertIn("problem", str(refused.exception))
+
+    def test_a_later_stages_text_changing_or_added_does_not_stale_what_was_kept(self):
+        kept = self.kept()
+        self.assertEqual(sorted(json.loads((kept / "made-with.json").read_text())), ["problem", "routing-table.md"])
+        (self.folder / "plugin" / "skills" / "slice" / "SKILL.md").write_text("a later stage's text, changed")
+        (self.folder / "plugin" / "skills" / "approach").mkdir()
+        (self.folder / "plugin" / "skills" / "approach" / "SKILL.md").write_text("added since")
+        self.assertEqual(run.stale(kept, self.folder / "plugin"), [])
+
+    def test_starting_from_documents_that_were_never_kept_is_refused(self):
+        with self.assertRaises(SystemExit):
+            run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1, command=("true",), start="requirements")
 
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)

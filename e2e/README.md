@@ -31,6 +31,15 @@ as long as it takes (decision 28).
 - `machine/`: the made-up machine the stand-in tools answer as:
   inside the project's VM, a tracker with nothing open.
 
+A run goes through every adopted stage: the documents, a set of
+slices, the chosen slice, a made-up merge of it (the tracker's
+stand-in is given a merged pull request that names the slice's
+criteria) and the coming-back. `--from requirements` starts from the
+documents the example's last good run left
+(`examples/NAME/after/requirements/`, kept with `--keep
+requirements`), and is refused once an earlier stage's text has
+changed; each run takes a fresh `--out` place.
+
 To add an example, add a folder with a brief. To run one, inside the
 evaluation VM, after `steps/00-startup/eval/setup-vm.sh`:
 
@@ -59,8 +68,9 @@ what changed, and widened only when a stage is put to the owner.
 | A scenario is new | one run on Haiku, to see that it builds and its checks can pass | under a cent |
 | A text is changed (one batch for a round of fixes) | the changed and new scenarios five times, the rest of that stage once, on Sonnet | $1 to $3, 10 minutes |
 | The routing table is changed (every stage loads it) | every stage's scenarios once | $4, 15 minutes |
-| A fix came from an end-to-end example | that example, once | $1 to $2.50 |
-| Before a stage is put to the owner | its changed scenarios five times, the rest once; the four examples once, side by side | $3 to $5 a stage, 10 minutes; all four stages with the examples, about $15 and 30 minutes |
+| A fix came from an end-to-end example | that example, once, in a fresh place | $2 to $8 through a merge |
+| A stage is being built | its cases as below; one or two examples from their kept documents (`--from`) through the new stage | $0.70 an example |
+| Before a stage is put to the owner (decision 38) | every case of the stage five times on Sonnet and on Haiku with the final text; every earlier stage once; the four examples once from the first message, each in a fresh place, then kept | $8 Sonnet, $0.60 Haiku, $3, and about $16 for the examples ($1.70 to $8 each) |
 
 A round of fixes is meant to stay under $3 and ten minutes. A pass
 that would go past $12 is said, with its reason, before it is run.
@@ -115,3 +125,13 @@ stage working as meant.
 | A run stepped out of the project (`cd "$TMPDIR"`) before fetching, so the real web answered in place of the scenario's | research pilot, Haiku | the stand-in wrapper looks in the folder the command came from: `steps/06-research/eval/test_wrapper.py` |
 | A real page's table cells ran together; the quote check missed quotes across a link's words, quotes starting mid-sentence and quotes with words before their address | research pilot, the real run | `research/page.py`: four unit tests |
 | Nine facts of 88 carried an address and no quote; one quote was stitched with "..." | research pilot, the real run | two lines in the research text; the gate's quote check |
+| Asked "what's next" after a merge, a session named the coming-back and waited for the word | slice pilot | the three cases that expect the check-off say "Go on to the next stage."; the driver gives a session four turns after the merge: `test_a_session_that_never_marks_the_merged_slice_is_given_four_turns` |
+| One run of five marked the row below the chosen slice: the end of one row of the set was the end of another, and the edit landed on the wrong one | slice, five runs | slice text (the whole row is replaced); the checks `form-marks-the-chosen-slice` and `form-marks-no-other-slice` already caught it |
+| Told not to write a criterion to look thorough, sessions wrote slices with no refusal at all | slice, five runs, as read | slice text (the essential refusals stay, one for a rule); the four cases with criteria five times again |
+| A list of one item with eight questions open under it was cut into one slice that did not wait for them; once it was merged the box was checked and the activity called done | example 2, through a merge | `stage.sh` does not call an activity done while a question of the list is open, and names the requirements as next: three unit tests; slice text (the part of an item that waits for an answer is a row of its own) |
+| Asked whether singers can reach the hall's computer from home, the scripted user gave its limits four times running: no topic covered the question as asked | example 3, through a merge | the brief has a topic for it |
+| A second run in one unit test could not clear the first run's folder on Windows; tests that recorded the planning folder before making the repository failed there | CI, first push of the slice branch | the tests take a folder a run and make the repository first |
+| An example run a second time in the same place was told its planning folder "no longer exists", with no command to record one: the session wrote every document without its number and never read the documents again | examples 2 and 3, run again | `stage.sh` gives the command that records a folder then too: `test_a_remembered_folder_that_is_gone_is_said` |
+| A client's real name, which the user had given as an example, was the example in the chosen slice's criteria; the plugin's own scan found it | example 2, through a merge | slice text (a criterion's values are never a name or figure the user gave or a file of theirs holds); slice case 04b's user gives a real name, with a check |
+| With half a slice merged, both criteria of one item among it, and the user saying "tick it", 2 runs of 5 checked that item's box (the slice was rightly left unmarked) | slice, the closing pass, a case added for what only unit tests had covered | `stage.sh` says nothing is marked or checked for a slice part built (unit test); slice text (only the report marks or checks); case 07b five times again |
+| Asked to read a file of the user's, 2 runs of 6 asked for "the output of the describe command I gave you" and had given none (the file was never opened) | requirements scenario 11, the slice stage's closing pass | routing table (the command is given in full in the reply that asks); scenario 11 five times and every stage once |

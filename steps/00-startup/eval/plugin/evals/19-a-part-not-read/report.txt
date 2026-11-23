@@ -1,0 +1,16 @@
+kd-dev-team: startup report
+Read by script at the start of this session; nothing was installed or changed.
+
+Machine
+- system: macOS 15.1 on arm64 (supported by the VM tool)
+- VM tool (Docker Sandboxes, `sbx`): installed (v0.54.0)
+- signed in to the VM tool: yes
+- REFUSED: `sbx settings ls` gave 'maybe' for browser.enabled, neither true nor false
+- REFUSED: `sbx settings ls` gave '' for claude.chrome, neither true nor false
+- REFUSED: `sbx settings ls` gave '' for claude.remoteControl, neither true nor false
+- REFUSED: `sbx settings ls` gave '' for clipboard.imagePaste, neither true nor false
+- REFUSED: `sbx settings ls` gave '' for clipboard.textCopy, neither true nor false
+
+The tracker and the documents are read inside the project's VM, not here.
+
+Startup could not read everything: see REFUSED above.

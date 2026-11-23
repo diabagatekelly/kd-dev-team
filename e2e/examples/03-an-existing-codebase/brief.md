@@ -19,6 +19,7 @@ planning
 | why-now | why now, the deadline | The spring concert is in ten weeks, and two of the pieces can't be sung with fewer than four tenors. |
 | limits | hard limits: rules, who can use what, where it runs | Singers mustn't need a password, several are in their eighties. And the register is on a small computer at the church hall that the section leaders use. |
 | unknowns | what is not known yet, open questions | Whether singers can reach the hall's computer from home. I think not, but I'm not sure. |
+| reach-from-home | whether singers can reach or use the hall's computer or the register from home, from where a singer tells the choir | I think not, but I'm not sure. |
 | the-code | what the existing register does or records, how it works, how it is started | I don't know, it's all in the folder. |
 | by-when | by when an absence must be known, how far ahead | By Tuesday evening for the Thursday, and I need it by voice part. |
 | take-back | whether a singer can take an absence back or change it | I haven't thought about that. |

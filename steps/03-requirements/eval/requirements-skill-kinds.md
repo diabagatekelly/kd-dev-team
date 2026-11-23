@@ -79,8 +79,8 @@ an item.
 **Outside systems and lasting things.** A system outside the product
 that this activity talks to, and a thing the product keeps track of
 over time (a loan, a booking), only as the documents name them. What
-is used today and would be replaced is neither. The research stage
-starts from this list.
+is used today and would be replaced is neither. The slice and the
+approach start from this list.
 
 **Then ask once.** Show the items and ask whether anything is
 missing, unwanted or not for now, with every question under "Not yet

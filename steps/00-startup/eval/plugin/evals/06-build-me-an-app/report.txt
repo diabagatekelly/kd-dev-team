@@ -11,5 +11,8 @@ Tracker
 
 Documents
 - planning folder: planning (chosen earlier for this project)
+- after a stage is finished, read the documents again: CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" report
+- a file of the user's (a sheet, an export) is never opened here: the user runs, in a terminal on their own
+  machine, this plugin's `sh startup/source.sh describe FILE`, and pastes what it prints
 - found: no planning document
 - next stage by the documents: problem (its document: planning/000_problem.md)

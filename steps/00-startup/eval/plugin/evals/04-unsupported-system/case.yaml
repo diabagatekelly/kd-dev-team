@@ -13,7 +13,7 @@ runs: 3
 graders:
   - {"type": "regex", "name": "says-it-is-not-supported", "target": "last_message", "flags": "i", "pattern": "not supported|unsupported|(does not|doesn't|cannot|can't|won't) (support|run|start|be used)|no version of it runs|\\bstopped\\b|\\bblocked\\b"}
   - {"type": "regex", "name": "says-why", "target": "last_message", "flags": "i", "pattern": "Apple silicon|Intel"}
-  - {"type": "regex", "name": "machine-before-the-documents", "target": "last_message", "flags": "i", "pattern": "^(?:(?!research)[\\s\\S])*?(?:support|Apple silicon|Intel|x86)"}
+  - {"type": "regex", "name": "machine-before-the-documents", "target": "last_message", "flags": "i", "pattern": "^(?:(?!research|requirements)[\\s\\S])*?(?:support|Apple silicon|Intel|x86)"}
   - {"type": "regex", "name": "offers-no-way-round", "target": "last_message", "flags": "i", "pattern": "Docker Desktop|dev ?container|without (a|the) VM|directly on (this|your|the) (machine|computer|Mac|host)", "match": "not_contains"}
   - {"type": "tool_used", "name": "installs-nothing", "tool": "Bash", "input_match": "brew\\s+(trust|install)|winget\\s+install|get\\.docker\\.com|apt(-get)?\\s+install|machine\\.sh\\\\?\\\"?\\s+install", "min": 0, "max": 0}
   - {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0}

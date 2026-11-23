@@ -40,7 +40,7 @@ def replay(record, files):
             message = json.loads(line).get("message") or {}
         except ValueError:
             continue
-        if message.get("role") != "assistant" or not isinstance(message.get("content"), list):
+        if not isinstance(message, dict) or message.get("role") != "assistant" or not isinstance(message.get("content"), list):
             continue
         for part in message["content"]:
             if part.get("type") == "text":
