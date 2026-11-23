@@ -25,10 +25,19 @@ requirements` it ends as it did before the slice stage existed, after the sessio
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
 
+An example need not be replayed from its first message each time (decision 38). `--keep STAGE
+RUN` copies the documents a good run left, up to that stage, into the example
+(`examples/NAME/after/STAGE/`), with a mark of every text they were made with. `--from STAGE` starts
+a run with those documents in place and the user coming back; it is refused when one of those
+texts has changed since, and the example is then run from its first message and kept again.
+
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
+                          [--through merge|slice|requirements] [--from STAGE]
+    python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
+import hashlib
 import json
 import os
 import pathlib
@@ -262,7 +271,38 @@ def marks(planning):
     return slices, boxes
 
 
-def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",), through="requirements"):
+def made_with(plugin):
+    """A mark of every text a session is given: each stage's text and the routing table."""
+    texts = [*sorted((plugin / "skills").glob("*/SKILL.md")), plugin / "hooks" / "routing-table.md"]
+    return {path.parent.name if path.name == "SKILL.md" else path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in texts if path.exists()}
+
+
+def keep(out, example, stage, plugin):
+    """Keep the documents a finished run left, up to `stage`, in the example, with the mark of the
+    texts they were made with. Returns the folder."""
+    brief = Brief((example / "brief.md").read_text(encoding="utf-8"))
+    planning, kept = out / "project" / brief.folder, example / "after" / stage
+    wanted = DOCUMENTS[:DOCUMENTS.index(stage) + 1]
+    shutil.rmtree(kept, ignore_errors=True)
+    kept.mkdir(parents=True)
+    for path in sorted(planning.rglob("*.md")):
+        name = re.sub(r"^\d+_|(-v\d+)?\.md$", "", path.name)
+        if name in wanted or path.name == "sources.md":
+            (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(path, kept / path.relative_to(planning))
+    now = made_with(plugin)
+    (kept / "made-with.json").write_text(json.dumps(now, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return kept
+
+
+def stale(kept, plugin):
+    """The texts that have changed since these documents were kept. A text added since is no change."""
+    then, now = json.loads((kept / "made-with.json").read_text(encoding="utf-8")), made_with(plugin)
+    return sorted(name for name, mark in then.items() if now.get(name) != mark)
+
+
+def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",), through="requirements", start=None):
     brief = Brief((example / "brief.md").read_text(encoding="utf-8"))
     project, nowhere = out / "project", out / "nowhere"
     shutil.rmtree(out, ignore_errors=True)
@@ -271,6 +311,14 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         shutil.copytree(example / "project", project)
     else:
         project.mkdir()
+    if start:
+        kept = example / "after" / start
+        if not (kept / "made-with.json").exists():
+            raise SystemExit(f"no documents were kept for {example.name} after {start}: run it from its first message, then --keep")
+        if stale(kept, plugin):
+            raise SystemExit(f"the documents kept for {example.name} after {start} were made with texts that have changed since "
+                             f"({', '.join(stale(kept, plugin))}): run it from its first message, then --keep")
+        shutil.copytree(kept, project / brief.folder, ignore=shutil.ignore_patterns("made-with.json"))
     # The made-up machine the stand-in tools answer as: inside a VM, a tracker with nothing open.
     machine = example / "machine" if (example / "machine").is_dir() else HERE / "machine"
     shutil.copytree(machine, project / ".cache" / "machine")
@@ -288,6 +336,8 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                     "--no-session-persistence"]
     planning = project / brief.folder
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
+    if start:   # the user comes back to documents already written
+        said, seen = brief.back, present(planning)
     sessions, merged, back = [], "", None
     for _ in range(max_turns):
         had_list = through == "requirements" and "requirements" in present(planning)
@@ -336,7 +386,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     # The user's own files stay outside the project; no value of one may be written in it.
     places, scanned = written_down(example / "files", project, plugin / "startup" / "source.sh")
     documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
-    summary = {"example": example.name, "model": model, "ended": ended, "session": session,
+    summary = {"example": example.name, "model": model, "ended": ended, "session": session, "started_from": start,
                "session_turns": len(turns),
                "sessions": 1 + sum(1 for turn in turns if turn.get("new_session_next")),
                "questions_put": sum(turn["session"].count("?") for turn in turns),
@@ -364,6 +414,11 @@ if __name__ == "__main__":
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
     parser.add_argument("--through", choices=("merge", "slice", "requirements"), default="merge")
+    parser.add_argument("--from", dest="start", choices=DOCUMENTS)
+    parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()
+    if given.keep:
+        print(keep(given.out.resolve(), given.example.resolve(), given.keep, given.plugin.resolve()))
+        raise SystemExit(0)
     print(json.dumps(run(given.example.resolve(), given.out.resolve(), given.plugin.resolve(), given.model,
-                         given.sorter_model, given.max_turns, through=given.through), indent=2))
+                         given.sorter_model, given.max_turns, through=given.through, start=given.start), indent=2))

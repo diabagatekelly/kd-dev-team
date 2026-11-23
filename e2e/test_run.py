@@ -365,6 +365,55 @@ class Run(unittest.TestCase):
         summary, _ = self.through(fake=fake)
         self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
 
+    # An example is started from its documents as its last good run left them (decision 38).
+    def kept(self):
+        plugin = self.folder / "plugin"
+        (plugin / "skills" / "problem").mkdir(parents=True, exist_ok=True)
+        (plugin / "skills" / "problem" / "SKILL.md").write_text("the problem text")
+        (plugin / "hooks").mkdir(exist_ok=True)
+        (plugin / "hooks" / "routing-table.md").write_text("the table")
+        planning = self.folder / "done" / "project" / "plans"
+        (planning / "slice-002").mkdir(parents=True)
+        for name in ("000_problem.md", "001_scope-map.md", "002_requirements.md", "sources.md", "003_slices.md", "slice-002/004_slice.md"):
+            (planning / name).write_text("kept " + name)
+        return run.keep(self.folder / "done", self.example, "requirements", plugin)
+
+    def test_the_documents_of_a_good_run_are_kept_up_to_a_stage(self):
+        kept = self.kept()
+        self.assertEqual(kept, self.example / "after" / "requirements")
+        self.assertEqual(sorted(path.name for path in kept.iterdir()),
+                         ["000_problem.md", "001_scope-map.md", "002_requirements.md", "made-with.json", "sources.md"])
+
+    def test_a_run_started_from_kept_documents_begins_with_them_and_the_users_coming_back(self):
+        self.kept()
+        script = self.folder / "fake.py"
+        script.write_text(self.THROUGH)
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1,
+                          command=(sys.executable, str(script)), through="merge", start="requirements")
+        self.assertEqual((self.folder / "out" / "project" / "plans" / "002_requirements.md").read_text(), "kept 002_requirements.md")
+        self.assertFalse((self.folder / "out" / "project" / "plans" / "made-with.json").exists())
+        calls = [json.loads(line) for line in (self.folder / "calls.jsonl").read_text().splitlines()]
+        self.assertEqual(calls[0][calls[0].index("-p") + 1], "Let's carry on where we left off.")
+        self.assertEqual(summary["started_from"], "requirements")
+
+    def test_kept_documents_are_refused_once_a_text_they_were_made_with_has_changed(self):
+        self.kept()
+        (self.folder / "plugin" / "skills" / "problem" / "SKILL.md").write_text("the problem text, changed")
+        with self.assertRaises(SystemExit) as refused:
+            run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1, command=("true",), start="requirements")
+        self.assertIn("problem", str(refused.exception))
+
+    def test_a_text_added_since_does_not_stale_what_was_kept(self):
+        self.kept()
+        (self.folder / "plugin" / "skills" / "slice").mkdir()
+        (self.folder / "plugin" / "skills" / "slice" / "SKILL.md").write_text("a later stage")
+        self.assertEqual(run.stale(self.example / "after" / "requirements", self.folder / "plugin"), [])
+
+    def test_starting_from_documents_that_were_never_kept_is_refused(self):
+        with self.assertRaises(SystemExit):
+            run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1, command=("true",), start="requirements")
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")
