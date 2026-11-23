@@ -1,0 +1,26 @@
+#!/bin/sh
+# Stand-in for curl, for tests: a made-up web under $STANDIN_STATE/web.
+#   web/allowed            one host a line: what the VM lets through; any other host answers 403
+#   web/pages/HOST/PATH    a page's body ("index" for the site's first page); PATH.down answers 503
+S="${STANDIN_STATE:?}/web"
+{ printf 'curl %s\n' "$*" >> "$STANDIN_STATE/calls.log"; } 2>/dev/null
+out=""; format=""; url=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o) out=$2; shift ;;
+    -w) format=$2; shift ;;
+    --max-time) shift ;;
+    http://*|https://*) url=$1 ;;
+  esac
+  shift
+done
+rest=${url#*://}; host=${rest%%/*}; path=${rest#"$host"}; path=${path%%[?#]*}; path=${path#/}; path=${path%/}
+[ -n "$path" ] || path=index
+code=200; body=""
+if ! grep -qx "$host" "$S/allowed" 2>/dev/null; then code=403; body="Blocked by network policy: $host is not on this VM's list."
+elif [ -f "$S/pages/$host/$path.down" ]; then code=503; body="Service unavailable."
+elif [ -f "$S/pages/$host/$path" ]; then body=$(cat "$S/pages/$host/$path")
+else code=404; body="Not found."; fi
+if [ -n "$out" ]; then printf '%s\n' "$body" > "$out"; else printf '%s\n' "$body"; fi
+case "$format" in *http_code*) printf '%s' "$code" ;; esac
+exit 0
