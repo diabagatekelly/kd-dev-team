@@ -21,7 +21,9 @@ import tempfile
 import urllib.parse
 
 MOST_WORDS = 25
-PAIR = re.compile(r'["“]([^"“”\n]+)["”]\s*\(\s*(https?://[^\s)]+)\s*\)')
+# A quote and the page it is from: the first address in brackets after it on its line.
+PAIR = re.compile(r'["“]([^"“”\n]+)["”][^"“”\n]*?\(\s*(https?://[^\s)]+)\s*\)')
+LINK = re.compile(r" <https?://[^\s>]+>")
 FACT = re.compile(r"^\s*(?:[-*]\s*)?\**(F\d+)\b")
 BLOCKS = {"p", "div", "br", "li", "tr", "h1", "h2", "h3", "h4", "h5", "h6", "pre", "table", "section", "dt", "dd"}
 
@@ -121,7 +123,8 @@ def pages_in(folder):
     for path in sorted(pathlib.Path(folder).glob("*.txt")):
         head, _, rest = path.read_text(encoding="utf-8", errors="replace").partition("\n")
         if head.startswith("URL: "):
-            out[head[5:].strip()] = squeeze(rest)
+            # without where its links lead: a quote may run across a link's words
+            out[head[5:].strip()] = squeeze(LINK.sub("", rest))
     return out
 
 
@@ -141,7 +144,7 @@ def check(documents, pages):
                     wrong.append(f"{name}:{number}: a quote of more than {MOST_WORDS} words")
                 if page is None:
                     wrong.append(f"{name}:{number}: no saved page for {url}")
-                elif squeeze(quote).rstrip(".") not in page:
+                elif squeeze(quote).rstrip(".").lower() not in page.lower():   # a quote may start mid-sentence
                     wrong.append(f"{name}:{number}: not on its page: \"{quote}\"")
     return wrong
 

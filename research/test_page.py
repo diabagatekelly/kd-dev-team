@@ -114,6 +114,17 @@ class Check(unittest.TestCase):
     def test_a_line_that_is_no_fact_and_quotes_nothing_is_left_alone(self):
         self.assertEqual(self.wrong("## Open\n- O1: what happens when no reply arrives. Test: cut the connection."), [])
 
+    def test_a_quote_followed_by_more_words_before_its_page_is_still_checked(self):
+        found = self.wrong('- F1: instant. "A payment is confirmed at once" It is on the list. (https://docs.example/payments)')
+        self.assertEqual(found, ['payright.md:1: not on its page: "A payment is confirmed at once"'])
+        self.assertEqual(self.wrong('- F1: starts pending. "a new payment has the status pending" (https://docs.example/payments)'), [])
+        self.assertEqual(self.wrong('- F1: slow. "It settles within 3 working days." So it is slow. (https://docs.example/payments)'), [])
+
+    def test_a_quote_that_runs_across_a_links_words_is_found(self):
+        folder = pathlib.Path(tempfile.mkdtemp())
+        (folder / "a.txt").write_text("URL: https://docs.example/payments\nRemoving it with /remove <https://docs.example/api#remove> ends it.\n")
+        self.assertEqual(page.check({"d.md": '- F1: x. "with /remove ends it" (https://docs.example/payments)'}, page.pages_in(folder)), [])
+
     def test_saved_pages_are_read_back_by_their_address(self):
         folder = pathlib.Path(tempfile.mkdtemp())
         (folder / "a.txt").write_text("URL: https://docs.example/payments\nA new   payment\nhas the status pending.\n")

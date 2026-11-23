@@ -50,8 +50,10 @@ comes back; what exists on the other side afterwards; every
 documented error, by its exact name; how long things take, how often
 they may be asked for and what other limits there are; whether
 sending it twice is safe; and what happens when no reply arrives. A
-fact is one sentence, with its quote and its page. Where two pages
-disagree, give both as facts and say that they disagree.
+fact is one sentence, with its quote and its page: what has no quote
+is not written as a fact. A quote is the page's words exactly and
+unbroken, with no "..." and nothing joined from two places. Where
+two pages disagree, give both as facts and say that they disagree.
 
 Every statement the planning documents make about the system, the
 user's beliefs among them, gets a line under "What our documents

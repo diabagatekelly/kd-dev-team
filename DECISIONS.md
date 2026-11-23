@@ -415,5 +415,12 @@ asking is listed apart, so it can be overturned.
     until the stage is agreed.
   - An inventory of `none` is to be the stage script's to skip, by a
     unit test, not a session's scenario.
+  - After the pilot: Opus is run at the gate and on the benchmark
+    only where Sonnet with the text does not hold (the bare model on
+    Sonnet already lacks what nothing tells it: the marks, the open
+    points, the quote with every fact).
+  - The quote check takes a quote with the first address after it on
+    its line, without regard to case, and reads across a link's
+    words.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
