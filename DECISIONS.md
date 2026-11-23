@@ -534,6 +534,23 @@ asking is listed apart, so it can be overturned.
     under `04-slice/inputs`). The slice known to have been cut too
     wide came from a scope change mid-build, not from a list, so it
     cannot be given to this stage as an input.
+  - An activity is not done while a question stands under "Not yet
+    confirmed" in its list: the script names the requirements as
+    next. The part of an item that waits for an answer is a row of
+    its own in the set, so its box stays unchecked.
+  - An issue no row covers is placed once the user has said in or
+    out; until then it stays due.
+  - Asked for a wider cut, the stage gives the size of each cut
+    with what the wider one costs (taken from kad's skill).
+  - A criterion's examples are never a name or figure the user
+    gave: said in this stage's text as well as the routing table,
+    since a run wrote one.
+  - A coming-back is done on "go on", as any stage is; asked what
+    is next, a session names it and waits.
+  - Opus was run bare only, and Haiku on the first form of the text
+    only: Sonnet holds with the text and is the session's model.
+  - The slice text is loaded on trial (`slice=...`) and is not in
+    the adopted list until the owner says the stage holds.
   - `e2e/tally.py` counts a pass with and without the checks of
     form; `e2e/run.py` carries an example on through a set, a chosen
     slice and one made-up merge (`--through requirements` for the

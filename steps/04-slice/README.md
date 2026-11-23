@@ -5,10 +5,15 @@
 follow the principles kad's skill was built on; push back when a
 slice is made wider; cut the whole set and recommend where to start;
 and the check-in after a merge is this stage's, set included.
-Criteria only for the slice being worked on. Built since: the stage
-script and the tracker script (unit tests first), the scenarios and
-their checks, a first text, and the pilot. What they found is below
-the agreed test, from "Built" on.
+Criteria only for the slice being worked on.
+
+**Tested (2026-11-23):** the text of 150 lines in
+`eval/slice-skill.md` passes every case on Sonnet 5.5 in its last
+five runs; no model holds without it; on the owner's three real
+lists no first slice is wider than kad's and every item has a home.
+The result is below the agreed test, from "Built" on. **Whether the
+stage holds is the owner's to say.** It cost $82 against the $70
+agreed: the end-to-end examples came to $34, not the $10 guessed.
 
 ## What it is
 
@@ -540,3 +545,48 @@ What they found (`../../e2e/README.md`):
 - **A scripted user that loops.** Example 3 cost $7.99 the first
   time: asked one thing its brief had no topic for, the user gave
   its limits four times. The brief has the topic now.
+- **A real name in a criterion.** Example 2's user had given a
+  client's name as an example, and the chosen slice's criteria used
+  it; the plugin's own scan found it. The text now says a
+  criterion's values are never a name or figure the user gave, and
+  case 04b's user gives one, with a check: the two cases with
+  criteria five times, 10 of 10, $1.07 (the text is 150 lines).
+
+Examples 2 and 3 were run again after those fixes: once stuck on
+the folder that was gone ($9.00), then through the merge in fresh
+places ($7.29). In both, the part of an item that waits for an
+answer is now a row of its own, and its box stays unchecked after
+the first merge.
+
+## What the stage cost
+
+| What | Guess after the pilot | Spent |
+|---|---|---|
+| Every earlier stage once with the new scripts | $3.07 | $3.07 |
+| Pilot | $3.69 | $3.69 |
+| Three runs, three arms | $17 | $18.73 |
+| The real requirements | $5 | $6.02 |
+| Tuning, and five runs of what passes | $11 | $13.69 |
+| Every earlier stage once more, the text loaded | $3 | $3.13 |
+| The four examples through a merge, and two of them twice more | $10 | $33.66 |
+| **In all** | **about $53** | **$81.99** |
+
+The cases came in as guessed. The examples did not: a run through
+a merge is $1.70 to $8, not the $2.50 the earlier stages cost, and
+two were run three times. The pass that first ran them was $20.50,
+over the $15 that is said beforehand, and it was not said. From
+here an example through a merge is counted at $4, and its user's
+brief is checked for a topic for each open question before it runs.
+
+## What a pass has not shown
+
+- Opus was not run with the text, nor Haiku with its final form:
+  Sonnet holds, and it is the session's model.
+- The cases after the retunes were run five times only where the
+  text changed for them, and once elsewhere: no single pass of 70
+  runs was made with the final text.
+- The made-up merge names every criterion of the slice. A real
+  delivery's line, and a merge that names part of a slice, are
+  covered by the script's unit tests only.
+- An issue is placed by its title and what `gh issue view` shows;
+  no run needed to read one.
