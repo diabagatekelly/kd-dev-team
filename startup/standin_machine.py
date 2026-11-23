@@ -12,7 +12,7 @@ import tempfile
 HERE = pathlib.Path(__file__).resolve().parent
 SH = shutil.which("sh") or shutil.which("bash")
 UTILITIES = ("sh awk sed grep head tail tr cat git sort wc basename dirname mkdir rm mv ls cut "
-             "printf test cksum").split()
+             "printf test cksum find xargs").split()
 LOCKS = ["browser.enabled", "claude.chrome", "claude.remoteControl",
          "clipboard.imagePaste", "clipboard.textCopy"]
 DEFAULT_HOSTS = ["api.anthropic.com", "claude.ai", "github.com", "platform.claude.com", "registry.npmjs.org"]

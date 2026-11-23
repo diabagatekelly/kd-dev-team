@@ -15,6 +15,10 @@ as long as it takes (decision 28).
   first two).
   `examples/NAME/project/`, where there is one, is the project the
   session starts in.
+  `examples/NAME/files/`, where there is one, holds files of the
+  user's own: they are never put in the project, and after the run
+  the plugin's own scan says whether a value of one was written
+  down.
 - `run.py`: runs one example. The session is the tool run headless
   with the assembled plugin. The user is a script: it says only what
   the brief holds. A model is used for one thing, to say which of the
@@ -104,3 +108,4 @@ stage working as meant.
 | A full account in one message named one limit; the document was written at once and the user's other limits (phones only, who may see a door code) never reached any document | example 2, twice | problem text: every account gets the last question unless the user has said that is everything; problem scenario `08-a-full-account-not-said-to-be-all` |
 | Told "say the word and I'll start", the scripted user said "I don't know." for five turns: no topic covered being asked to go on | example 2, third run | every brief has a `proceed` topic unless it sets its own: one unit test |
 | `tools.txt` held only the last session's tool calls | example 2, third run | the driver keeps every session of a run |
+| Nothing kept a file of the user's own (a sheet, an export) out of the documents; kad had a real row carried into a plan, its tests and its history twice | looking over the tests; the owner chose that the file stays on their machine | `startup/source.sh` (describe: the shape, never a cell; scan: where a value is written, never what), 15 unit tests; a line in the report; a rule in the routing table; requirements scenarios 11 and 12; example 2 has a made-up price list and every run is scanned |

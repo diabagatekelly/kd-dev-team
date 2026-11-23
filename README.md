@@ -25,7 +25,7 @@ design are recorded under `next-plugin/validation/`.
 
 | Folder | Holds |
 |---|---|
-| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch) and `report.sh` (the one report a session is given). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
+| `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -45,8 +45,8 @@ Stages 0 to 3 hold. Next, in this order:
    adopted loaded (132 runs on Sonnet), and all four examples reach
    the requirements with their documents numbered in order. Still
    owed from the look over the tests: the plugin made
-   installable and run once in a real VM; a guard for the owner's
-   own files.
+   installable and run once in a real VM, which the owner has
+   held off for now.
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
    or between them. It needs a new row in the routing table and a

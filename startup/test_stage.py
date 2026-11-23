@@ -191,6 +191,12 @@ class Stage(unittest.TestCase):
         self.chosen("000_problem.md")
         self.assertRegex(self.report(), r'- after a stage is finished, read the documents again: .*sh ".*stage\.sh" report')
 
+    def test_the_report_says_how_a_file_of_the_users_is_described(self):
+        self.chosen("000_problem.md")
+        out = self.report()
+        self.assertIn("- a file of the user's (a sheet, an export) is never opened here", out)
+        self.assertRegex(out, r"source\.sh describe FILE")
+
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()
         (self.machine.project / "planning").rmdir()

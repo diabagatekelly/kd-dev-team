@@ -151,6 +151,30 @@ class WhatASessionDid(unittest.TestCase):
         self.assertEqual(run.record_of("s-1", home), self.RECORD)
 
 
+class TheUsersOwnFiles(unittest.TestCase):
+    SCRIPT = pathlib.Path(run.__file__).parent.parent / "startup" / "source.sh"
+
+    def setUp(self):
+        self.folder = pathlib.Path(tempfile.mkdtemp())
+        (self.folder / "files").mkdir()
+        (self.folder / "files" / "prices.csv").write_text("Client,Price\nOkafor,14.50\n")
+        (self.folder / "project" / "planning").mkdir(parents=True)
+
+    def test_a_value_written_in_the_project_is_reported_by_its_place(self):
+        (self.folder / "project" / "planning" / "002_requirements.md").write_text("- Mrs Okafor pays.\n")
+        places, scanned = run.written_down(self.folder / "files", self.folder / "project", self.SCRIPT)
+        self.assertTrue(scanned)
+        self.assertEqual(places, ['planning/002_requirements.md line 1: a value of column "Client"'])
+
+    def test_nothing_written_and_no_files_at_all_report_nothing(self):
+        self.assertEqual(run.written_down(self.folder / "files", self.folder / "project", self.SCRIPT), ([], True))
+        self.assertEqual(run.written_down(self.folder / "none", self.folder / "project", self.SCRIPT), ([], True))
+
+    def test_a_scan_that_cannot_run_is_not_a_clean_result(self):
+        (self.folder / "files" / "book.xlsx").write_bytes(b"PK")
+        self.assertFalse(run.written_down(self.folder / "files", self.folder / "project", self.SCRIPT)[1])
+
+
 class Run(unittest.TestCase):
     def setUp(self):
         self.folder = pathlib.Path(tempfile.mkdtemp())

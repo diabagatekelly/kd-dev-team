@@ -40,5 +40,13 @@ Whatever the user asks for:
   command the report gives, is how the next stage is found.
 - Never suggest what the product might be or do, not even as
   examples: that is the user's to say.
+- A file of the user's (a sheet, an export, a screenshot) is never
+  opened, searched or copied here, wherever it is. Ask the user to
+  describe it on their own machine, as the report says, and to paste
+  what that prints; list it in `sources.md` in the planning folder
+  (what it is, where the user keeps it, the date, its columns as
+  pasted). An example in a document is invented, and said to be: a
+  real name or figure the user gives as an example is not written
+  down.
 - A stage with no text of its own here is not built yet. Say so and
   stop: do not do its work some other way, and do not offer to.

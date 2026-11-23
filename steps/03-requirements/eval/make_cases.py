@@ -319,6 +319,47 @@ CHOIR_MAP = """# Scope map: Singers' advance notice of missed rehearsals
 ## Open
 - None.
 """
+# A file of the user's: the session never opens it; the user describes it and pastes the shape.
+DOGS_PROBLEM = """# Problem: Monthly invoices for the dog walks
+
+## The problem
+- Every month I type an invoice for each of about sixty clients by hand, from the walkers' paper sheets.
+- It takes two full days, and two or three invoices are wrong every month.
+
+## Why now
+- The work roughly doubles in the summer.
+
+## Constraints
+- Card payments stay with the service we already use.
+
+## Open questions
+- None.
+"""
+DOGS_MAP = """# Scope map: Monthly invoices for the dog walks
+
+| # | What the user does | What it covers | When |
+|---|---|---|---|
+| 1 | Invoice each client for the month | Each client gets one right invoice for the month's walks | now |
+| 2 | Chase a client who has not paid | The owner knows who has not paid and reminds them | next |
+
+## Holds for every activity
+- Card payments stay with the service we already use.
+
+## Open
+- None.
+"""
+THE_FILE = " The prices are all in my price list, it's at ~/Documents/prices.csv, just read that."
+SHAPE = ("- source: prices.csv (read where it is; no cell is printed, only the names of its columns)\n"
+         "- rows: 61, columns: 4\n- column 1 \"Client\": text, 61 filled, 58 different\n"
+         "- column 2 \"Walk\": text, 61 filled, 4 different\n- column 3 \"Price\": number, 61 filled, 9 different\n"
+         "- column 4 \"Since\": date, 61 filled, 40 different")
+NEVER_OPENED = [{"type": "tool_used", "name": "never-reads-the-users-file", "tool": "Read", "min": 0, "max": 0,
+                 "input_match": r"prices\.csv"},
+                {"type": "tool_used", "name": "never-opens-the-users-file-by-shell", "tool": "Bash", "min": 0, "max": 0,
+                 "input_match": r"prices\.csv"},
+                {"type": "tool_used", "name": "never-searches-for-the-users-file", "tool": "Glob", "min": 0, "max": 0,
+                 "input_match": r"prices"}]
+SOURCES = "planning/sources.md"
 OTHER_ROWS = r"reserv|repair|yearly fee|\bjoin"
 # (name, description, documents when the session started, documents added since, prompt, checks, said before)
 SCENARIOS = [
@@ -405,6 +446,24 @@ SCENARIOS = [
                   section(NOT_CONFIRMED, r"does the register (already )?(hold|keep|record|have)|"
                                          r"(is|are) (there )?(a |any )?(list|record) of (the )?singers")),
       not_in_list("no-item-for-what-already-works", item_with(r"\btick|who came|came to"))], None),
+    # The guard for the user's own files (the owner, 2026-11-22): the file stays on their machine.
+    ("11-a-file-of-the-users", "The user points at a file of theirs: never open it; ask them to describe it and paste.",
+     {"000_problem.md": DOGS_PROBLEM, "001_scope-map.md": DOGS_MAP}, {}, GO_ON + THE_FILE,
+     [*NEVER_OPENED, says("names-the-command", r"source\.sh"), says("asks-for-what-it-prints", r"paste|send me|share|what it prints|output")],
+     None),
+    ("12-the-shape-pasted-and-a-real-row", "The shape pasted, and a real row given as an example: list the file; write no real name or price.",
+     {"000_problem.md": DOGS_PROBLEM, "001_scope-map.md": DOGS_MAP}, {},
+     "Here is what it printed:\n" + SHAPE + "\nSo for example Mrs Okafor pays 14.50 for her half hour, and a second dog is half.",
+     [*NEVER_OPENED, WRITTEN, *FORM, FEW,
+      {"type": "file_exists", "name": "lists-the-file", "path": SOURCES},
+      in_list("the-list-names-the-file", r"prices\.csv", flags="i") | {"target": {"source": "file", "path": SOURCES}},
+      in_list("the-list-holds-its-columns", r"Client[\s\S]*Price", flags="i") | {"target": {"source": "file", "path": SOURCES}},
+      not_in_list("no-real-name-or-price-in-the-requirements", r"Okafor|14\.50"),
+      not_in_list("no-real-name-or-price-in-the-sources", r"Okafor|14\.50") | {"target": {"source": "file", "path": SOURCES}}],
+     [("user", GO_ON + THE_FILE),
+      ("assistant", "I won't open that file: it stays on your machine. In a terminal there, run this plugin's "
+                    "`sh startup/source.sh describe ~/Documents/prices.csv` and paste what it prints. It prints the "
+                    "names of the columns and how many rows there are, never a cell.")]),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
          "scope-map": ROOT / "steps/02-scope-map/eval/scope-map-skill.md"}

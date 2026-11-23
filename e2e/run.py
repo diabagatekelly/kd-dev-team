@@ -178,6 +178,17 @@ def record_of(session, home):
     return found[0].read_text(encoding="utf-8", errors="replace") if found else ""
 
 
+def written_down(files, project, script):
+    """Each place in the project where a value of one of the user's own files is written, as the
+    plugin's scan reports it (where, never what); and whether every file could be scanned."""
+    places, scanned = [], True
+    for path in sorted(files.iterdir()) if files.is_dir() else []:
+        done = subprocess.run(["sh", str(script), "scan", str(path), str(project)], capture_output=True, text=True)
+        scanned = scanned and done.returncode in (0, 1)
+        places += [line[2:] for line in done.stdout.splitlines() if " line " in line and ": a value of column " in line]
+    return places, scanned
+
+
 def present(planning):
     """Which of the three documents exist in the planning folder, by name."""
     names = [path.name for path in planning.glob("*.md")] if planning.is_dir() else []
@@ -240,6 +251,8 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     (out / "turns.json").write_text(json.dumps(turns, indent=2) + "\n", encoding="utf-8")
     calls = [call for one in sessions for call in tool_calls(record_of(one, os.environ.get("HOME", "")))]
     (out / "tools.txt").write_text("\n".join(calls) + "\n", encoding="utf-8")
+    # The user's own files stay outside the project; no value of one may be written in it.
+    places, scanned = written_down(example / "files", project, plugin / "startup" / "source.sh")
     documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
     summary = {"example": example.name, "model": model, "ended": ended, "session": session,
                "session_turns": len(turns),
@@ -248,6 +261,10 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                "asked_and_not_covered": sum((turn.get("picked") or {}).get("uncovered") or 0 for turn in turns),
                "cost_usd": round(cost, 4),
                "tool_calls": len(calls),
+               "values_of_the_users_files_written_down": places if scanned else "the scan could not run",
+               "the_users_files_opened": [call for call in calls
+                                          if any(path.name in call for path in (example / "files").glob("*"))]
+               if (example / "files").is_dir() else [],
                # Each document under the number and name the stage script gives it, so the next session finds it.
                "numbered_in_order": [path.name for path in documents]
                == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],

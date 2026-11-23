@@ -123,6 +123,8 @@ report() {
 $(stages)
 STAGES
   say "- after a stage is finished, read the documents again: $SELF report"
+  say "- a file of the user's (a sheet, an export) is never opened here: the user runs, in a terminal on their own"
+  say "  machine, this plugin's \`sh startup/source.sh describe FILE\`, and pastes what it prints"
   say "- found: ${found:-no planning document}"
   list=$(numbered "$dir" "requirements.md")
   [ -z "$list" ] || count "$dir/$list" "$list"

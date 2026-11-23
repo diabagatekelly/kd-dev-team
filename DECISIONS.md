@@ -236,6 +236,19 @@ asking is listed apart, so it can be overturned.
     changes), then only what changed, and the wide pass only before
     a stage is put to the owner. The owner can change any row.
 
+## 2026-11-22: a file of the user's stays on their machine
+
+32. **A file of the user's own (a sheet, an export) is never brought
+    into the project's VM** (the owner, choosing between that and
+    copying it in under a rule and a scan). The user describes it on
+    their own machine with `startup/source.sh describe`, which prints
+    its columns and counts and never a cell, and pastes that into
+    the session; the session lists the file in `sources.md` and
+    writes every example with invented values. The same script's
+    `scan`, run on the user's machine, says where a value of the file
+    has been written, never what. The real run on the owner's Mac
+    (the plugin installed, a real VM) is held off for now.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -249,11 +262,10 @@ asking is listed apart, so it can be overturned.
   list** (a criterion under the named item it belongs to, or an item
   of its own): with the answers stage. Stage 3 owes it only names
   that do not change.
-- **A file of the owner's that a stage reads** (a sheet, an export, a
-  screenshot): kad listed it in `sources.md`, read its shape and
-  never its rows, and scanned for its values. Not carried yet;
-  brought to the owner as a piece of its own before any stage is
-  used on a real project.
+- **Where the user finds `source.sh` on their own machine,** and when
+  the scan is run (before the planning pull request is merged?):
+  with the plugin's real install, which waits for the run on the
+  owner's Mac.
 - **Approaches the user considered and rejected:** kad's skill asked
   and recorded them; no stage here does yet.
 - **A dependency the user did not name** (a library the design or
@@ -325,6 +337,15 @@ asking is listed apart, so it can be overturned.
   words written in the example's brief (the owner asked for a user
   that does not drift); a model only says which of the brief's
   topics a message asks about, and its pick is kept with the turn.
+- `startup/source.sh`, 2026-11-22: it reads delimited text (.csv,
+  .tsv, .txt) and refuses a workbook, asking for the sheet saved as
+  CSV (a workbook cannot be read with what a fresh Mac and a fresh
+  Windows machine both have); a screenshot or a PDF is not read at
+  all. A value is looked for when it would tell a reader something:
+  text of five characters or more, a number with a decimal part or
+  of five digits or more; a column's name is not a value. The rule
+  for the session is said once, in the routing table, not in each
+  stage's text.
 - The requirements list (`steps/03-requirements/`), 2026-11-22:
   - An item is a line `- [ ] **its-name**: ...`; a name is lower case
     words joined by hyphens.
