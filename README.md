@@ -102,7 +102,8 @@ slices are cut from them, and a dependency is chosen after.
 **Next, in this order:**
 
 1. **The approach (stage 5):** where a dependency is committed to.
-   Not proposed yet.
+   Proposed in `steps/05-approach/README.md`, not agreed: nothing of
+   it is built or run.
 2. **Research (stage 6): paused at its pilot**
    (`steps/06-research/README.md`): $2.17 spent, about $40 to
    finish, in its new place after the approach. Its scenarios were

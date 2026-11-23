@@ -585,5 +585,34 @@ asking is listed apart, so it can be overturned.
     form; `e2e/run.py` carries an example on through a set, a chosen
     slice and one made-up merge (`--through requirements` for the
     earlier ending).
+- The approach stage as proposed (`steps/05-approach/README.md`),
+  2026-11-23; not agreed yet, and nothing of it built:
+  - Candidates come from the documents (a provider set as a limit),
+    the user, or a search the user says yes to; never from memory.
+    With neither, the need waits. At most three are kept a need.
+  - The search is the tool's own web search, for names and addresses
+    only. If it does not work from a session in the VM (the pilot
+    checks), candidates come from the user alone.
+  - A candidate's pages are read with `research/page.py`, four a
+    candidate at most, and kept in the slice's `pages/` folder, one
+    place for this stage and research.
+  - A provider fixed by a limit still gets the short read, against
+    what the slice needs of it.
+  - The way that commits to nothing is a row of every table where
+    there is one.
+  - Every need of the slice is put to the user in one message, not
+    one question a decision as kad did.
+  - The one question also asks what the user has already ruled out,
+    which gives "approaches the user considered and rejected" its
+    home.
+  - Every commitment is recorded; kad's three checks for whether a
+    decision earns a record wait for the design and the stack.
+  - The stage script skips the approach when the slice's needs are
+    `none`, and keeps it as next while a need is `waiting`. The
+    slice text and the routing table are not changed for it.
+  - kad's arm is `architecture-design` with `adr`, on Sonnet, on the
+    four cases it has something for. Opus is run bare once a case.
+  - The outcome is counted on one real choice of the owner's, from
+    kad's own records of it (private); the README names no provider.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
