@@ -372,6 +372,8 @@ class Run(unittest.TestCase):
         (plugin / "skills" / "problem" / "SKILL.md").write_text("the problem text")
         (plugin / "hooks").mkdir(exist_ok=True)
         (plugin / "hooks" / "routing-table.md").write_text("the table")
+        (plugin / "skills" / "slice").mkdir(exist_ok=True)
+        (plugin / "skills" / "slice" / "SKILL.md").write_text("a later stage's text")
         planning = self.folder / "done" / "project" / "plans"
         (planning / "slice-002").mkdir(parents=True)
         for name in ("000_problem.md", "001_scope-map.md", "002_requirements.md", "sources.md", "003_slices.md", "slice-002/004_slice.md"):
@@ -404,11 +406,13 @@ class Run(unittest.TestCase):
             run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 1, command=("true",), start="requirements")
         self.assertIn("problem", str(refused.exception))
 
-    def test_a_text_added_since_does_not_stale_what_was_kept(self):
-        self.kept()
-        (self.folder / "plugin" / "skills" / "slice").mkdir()
-        (self.folder / "plugin" / "skills" / "slice" / "SKILL.md").write_text("a later stage")
-        self.assertEqual(run.stale(self.example / "after" / "requirements", self.folder / "plugin"), [])
+    def test_a_later_stages_text_changing_or_added_does_not_stale_what_was_kept(self):
+        kept = self.kept()
+        self.assertEqual(sorted(json.loads((kept / "made-with.json").read_text())), ["problem", "routing-table.md"])
+        (self.folder / "plugin" / "skills" / "slice" / "SKILL.md").write_text("a later stage's text, changed")
+        (self.folder / "plugin" / "skills" / "approach").mkdir()
+        (self.folder / "plugin" / "skills" / "approach" / "SKILL.md").write_text("added since")
+        self.assertEqual(run.stale(kept, self.folder / "plugin"), [])
 
     def test_starting_from_documents_that_were_never_kept_is_refused(self):
         with self.assertRaises(SystemExit):

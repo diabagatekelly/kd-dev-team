@@ -291,7 +291,11 @@ def keep(out, example, stage, plugin):
         if name in wanted or path.name == "sources.md":
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    now = made_with(plugin)
+    # Only the texts of the stages kept, and the table every stage is given: a later stage's text
+    # changes nothing in these documents.
+    earlier = {"slices": "slice"}
+    now = {name: mark for name, mark in made_with(plugin).items()
+           if name == "routing-table.md" or name in {earlier.get(stage, stage) for stage in wanted}}
     (kept / "made-with.json").write_text(json.dumps(now, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return kept
 
