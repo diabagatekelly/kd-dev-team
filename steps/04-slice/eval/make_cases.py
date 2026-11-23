@@ -110,7 +110,9 @@ def the_set(path=SET, low=2, high=8, states=r"built|chosen"):
             in_file(path, f"form-at-least-{low}-slices", rows(low)),
             not_in_file(path, f"form-at-most-{high}-slices", rows(high + 1)),
             not_in_file(path, "form-no-slice-is-marked-yet", ROW + STATE.format(states)),
-            in_file(path, "form-says-where-to-start", r"(?:^|\n)#{1,6}[^\n]*where to start")]
+            in_file(path, "form-says-where-to-start", r"(?:^|\n)#{1,6}[^\n]*where to start"),
+            # Found by reading the first runs: "## Issues" and "## What changed" written with nothing under them.
+            not_in_file(path, "form-no-empty-section", r"(?:^|\n)#{1,6}[^\n]*\n\s*(?=#{1,6} |$)")]
 
 
 def every_item(path, names):
@@ -528,7 +530,9 @@ SCENARIOS = [
     ("08-a-merge-and-three-issues", "A merge and three issues: each placed with its reason, two without asking; in or out asked for the one no row covers.",
      tools(("chosen", "open", "open")), {},
      [FIRST, *["\t".join(["issue", number, labels, title]) for number, labels, title, _ in ISSUES]], "slice, the coming-back", GO_ON,
-     [*BUILT_1, in_file(SET, "places-every-issue", all_of("#21", "#22", "#23")),
+     # The third is placed once the user has said in or out: recorded as asked, or left until then.
+     [*BUILT_1, in_file(SET, "places-the-issues-a-slice-covers", all_of("#21", "#22")),
+      not_in_file(SET, "places-nothing-in-a-slice-that-no-slice-covers", r"#23[^\n]*:\s*\**slice \d"),
       in_file(SET, "places-the-first-in-the-slice-in-hand", r"#21[^\n]*(?:slice 1|in hand|record a loan|just built|built)"),
       in_file(SET, "places-the-second-in-a-later-slice", r"#22[^\n]*(?:slice 3|not come back|later slice)"),
       says("asks-in-or-out-for-the-third", near(r"#23|old tools|buy", r"\?", 400)),

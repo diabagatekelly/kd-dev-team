@@ -169,9 +169,18 @@ class Checks(unittest.TestCase):
                   "- #22 Days out: slice 3, because it is about the list of tools not back.\n- #23 Old tools: not placed, no slice or row covers it; asked.\n"}
         asked = "Slice 1 is built. #21 goes with slice 1 and #22 with slice 3. Selling old tools (#23) is covered by no row: is it in or out? I recommend slice 2 next."
         self.assertEqual(failed("08-a-merge-and-three-issues", placed, asked), [])
+        # Found by the first runs: the issue no row covers was left out of the set until the user answers, and failed.
+        waiting = {**placed, cases.SET: placed[cases.SET].replace("- #23 Old tools: not placed, no slice or row covers it; asked.\n", "")}
+        self.assertEqual(failed("08-a-merge-and-three-issues", waiting, asked), [])
         self.assertEqual(failed("08-a-merge-and-three-issues", self.AFTER, "Where should #21 go? And #23?"),
-                         ["places-every-issue", "places-the-first-in-the-slice-in-hand", "places-the-second-in-a-later-slice",
-                          "asks-nothing-of-the-first-two"])
+                         ["places-the-issues-a-slice-covers", "places-the-first-in-the-slice-in-hand",
+                          "places-the-second-in-a-later-slice", "asks-nothing-of-the-first-two"])
+        wrong = {**placed, cases.SET: placed[cases.SET].replace("#23 Old tools: not placed", "#23 Old tools: slice 2")}
+        self.assertEqual(failed("08-a-merge-and-three-issues", wrong, asked), ["places-nothing-in-a-slice-that-no-slice-covers"])
+
+    def test_a_section_with_nothing_under_it_fails_its_form(self):
+        files = {cases.SET: cases.ROTA_SET + "\n## Issues\n\n## What changed\n"}
+        self.assertEqual(failed("01-a-list-of-four-items", files, cases.ROTA_SHOWN), ["form-no-empty-section"])
 
     def test_a_proposal_writes_nothing_and_the_yes_writes_a_new_version(self):
         self.assertEqual(failed("09a-work-shows-two-slices-are-one", dict(cases.MID), cases.PROPOSED), [])

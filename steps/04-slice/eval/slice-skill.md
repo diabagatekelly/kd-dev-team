@@ -23,13 +23,12 @@ Two documents, under the names the startup report gives. The set:
 
 ## Where to start
 Which slices can be started now, which wait and for what. The one you recommend first, and why.
-
-## Issues
-From the first coming-back on: `- #<number> <its title>: <where it belongs>, because <why>.`
-
-## What changed
-From the first change on: a line a change, with its reason.
 ```
+
+Two more sections are added to the set when there is something to
+put in them, never empty: `## Issues`, a line an issue (`- #<number>
+<its title>: <where it belongs>, because <why>.`), and `## What
+changed`, a line a change with its reason.
 
 The chosen slice, in the folder of its number:
 
@@ -86,7 +85,11 @@ document. A criterion is one starting state, one action and one
 outcome a person could check by looking, with invented values,
 named by its item and a number. Write the ordinary path and the
 refusals this behaviour's own rule makes (a value it cannot take, a
-thing that is not there). Not yours, and written once by later
+thing that is not there): one for a rule, not one for every way of
+mistyping, and none added to look thorough. Nothing the list does
+not know of: no state, step or thing made up to have something to
+refuse. A limit is a starting state, not a criterion of its own.
+Not yours, and written once by later
 stages: who may do it, a request for what is not theirs, the same
 action done twice, the failure of anything the path depends on. A
 criterion that compares (a duplicate, a match) says what makes two
@@ -117,7 +120,8 @@ a person could not tell apart, join them without argument.
   in a later slice of the set, or in a later row of the scope map,
   each under "Issues" with why. `gh issue view <number>` reads one
   whose title does not say enough. Only an issue that no slice and
-  no row covers is put to the user: in or out?
+  no row covers is put to the user, in or out, and it is placed
+  when they have answered.
 - Say whether the list still holds. A change to it is named for the
   requirements stage, where the user confirms it: add or change no
   item yourself.
