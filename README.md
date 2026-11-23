@@ -39,26 +39,29 @@ requirements), all on Sonnet 5.5. After the owner said each holds,
 all four were run together, end to end, and their texts changed from
 what those runs found (decisions 28 to 32). Where each stands:
 
-| Stage | Its text | Scenarios | Last pass with every adopted text loaded (Sonnet) |
+| Stage | Its text | Scenarios | The pass of 2026-11-23, every adopted text loaded (Sonnet) |
 |---|---|---|---|
-| 0 Startup | routing table, 52 lines | 21 | 20 of 21, one run each |
-| 1 Problem | 51 lines | 8 | 8 of 8, one run each; the three changed, 5 of 5 each |
-| 2 Scope map | 56 lines | 6 | 18 of 18, three runs each |
-| 3 Requirements | 93 lines | 12 | 12 of 12, one run each; the two newest, 5 of 5 each |
+| 0 Startup | routing table, 52 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 20 of 20 |
+| 1 Problem | 51 lines | 8 | 8 of 8 once; scenarios 05, 07 and 08 five times, 15 of 15 |
+| 2 Scope map | 56 lines | 6 | 6 of 6 once; scenarios 05 and 06 five times, 10 of 10 |
+| 3 Requirements | 93 lines | 12 | 12 of 12 once; scenarios 05 and 08 to 12 five times, 29 of 30 |
+
+That pass is the one the texts were owed after the end-to-end runs
+changed them: 107 runs and the four examples, side by side, 18
+minutes, $14.33 ($7.45 the scenarios, $6.88 the examples). By the
+checks 105 of 107; one of the two was a check that failed a good
+answer (an offer to correct the requirements, read as an offer to do
+the research another way), corrected and graded again. The one real
+miss: in one run of requirements scenario 12, `sources.md` said
+where the user keeps their file and not its name. Startup's scenario
+03, which once said a row's number to the user, did not in five runs.
+The four examples each reached the requirements with their documents
+numbered in order, no file of the user's opened and no value of one
+written down. Whether each stage still holds is the owner's to say.
 
 **Next, in this order:**
 
-1. **The pass the texts are owed.** Every one of the four has
-   changed since the owner said its stage holds. Before any is
-   called held again: the 14 scenarios that are new or changed five
-   times, the rest once, and the four end-to-end examples once,
-   side by side (about 100 runs, 30 minutes, $15 with the examples
-   or $9 without; decisions 30 and 31). It runs in the background
-   in the VM while other work goes on, so long as no adopted text is
-   changed and the VM's branch is left alone until it ends. One
-   known failure to watch: startup's scenario 03 once said "Row 4
-   first" to the user, which the routing table forbids (1 run of 1
-   in the last pass, 3 of 3 clean before it).
+1. **The owner's word on that pass,** stage by stage.
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
    or between them. Its conditions, bar and cost are put to the
