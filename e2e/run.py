@@ -19,7 +19,8 @@ back in a new one, which is given a fresh startup report and none of the convers
 A run goes on through the slice stage: once a slice's own document has been written, its merge is
 made up (the tracker's stand-in is given a merged pull request that names that document's
 criteria), the user comes back in a new session and says the slice is built and merged, and the
-run ends after that session's first turn: the coming-back to the set. With `--through
+run ends once the set says that slice is built (the coming-back), or four turns after the merge
+if it never does. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -170,7 +171,7 @@ def tool_calls(record):
             message = json.loads(line).get("message") or {}
         except ValueError:
             continue
-        if message.get("role") != "assistant" or not isinstance(message.get("content"), list):
+        if not isinstance(message, dict) or message.get("role") != "assistant" or not isinstance(message.get("content"), list):
             continue
         for part in message["content"]:
             if part.get("type") == "tool_use":
@@ -287,7 +288,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                     "--no-session-persistence"]
     planning = project / brief.folder
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
-    sessions, merged, back = [], "", False
+    sessions, merged, back = [], "", None
     for _ in range(max_turns):
         had_list = through == "requirements" and "requirements" in present(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
@@ -299,9 +300,14 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if had_list:
             ended = "the list was shown and the user's answers taken"
             break
-        if back:
-            ended = "the slice was merged and the session came back to the set"
-            break
+        if back is not None:
+            back += 1
+            if marks(planning)[0].get(str(number_merged)) == "built":
+                ended = "the slice was merged and the session came back to the set"
+                break
+            if back == 4:
+                ended = "the slice was merged and four turns later the set did not say it was built"
+                break
         appeared = present(planning) - seen
         seen |= appeared
         sorted_, _, spent = ask(command, reply, nowhere, sorter_extra, env)
@@ -312,7 +318,8 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if appeared & brief.away_after:   # the user comes back another day: nothing carries over but the files
             session, said, turn["new_session_next"] = None, brief.back, True
         if through == "merge" and "slice" in appeared:   # the slice is built and merged while the user is away
-            merged, back = merge(project, planning), True
+            merged, back = merge(project, planning), 0
+            number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
             session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged
         same = same + 1 if said == turn["user"] else 0
         if same == 2:   # said twice running, and this would be the third time

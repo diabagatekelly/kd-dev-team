@@ -21,6 +21,7 @@ RUN = "\n".join([
     record(use("Edit", file_path="/tmp/x/planning/001_scope-map.md", old_string="now", new_string="next")),
     record({"type": "text", "text": "Written. Anything missing?"}),
     "not json",
+    json.dumps({"type": "system", "message": "a line whose message is plain text"}),   # found by the slice stage's pilot
 ])
 START = {"planning/001_scope-map.md": "| 1 | Borrow | now |\n| 2 | Return | now |\n"}
 

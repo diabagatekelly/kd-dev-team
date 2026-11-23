@@ -5,10 +5,10 @@
 follow the principles kad's skill was built on; push back when a
 slice is made wider; cut the whole set and recommend where to start;
 and the check-in after a merge is this stage's, set included.
-Criteria only for the slice being worked on. **Nothing is built or
-run yet: the next step is the stage script and its unit tests, the
-scenarios, then the pilot, whose cost is reported before anything
-else runs.**
+Criteria only for the slice being worked on. Built since: the stage
+script and the tracker script (unit tests first), the scenarios and
+their checks, a first text, and the pilot. What they found is below
+the agreed test, from "Built" on.
 
 ## What it is
 
@@ -301,3 +301,101 @@ the coming-back.
 Whether a slice cut before any fact is known survives the approach
 and research: that is seen when those stages can send a finding
 back. Whether it is the right size to build is seen at the build.
+
+## Built (2026-11-23)
+
+**The scripts** (`startup/`, unit tests first: 157 for the folder, on
+three systems).
+
+- `stage.sh` takes the new order (decision 36): problem, scope map,
+  requirements, the set of slices, the chosen slice, approach,
+  research, and on. It names both documents of this stage at once:
+  the set (`003_slices.md`), and where the chosen slice's own will
+  go (`slice-NNN/004_slice.md`, NNN the slice's number in the set).
+- It counts the set: slices by state, a requirement in no slice, an
+  item the list does not hold, a state it does not know, two slices
+  chosen at once, the chosen slice's criteria and any that names no
+  item. It says how a changed set is written: corrected in place
+  until a slice is built from it, a new numbered version after.
+- It says when a coming-back is due and exactly what to do: mark a
+  slice built when merged work names every criterion of its
+  document; check a box when every slice of its item is built (or
+  merged work names the item outright); and the open issues that no
+  version of the set has placed. Merged work that names part of a
+  slice, or a criterion no document holds, is said and nothing is
+  due for it. When what is due finishes the list, it says the
+  activity is done. A set it cannot read is refused, not passed
+  over.
+- `tracker.sh` reads the latest fifty merged pull requests and the
+  line of each that says what it completes (`Completes: slice 2:
+  item / 1, item / 2`), and gives them and the open issues to the
+  stage script.
+
+**Every earlier stage once with the new scripts** (Sonnet, every
+adopted text loaded): startup 21 of 21, the problem 8 of 8, the
+scope map 6 of 6, the requirements 12 of 12; $3.07. Three of
+startup's scenarios changed with the order: after the requirements
+the slice is named, never research (09, 14), and the stage that is
+not built is the slice (21) until this text is adopted. The
+requirements text says the slice and the approach start from its
+inventory, not research.
+
+**The cases.** The ten rows are fourteen cases
+(`eval/make_cases.py`): rows 4, 6, 9 and 10 hold two situations
+each, and a proposal and the yes to it are two turns. The bar is
+every case in every run (70 of 70 at five runs). Each check was
+graded for nothing on a document written by hand, a good one and a
+faulty one, before any run (`eval/test_cases.py`). Checks named
+`form-...` are on what nothing tells the bare model or kad's skills
+to write (the table and its columns, a criterion's name, the
+headings); every count is given with and without them
+(`e2e/tally.py`).
+
+## The pilot (2026-11-23): $3.69
+
+Each case once on Haiku and Sonnet for the three arms, kad's on the
+eight cutting cases: 72 runs. For the setup, not the result.
+
+| Arm | Haiku 5.5 | Sonnet 5.5 |
+|---|---|---|
+| Bare | 1 of 14 (2 but for form), $0.08 | 5 of 14 (8), $1.06 |
+| kad's two skills | 0 of 8 (1), $0.08 | 1 of 8 (3), $1.25 |
+| Our text, first form (141 lines) | 8 of 14 (8), $0.08 | 9 of 14 (9), $1.15 |
+
+A run costs about half a cent on Haiku and $0.08 on Sonnet ($0.16
+with kad's two skills, which are six hundred lines).
+
+**What it met, and what each became** (decision 29):
+
+| Met | Now |
+|---|---|
+| Asked "what's next" after a merge, a session named the coming-back and waited for the word, as it does for any stage; the three cases that expect the check-off failed on every arm but one | those cases say "Go on to the next stage."; the case where nothing is due still asks "what's next" |
+| "I need your yes first" has no question mark, and was failed as not asking | the check takes a request for the yes; a unit test with those words |
+| "1 of 4 is checked off", said of the list, was failed as checking something off | the check is on what the session did; a unit test with those words |
+| A pattern that counted rows could be matched in so many ways that a short document took minutes to fail (found by the unit test, before any run) | rows are counted by where they start; the test runs in seconds |
+| One transcript held a line whose message is plain text, and grading it again stopped there | `e2e/regrade.py` and `e2e/run.py` pass over it: two unit tests |
+| A fault in reading the set left the stage script's report silent and wrong (found while it was written) | the script refuses: a unit test |
+| A second command in the VM stopped it, and a pass started in the background inside it was lost (no cost) | the pass is kept attached to the command that starts it; written in the runbook |
+
+Graded again with the corrected checks, for nothing: our text on
+Sonnet passes 11 of 14; the three left are the cases that asked
+"what's next". Bare on Sonnet gives way at once when the user asks
+for everything in one slice (the set rewritten, the floated tool
+written into it) and writes a new set before the user has agreed to
+it. kad's skills write the first slice with the set, unasked, and
+on the wider cut change the set without saying what it costs.
+
+## Cost, corrected from the pilot
+
+| What | First guess | Now |
+|---|---|---|
+| Pilot | $5 | $3.69, spent |
+| Three runs: bare on three models; kad's and ours on Haiku and Sonnet | $30 | $17: three passes, the dearest (bare, with Opus) about $9.50 |
+| The real requirements: three lists, three runs of ours and of kad's, on Sonnet | $4 | $5 |
+| Two rounds of tuning | $8 | $5 |
+| Five runs of what passes | $9 | $6 |
+| Every earlier stage once with the new scripts | $14 with the examples | $3.07, spent |
+| Every earlier stage once more with the text loaded; the four examples carried on through a set, a chosen slice and one merge | | $13 |
+| **In all** | **about $70** | **about $53** |
+
+No one pass is over $15.

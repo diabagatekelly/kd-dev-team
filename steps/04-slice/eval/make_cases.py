@@ -52,7 +52,7 @@ KAD = {"vertical-slicing": [HERE / "kad-vertical-slicing.md", ROOT.parent / "kad
        "acceptance-criteria": [HERE / "kad-acceptance-criteria.md", ROOT.parent / "kad-dev-team-plugin/skills/acceptance-criteria/SKILL.md"]}
 LIST, SET = "planning/002_requirements.md", "planning/003_slices.md"
 GO_ON = "Go on to the next stage."
-NEXT = "what's next"
+NEXT = "what's next"   # asked this, a session names the next stage and waits for the word
 
 
 def in_file(path, name, pattern, flags="i"):
@@ -521,13 +521,13 @@ SCENARIOS = [
       *untouched("writes-no-slice-before-the-choice", r"_slice\.md"), *LIST_UNTOUCHED],
      [("user", GO_ON), ("assistant", ROTA_SHOWN)], [], True),
     ("07-a-merge", "A merge names every criterion of one slice: checked off; the set holds and is not rewritten; the next slice recommended.",
-     tools(("chosen", "open", "open")), {}, [FIRST], "slice, the coming-back", NEXT,
+     tools(("chosen", "open", "open")), {}, [FIRST], "slice, the coming-back", GO_ON,
      [*BUILT_1, not_in_file(SET, "chooses-no-slice-for-the-user", ROW + STATE.format("chosen")),
       says("recommends-what-is-next", r"recommend|suggest|I(?:'d| would) (?:start|take|go)|next[^.\n]{0,80}(?:slice|return|not come back)|start (?:with|on)")],
      None, [], False),
     ("08-a-merge-and-three-issues", "A merge and three issues: each placed with its reason, two without asking; in or out asked for the one no row covers.",
      tools(("chosen", "open", "open")), {},
-     [FIRST, *["\t".join(["issue", number, labels, title]) for number, labels, title, _ in ISSUES]], "slice, the coming-back", NEXT,
+     [FIRST, *["\t".join(["issue", number, labels, title]) for number, labels, title, _ in ISSUES]], "slice, the coming-back", GO_ON,
      [*BUILT_1, in_file(SET, "places-every-issue", all_of("#21", "#22", "#23")),
       in_file(SET, "places-the-first-in-the-slice-in-hand", r"#21[^\n]*(?:slice 1|in hand|record a loan|just built|built)"),
       in_file(SET, "places-the-second-in-a-later-slice", r"#22[^\n]*(?:slice 3|not come back|later slice)"),
@@ -539,7 +539,8 @@ SCENARIOS = [
      [says("proposes-the-two-as-one", r"\bjoin|\bmerg|combin|\bone slice|single slice|\bfold|become(?:s)? one|into (?:slice )?2|together"),
       says("leaves-the-built-slice", near(r"slice 1|built", r"stays?|unchanged|as it is|as they are|untouched|not touched|left|keeps?|remains?", 200)),
       says("names-the-requirements-stage-for-the-item", near(r"see-who-has-it|item|due back", r"requirements", 400)),
-      says("asks-before-it-replaces-the-set", r"\?"),
+      # A request for the yes need not end in a question mark ("I need your yes first").
+      says("asks-before-it-replaces-the-set", r"\?|your (?:yes|go-ahead|word|agreement)|say (?:yes|the word)|if you (?:agree|say)|once you (?:agree|confirm|say)"),
       *untouched("writes-no-set-before-the-yes", r"_slices"), *LIST_UNTOUCHED],
      None, [], False),
     ("09b-the-user-agrees", "The second turn: the new set written as a new version, with what changed; the earlier set and the built slice as they were.",
@@ -553,7 +554,7 @@ SCENARIOS = [
      [("user", MID_SLICE), ("assistant", PROPOSED)], [], False),
     ("10a-the-last-slice-merged", "The last slice is merged: checked off, the activity said to be done, the next \"now\" asked.",
      tools(("built", "built", "chosen"), checked=["record-a-loan", "record-a-return", "see-who-has-it"], slices=(1, 2, 3)), {},
-     [FIRST, merged(15, 2, "Record a return"), merged(19, 3, "The tools not back")], "slice, the coming-back", NEXT,
+     [FIRST, merged(15, 2, "Record a return"), merged(19, 3, "The tools not back")], "slice, the coming-back", GO_ON,
      [in_file(SET, "marks-the-last-slice-built", TOOLS_ROWS[2] + r"\s*\**built"),
       not_in_file(LIST, "checks-every-box", r"- \[ \]"), not_in_file(LIST, "adds-no-item", BUILT_1[-1]["pattern"]),
       says("says-the-activity-is-done", r"\bdone\b|complete|finished|every (?:slice|box|requirement|item)|all (?:three|four|the) (?:slices|boxes|requirements|items)"),
@@ -563,7 +564,8 @@ SCENARIOS = [
     ("10b-nothing-is-due", "Nothing merged since the last coming-back and no issue: no coming-back; the next stage named.",
      MID, {}, [FIRST], "approach (its document: planning/slice-002/006_approach.md)", NEXT,
      [says("names-the-next-stage", r"approach"),
-      never_says("checks-nothing-off", r"(?:I(?:'ve| have)|now) (?:marked|checked|ticked)|checked off|marked[^.\n]{0,40}built"),
+      # What the session did, not what it reports of the list ("1 of 4 is checked off").
+      never_says("checks-nothing-off", r"I(?:'ve| have)(?: now| just)? (?:marked|checked|ticked)|I(?:'ll| will) (?:mark|check|tick)|(?:now|just) (?:marked|checked|ticked)"),
       {"type": "tool_used", "name": "writes-no-file", "tool": "Write", "min": 0, "max": 0},
       {"type": "tool_used", "name": "edits-no-file", "tool": "Edit", "min": 0, "max": 0}],
      None, [], False),

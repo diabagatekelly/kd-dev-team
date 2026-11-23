@@ -139,6 +139,10 @@ class WhatASessionDid(unittest.TestCase):
     def test_each_tool_call_is_listed_with_what_it_was_given(self):
         self.assertEqual(run.tool_calls(self.RECORD), ["Read: /p/register.py", "Bash: cat > a.md <<'EOF'", "Skill: x:problem"])
 
+    def test_a_line_of_the_record_whose_message_is_plain_text_is_passed_over(self):
+        # Found by the slice stage's pilot: one transcript held such a line and grading it again stopped there.
+        self.assertEqual(run.tool_calls(json.dumps({"type": "system", "message": "compacted"}) + "\n"), [])
+
     def test_no_record_lists_nothing(self):
         self.assertEqual(run.tool_calls(""), [])
         self.assertEqual(run.record_of("s-1", tempfile.mkdtemp()), "")
@@ -332,6 +336,11 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["boxes"], {"a": True})
         early, _ = self.through(turns=5)
         self.assertEqual((early["ended"], early["slices"], early["boxes"]), ("the turns ran out", {"2": "open"}, {"a": False}))
+
+    def test_a_session_that_never_marks_the_merged_slice_is_given_four_turns(self):
+        # Found by the pilot: asked what is next after a merge, a session names the coming-back and waits for the word.
+        summary, sessions = self.through(fake=self.THROUGH.replace("if n == 6:", "if n == 7:"))
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the slice was merged and the session came back to the set", 7))
 
     def test_asked_where_to_start_the_user_takes_the_recommended_slice_unless_the_brief_says_otherwise(self):
         self.assertEqual(run.Brief(BRIEF).reply({"asked": ["start"], "uncovered": 0}, set(), False),

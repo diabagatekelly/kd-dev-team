@@ -173,6 +173,9 @@ class Checks(unittest.TestCase):
 
     def test_a_proposal_writes_nothing_and_the_yes_writes_a_new_version(self):
         self.assertEqual(failed("09a-work-shows-two-slices-are-one", dict(cases.MID), cases.PROPOSED), [])
+        # Found by the pilot: a request for the yes with no question mark was failed as not asking.
+        self.assertEqual(failed("09a-work-shows-two-slices-are-one", dict(cases.MID),
+                                cases.PROPOSED.replace("Shall I write this as the new set?", "I need your yes first.")), [])
         new = cases.TOOLS_SET.split("| 2 |")[0] % "built" + "| 2 | Record a return, and see every tool that has not come back | record-a-return, " \
             "see-who-has-it, list-overdue-tools | 1 | chosen |\n\n## What changed\n- Slices 2 and 3 are one: a tool is on the list until its return is recorded.\n"
         self.assertEqual(failed("09b-the-user-agrees", {cases.NEW_SET: new}, "Written. The item is the requirements stage's."), [])
@@ -190,7 +193,8 @@ class Checks(unittest.TestCase):
                          ["marks-the-last-slice-built", "checks-every-box", "says-the-activity-is-done", "asks-which-row-is-the-next-now"])
 
     def test_with_nothing_due_nothing_is_checked_off(self):
-        self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "The next stage is the approach, which is not built yet."), [])
+        self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "The next stage is the approach, which is not built yet. "
+                                                              "Slice 1 is built and 1 of 4 requirements is checked off."), [])
         self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "I've marked slice 2 built.", [("Edit", "{}")]),
                          ["names-the-next-stage", "checks-nothing-off", "edits-no-file"])
 
