@@ -80,15 +80,17 @@ person the most for the least, and that the others build on.
 why, and ask where to start. Write no criteria before the answer.
 A set of one slice has nothing to choose: go straight on.
 
-**The chosen slice.** Mark it `chosen` in the set and write its
-document. A criterion is one starting state, one action and one
+**The chosen slice.** Mark it `chosen` in the set, replacing its
+whole row (the end of one row can be the end of another), and write
+its document. A criterion is one starting state, one action and one
 outcome a person could check by looking, with invented values,
 named by its item and a number. Write the ordinary path and the
-refusals this behaviour's own rule makes (a value it cannot take, a
-thing that is not there): one for a rule, not one for every way of
-mistyping, and none added to look thorough. Nothing the list does
-not know of: no state, step or thing made up to have something to
-refuse. A limit is a starting state, not a criterion of its own.
+essential refusals: those a person using it as meant would meet
+from this behaviour's own rule (a value it cannot take, a thing that
+is not there). One for a rule, not one for every field left empty,
+and none added to look thorough; no state the documents do not have
+is made up to be refused. A limit is a starting state, not a
+criterion of its own.
 Not yours, and written once by later
 stages: who may do it, a request for what is not theirs, the same
 action done twice, the failure of anything the path depends on. A
