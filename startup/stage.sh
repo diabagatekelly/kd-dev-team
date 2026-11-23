@@ -188,7 +188,7 @@ END {
     n = split(held[s], each, "\t"); got = 0; missing = ""
     for (i = 1; i <= n; i++) if ((s, each[i]) in named) got++; else missing = add(missing, each[i], ", ")
     if (got == n) { now[s] = "built"; any_built = 1; due_line("slice " s " is built by merged work (" sorted(by[s]) "): mark it built in " folder "/" set) }
-    else if (got) print "- merged work (" sorted(by[s]) ") names " got " of the " n " criteria of slice " s ": not built yet; still to come: " missing
+    else if (got) print "- merged work (" sorted(by[s]) ") names " got " of the " n " criteria of slice " s ": not built yet, so nothing is marked or checked for it; still to come: " missing
   }
   if (lost != "") print "- merged work names what no slice\047s document holds: " lost
   all_built = rows_n > 0; all_marked = rows_n > 0

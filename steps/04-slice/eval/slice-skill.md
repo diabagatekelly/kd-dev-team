@@ -120,7 +120,9 @@ a person could not tell apart, join them without argument.
 **Coming back.** When the report says a coming-back is due:
 
 - Do what it lists and no more: mark a slice `built`, check a box.
-  Only merged work marks or checks, never the user's word or yours.
+  Only the report marks or checks, never the user's word or yours:
+  an item whose own criteria have all merged is still unchecked
+  while a slice that holds it is not built.
 - Place every issue it lists, without asking: in the slice in hand,
   in a later slice of the set, or in a later row of the scope map,
   each under "Issues" with why. `gh issue view <number>` reads one

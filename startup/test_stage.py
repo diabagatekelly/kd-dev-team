@@ -285,8 +285,10 @@ class Stage(unittest.TestCase):
     def test_merged_work_naming_part_of_a_slice_is_said_and_nothing_is_due(self):
         out = self.planned(self.BUILDING, slices={1: the_slice("record-a-loan / 1", "record-a-loan / 2")},
                            tracker=["merged\t12\tslice 1: record-a-loan / 1\tRecord a loan"])
-        self.assertIn("- merged work (#12) names 1 of the 2 criteria of slice 1: not built yet; still to come: "
-                      "record-a-loan / 2\n", out)
+        # Found by the closing pass: with both criteria of one item merged and the slice half built, 2 runs of 5
+        # checked that item's box on the user's word.
+        self.assertIn("- merged work (#12) names 1 of the 2 criteria of slice 1: not built yet, so nothing is marked or "
+                      "checked for it; still to come: record-a-loan / 2\n", out)
         self.assertNotIn("coming-back", out)
 
     def test_a_criterion_merged_work_names_that_the_slice_does_not_hold_is_said(self):
