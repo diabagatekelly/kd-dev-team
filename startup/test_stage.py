@@ -319,8 +319,8 @@ class Stage(unittest.TestCase):
         out = self.planned(placed, slices={1: the_slice("record-a-loan / 1")},
                            tracker=["issue\t14\tbug\tA return is lost", "issue\t15\t-\tLoans show twice",
                                     "issue\t140\t-\tA typo"])
-        self.assertIn('- a coming-back to the slices is due:\n  - open issues not placed yet: #15 "Loans show twice", '
-                      '#140 "A typo"\n', out)
+        self.assertIn('- a coming-back to the slices is due:\n  - open issues not placed yet (each is placed, by its number, in '
+                      'planning/003_slices.md): #15 "Loans show twice", #140 "A typo"\n', out)
         self.assertIn("- next stage by the documents: slice, the coming-back", out)
 
     def test_an_issue_placed_in_an_earlier_version_of_the_set_stays_placed(self):

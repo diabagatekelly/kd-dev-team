@@ -201,7 +201,7 @@ END {
     else all_checked = 0
   }
   for (i = 1; i <= issues_n; i++) if (!(issues[i] in placed)) waiting = add(waiting, "#" issues[i] " \"" title[issues[i]] "\"", ", ")
-  if (waiting != "") due_line("open issues not placed yet: " waiting)
+  if (waiting != "") due_line("open issues not placed yet (each is placed, by its number, in " folder "/" set "): " waiting)
   if (due != "") {
     if (all_built && all_checked && !(all_marked && were_checked)) due_line("with those, every slice is built and every requirement checked: the activity is done")
     printf "- a coming-back to the slices is due:\n%s", due
