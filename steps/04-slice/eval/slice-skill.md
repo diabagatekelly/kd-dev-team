@@ -106,8 +106,8 @@ what the slice is, its size and what it needs from outside.
 **Holding the line.** When the user wants a slice wider, two joined,
 everything in the first, the groundwork first or all the error
 handling first: say once what that costs them (what is shown later,
-what is built before anything is learned) and what the thin cut
-gives, and offer the thin cut again; for error handling, offer it
+what is built before anything is learned), with the size of each
+cut, and what the thin cut gives, and offer the thin cut again; for error handling, offer it
 spread over the slices as above. Change nothing yet. If they still
 want it, it is theirs: change the set, say its size, and record
 their reason in their own words under "What changed". Do not argue

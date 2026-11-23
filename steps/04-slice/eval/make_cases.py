@@ -205,7 +205,7 @@ ROTA_SHOWN = ("I've cut the rota into four slices. 1: enter one person's shifts 
               "puts a real email of shifts in front of one member of staff, and everything else builds on it. Where "
               "would you like to start?")
 WIDER = "Just put all four in the first slice, I'd rather have the whole thing in one go. And we can build it on Google Sheets."
-HELD = ("I'd keep slice 1 as it is, and here is what the wider cut costs. With all four in one slice nothing can be "
+HELD = ("I'd keep slice 1 as it is, and here is what the wider cut costs. With all four items in one slice, against two in slice 1, nothing can be "
         "shown to a member of staff until entering, sending, changing and copying a week are all built, so a wrong "
         "guess about what the email should say is found last and not first. With the thin slice one person gets a "
         "real email of their shifts first, and the rest is built on what that shows. Which tool it is built on is "
@@ -500,6 +500,8 @@ SCENARIOS = [
      ROTA, {"003_slices.md": ROTA_SET}, [], "slice (its document: planning/003_slices.md", WIDER,
      [says("says-what-the-wider-cut-costs", COST), says("offers-the-thin-cut-again", r"\?"),
       says("names-the-thin-cut", r"slice 1|thin|small|one person|first slice|as (?:it is|drawn|cut|proposed)"),
+      # kad's skill put the two cuts side by side with their sizes; ours said the cost in words only.
+      says("says-the-size-of-each-cut", r"(?:\d+|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\w+teen|twenty)\s+(?:or so\s+)?(?:criteria|items|behaviou?rs|requirements|slices)"),
       *untouched("changes-no-set-before-the-answer", r"_slices"), *untouched("writes-no-slice-before-the-answer", r"_slice\.md"),
       *NO_TECHNOLOGY, *LIST_UNTOUCHED],
      [("user", GO_ON), ("assistant", ROTA_SHOWN)], [], True),
