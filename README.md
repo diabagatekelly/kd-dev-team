@@ -48,14 +48,17 @@ what those runs found (decisions 28 to 32). Where each stands:
 
 **Next, in this order:**
 
-1. **The wide pass the texts are owed.** Every one of the four has
+1. **The pass the texts are owed.** Every one of the four has
    changed since the owner said its stage holds. Before any is
-   called held again: its changed scenarios ten times, the rest
-   three times, and the four end-to-end examples once (about $12;
-   decisions 30 and 31). One known failure to watch: startup's
-   scenario 03 once said "Row 4 first" to the user, which the
-   routing table forbids (1 run of 1 in the last pass, 3 of 3 clean
-   before it).
+   called held again: the 14 scenarios that are new or changed five
+   times, the rest once, and the four end-to-end examples once,
+   side by side (about 100 runs, 30 minutes, $15 with the examples
+   or $9 without; decisions 30 and 31). It runs in the background
+   in the VM while other work goes on, so long as no adopted text is
+   changed and the VM's branch is left alone until it ends. One
+   known failure to watch: startup's scenario 03 once said "Row 4
+   first" to the user, which the routing table forbids (1 run of 1
+   in the last pass, 3 of 3 clean before it).
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
    or between them. Its conditions, bar and cost are put to the
@@ -76,8 +79,8 @@ proposal at a time with its cost; a stage is tested before it is
 adopted, the bare model first, against a bar set before the run;
 each stage's text is set beside kad's skill part by part (decision
 26); every problem met becomes a test, an evaluation or a change to
-a text (decision 29); five runs for what changed, ten before a
-stage is put to the owner (decision 30); the suites stay quick and
+a text (decision 29); five runs for what changed and before a
+stage is put to the owner, never ten (decision 30); the suites stay quick and
 cheap (decision 31, the table in `e2e/README.md`).
 
 **How a stage is run.** Inside the evaluation VM `kd-startup-eval`,

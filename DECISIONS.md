@@ -220,12 +220,14 @@ asking is listed apart, so it can be overturned.
 
 ## 2026-11-22: how many runs
 
-30. **Five runs for a scenario that is new or whose text has just
-    changed; ten only before the owner is asked whether a stage
-    holds** (the owner, asked whether ten was too many). The other
-    scenarios of a stage get three runs as a check that nothing else
-    moved, and the fixes from one round of reading are batched into
-    one pass, not run one by one.
+30. **Five runs, not ten** (the owner). Five for a scenario that is
+    new or whose text has just changed, and five again before the
+    owner is asked whether a stage holds; the other scenarios of a
+    stage get one run as a check that nothing else moved, and the
+    fixes from one round of reading are batched into one pass. (The
+    owner first chose ten before a stage is put to them, and changed
+    it to five on 2026-11-23, when a ten-run pass over the four
+    stages came to about 75 minutes and $25.)
 
 ## 2026-11-22: the suites stay quick and cheap
 

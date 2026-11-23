@@ -60,7 +60,7 @@ what changed, and widened only when a stage is put to the owner.
 | A text is changed (one batch for a round of fixes) | the changed and new scenarios five times, the rest of that stage once, on Sonnet | $1 to $3, 10 minutes |
 | The routing table is changed (every stage loads it) | every stage's scenarios once | $4, 15 minutes |
 | A fix came from an end-to-end example | that example, once | $1 to $2.50 |
-| Before a stage is put to the owner | its changed scenarios ten times, the rest three times; the four examples once, side by side | $10 to $12, 30 minutes |
+| Before a stage is put to the owner | its changed scenarios five times, the rest once; the four examples once, side by side | $3 to $5 a stage, 10 minutes; all four stages with the examples, about $15 and 30 minutes |
 
 A round of fixes is meant to stay under $3 and ten minutes. A pass
 that would go past $12 is said, with its reason, before it is run.
