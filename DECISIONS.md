@@ -218,6 +218,15 @@ asking is listed apart, so it can be overturned.
     for them. Each finding and the test it became is listed in
     `e2e/README.md`.
 
+## 2026-11-22: how many runs
+
+30. **Five runs for a scenario that is new or whose text has just
+    changed; ten only before the owner is asked whether a stage
+    holds** (the owner, asked whether ten was too many). The other
+    scenarios of a stage get three runs as a check that nothing else
+    moved, and the fixes from one round of reading are batched into
+    one pass, not run one by one.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
