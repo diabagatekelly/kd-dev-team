@@ -237,7 +237,12 @@ report() {
     return 0
   fi
   dir=$(inside "$folder")
-  if [ ! -d "$dir" ]; then say "- planning folder: $folder (chosen earlier for this project) no longer exists"; return 0; fi
+  if [ ! -d "$dir" ]; then
+    say "- planning folder: $folder (chosen earlier for this project) no longer exists"
+    say "- to record the folder the user names (it is made if it is not there): $SELF remember FOLDER"
+    say "  then read the documents again: $SELF report"
+    return 0
+  fi
   say "- planning folder: $folder (chosen earlier for this project)"
   number=$(next_number)
   list=$(numbered "$dir" "requirements.md")

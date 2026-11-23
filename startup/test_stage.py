@@ -499,8 +499,12 @@ class Stage(unittest.TestCase):
     def test_a_remembered_folder_that_is_gone_is_said(self):
         self.chosen()
         (self.machine.project / "planning").rmdir()
-        self.assertIn("- planning folder: planning (chosen earlier for this project) no longer exists",
-                      self.report())
+        out = self.report()
+        self.assertIn("- planning folder: planning (chosen earlier for this project) no longer exists", out)
+        # Found by an end-to-end run started twice in one place: with no command to record a folder again,
+        # the session wrote every document without its number and never read the documents again.
+        self.assertRegex(out, r'- to record the folder the user names \(it is made if it is not there\): .*stage\.sh" remember FOLDER')
+        self.assertIn("then read the documents again", out)
 
     def test_remembering_no_folder_is_refused(self):
         self.assertEqual(self.machine.run("stage.sh", "remember").returncode, 3)
