@@ -227,6 +227,15 @@ asking is listed apart, so it can be overturned.
     moved, and the fixes from one round of reading are batched into
     one pass, not run one by one.
 
+## 2026-11-22: the suites stay quick and cheap
+
+31. **The tests and the end-to-end runs are not to take forever or
+    cost much: a good balance** (the owner). The balance chosen is
+    the table in `e2e/README.md`, "How much is run, and when": what
+    is free first (unit tests; kept runs graded again when a check
+    changes), then only what changed, and the wide pass only before
+    a stage is put to the owner. The owner can change any row.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

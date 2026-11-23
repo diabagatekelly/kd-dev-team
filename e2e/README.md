@@ -39,6 +39,28 @@ audit repository under `e2e/runs`.
 
 The driver's unit tests: `python3 -I -m unittest` in this folder.
 
+## How much is run, and when
+
+The owner wants these suites neither slow nor dear (decision 31).
+What is free is done first and always; what costs is run only on
+what changed, and widened only when a stage is put to the owner.
+
+| When | What is run | About |
+|---|---|---|
+| Every commit | every script's unit tests, on three systems | free, 2 minutes |
+| A check is changed or added | `regrade.py`: the kept transcripts graded again by the checks as they stand | free, seconds |
+| A scenario is new | one run on Haiku, to see that it builds and its checks can pass | under a cent |
+| A text is changed (one batch for a round of fixes) | the changed and new scenarios five times, the rest of that stage once, on Sonnet | $1 to $3, 10 minutes |
+| The routing table is changed (every stage loads it) | every stage's scenarios once | $4, 15 minutes |
+| A fix came from an end-to-end example | that example, once | $1 to $2.50 |
+| Before a stage is put to the owner | its changed scenarios ten times, the rest three times; the four examples once, side by side | $10 to $12, 30 minutes |
+
+A round of fixes is meant to stay under $3 and ten minutes. A pass
+that would go past $12 is said, with its reason, before it is run.
+
+`regrade.py PLUGIN TRACES NAME` was checked against the tool itself:
+on 1,305 checks of kept runs its verdict was the tool's every time.
+
 ## What the runs found, and the test each became
 
 Every problem a run meets ends in a unit test, an evaluation
