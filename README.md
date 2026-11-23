@@ -27,6 +27,7 @@ design are recorded under `next-plugin/validation/`.
 |---|---|
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues), `stage.sh` (the next stage by the documents that exist), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
+| `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
@@ -60,17 +61,33 @@ numbered in order, no file of the user's opened and no value of one
 written down. The owner has said all four stages still hold
 (decision 33).
 
-**Next, in this order:**
+**Next, in this order** (the order of the stages changed on
+2026-11-23, decision 36: the requirements say what, a provider is a
+how, so the slices are cut first and research follows the choice of
+a dependency):
 
-1. **Research (stage 4):** its conditions, bar and cost put to the
-   owner as one proposal before anything is built, with how an
-   outcome on the benchmark is tested (put off to this stage).
-2. Then the slice (stage 5), and with it or just after it **the
-   check-in after a merge** (decisions 23 and 34). A first proposal
-   for the check-in is parked in `steps/check-in/README.md`, with
-   what kad did at that point set beside it. Its two first scenarios
-   (a slice that contradicts the map, one that does not) are in the
-   history of `steps/02-scope-map/eval/make_cases.py`.
+1. **The slice (stage 4): agreed, not built** (decision 37,
+   `steps/04-slice/README.md`). The whole set of slices for the
+   "now", a recommended start, criteria for the chosen one only,
+   pushback on a wider cut, and the coming-back after every merge.
+   To do, in order: `startup/stage.sh` takes the new order of
+   stages, counts the set and says when a coming-back is due, and
+   the tracker script reads merged work (unit tests first); the ten
+   scenarios; a pilot of about $5, reported before anything else
+   runs; then the passes, about $70 in all.
+2. **The approach (stage 5):** where a dependency is committed to.
+   Not proposed yet.
+3. **Research (stage 6): paused at its pilot**
+   (`steps/06-research/README.md`). A page reader and a quote check
+   with unit tests (`research/`), six scenarios on a made-up
+   provider, a first text, and one real run: $2.17 spent, about $40
+   to finish. Its gate and benchmark are run in its place, after the
+   approach.
+
+`startup/stage.sh` still has the old order (research straight after
+the requirements) until the slice stage is built. The parked
+check-in proposal (`steps/check-in/README.md`) is replaced by the
+slice stage's coming-back.
 
 **Watched, not changed:** in one run of five, `sources.md` said
 where the user keeps their file and not its name. The routing
@@ -132,6 +149,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
   counts and costs. Nothing that quotes a real project is kept here.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
-  `startup/` and `steps/03-requirements/eval/`.
+  `startup/`, `research/`, `steps/03-requirements/eval/`,
+  `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.

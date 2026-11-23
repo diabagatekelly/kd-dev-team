@@ -79,23 +79,24 @@ finds about half of what four find.
 | 1 | Problem | the problem, why now, constraints | `problem-framing-doc`, kept |
 | 2 | Scope | the steps of a large problem | `scope-map`, kept |
 | 3 | Requirements | who needs what, in and out of scope, and an inventory a script can read: dependencies, lasting things | `requirements-refinement`, kept; the inventory made machine-readable |
-| 4 | Research | per dependency: a dossier of cited facts, the plan's statements checked against them, open points with the test that would settle each; per lasting thing: its states | `domain-model`, kept and joined by the new dossier step |
-| 5 | Slice | the thinnest cut and its criteria | `vertical-slicing`, `acceptance-criteria`, kept |
-| 6 | Questions | the library's questions that matter for the slice, each with the things it applies to; two grids by script (each received field against the ways a value can be wrong; each state against each event) | new |
-| 7 | Answers | every question answered per thing, as a fact, a choice the planner records, or a decision for the owner | replaces the lists inside `reliability-requirements`, `security-requirements`; those two skills become the answering of their areas |
-| 8 | Tests of open facts | the "needs a test" answers with real harm, run against the dependency's test environment in the VM | new |
-| 9 | Design | structure, boundaries, where each criterion lives | `architecture-design`, kept; its interleavings fed by stage 6 |
-| 10 | Screens | design system, screen, accessibility check on the rendered screen | `design-system`, `screen-design`, `accessibility-review`, kept |
-| 11 | Stack and repository | what the slice forces, nothing more | `technology-bootstrap` (to be freed of one runtime's names), `repo-bootstrap`, `adr` |
-| 12 | Readiness | scripts: every kept question answered, every fact sourced, every quote found on its page, every criterion with a home | the readiness gate, kept and extended |
-| 13 | The owner's list, then the planning pull request | one short list of decisions, ranked by harm; the plan merged before any build | the planning pull request, kept |
+| 4 | Slice | the whole set of thin slices of the "now", what each builds on, a recommended start; criteria for the chosen one only; after each merge, what is done, where each new issue belongs, and whether the list and the set still hold (decision 37) | `vertical-slicing`, `acceptance-criteria`, kept |
+| 5 | Approach | for each thing the slice needs that the app cannot do itself: the ways to meet it, compared on the user's limits from a short read of each candidate's documentation; committing to a dependency is the owner's | new (decision 36); in kad the choice was made inside the design and recorded as an `adr` |
+| 6 | Research | per dependency committed to: a dossier of cited facts, the plan's statements checked against them, open points with the test that would settle each; per lasting thing: its states | `domain-model`, kept and joined by the new dossier step |
+| 7 | Questions | the library's questions that matter for the slice, each with the things it applies to; two grids by script (each received field against the ways a value can be wrong; each state against each event) | new |
+| 8 | Answers | every question answered per thing, as a fact, a choice the planner records, or a decision for the owner | replaces the lists inside `reliability-requirements`, `security-requirements`; those two skills become the answering of their areas |
+| 9 | Tests of open facts | the "needs a test" answers with real harm, run against the dependency's test environment in the VM | new |
+| 10 | Design | structure, boundaries, where each criterion lives | `architecture-design`, kept; its interleavings fed by stage 7 |
+| 11 | Screens | design system, screen, accessibility check on the rendered screen | `design-system`, `screen-design`, `accessibility-review`, kept |
+| 12 | Stack and repository | what the slice forces, nothing more | `technology-bootstrap` (to be freed of one runtime's names), `repo-bootstrap`, `adr` |
+| 13 | Readiness | scripts: every kept question answered, every fact sourced, every quote found on its page, every criterion with a home | the readiness gate, kept and extended |
+| 14 | The owner's list, then the planning pull request | one short list of decisions, ranked by harm; the plan merged before any build | the planning pull request, kept |
 
 Not carried over: the orchestrator as a whole (only this route, as a
 small table), the block of text copied into five skills (kept once),
 and the examples from one field.
 
 A slice that adds no dependency, no lasting thing, no stored data and
-no secret runs a lighter pass: the dossier is reused, stage 6 covers
+no secret runs a lighter pass: the dossier is reused, stage 7 covers
 only what changed, and only new cells are answered.
 
 ## 4. What reaches the owner
@@ -121,7 +122,7 @@ only what changed, and only new cells are answered.
   once.
 
 **How.** A preference is never asked for before the fact it depends on
-is known (stage 4 comes before any question about waits, limits or
+is known (stage 6 comes before any question about waits, limits or
 what a dependency allows). Decisions for the owner are gathered and
 brought once per slice as a short list ranked by harm, each with what
 happens if it is left, not one at a time as the work proceeds. Every
@@ -191,7 +192,8 @@ better; a real slice now and then.
 Pipeline order (the owner, 2026-11-21, against this document's first
 proposal to begin with research): stage 0, then 1, 2, 3 and on, one
 stage at a time, each with its test read by the owner before the
-next. Stages 1 to 3, 5, 9 and 10 have no measure yet: each is agreed
+next. The order itself changed on 2026-11-23 (decision 36): the slice
+before any dependency is chosen, research after. Stages 4, 5, 10 and 11 have no measure yet: each is agreed
 with the owner when the stage is reached, before its text is judged.
 
 ## 7. For the owner to decide

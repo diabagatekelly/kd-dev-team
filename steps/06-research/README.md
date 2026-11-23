@@ -1,7 +1,14 @@
-# Stage 4, research: the test, set before anything is built or run
+# Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-23:** a proposal for the owner. Nothing here is
-agreed, built or run.
+**State, 2026-11-23: paused at its pilot.** This was the fourth
+stage when it was proposed and piloted. The pilot showed that a
+provider is seldom known that early, and the order changed (decision
+36): the slice, then the approach, where a dependency is committed
+to, then this stage. What is below stands as agreed (decision 35)
+but for where the list of things to research comes from: the
+approach, not the requirements. The gate and the benchmark are run
+when the stage is reached; the pilot and the corrected costs are
+further down.
 
 ## What it is
 
@@ -176,32 +183,79 @@ a recommendation.
   another model than the session's: the measurement says. A text is
   carried only for what it adds over the bare model.
 
-## Cost
+## The pilot, 2026-11-23: $2.17
 
-A run that reads real documentation is long, and its cost is known
-only from the earlier experiments' token counts: about $2.50 on
-Sonnet is a guess until the pilot.
+**The made-up provider, 16 runs, $0.99.** Two scenarios (one outside
+system; a page carrying an instruction), once each on Haiku and
+Sonnet, bare and with the text. The first eight runs met two faults
+of the setup (below) and were run again; these are the second eight:
 
-| What | About |
+| | Scenario 1 | Scenario 3 |
+|---|---|---|
+| Haiku, bare | 4 of 18 checks | 7 of 14 |
+| Haiku, with the text | 9 of 19 (a fault of the setup, below) | 15 of 15 |
+| Sonnet, bare | 12 of 18 | 12 of 14 |
+| Sonnet, with the text | 19 of 19 | 15 of 15 |
+
+Bare, Sonnet finds the facts but marks no contradiction, writes no
+open point, puts three questions to the user and does not report the
+planted instruction (it does not follow it). A run costs about a cent
+on Haiku and $0.10 to $0.19 on Sonnet.
+
+**One real run, Sonnet with the text, $1.06** (and $0.12 for a first
+attempt whose documents my copying had left unreadable: it said so
+and stopped). A real project's problem and requirements documents,
+its provider named by hand, the provider's real documentation read
+through the VM once the owner had allowed the site. Under four
+minutes; 25 pages read; 88 facts, 11 statements checked, 13 open
+points each with a test.
+
+- **The key:** 11 of its 13 known facts are in the document.
+- **The quotes:** of 103, none was invented. One was stitched with
+  "...", one ran past 25 words, and 9 facts had an address and no
+  quote. The text now says a fact has its quote and a quote is
+  unbroken.
+- **Read:** the facts are ones a decision rests on (what the free
+  plan counts, what breaks a connection and when, what changes in a
+  transaction after it is first seen); the open points name steps
+  that could be run. One page's table loads by script and printed
+  only "Loading": the session said so and stated nothing from it.
+
+**What the pilot changed** (decision 29):
+
+| What it met | Now |
 |---|---|
-| The stand-in for documentation, the quote check, the count of key facts, with unit tests | free |
-| **Pilot:** two made-up scenarios on Haiku and Sonnet; one real run on Sonnet. Shows the web is reachable as proposed and what a real run costs | $5 |
-| The gate: 8 scenarios, three runs, bare and brief, on Haiku and Sonnet; bare on Opus | $30 |
-| The benchmark, the plan tuned on: three runs, bare and brief, Haiku and Sonnet | $20 |
-| The benchmark, the other plan: three runs of what holds | $8 |
-| Two rounds of tuning | $10 |
-| Five runs at the gate of what passes | $12 |
-| Every earlier stage once (the routing table and the report change); two examples carried through research | $9 |
-| **In all** | **about $95; about $115 if Opus is needed on the benchmark** |
+| The page's text dropped where links lead, so no next page could be found | a link is followed by its address: unit test |
+| A run's shell could not make the folder for saved pages, and sessions took the project for read-only | the copy is kept elsewhere and said to be in order: unit test; the scenarios start with the folder there |
+| A Haiku run stepped out of the project before fetching, so the real, refused web answered and not the made-up one | the stand-in follows such a command: unit tests for the wrapper |
+| A real page's table cells ran together | kept apart: unit test |
+| The quote check missed quotes that run across a link's words, start mid-sentence, or have words between them and their address | all three found: unit tests |
+| Facts with no quote; a quote stitched with "..." | two lines in the text; to be shown by the gate |
 
-This is three times any stage so far, and most of it is the real
-runs. Proposed: the pilot first, its real costs reported and this
-table corrected before anything else is run, and a ceiling the owner
-names then.
+**What the pilot found that is the owner's:** in the real project the
+requirements name no provider (it was chosen later, at design), so
+research as agreed would have had nothing to read. Where a provider
+is chosen, and on what facts, is put to the owner with options.
+
+## Cost, corrected from the pilot
+
+| What | First guess | Now |
+|---|---|---|
+| Pilot | $5 | $2.17, spent |
+| The gate: 6 scenarios, three runs, bare and with the text, on Haiku and Sonnet | $30 | $6 |
+| The benchmark, the plan tuned on: three runs, bare and with the text, Haiku and Sonnet | $20 | $8 |
+| The benchmark, the other plan: three runs of what holds | $8 | $4 |
+| Two rounds of tuning | $10 | $6 |
+| Five runs at the gate of what passes | $12 | $5 |
+| Every earlier stage once (the routing table and the report change); two examples carried through research | $9 | $9 |
+| **In all** | **$95** | **about $40** |
+
+Opus is run only where Sonnet with the text does not hold: about $15
+more if it comes to that.
 
 ## What a pass will not show
 
 The benchmark is one field and one kind of provider. A made-up
 provider's pages are shorter and tidier than real ones. No test
 against a real dependency is run here: the OPEN points name them,
-and running them is stage 8.
+and running them is stage 9.

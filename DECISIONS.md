@@ -266,6 +266,67 @@ asking is listed apart, so it can be overturned.
     belongs is the slice stage's to say and record; the owner is
     asked only what is theirs. Research is next, in pipeline order.
 
+## 2026-11-23: how the research stage is measured
+
+35. **Stage 4, research, is tested as proposed in
+    `steps/06-research/README.md`** (the owner; the stage was the fourth then). A session reads a
+    site the VM does not allow only after naming it and why and
+    getting the user's yes, for that VM only. A state with no way
+    out is recorded and brought once in the owner's list, not asked
+    state by state as kad did. The outcome on the benchmark: a key,
+    written before any run and kept private, of the facts two real
+    plans got wrong about their providers; counted in a dossier
+    written from the requirements-level documents alone; no model
+    judge. The gate is six scenarios on a made-up provider (the
+    owner asked why eight and took five; a sixth, the site not
+    allowed, was added for the yes). A pilot of about $5 first, its
+    real costs reported and the table corrected; the ceiling is
+    named by the owner then.
+
+## 2026-11-23: the order of the stages, after the research pilot
+
+36. **The slice comes before any dependency is chosen, and research
+    after the choice** (the owner). The requirements say what is
+    needed, not how: a provider is a "how", and is in the
+    requirements only where the user brought one as a constraint.
+    The pilot showed it: the owner's real requirements named no
+    provider, so research straight after them had nothing to read.
+    The order is now: 0 startup, 1 problem, 2 scope map,
+    3 requirements, 4 slice (with the check-in after a merge),
+    5 approach (for each thing the slice needs that the app cannot
+    do itself, the ways to meet it compared on the user's limits
+    from a short read of each candidate's documentation; committing
+    to a dependency is the owner's), 6 research (the full document
+    for each dependency committed to, and the states of each lasting
+    thing; a criterion of the slice that the facts make impossible
+    goes back to the slice), 7 questions, 8 answers, 9 tests of open
+    facts, 10 design (structure and boundaries), 11 screens,
+    12 stack and repository, 13 readiness, 14 the owner's list and
+    the planning pull request. Research stays at its pilot and is
+    finished in its new place; the slice is built next. The owner
+    names no ceiling for research: costs are still reported, and a
+    pass over about $15 is still said first.
+
+## 2026-11-23: the slice stage
+
+37. **Stage 4, the slice, is tested as proposed in
+    `steps/04-slice/README.md`, in its second form** (the owner). It
+    carries every principle kad's skill was built from
+    (`.synthesis/product-slicer.md` in kad's repository). It cuts
+    the whole set of slices for the "now" activity, each row with
+    the items it covers and what it builds on, recommends where to
+    start, and the user chooses. Criteria are written only for the
+    slice being worked on, to stay agile. When the user widens a
+    slice the stage pushes back once, with the cost: the user may be
+    wrong and leans on the stage as the expert; after that their
+    word stands. The check-in after a merge (decisions 23 and 34) is
+    this stage's: it checks off what merged work names, places every
+    new issue without asking unless no row covers it, says whether
+    the requirements and the set still hold, and proposes a new set
+    when they do not; the same when work mid-slice changes the
+    "what". The gate is ten scenarios; about $70, a pilot of $5
+    first.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -381,5 +442,45 @@ asking is listed apart, so it can be overturned.
   05, 07 and 08, scope map 05 and 06, requirements 05 and 08 to 12.
 - The check-in's folder, `steps/check-in/`, has no number: it comes
   after the build, whose stages are not numbered yet.
+- Research (`research/`, `steps/06-research/`), 2026-11-23:
+  - The page script is Python: research runs inside the project's
+    VM, which is Linux. That a new VM has Python is to be checked in
+    the real run.
+  - A page is read with `curl`, so the VM's own list decides what is
+    reached; the page is kept as text beside the research documents
+    and every quote is looked for in it.
+  - The VM cannot widen its own list: the yes for a site is a
+    command the user runs in a terminal on their own machine.
+  - A fact is written with its quote and its page together,
+    `"quote" (address)`, which is what the script looks for.
+  - In the scenarios the report's two new lines (what is to be
+    researched, each with its document, and the command that reads a
+    page) are added by hand: the stage script does not print them
+    until the stage is agreed.
+  - An inventory of `none` is to be the stage script's to skip, by a
+    unit test, not a session's scenario.
+  - After the pilot: Opus is run at the gate and on the benchmark
+    only where Sonnet with the text does not hold (the bare model on
+    Sonnet already lacks what nothing tells it: the marks, the open
+    points, the quote with every fact).
+  - The quote check takes a quote with the first address after it on
+    its line, without regard to case, and reads across a link's
+    words.
+- The new order (decision 36), 2026-11-23:
+  - `steps/04-research/` is renamed `steps/06-research/` now; the
+    stage script's order (`startup/stage.sh`, adopted, with its
+    scenarios) changes when the slice stage is built, and every
+    earlier stage is run once then.
+  - Where the approach stage's candidates come from (the user, or a
+    search they say yes to) is settled when that stage is built.
+- The slice stage (decision 37), 2026-11-23:
+  - The set is a document of its own (`NNN_slices.md`), a new
+    numbered version once a slice has been built from it; a slice's
+    own document is in its folder.
+  - kad's three placeholder lines (security, reliability,
+    accessibility) are not carried: the questions stage draws those
+    for every slice.
+  - kad's arm is run on the cutting scenarios only; it had nothing
+    for the coming-back.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

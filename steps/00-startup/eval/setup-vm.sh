@@ -7,7 +7,7 @@ bin=${1:?name a folder early on the PATH}
 here=$(cd "$(dirname "$0")" && pwd); root=$(cd "$here/../../.." && pwd)
 sudo mkdir -p /opt/standin "$bin"
 sudo cp "$root"/startup/standin/* /opt/standin/
-for tool in sbx gh brew winget sw_vers uname; do
+for tool in sbx gh brew winget sw_vers uname curl; do
   sudo cp "$here/standin-wrapper.sh" "$bin/$tool"; sudo chmod 755 "$bin/$tool"
 done
 python3 -I "$here/make_cases.py" >/dev/null
