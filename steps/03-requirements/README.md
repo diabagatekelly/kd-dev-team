@@ -370,6 +370,31 @@ $2.02. Scenario 08 alone, ten runs: 7 of 10 by the check and 10 of
 10 as read (all ten ask what practising is; three in wordings the
 check did not know, since widened and not run again).
 
+## Three more rules from the end-to-end runs (2026-11-22)
+
+Each from reading a run (`../../e2e/README.md`), each with a
+scenario; the text is 94 lines.
+
+- **How it is done today gives no item,** and an item that would
+  assume an open question's answer waits (scenario 09). A list had
+  made requirements of the two ways a teacher tests today, with the
+  question of what practising should be open beneath them.
+- **A project's code is read:** the session looks at what the
+  project holds, reads what the code does for this activity, asks
+  nothing it shows, and puts what already works under "Out for now"
+  (scenario 10, a small register with its data). Before the sentence
+  "look at what else the project holds", 2 runs of 13 opened no
+  code; after it, 10 of 10 did.
+- **What the verb means is asked** (scenario 08, above).
+
+With every adopted text loaded, on Sonnet: the ten scenarios, three
+runs each, 30 of 30; scenarios 05 and 10, ten runs each, 10 of 10
+and 10 of 10 (scenario 10 by the checks as corrected and graded
+again with `e2e/regrade.py`: three runs had said "no account or
+sign-in" of the no-password limit, and one had asked whether all 45
+singers are in the register, which holds five). Scenarios 08 and 09,
+ten runs each: 10 of 10 and 10 of 10, graded again the same way.
+
 ## What a pass does not show
 
 The scenarios are made-up problems of a page and at most two turns.

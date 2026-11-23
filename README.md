@@ -29,8 +29,8 @@ design are recorded under `next-plugin/validation/`.
 
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
-| `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 49 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
-| `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 86 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
+| `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
+| `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 94 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
 ## Where the work stands (2026-11-22)
 
@@ -42,10 +42,9 @@ Stages 0 to 3 hold. Next, in this order:
    Every problem a run meets becomes a test, an evaluation or a
    change to a text (decision 29); the table is in `e2e/README.md`.
    As it stands: every stage's scenarios pass with everything
-   adopted loaded (123 runs on Sonnet), and all four examples reach
+   adopted loaded (132 runs on Sonnet), and all four examples reach
    the requirements with their documents numbered in order. Still
-   owed from the look over the tests: the problem and scope-map
-   texts set beside kad's skills part by part; an example that
+   owed from the look over the tests: an example that
    stops and starts again in a new session; the plugin made
    installable and run once in a real VM; a guard for the owner's
    own files.

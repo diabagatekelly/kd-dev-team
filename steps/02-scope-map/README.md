@@ -226,7 +226,15 @@ kad's `scope-map` (122 lines):
 | Steps are parts of a solution, ordered by the build | **Different on purpose:** rows are what a user does (decision 22) |
 | Revise in place until something is built on it, then a new numbered version; revise when a slice proves a boundary wrong, not on a hunch | **Not carried yet:** the check-in stage (decisions 21 and 23) |
 
-The text is 58 lines with the two additions.
+The text is 56 lines with the two additions.
+
+With the two additions (56 lines), every adopted text loaded, on
+Sonnet: the six scenarios, three runs each, 18 of 18; the user's
+correction and the limit worded for one activity, ten runs each, 10
+of 10 and 10 of 10. Read in three of them: what the user took out is
+under "Out" in their own words ("a different group handles them"),
+and the limit about texting is kept under the limits as worded, with
+the question put ("about reservations only, or every activity?").
 
 ## What a pass does not show
 

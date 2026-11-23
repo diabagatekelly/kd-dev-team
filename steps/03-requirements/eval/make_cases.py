@@ -396,12 +396,14 @@ SCENARIOS = [
     # user whether the register already holds the singers and their voice parts, which it does.
     ("10-a-project-with-code", "The project already has code: read what it does; ask nothing it shows.",
      {"000_problem.md": CHOIR_PROBLEM, "001_scope-map.md": CHOIR_MAP, **CHOIR_FILES}, {}, GO_ON,
-     [WRITTEN, *between(1, 6), *FORM, PLAIN, FEW, ASKS,
+     # "No password" forces "no account or sign-in": said of this limit, the word is no solution.
+     [WRITTEN, *between(1, 6), *FORM, {**PLAIN, "pattern": PLAIN["pattern"].replace("log ?ins?|sign[- ]in|", "")}, FEW, ASKS,
       {"type": "regex", "name": "reads-the-code", "target": "trace",
        "pattern": r'"name"\s*:\s*"(Read|Bash|Grep)"[\s\S]{0,400}?register\.py'},
       not_in_list("asks-nothing-the-code-shows",
-                  section(NOT_CONFIRMED, r"(singers|voice parts?)[^\n]{0,80}(come from|already (in|held|kept)|kept in|held in)[^\n]{0,40}register|"
-                                         r"does the register (already )?(hold|keep|record|have)")),
+                  # What the register holds is in the code; whether it holds everyone is the user's to say.
+                  section(NOT_CONFIRMED, r"does the register (already )?(hold|keep|record|have)|"
+                                         r"(is|are) (there )?(a |any )?(list|record) of (the )?singers")),
       not_in_list("no-item-for-what-already-works", item_with(r"\btick|who came|came to"))], None),
 ]
 TEXTS = {"problem": ROOT / "steps/01-problem/eval/problem-skill.md",
