@@ -327,6 +327,23 @@ asking is listed apart, so it can be overturned.
     "what". The gate is ten scenarios; about $70, a pilot of $5
     first.
 
+## 2026-11-23: what is tested where, for every stage
+
+38. **Unhappy paths in the stage's cases; the happy path end to
+    end; Haiku always tried with the final text** (the owner, on the
+    slice stage's result: "I want to have confidence in what we
+    build rather than trying to patch a bunch of holes after the
+    fact", and no suite "that takes forever to run and eats up all
+    my tokens"). For every new stage: unit tests for every branch of
+    a script; cases for every behaviour, a change of mind or of
+    scope included, five runs on Sonnet and five on Haiku with the
+    final text before a model is settled; the same four examples
+    carried on through the new stage, none new; and one pass of the
+    four from the first message before the stage is put to the
+    owner. A change scenario is a case, not an example. To keep an
+    example cheap it is started from its documents as its last good
+    run left them, refreshed when an earlier stage's text changes.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

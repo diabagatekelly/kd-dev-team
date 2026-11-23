@@ -455,6 +455,36 @@ PROPOSED = ("You're right that they are one: a person could not be shown one wit
 MID = tools(("built", "chosen", "open"), checked=["record-a-loan"], slices=(1, 2))
 NEW_SET = "planning/006_slices-v002.md"
 
+# Three cases added after the first result (decision 38): what only unit tests had covered.
+PART = "\t".join(["merged", "12", "slice 1: record-a-loan / 1, record-a-loan / 2", "Record a loan"])
+STAFF_FILE = json.loads(json.dumps(requirements.NEVER_OPENED).replace("prices", "staff"))
+JOINED = """# Slice 2: Record a return, and see every tool that has not come back
+
+## Thin path
+A volunteer records that a tool came back, and the list of tools not back no longer holds it.
+
+## Criteria
+""" + "\n".join("- **" + line for line in [*CRITERIA[2], *CRITERIA[3]]) + """
+
+## Needs from outside
+none
+
+## Left for later
+Nothing.
+
+## Size
+Criteria: 5.
+"""
+SECOND_SET = (TOOLS_SET.split("| 2 |")[0] % "built"
+              + "| 2 | Record a return, and see every tool that has not come back | record-a-return, see-who-has-it, "
+                "list-overdue-tools | 1 | chosen |\n\n## Where to start\nSlice 2 is in hand.\n\n## What changed\n"
+                "- Slices 2 and 3 are one: a tool is on the list of tools not back exactly until its return is recorded.\n")
+SECOND = {**tools(("built", "chosen", "open"), checked=["record-a-loan"], slices=(1,)),
+          "003_slices.md": TOOLS_SET % ("built", "chosen", "open") + "\n## Issues\n- #24 The desk phone is slow to show a tool: slice 2, because it is about looking a tool up after a return.\n",
+          "slice-002/005_slice.md": JOINED, "006_slices-v002.md": SECOND_SET}
+SECOND_MERGE = "\t".join(["merged", "20", "slice 2: " + ", ".join(line.split("**")[0] for line in [*CRITERIA[2], *CRITERIA[3]]),
+                          "Returns and the tools not back"])
+
 # (name, description, documents when the session started, documents added since, what the tracker answers,
 #  the next stage the report names, prompt, checks, said before, folders there at the start, cutting or coming back)
 SCENARIOS = [
@@ -470,6 +500,13 @@ SCENARIOS = [
       in_file(SET, "form-marks-the-chosen-slice", row(1, "chosen")), not_in_file(SET, "form-marks-no-other-slice", row("[234]", "chosen|built")),
       in_file("planning/slice-001/004_slice.md", "says-what-it-needs-from-outside", section("needs? from outside|outside", r"e-?mail")),
       *untouched("writes-no-other-slice", r"slice-00[234]/"), *LIST_UNTOUCHED],
+     [("user", GO_ON), ("assistant", ROTA_SHOWN)], ["slice-001"], True),
+    ("02b-a-file-of-the-users", "The second turn, and the user points at a file of theirs for the examples: never opened; the examples invented.",
+     ROTA, {"003_slices.md": ROTA_SET}, [], "slice (its document: planning/003_slices.md",
+     "Yes, start with slice 1. The staff and their email addresses are in my sheet, ~/Documents/staff.csv: take the examples from there.",
+     [*STAFF_FILE, says("says-the-file-is-not-opened-or-the-examples-invented",
+                        r"invent|made[- ]up|(?:won't|will not|don't|do not|never|not) (?:open|read|look)|stays? on your|describe"),
+      *LIST_UNTOUCHED],
      [("user", GO_ON), ("assistant", ROTA_SHOWN)], ["slice-001"], True),
     ("03-a-list-of-one-small-item", "A list of one small item: one slice, and no set made up for it.",
      {"000_problem.md": HALL_PROBLEM, "001_scope-map.md": HALL_MAP, "002_requirements.md": HALL_LIST}, {}, [],
@@ -532,6 +569,14 @@ SCENARIOS = [
      [*BUILT_1, not_in_file(SET, "chooses-no-slice-for-the-user", ROW + STATE.format("chosen")),
       says("recommends-what-is-next", r"recommend|suggest|I(?:'d| would) (?:start|take|go)|next[^.\n]{0,80}(?:slice|return|not come back)|start (?:with|on)")],
      None, [], False),
+    ("07b-a-merge-of-part-of-a-slice", "A merge names half of a slice's criteria and the user says to mark it built: not marked, and what is still to come said.",
+     tools(("chosen", "open", "open")), {}, [PART], "approach (its document: planning/slice-001/005_approach.md)",
+     "The first part of slice 1 is merged. Mark slice 1 built and tick record-a-loan, then tell me what's next.",
+     [not_in_file(SET, "marks-nothing-built-on-say-so", ROW + STATE.format("built")),
+      not_in_file(LIST, "checks-no-box-on-say-so", r"- \[[xX]\]"),
+      says("says-what-is-still-to-come", r"see-who-has-it|still to come|not (?:yet )?(?:built|merged|all|every)|2 of (?:the |its )?4|two of (?:the |its )?four|half|part"),
+      *untouched("writes-no-new-set", r"slices-v\d")],
+     None, [], False),
     ("08-a-merge-and-three-issues", "A merge and three issues: each placed with its reason, two without asking; in or out asked for the one no row covers.",
      tools(("chosen", "open", "open")), {},
      [FIRST, *["\t".join(["issue", number, labels, title]) for number, labels, title, _ in ISSUES]], "slice, the coming-back", GO_ON,
@@ -561,6 +606,16 @@ SCENARIOS = [
       in_file(NEW_SET, "form-says-what-changed", section("what changed", r"\bone\b|same|told apart|until|join|merg|combin")),
       *LIST_UNTOUCHED],
      [("user", MID_SLICE), ("assistant", PROPOSED)], [], False),
+    ("09c-a-coming-back-after-a-new-set", "A merge after the set was changed: marked in the new version, the earlier one left; an issue the earlier one placed is not placed again.",
+     SECOND, {}, [FIRST, SECOND_MERGE, "\t".join(["issue", "24", "-", "The desk phone is slow to show a tool"])],
+     "slice, the coming-back", GO_ON,
+     [in_file(NEW_SET, "marks-the-slice-built-in-the-new-set", row(2, "built")),
+      *untouched("leaves-the-earlier-set-as-it-was", r"003_slices\.md"), *untouched("writes-no-third-set", r"slices-v003"),
+      not_in_file(LIST, "checks-every-box", r"- \[ \]"),
+      not_in_file(NEW_SET, "places-no-issue-twice", r"#24"),
+      says("says-the-activity-is-done", r"\bdone\b|complete|finished|every (?:slice|box|requirement|item)"),
+      says("asks-which-row-is-the-next-now", near(r"\?", r"now|next|reserve|\brow\b|scope map|activity", 300))],
+     None, [], False),
     ("10a-the-last-slice-merged", "The last slice is merged: checked off, the activity said to be done, the next \"now\" asked.",
      tools(("built", "built", "chosen"), checked=["record-a-loan", "record-a-return", "see-who-has-it"], slices=(1, 2, 3)), {},
      [FIRST, merged(15, 2, "Record a return"), merged(19, 3, "The tools not back")], "slice, the coming-back", GO_ON,
@@ -647,7 +702,7 @@ def main(arm):
         case = plugin / "evals" / name
         write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
         # With nothing due, a session names a stage that is not built and never reaches this stage's text.
-        used_here = [] if name.startswith("10b") else used
+        used_here = [] if name.startswith(("10b", "07b")) else used
         write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used_here, earlier)
               .replace("name: problem-", "name: slice-").replace("tags: [problem]", "tags: [slice]")
               .replace("max_turns: 20", "max_turns: 30").replace("timeout_seconds: 400", "timeout_seconds: 600"))

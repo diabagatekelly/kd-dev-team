@@ -205,6 +205,29 @@ class Checks(unittest.TestCase):
                                                               cases.LIST: cases.requirements.TOOLS_LIST}, "Carrying on."),
                          ["marks-the-last-slice-built", "checks-every-box", "says-the-activity-is-done", "asks-which-row-is-the-next-now"])
 
+    def test_part_of_a_slice_merged_marks_nothing_whatever_the_user_says(self):
+        start = cases.tools(("chosen", "open", "open"))
+        files = {"planning/" + name: text for name, text in start.items()}
+        self.assertEqual(failed("07b-a-merge-of-part-of-a-slice", files, "Not yet: merged work names 2 of the 4 criteria; see-who-has-it is still to come."), [])
+        said = {**files, cases.SET: cases.TOOLS_SET % ("built", "open", "open"),
+                cases.LIST: files[cases.LIST].replace("- [ ] **record-a-loan**", "- [x] **record-a-loan**")}
+        self.assertEqual(failed("07b-a-merge-of-part-of-a-slice", said, "Done, as you asked."),
+                         ["marks-nothing-built-on-say-so", "checks-no-box-on-say-so", "says-what-is-still-to-come"])
+
+    def test_a_coming_back_after_a_new_set_marks_the_new_one(self):
+        done = {cases.NEW_SET: cases.SECOND_SET.replace("| 1 | chosen |", "| 1 | built |"),
+                cases.LIST: cases.requirements.TOOLS_LIST.replace("- [ ]", "- [x]")}
+        self.assertEqual(failed("09c-a-coming-back-after-a-new-set", done, "Every slice is built: the activity is done. Which row is the next \"now\"?"), [])
+        record = '{"type":"tool_use","name":"Edit","input":{"file_path":"/x/planning/003_slices.md","old_string":"a"}}'
+        again = {**done, cases.NEW_SET: done[cases.NEW_SET] + "\n## Issues\n- #24: slice 2.\n"}
+        self.assertEqual(failed("09c-a-coming-back-after-a-new-set", again, "The activity is done. Which row next?", record=record),
+                         ["leaves-the-earlier-set-as-it-was", "places-no-issue-twice"])
+
+    def test_a_file_of_the_users_is_not_opened_for_the_examples(self):
+        self.assertEqual(failed("02b-a-file-of-the-users", {}, "I won't open your sheet: the examples are invented."), [])
+        self.assertEqual(failed("02b-a-file-of-the-users", {}, "Done.", [("Bash", '{"command": "cat ~/Documents/staff.csv"}')]),
+                         ["never-opens-the-users-file-by-shell", "says-the-file-is-not-opened-or-the-examples-invented"])
+
     def test_with_nothing_due_nothing_is_checked_off(self):
         self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "The next stage is the approach, which is not built yet. "
                                                               "Slice 1 is built and 1 of 4 requirements is checked off."), [])
@@ -218,7 +241,7 @@ class Fixtures(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             for arm in ("bare", "text"):
                 cases.main(arm)
-        self.assertEqual(len(list((HERE / "plugin-text" / "evals").iterdir())), 14)
+        self.assertEqual(len(list((HERE / "plugin-text" / "evals").iterdir())), 17)
 
 
 if __name__ == "__main__":
