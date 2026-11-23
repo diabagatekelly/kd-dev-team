@@ -18,7 +18,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
           "scope-map": "steps/02-scope-map/eval/scope-map-skill.md",
-          "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md"}
+          "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md",
+          "slice": "steps/04-slice/eval/slice-skill.md"}
 HOOK = """#!/bin/sh
 # The startup report of this machine and project, then what to do with it.
 sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"

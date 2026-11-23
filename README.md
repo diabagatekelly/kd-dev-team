@@ -27,7 +27,7 @@ design are recorded under `next-plugin/validation/`.
 |---|---|
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
-| `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, **tested and not yet adopted**: the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
+| `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -36,8 +36,8 @@ design are recorded under `next-plugin/validation/`.
 
 ## Where the work stands (2026-11-23)
 
-Stages 0 to 3 hold (startup, the problem, the scope map, the
-requirements), all on Sonnet 5.5. After the owner said each holds,
+Stages 0 to 4 hold (startup, the problem, the scope map, the
+requirements, the slice), all on Sonnet 5.5. For stages 0 to 3: After the owner said each holds,
 all four were run together, end to end, and their texts changed from
 what those runs found (decisions 28 to 32). Where each stands:
 
@@ -62,8 +62,8 @@ numbered in order, no file of the user's opened and no value of one
 written down. The owner has said all four stages still hold
 (decision 33).
 
-**Stage 4, the slice: tested, and put to the owner**
-(`steps/04-slice/README.md`, decision 37). Built in the order the
+**Stage 4, the slice, holds** (decision 39,
+`steps/04-slice/README.md`), on Sonnet 5.5 like the four before it. Built in the order the
 stages now have (decision 36): the requirements say what, the
 slices are cut from them, and a dependency is chosen after.
 
@@ -93,7 +93,7 @@ slices are cut from them, and a dependency is chosen after.
   and the closing pass the owner asked for was $29.
 - What is tested where, for every stage from here: decision 38.
 
-**After it, in this order:**
+**Next, in this order:**
 
 1. **The approach (stage 5):** where a dependency is committed to.
    Not proposed yet.
@@ -102,9 +102,7 @@ slices are cut from them, and a dependency is chosen after.
    finish, in its new place after the approach. Its scenarios were
    moved to the slice's folder so that they still build.
 
-The slice text is not in `e2e/make_plugin.py`'s adopted texts until
-the owner says the stage holds: until then it is loaded on trial
-(`slice=steps/04-slice/eval/slice-skill.md`). The parked check-in
+The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
 stage's coming-back.
 

@@ -12,7 +12,7 @@ Criteria only for the slice being worked on.
 model holds without it; on the owner's three real lists no first
 slice is wider than kad's and every item has a home. The result is
 below the agreed test, from "Built" on; the last word is "The
-closing pass". **Whether the stage holds is the owner's to say.**
+closing pass". **The owner has said the stage holds (decision 39).**
 It cost $111 against the $70 agreed: $82 to the first result (the
 end-to-end examples came to $34, not the $10 guessed), and $29 for
 the closing pass the owner then asked for.

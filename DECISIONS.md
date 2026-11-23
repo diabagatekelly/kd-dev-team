@@ -344,6 +344,17 @@ asking is listed apart, so it can be overturned.
     example cheap it is started from its documents as its last good
     run left them, refreshed when an earlier stage's text changes.
 
+## 2026-11-23: the slice stage holds
+
+39. **The slice stage holds with the text of 152 lines in
+    `steps/04-slice/eval/slice-skill.md`, on the session's model,
+    Sonnet 5.5** (the owner, on the result in
+    `steps/04-slice/README.md`: Sonnet 83 of 85 over five runs of
+    seventeen cases and 10 of 10 on the two its one slip touched,
+    once fixed; every stage once, 64 of 64; the owner's three real
+    lists cut no wider than kad's). Haiku was tried with the final
+    text and does not hold (66 of 85): it gives way on a wider cut.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
