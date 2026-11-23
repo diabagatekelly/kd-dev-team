@@ -266,6 +266,23 @@ asking is listed apart, so it can be overturned.
     belongs is the slice stage's to say and record; the owner is
     asked only what is theirs. Research is next, in pipeline order.
 
+## 2026-11-23: how the research stage is measured
+
+35. **Stage 4, research, is tested as proposed in
+    `steps/04-research/README.md`** (the owner). A session reads a
+    site the VM does not allow only after naming it and why and
+    getting the user's yes, for that VM only. A state with no way
+    out is recorded and brought once in the owner's list, not asked
+    state by state as kad did. The outcome on the benchmark: a key,
+    written before any run and kept private, of the facts two real
+    plans got wrong about their providers; counted in a dossier
+    written from the requirements-level documents alone; no model
+    judge. The gate is six scenarios on a made-up provider (the
+    owner asked why eight and took five; a sixth, the site not
+    allowed, was added for the yes). A pilot of about $5 first, its
+    real costs reported and the table corrected; the ceiling is
+    named by the owner then.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -381,5 +398,22 @@ asking is listed apart, so it can be overturned.
   05, 07 and 08, scope map 05 and 06, requirements 05 and 08 to 12.
 - The check-in's folder, `steps/check-in/`, has no number: it comes
   after the build, whose stages are not numbered yet.
+- Research (`research/`, `steps/04-research/`), 2026-11-23:
+  - The page script is Python: research runs inside the project's
+    VM, which is Linux. That a new VM has Python is to be checked in
+    the real run.
+  - A page is read with `curl`, so the VM's own list decides what is
+    reached; the page is kept as text beside the research documents
+    and every quote is looked for in it.
+  - The VM cannot widen its own list: the yes for a site is a
+    command the user runs in a terminal on their own machine.
+  - A fact is written with its quote and its page together,
+    `"quote" (address)`, which is what the script looks for.
+  - In the scenarios the report's two new lines (what is to be
+    researched, each with its document, and the command that reads a
+    page) are added by hand: the stage script does not print them
+    until the stage is agreed.
+  - An inventory of `none` is to be the stage script's to skip, by a
+    unit test, not a session's scenario.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

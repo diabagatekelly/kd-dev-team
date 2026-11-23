@@ -1,7 +1,11 @@
 # Stage 4, research: the test, set before anything is built or run
 
-**State, 2026-11-23:** a proposal for the owner. Nothing here is
-agreed, built or run.
+**State, 2026-11-23:** the conditions, the measures and the bar are
+agreed by the owner (decision 35), with five merged scenarios in
+place of the eight first proposed and a sixth for the yes to a site
+(the table below is the first proposal; the scenarios as built are in
+`eval/make_cases.py`). The pilot is being run; the ceiling is named
+after it.
 
 ## What it is
 
