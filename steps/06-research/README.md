@@ -1,11 +1,14 @@
-# Stage 4, research: the test, set before anything is built or run
+# Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-23:** the conditions, the measures and the bar are
-agreed by the owner (decision 35), with five merged scenarios in
-place of the eight first proposed and a sixth for the yes to a site
-(the scenarios as built are in `eval/make_cases.py`). The pilot is
-done, below; the cost table is corrected from it and the ceiling is
-the owner's to name.
+**State, 2026-11-23: paused at its pilot.** This was the fourth
+stage when it was proposed and piloted. The pilot showed that a
+provider is seldom known that early, and the order changed (decision
+36): the slice, then the approach, where a dependency is committed
+to, then this stage. What is below stands as agreed (decision 35)
+but for where the list of things to research comes from: the
+approach, not the requirements. The gate and the benchmark are run
+when the stage is reached; the pilot and the corrected costs are
+further down.
 
 ## What it is
 
@@ -255,4 +258,4 @@ more if it comes to that.
 The benchmark is one field and one kind of provider. A made-up
 provider's pages are shorter and tidier than real ones. No test
 against a real dependency is run here: the OPEN points name them,
-and running them is stage 8.
+and running them is stage 9.

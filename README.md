@@ -62,15 +62,23 @@ written down. The owner has said all four stages still hold
 
 **Next, in this order:**
 
-1. **Research (stage 4):** its conditions, bar and cost put to the
-   owner as one proposal before anything is built, with how an
-   outcome on the benchmark is tested (put off to this stage).
-2. Then the slice (stage 5), and with it or just after it **the
+1. **The slice (stage 4),** and with it or just after it **the
    check-in after a merge** (decisions 23 and 34). A first proposal
    for the check-in is parked in `steps/check-in/README.md`, with
    what kad did at that point set beside it. Its two first scenarios
    (a slice that contradicts the map, one that does not) are in the
    history of `steps/02-scope-map/eval/make_cases.py`.
+2. **The approach (stage 5):** where a dependency is committed to.
+3. **Research (stage 6),** paused at its pilot
+   (`steps/06-research/README.md`): a page reader and a quote check
+   with unit tests, six scenarios on a made-up provider, a first
+   text, and one real run. Its gate and benchmark are run in its
+   place.
+
+The order changed on 2026-11-23 (decision 36): the requirements say
+what, a provider is a how, so the slice is cut first and research
+follows the choice of a dependency. `startup/stage.sh` still has the
+old order until the slice stage is built.
 
 **Watched, not changed:** in one run of five, `sources.md` said
 where the user keeps their file and not its name. The routing

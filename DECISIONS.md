@@ -269,7 +269,7 @@ asking is listed apart, so it can be overturned.
 ## 2026-11-23: how the research stage is measured
 
 35. **Stage 4, research, is tested as proposed in
-    `steps/04-research/README.md`** (the owner). A session reads a
+    `steps/06-research/README.md`** (the owner; the stage was the fourth then). A session reads a
     site the VM does not allow only after naming it and why and
     getting the user's yes, for that VM only. A state with no way
     out is recorded and brought once in the owner's list, not asked
@@ -282,6 +282,30 @@ asking is listed apart, so it can be overturned.
     allowed, was added for the yes). A pilot of about $5 first, its
     real costs reported and the table corrected; the ceiling is
     named by the owner then.
+
+## 2026-11-23: the order of the stages, after the research pilot
+
+36. **The slice comes before any dependency is chosen, and research
+    after the choice** (the owner). The requirements say what is
+    needed, not how: a provider is a "how", and is in the
+    requirements only where the user brought one as a constraint.
+    The pilot showed it: the owner's real requirements named no
+    provider, so research straight after them had nothing to read.
+    The order is now: 0 startup, 1 problem, 2 scope map,
+    3 requirements, 4 slice (with the check-in after a merge),
+    5 approach (for each thing the slice needs that the app cannot
+    do itself, the ways to meet it compared on the user's limits
+    from a short read of each candidate's documentation; committing
+    to a dependency is the owner's), 6 research (the full document
+    for each dependency committed to, and the states of each lasting
+    thing; a criterion of the slice that the facts make impossible
+    goes back to the slice), 7 questions, 8 answers, 9 tests of open
+    facts, 10 design (structure and boundaries), 11 screens,
+    12 stack and repository, 13 readiness, 14 the owner's list and
+    the planning pull request. Research stays at its pilot and is
+    finished in its new place; the slice is built next. The owner
+    names no ceiling for research: costs are still reported, and a
+    pass over about $15 is still said first.
 
 ## Put off to the stage that needs them
 
@@ -398,7 +422,7 @@ asking is listed apart, so it can be overturned.
   05, 07 and 08, scope map 05 and 06, requirements 05 and 08 to 12.
 - The check-in's folder, `steps/check-in/`, has no number: it comes
   after the build, whose stages are not numbered yet.
-- Research (`research/`, `steps/04-research/`), 2026-11-23:
+- Research (`research/`, `steps/06-research/`), 2026-11-23:
   - The page script is Python: research runs inside the project's
     VM, which is Linux. That a new VM has Python is to be checked in
     the real run.
@@ -422,5 +446,12 @@ asking is listed apart, so it can be overturned.
   - The quote check takes a quote with the first address after it on
     its line, without regard to case, and reads across a link's
     words.
+- The new order (decision 36), 2026-11-23:
+  - `steps/04-research/` is renamed `steps/06-research/` now; the
+    stage script's order (`startup/stage.sh`, adopted, with its
+    scenarios) changes when the slice stage is built, and every
+    earlier stage is run once then.
+  - Where the approach stage's candidates come from (the user, or a
+    search they say yes to) is settled when that stage is built.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
