@@ -7,13 +7,15 @@ slice is made wider; cut the whole set and recommend where to start;
 and the check-in after a merge is this stage's, set included.
 Criteria only for the slice being worked on.
 
-**Tested (2026-11-23):** the text of 150 lines in
-`eval/slice-skill.md` passes every case on Sonnet 5.5 in its last
-five runs; no model holds without it; on the owner's three real
-lists no first slice is wider than kad's and every item has a home.
-The result is below the agreed test, from "Built" on. **Whether the
-stage holds is the owner's to say.** It cost $82 against the $70
-agreed: the end-to-end examples came to $34, not the $10 guessed.
+**Tested (2026-11-23):** the text of 152 lines in
+`eval/slice-skill.md` holds on Sonnet 5.5 and not on Haiku 5.5; no
+model holds without it; on the owner's three real lists no first
+slice is wider than kad's and every item has a home. The result is
+below the agreed test, from "Built" on; the last word is "The
+closing pass". **Whether the stage holds is the owner's to say.**
+It cost $111 against the $70 agreed: $82 to the first result (the
+end-to-end examples came to $34, not the $10 guessed), and $29 for
+the closing pass the owner then asked for.
 
 ## What it is
 
@@ -578,15 +580,81 @@ over the $15 that is said beforehand, and it was not said. From
 here an example through a merge is counted at $4, and its user's
 brief is checked for a topic for each open question before it runs.
 
-## What a pass has not shown
+## What the first result had not shown
 
-- Opus was not run with the text, nor Haiku with its final form:
-  Sonnet holds, and it is the session's model.
-- The cases after the retunes were run five times only where the
-  text changed for them, and once elsewhere: no single pass of 70
-  runs was made with the final text.
-- The made-up merge names every criterion of the slice. A real
-  delivery's line, and a merge that names part of a slice, are
-  covered by the script's unit tests only.
-- An issue is placed by its title and what `gh issue view` shows;
-  no run needed to read one.
+Closed by the closing pass, below: Haiku with the final text; one
+pass of every case with the final text; a merge that names part of
+a slice. Still open: Opus with the text; a real delivery's line; an
+issue whose body had to be read.
+
+## The closing pass (2026-11-23, decision 38): $29.12
+
+Asked whether everything was up to date, the answer was no: the
+earlier stages had not been run since the last two changes to the
+stage script, twelve cases had not been run with the final line of
+the text, two examples predated three changes, and Haiku had only
+been run on the first form. The owner asked for a meaningful test
+of Haiku and set what is tested where (decision 38).
+
+**Three cases added**, for what only unit tests had covered, so the
+ten rows are seventeen cases: half a slice merged and the user
+saying "mark it built" (07b); a coming-back after the set has a
+second version (09c); the user pointing at a file of their own for
+the examples (02b).
+
+**Every case five times with the final text:**
+
+| Model | Runs that pass | Cost |
+|---|---|---|
+| Sonnet 5.5 | 83 of 85; after the fix below, the two cases it touches 10 of 10 | $7.78 |
+| Haiku 5.5 | 66 of 85 | $0.57 |
+
+- **Sonnet's two failures were one real slip, found by a new
+  case.** With half a slice merged, both criteria of one item among
+  it, and the user saying "tick it", 2 runs of 5 checked that
+  item's box (the slice was rightly left unmarked). The stage
+  script now says that nothing is marked or checked for a slice
+  part built (unit test), and the text says only the report marks
+  or checks. Cases 07 and 07b five times again: 10 of 10.
+- **Haiku does not hold, and where it fails is what the stage is
+  for.** Asked for everything in one slice it gives way in 4 runs
+  of 5 (the set rewritten before any answer, the floated tool
+  written down in 2); it writes a new set before the user has
+  agreed in 2 of 5; it checked the box on the user's word in 5 of
+  5, and still in 2 of 5 after the fix. Cutting a set and writing
+  criteria it does as Sonnet does. A run on Haiku is under a cent
+  against nine on Sonnet; the saving is about eight cents a turn of
+  this stage.
+
+**Every stage once, final scripts, slice text loaded** (Sonnet):
+62 of 64 the first time. The two were in adopted stages and not of
+this stage's making: the problem stage wrote its document before
+its last question (not seen again in 5 runs), and a requirements
+session asked for "the output of the describe command I gave you"
+having given none. That one came back (2 runs of 6), so the routing
+table now says to give the command in full in the reply that asks.
+Then every stage once more: startup 21 of 21, the problem 8 of 8,
+the scope map 6 of 6, the requirements 12 of 12, the slice 17 of
+17, and that scenario 5 of 5; $4.95.
+
+**Examples 1 and 4 from the first message, fresh places:** both
+through the merge and the coming-back; $3.45 and $6.44.
+
+**An example no longer replays what has not changed.** Its
+documents after the requirements are kept from its last good run
+(`e2e/examples/NAME/after/requirements/`, with a mark of the texts
+they were made with); `e2e/run.py --from requirements` starts
+there, and refuses when one of those texts has changed since.
+Examples 1 and 2 from there through a merge: both got there, $0.72
+and $0.61, against $3.45 and $1.69 from the first message. (The
+four kept sets come from runs made before the routing table's
+one-line change above, and carry the mark of the table as it now
+stands.)
+
+## Where it stands
+
+- Every stage's cases have run with the scripts and texts as they
+  are in this branch, the slice's seventeen five times on Sonnet.
+- Still covered by unit tests only: a real delivery's `Completes:`
+  line (the merges are made up). Not run: Opus with the text; a
+  finding sent back by a later stage, which waits for those stages.

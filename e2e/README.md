@@ -60,7 +60,8 @@ what changed, and widened only when a stage is put to the owner.
 | A text is changed (one batch for a round of fixes) | the changed and new scenarios five times, the rest of that stage once, on Sonnet | $1 to $3, 10 minutes |
 | The routing table is changed (every stage loads it) | every stage's scenarios once | $4, 15 minutes |
 | A fix came from an end-to-end example | that example, once, in a fresh place | $2 to $8 through a merge |
-| Before a stage is put to the owner | its changed scenarios five times, the rest once; the four examples once, side by side | $3 to $5 a stage, 10 minutes; the four examples through a merge, about $16 ($1.70 to $8 each: count $4), in a fresh place each time |
+| A stage is being built | its cases as below; one or two examples from their kept documents (`--from`) through the new stage | $0.70 an example |
+| Before a stage is put to the owner (decision 38) | every case of the stage five times on Sonnet and on Haiku with the final text; every earlier stage once; the four examples once from the first message, each in a fresh place, then kept | $8 Sonnet, $0.60 Haiku, $3, and about $16 for the examples ($1.70 to $8 each) |
 
 A round of fixes is meant to stay under $3 and ten minutes. A pass
 that would go past $12 is said, with its reason, before it is run.

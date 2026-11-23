@@ -27,7 +27,7 @@ design are recorded under `next-plugin/validation/`.
 |---|---|
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
-| `steps/04-slice/eval/slice-skill.md` | stage 4's text, 150 lines, **tested and not yet adopted**: the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
+| `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, **tested and not yet adopted**: the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -72,18 +72,26 @@ slices are cut from them, and a dependency is chosen after.
   `startup/tracker.sh` reads what merged pull requests say they
   complete. Every earlier stage's scenarios passed once with them
   (47 of 47), and once more with the slice text loaded (47 of 47).
-- Fourteen cases for the ten rows of the test. No model holds
+- Seventeen cases for the ten rows of the test. No model holds
   without a text (Sonnet 9 of 42, Opus 8, Haiku 6); kad's two
-  skills pass 3 of 24, by what they were built to do. The text of
-  150 lines (`steps/04-slice/eval/slice-skill.md`) passes every
-  case on Sonnet in its last five runs.
+  skills pass 3 of 24, by what they were built to do. With the text
+  of 152 lines (`steps/04-slice/eval/slice-skill.md`), five runs a
+  case: Sonnet 83 of 85, and 10 of 10 on the two cases its one slip
+  touched once that was fixed; Haiku 66 of 85, giving way when the
+  user asks for a wider cut.
 - On three of the owner's real requirements lists (counted
   privately): first slices of 4 to 5, 6 to 7 and 3 to 4 criteria
   where kad's were 8, 21 and 5, and every item with a home in the
   set in 9 runs of 9.
 - The four end-to-end examples go through a set, a chosen slice, a
-  made-up merge and the coming-back.
-- $82 against $70 agreed; the examples cost three times the guess.
+  made-up merge and the coming-back, and can now start from their
+  documents after the requirements (about $0.70 a run, not $2 to
+  $8).
+- Every stage's scenarios passed once with the final scripts and
+  texts (64 of 64).
+- $111 against $70 agreed: the examples cost three times the guess,
+  and the closing pass the owner asked for was $29.
+- What is tested where, for every stage from here: decision 38.
 
 **After it, in this order:**
 
@@ -132,6 +140,9 @@ free checks only, no model judge:
   example end to end with its scripted user, through a set of
   slices, a chosen slice and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
+- `--from requirements` starts an example from the documents its
+  last good run left (`--keep requirements RUN` keeps them); it is
+  refused once an earlier stage's text has changed.
 - A text not yet adopted is loaded on trial with `NAME=TEXT` after
   either of `e2e/regress.py` and `e2e/make_plugin.py`.
 - The VM stops when the command that started it returns: a pass is
