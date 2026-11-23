@@ -115,7 +115,10 @@ def path_without(absent, path, bin_folder):
             continue
         for entry in here.iterdir():
             if entry.name not in absent and not (bin_folder / entry.name).exists():
-                (bin_folder / entry.name).symlink_to(entry)
+                try:
+                    (bin_folder / entry.name).symlink_to(entry)
+                except OSError:   # a system that keeps links for administrators: a copy serves
+                    shutil.copy2(entry, bin_folder / entry.name)
     return os.pathsep.join([str(bin_folder), *kept])
 
 
@@ -234,7 +237,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                # Each document under the number and name the stage script gives it, so the next session finds it.
                "numbered_in_order": [path.name for path in documents]
                == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],
-               "documents": [str(path.relative_to(project)) for path in documents]}
+               "documents": [path.relative_to(project).as_posix() for path in documents]}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary
 
