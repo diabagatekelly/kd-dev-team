@@ -60,7 +60,7 @@ class _Text(html.parser.HTMLParser):
 def as_text(body, base=""):
     """A page's words: tags, scripts and styles gone, a line a block, each link followed by where
     it leads. Plain text is left as it is."""
-    if not re.search(r"<\s*(html|body|p|div|h[1-6]|br|li|span|a)\b", body, re.I):
+    if not re.search(r"<\s*(html|body|p|div|h[1-6]|br|li|span|a|table|tr|td)\b", body, re.I):
         return body.strip() + "\n"
     parser = _Text(base)
     parser.feed(body)
