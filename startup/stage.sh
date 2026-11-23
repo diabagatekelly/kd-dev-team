@@ -169,7 +169,7 @@ END {
     print "- the set of slices (" set ") has no table this script can read: its columns are # | Slice | Items | Builds on | State"
     print "@table 0"; exit
   }
-  printf "- slices (%s): %d slices, %d built, %d chosen, %d open\n", set, rows_n, built_n, chosen_n, open_n
+  printf "- slices (%s): %d %s, %d built, %d chosen, %d open\n", set, rows_n, (rows_n == 1 ? "slice" : "slices"), built_n, chosen_n, open_n
   if (unknown != "") print "- a slice whose state is not built, chosen or open: " unknown
   if (chosen_n > 1) print "- more than one slice is chosen: " chosen_all " (the first is read)"
   for (i = 1; i <= items_n; i++) if (!(items[i] in covers)) homeless = add(homeless, items[i], ", ")

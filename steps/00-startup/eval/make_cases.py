@@ -8,6 +8,7 @@ The output is a small plugin, `plugin/`, whose one hook hands a session that rep
 Usage: python3 -I make_cases.py [--table]   (rewrites plugin/ beside this file)
 """
 import json
+import os
 import pathlib
 import shutil
 import sys
@@ -36,11 +37,16 @@ DOCUMENTS = {
                        "books, to find a title\n\n## Lasting things\n\n- a proposal\n",
     "slice-001/004_slice.md": "# Slice 1: propose a book\n\nA member proposes a book and every member sees it "
                           "on the list.\n",
+    "003_slices.md": "# Slices: the list\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
+                     "| 1 | Propose a book and see it on the list | propose-a-book | nothing | chosen |\n",
 }
 THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
+THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.md"]
 # The first stage with no text of its own, and the documents that make it next: scenario 21. It
-# moves on each time a stage is adopted.
-NOT_BUILT = (r"\bslic", THROUGH_REQUIREMENTS)
+# moves on each time a stage is adopted. KD_TRIAL names a stage whose text is loaded on trial,
+# before the owner has said it holds (`e2e/regress.py slice=...`).
+NOT_BUILT = ((r"\bapproach", THROUGH_A_SLICE) if "slice" in os.environ.get("KD_TRIAL", "").split(",")
+             else (r"\bslic", THROUGH_REQUIREMENTS))
 
 
 def pull(number, title, branch, unresolved=0):

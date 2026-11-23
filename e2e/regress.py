@@ -5,8 +5,11 @@ A stage's own test loads the texts that existed when it was run. Here each stage
 rebuilt and given every adopted text and the current routing table, so that a change to one
 stage is seen by the scenarios of all of them.
 
-Usage: python3 -I regress.py      (prints one line a stage: its name and the plugin to run)
+Usage: python3 -I regress.py [NAME=TEXT ...]      (prints one line a stage: its name and the plugin to run)
+    NAME=TEXT   a stage's text on trial, loaded as the skill NAME in every plugin before the owner
+                has said it holds; startup's scenario of a stage that is not built moves past it
 """
+import os
 import pathlib
 import shutil
 import subprocess
@@ -21,20 +24,21 @@ STAGES = [("00-startup", ["--table"], "plugin-table"), ("01-problem", ["text"], 
           ("02-scope-map", ["text"], "plugin-text"), ("03-requirements", ["kinds"], "plugin-kinds")]
 
 
-def overlay(plugin, root=ROOT):
-    """Every adopted text in the plugin, whatever it was built with."""
-    for name, source in make_plugin.SKILLS.items():
+def overlay(plugin, root=ROOT, trial=None):
+    """Every adopted text in the plugin, whatever it was built with, and any text on trial."""
+    for name, source in {**make_plugin.SKILLS, **(trial or {})}.items():
         make_plugin.write(plugin / "skills" / name / "SKILL.md", (root / source).read_text(encoding="utf-8"))
     shutil.copy(root / "steps/00-startup/eval/routing-table.md", plugin / "hooks" / "routing-table.md")
 
 
-def main():
+def main(trial=None):
     for stage, arguments, plugin in STAGES:
         folder = ROOT / "steps" / stage / "eval"
-        subprocess.run([sys.executable, "-I", "make_cases.py", *arguments], cwd=folder, check=True, capture_output=True)
-        overlay(folder / plugin)
+        subprocess.run([sys.executable, "-I", "make_cases.py", *arguments], cwd=folder, check=True, capture_output=True,
+                       env={**os.environ, "KD_TRIAL": ",".join(trial or {})})
+        overlay(folder / plugin, trial=trial)
         print(stage, folder / plugin)
 
 
 if __name__ == "__main__":
-    main()
+    main(dict(argument.split("=", 1) for argument in sys.argv[1:] if "=" in argument))

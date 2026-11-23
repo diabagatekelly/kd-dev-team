@@ -189,6 +189,7 @@ class Stage(unittest.TestCase):
 
     def test_an_item_in_no_slice_is_said(self):
         out = self.planned(the_set(row(1, "open", "record-a-loan")))
+        self.assertIn("- slices (003_slices.md): 1 slice, 0 built, 0 chosen, 1 open\n", out)
         self.assertIn("- a requirement in no slice: record-a-return, see-who-has-it\n", out)
 
     def test_an_item_the_requirements_do_not_hold_is_said_with_its_slice(self):
