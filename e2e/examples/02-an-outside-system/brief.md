@@ -38,3 +38,9 @@ Go on.
 | Document | The user says |
 |---|---|
 | scope-map | That looks right. One thing: if paying the walkers is on there as an activity, it isn't decided yet. |
+
+## A new session after
+problem, scope-map
+
+## On coming back
+I'm back. Where were we?

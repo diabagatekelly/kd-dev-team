@@ -9,7 +9,10 @@ as long as it takes (decision 28).
   first message; a table of topics, each with what it covers and the
   answer, word for word; the line for what no topic covers; the line
   said when a document is first shown (a change of mind, an addition);
-  and how many of the requirements' questions are answered at first.
+  how many of the requirements' questions are answered at first; and,
+  where wanted, after which documents the user closes the session
+  and comes back in a new one (example 2 does, after each of the
+  first two).
   `examples/NAME/project/`, where there is one, is the project the
   session starts in.
 - `run.py`: runs one example. The session is the tool run headless

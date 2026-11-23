@@ -226,6 +226,22 @@ class Run(unittest.TestCase):
         self.assertEqual(len([call for call in calls if "--system-prompt" in call]), 2)
         self.assertEqual(json.loads((self.folder / "out" / "turns.json").read_text())[0]["picked"]["asked"], ["today"])
 
+    def test_the_user_comes_back_in_a_new_session_where_the_brief_says_so(self):
+        (self.example / "brief.md").write_text(BRIEF + "\n## A new session after\nscope-map\n\n## On coming back\nI'm back.\n")
+        summary, calls = self.go()
+        sessions = [call for call in calls if "--system-prompt" not in call]
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[2], "I'm back.")           # after the turn that wrote the map
+        self.assertNotIn("--resume", sessions[2])        # a new session, not the old one resumed
+        self.assertIn("--resume", sessions[1])
+        self.assertIn("--resume", sessions[3])
+        self.assertEqual(summary["sessions"], 2)
+
+    def test_a_brief_that_says_nothing_of_it_stays_in_one_session(self):
+        summary, _ = self.go()
+        self.assertEqual(summary["sessions"], 1)
+        self.assertEqual(run.Brief(BRIEF).away_after, set())
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")

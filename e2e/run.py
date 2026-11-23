@@ -13,6 +13,9 @@ What the user says, in this order:
   anything asked that no topic covers;
 - else, when nothing was asked, the brief's line for going on.
 
+Where the brief says so, the user closes the session once a document has been written and comes
+back in a new one, which is given a fresh startup report and none of the conversation.
+
 A run ends after the session's first turn that began with a requirements document in the planning
 folder (so the user's answers to its questions have been taken once), when the user would say the
 same thing a third time running, or at --max-turns.
@@ -77,6 +80,9 @@ class Brief:
         self.not_known = section(text, "Not known") or "I don't know yet."
         self.go_on = section(text, "Nothing asked") or "Go on."
         self.shown = {name: says for name, says in rows(section(text, "When a document is first shown"))}
+        # After which documents the user closes the session and comes back in a new one, and what they say then.
+        self.away_after = {name for name in DOCUMENTS if name in section(text, "A new session after").lower()}
+        self.back = section(text, "On coming back") or "Let's carry on where we left off."
         limit = section(text, "Answers to the requirements' questions")
         self.limit = int(re.search(r"\d+", limit).group()) if re.search(r"\d+", limit) else None
 
@@ -218,6 +224,8 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         turn["picked"] = picked_from(sorted_)
         turn["appeared"] = sorted(appeared)
         said = brief.reply(turn["picked"], appeared, limited="requirements" in appeared)
+        if appeared & brief.away_after:   # the user comes back another day: nothing carries over but the files
+            session, said, turn["new_session_next"] = None, brief.back, True
         same = same + 1 if said == turn["user"] else 0
         if same == 2:   # said twice running, and this would be the third time
             ended = "stuck: the user had only the same thing to say"
@@ -230,6 +238,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     documents = sorted(planning.rglob("*.md")) if planning.is_dir() else []
     summary = {"example": example.name, "model": model, "ended": ended, "session": session,
                "session_turns": len(turns),
+               "sessions": 1 + sum(1 for turn in turns if turn.get("new_session_next")),
                "questions_put": sum(turn["session"].count("?") for turn in turns),
                "asked_and_not_covered": sum((turn.get("picked") or {}).get("uncovered") or 0 for turn in turns),
                "cost_usd": round(cost, 4),
