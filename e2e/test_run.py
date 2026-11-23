@@ -272,6 +272,16 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["sessions"], 1)
         self.assertEqual(run.Brief(BRIEF).away_after, set())
 
+    def test_the_list_of_the_users_files_is_no_break_in_the_numbering(self):
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace('if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map")',
+                                     'if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map"); '
+                                     'pathlib.Path("plans/000_problem.md").write_text("p"); pathlib.Path("plans/sources.md").write_text("s")'))
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 10,
+                          command=(sys.executable, str(fake)))
+        self.assertTrue(summary["numbered_in_order"])
+
     def test_it_ends_when_the_turns_run_out(self):
         summary, _ = self.go(turns=1)
         self.assertEqual(summary["ended"], "the turns ran out")

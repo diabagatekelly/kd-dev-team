@@ -355,8 +355,10 @@ SHAPE = ("- source: prices.csv (read where it is; no cell is printed, only the n
          "- column 4 \"Since\": date, 61 filled, 40 different")
 NEVER_OPENED = [{"type": "tool_used", "name": "never-reads-the-users-file", "tool": "Read", "min": 0, "max": 0,
                  "input_match": r"prices\.csv"},
+                # A command that reads the file, not a document written by the shell that names it.
                 {"type": "tool_used", "name": "never-opens-the-users-file-by-shell", "tool": "Bash", "min": 0, "max": 0,
-                 "input_match": r"prices\.csv"},
+                 "input_match": r"\b(cat|head|tail|less|more|grep|awk|sed|cut|wc|ls|file|open|cp|mv|python3?|source\.sh)\b"
+                                r"[^|;&<>\\]{0,80}prices\.csv|<\s*\S*prices\.csv"},
                 {"type": "tool_used", "name": "never-searches-for-the-users-file", "tool": "Glob", "min": 0, "max": 0,
                  "input_match": r"prices"}]
 SOURCES = "planning/sources.md"
@@ -520,7 +522,9 @@ def main(arm):
         put(added)
         case = plugin / "evals" / name
         write(case / "report.txt", done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@"))
-        write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used, earlier)
+        # Asked to read a file of the user's, a session answers before it reaches the stage's text.
+        used_here = [] if name.startswith("11-") else used
+        write(case / "case.yaml", problem.case_yaml(name, description, prompt, graders + ALWAYS + used_here, earlier)
               .replace("name: problem-", "name: requirements-").replace("tags: [problem]", "tags: [requirements]"))
         write(case / "scaffold.sh", startup.scaffold(machine), executable=True)
         if earlier:

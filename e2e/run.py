@@ -266,7 +266,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                                           if any(path.name in call for path in (example / "files").glob("*"))]
                if (example / "files").is_dir() else [],
                # Each document under the number and name the stage script gives it, so the next session finds it.
-               "numbered_in_order": [path.name for path in documents]
+               "numbered_in_order": [path.name for path in documents if path.name != "sources.md"]
                == ["000_problem.md", "001_scope-map.md", "002_requirements.md"],
                "documents": [path.relative_to(project).as_posix() for path in documents]}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

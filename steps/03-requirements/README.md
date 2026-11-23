@@ -395,6 +395,26 @@ sign-in" of the no-password limit, and one had asked whether all 45
 singers are in the register, which holds five). Scenarios 08 and 09,
 ten runs each: 10 of 10 and 10 of 10, graded again the same way.
 
+## A file of the user's own (2026-11-22, decision 32)
+
+The file stays on the user's machine; `startup/source.sh` describes
+it there without a cell, and the session works from what the user
+pastes. The rule is in the routing table, said once. Two scenarios
+here: the user points at a file ("just read that"), and the user
+pastes its shape and gives a real row as an example.
+
+On Sonnet, five runs each: 5 of 5 and 5 of 5, by checks corrected
+after the run and graded again with `e2e/regrade.py` (one had
+counted a requirements document written by the shell that names the
+file as the file being opened; one had wanted the stage's text
+used, where a session rightly answers about the file first). In all
+ten the file was never read, searched for or listed; in the five
+with a real row, neither the name nor the price reached the
+requirements or `sources.md`. Every stage once with the changed
+routing table: startup 20 of 21, problem 8 of 8, scope map 6 of 6,
+requirements 12 of 12. Startup's one failure is real: a session
+said "Row 4 first" to the user, which the table forbids. $3.90.
+
 ## What a pass does not show
 
 The scenarios are made-up problems of a page and at most two turns.
