@@ -85,8 +85,9 @@ A set of one slice has nothing to choose: go straight on.
 **The chosen slice.** Mark it `chosen` in the set, replacing its
 whole row (the end of one row can be the end of another), and write
 its document. A criterion is one starting state, one action and one
-outcome a person could check by looking, with invented values,
-named by its item and a number. Write the ordinary path and the
+outcome a person could check by looking, named by its item and a
+number. Its values are invented: never a name or a figure the user
+gave as an example, or one a file of theirs holds. Write the ordinary path and the
 essential refusals: those a person using it as meant would meet
 from this behaviour's own rule (a value it cannot take, a thing that
 is not there). One for a rule, not one for every field left empty,

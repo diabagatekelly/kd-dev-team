@@ -487,8 +487,11 @@ SCENARIOS = [
       not_in_file(SET, "nothing-of-how", HOW + "|" + PROVIDERS), not_in_file(SET, "nothing-from-outside-the-list", r"championship"),
       *NO_CRITERIA_YET, RECOMMENDS, ASKS, *LIST_UNTOUCHED], None, [], True),
     ("04b-a-comparison-needs-its-key", "The second turn: a rule that compares records names what makes two the same, or is left for later, triaged.",
-     RACE, {"003_slices.md": RACE_SET}, [], "slice (its document: planning/003_slices.md", "Start with slice 1.",
+     RACE, {"003_slices.md": RACE_SET}, [], "slice (its document: planning/003_slices.md",
+     "Start with slice 1. Last month Dalia Haddad was on the sheet twice, that's the sort of thing I mean.",
      [*the_slice("planning/slice-001/004_slice.md", RACE_NAMES, least=1),
+      # Found by an end-to-end example: a client's real name, given by the user as an example, was the criteria's example.
+      not_in_file("planning/slice-001/004_slice.md", "writes-no-real-name-the-user-gave", r"Haddad|Dalia"),
       in_file(SET, "form-marks-the-chosen-slice", row(1, "chosen")),
       in_file("planning/slice-001/004_slice.md", "the-comparison-names-its-key-or-is-left-for-later",
               section("left for later|deferred|later", DUPLICATE) + "|" + section("criteria", KEY)),

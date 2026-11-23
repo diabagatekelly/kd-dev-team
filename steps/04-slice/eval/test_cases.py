@@ -121,6 +121,8 @@ class Checks(unittest.TestCase):
         usable = "- Publishing: slice 3. Usable without it: the paper sheet.\n"
         self.assertEqual(failed("04b-a-comparison-needs-its-key", {cases.SET: chosen, SLICE_1: RACE_SLICE % ("", left)}), [])
         self.assertEqual(failed("04b-a-comparison-needs-its-key", {cases.SET: chosen, SLICE_1: RACE_SLICE % (keyed, usable)}), [])
+        self.assertEqual(failed("04b-a-comparison-needs-its-key", {cases.SET: chosen, SLICE_1: (RACE_SLICE % ("", left)).replace("Sam Doe", "Dalia Haddad")}),
+                         ["writes-no-real-name-the-user-gave"])
         self.assertEqual(failed("04b-a-comparison-needs-its-key", {cases.SET: chosen, SLICE_1: RACE_SLICE % (bare, usable)}),
                          ["the-comparison-names-its-key-or-is-left-for-later", "no-comparison-asserted-without-its-key"])
 
