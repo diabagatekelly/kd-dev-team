@@ -32,40 +32,82 @@ design are recorded under `next-plugin/validation/`.
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
 | `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 94 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
-## Where the work stands (2026-11-22)
+## Where the work stands (2026-11-23)
 
-Stages 0 to 3 hold. Next, in this order:
+Stages 0 to 3 hold (startup, the problem, the scope map, the
+requirements), all on Sonnet 5.5. After the owner said each holds,
+all four were run together, end to end, and their texts changed from
+what those runs found (decisions 28 to 32). Where each stands:
 
-1. **A pause the owner asked for** (decision 28), under way: the
-   tests of stages 0 to 3 looked over for gaps, and the four stages
-   run end to end on four examples with a scripted user (`e2e/`).
-   Every problem a run meets becomes a test, an evaluation or a
-   change to a text (decision 29); the table is in `e2e/README.md`.
-   As it stands: every stage's scenarios pass with everything
-   adopted loaded (132 runs on Sonnet), and all four examples reach
-   the requirements with their documents numbered in order. Still
-   owed from the look over the tests: the plugin made
-   installable and run once in a real VM, which the owner has
-   held off for now.
+| Stage | Its text | Scenarios | Last pass with every adopted text loaded (Sonnet) |
+|---|---|---|---|
+| 0 Startup | routing table, 52 lines | 21 | 20 of 21, one run each |
+| 1 Problem | 51 lines | 8 | 8 of 8, one run each; the three changed, 5 of 5 each |
+| 2 Scope map | 56 lines | 6 | 18 of 18, three runs each |
+| 3 Requirements | 93 lines | 12 | 12 of 12, one run each; the two newest, 5 of 5 each |
+
+**Next, in this order:**
+
+1. **The wide pass the texts are owed.** Every one of the four has
+   changed since the owner said its stage holds. Before any is
+   called held again: its changed scenarios ten times, the rest
+   three times, and the four end-to-end examples once (about $12;
+   decisions 30 and 31). One known failure to watch: startup's
+   scenario 03 once said "Row 4 first" to the user, which the
+   routing table forbids (1 run of 1 in the last pass, 3 of 3 clean
+   before it).
 2. **The check-in after a merge** (decision 23): is the slice done, is
    a new "now" due, does a new issue belong to this slice, the next
-   or between them. It needs a new row in the routing table and a
-   reading of merged pull requests by the scripts. Its two first
-   scenarios (a slice that contradicts the map, one that does not)
-   were written for stage 2 and taken out; they are in the history of
-   `steps/02-scope-map/eval/make_cases.py`. A map changed there is a
-   new numbered version, the earlier one kept (decision 21).
+   or between them. Its conditions, bar and cost are put to the
+   owner before anything is built. It needs a new row in the routing
+   table and a reading of merged pull requests by the scripts; the
+   stage script already counts the requirements list's boxes. Its
+   two first scenarios (a slice that contradicts the map, one that
+   does not) were written for stage 2 and taken out; they are in the
+   history of `steps/02-scope-map/eval/make_cases.py`. A map changed
+   there is a new numbered version, the earlier one kept (decision
+   21); kad's rule to revise in place until something is built on a
+   document, then supersede it, belongs here too.
+3. Then research (stage 4), in pipeline order.
 
-How a stage is run: the scenarios are built by the stage's
-`eval/make_cases.py ARM` and run inside the evaluation VM by
-`steps/00-startup/eval/run-pass.sh` with `ARM_PLUGIN` pointing at the
-stage's arm, after `setup-vm.sh`. kad's skill, where it is an arm, is
-copied into the VM by hand and never committed.
+**How the work is done** (the owner's standing rules, all in
+`DECISIONS.md`): the owner is asked only what is theirs, one
+proposal at a time with its cost; a stage is tested before it is
+adopted, the bare model first, against a bar set before the run;
+each stage's text is set beside kad's skill part by part (decision
+26); every problem met becomes a test, an evaluation or a change to
+a text (decision 29); five runs for what changed, ten before a
+stage is put to the owner (decision 30); the suites stay quick and
+cheap (decision 31, the table in `e2e/README.md`).
 
-Owed, none of it blocking: a PowerShell twin of the scripts; one real
-check of the VM and its install on each kind of machine, with the
-owner present; the plugin installed inside a newly made VM; what of
-the planning folder's memory survives a VM being destroyed.
+**How a stage is run.** Inside the evaluation VM `kd-startup-eval`,
+free checks only, no model judge:
+
+- `python3 -I e2e/regress.py` builds every stage's adopted arm with
+  every adopted text loaded; a stage's own `eval/make_cases.py ARM`
+  builds one arm. `steps/00-startup/eval/run-pass.sh MODEL RUNS NAME
+  CEILING` runs one, with `ARM_PLUGIN` pointing at the stage's
+  plugin and `CASES='stage-NN*'` for one scenario, after
+  `setup-vm.sh`.
+- `python3 -I e2e/regrade.py PLUGIN TRACES NAME` grades kept runs
+  again by the checks as they stand, for nothing: a corrected check
+  is shown right this way, never by running the scenario again.
+- `python3 -I e2e/run.py e2e/examples/NAME --out FOLDER` runs one
+  example end to end with its scripted user, after
+  `python3 -I e2e/make_plugin.py`.
+- kad's skill, where it is an arm, is copied into the VM by hand and
+  never committed. Raw runs go to the audit repository.
+
+**Owed, none of it blocking:** the adopted pieces assembled into the
+real plugin and run once in a real VM on the owner's Mac (held off
+by the owner; it also settles where the user finds `source.sh` on
+their own machine, and installing the plugin inside a new VM); a
+PowerShell twin of the scripts; one real check of the VM and its
+install on each kind of machine, with the owner present; what of
+the planning folder's memory survives a VM being destroyed; the
+cause of a fault in the evaluation where a session's shell twice
+could not see the recorded folder (worked round in the scenarios'
+set-up, not found).
 
 ## What came across from the earlier work
 
