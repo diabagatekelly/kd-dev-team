@@ -167,6 +167,20 @@ limits what can be done. Scenario 07 was added. With every adopted
 text loaded, all seven scenarios on Sonnet, three runs each: 21 of
 21, $1.31; scenario 07 alone, ten runs: 10 of 10.
 
+## The last question, for every account (2026-11-22)
+
+An end-to-end example whose user closes the session and comes back
+showed that the fix above was too narrow: a full account in one
+message named one limit, the document was written at once, and two
+other limits never reached it. The text (51 lines) now gives every
+account the last question unless the user has said that is
+everything. Scenario 08 was added, and scenario 05's user now says
+so. On Sonnet, by decision 30: scenarios 05, 07 and 08 five runs
+each, 5 of 5 each; the whole stage once, 8 of 8; $1.70. (Scenario
+08's first five runs failed on the scenario, not the text: its
+account left the open questions unspoken, so that was asked first,
+as the text says. The account was completed and run again.)
+
 ## Set beside kad's skill, part by part (2026-11-22, decision 26)
 
 kad's `problem-framing-doc` (72 lines):

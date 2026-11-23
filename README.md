@@ -44,8 +44,7 @@ Stages 0 to 3 hold. Next, in this order:
    As it stands: every stage's scenarios pass with everything
    adopted loaded (132 runs on Sonnet), and all four examples reach
    the requirements with their documents numbered in order. Still
-   owed from the look over the tests: an example that
-   stops and starts again in a new session; the plugin made
+   owed from the look over the tests: the plugin made
    installable and run once in a real VM; a guard for the owner's
    own files.
 2. **The check-in after a merge** (decision 23): is the slice done, is
