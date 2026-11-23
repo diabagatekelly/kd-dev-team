@@ -41,7 +41,7 @@ what those runs found (decisions 28 to 32). Where each stands:
 
 | Stage | Its text | Scenarios | The pass of 2026-11-23, every adopted text loaded (Sonnet) |
 |---|---|---|---|
-| 0 Startup | routing table, 52 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 20 of 20 |
+| 0 Startup | routing table, 52 lines | 21 | 21 of 21 once; scenarios 03, 19, 20 and 21 five times, 19 of 20 by the checks and 20 of 20 as read |
 | 1 Problem | 51 lines | 8 | 8 of 8 once; scenarios 05, 07 and 08 five times, 15 of 15 |
 | 2 Scope map | 56 lines | 6 | 6 of 6 once; scenarios 05 and 06 five times, 10 of 10 |
 | 3 Requirements | 93 lines | 12 | 12 of 12 once; scenarios 05 and 08 to 12 five times, 29 of 30 |
@@ -57,24 +57,24 @@ where the user keeps their file and not its name. Startup's scenario
 03, which once said a row's number to the user, did not in five runs.
 The four examples each reached the requirements with their documents
 numbered in order, no file of the user's opened and no value of one
-written down. Whether each stage still holds is the owner's to say.
+written down. The owner has said all four stages still hold
+(decision 33).
 
 **Next, in this order:**
 
-1. **The owner's word on that pass,** stage by stage.
-2. **The check-in after a merge** (decision 23): is the slice done, is
-   a new "now" due, does a new issue belong to this slice, the next
-   or between them. Its conditions, bar and cost are put to the
-   owner before anything is built. It needs a new row in the routing
-   table and a reading of merged pull requests by the scripts; the
-   stage script already counts the requirements list's boxes. Its
-   two first scenarios (a slice that contradicts the map, one that
-   does not) were written for stage 2 and taken out; they are in the
-   history of `steps/02-scope-map/eval/make_cases.py`. A map changed
-   there is a new numbered version, the earlier one kept (decision
-   21); kad's rule to revise in place until something is built on a
-   document, then supersede it, belongs here too.
-3. Then research (stage 4), in pipeline order.
+1. **Research (stage 4):** its conditions, bar and cost put to the
+   owner as one proposal before anything is built, with how an
+   outcome on the benchmark is tested (put off to this stage).
+2. Then the slice (stage 5), and with it or just after it **the
+   check-in after a merge** (decisions 23 and 34). A first proposal
+   for the check-in is parked in `steps/check-in/README.md`, with
+   what kad did at that point set beside it. Its two first scenarios
+   (a slice that contradicts the map, one that does not) are in the
+   history of `steps/02-scope-map/eval/make_cases.py`.
+
+**Watched, not changed:** in one run of five, `sources.md` said
+where the user keeps their file and not its name. The routing
+table's rule is changed only if that comes back.
 
 **How the work is done** (the owner's standing rules, all in
 `DECISIONS.md`): the owner is asked only what is theirs, one

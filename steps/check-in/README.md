@@ -1,7 +1,17 @@
 # The check-in after a merge: the test, set before anything is built or run
 
-**State, 2026-11-23:** a proposal for the owner. Nothing here is
-agreed, built or run.
+**State, 2026-11-23: parked** (decision 34). Nothing here is agreed,
+built or run. The owner, on reading it: it is too early, and the
+slice stage should say where a new issue belongs, not the owner.
+It leans on a line the delivery stage writes, on a slice document
+and on issues from a build, none of which exist. When it is taken
+up, with or just after the slice stage, it is smaller than what
+follows: the scripts say a check-in is due, check the boxes from
+merged work and list the new issues; the slice stage's text places
+each issue and records why, without asking; the owner is asked only
+whether something no row covers is in or out, and which row is the
+next "now". Conditions 6 and 7 below, and scenarios 5 to 10, change
+with that. The comparison with kad stands.
 
 The folder has no number: the check-in comes after the build, whose
 stages are not numbered yet.

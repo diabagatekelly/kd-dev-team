@@ -251,6 +251,21 @@ asking is listed apart, so it can be overturned.
     has been written, never what. The real run on the owner's Mac
     (the plugin installed, a real VM) is held off for now.
 
+## 2026-11-23: the four stages hold again; the check-in waits for the slice
+
+33. **Stages 0 to 3 still hold with their texts as changed by the
+    end-to-end runs** (the owner, on the pass in `README.md`: 105 of
+    107 by the checks, 106 as read, the four examples clean). The
+    one real miss, a `sources.md` that did not name the user's file
+    in one run of five, is left unless it comes back.
+34. **The check-in after a merge is built with or just after the
+    slice stage, not before research** (the owner, on its first
+    proposal: "I could see the vertical slicing skill playing a role
+    in deciding if something fits in the current slice, the next
+    slice, or between, rather than asking me"). Where a new issue
+    belongs is the slice stage's to say and record; the owner is
+    asked only what is theirs. Research is next, in pipeline order.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -360,5 +375,11 @@ asking is listed apart, so it can be overturned.
   - The stage script reports the count on every startup report once
     the document exists; it does not read the inventory until the
     research stage needs it.
+- The pass of 2026-11-23: startup's scenario 03 was run five times
+  with the 14 new or changed scenarios, since one run says little of
+  a slip seen once. The 14 were taken as startup 19 to 21, problem
+  05, 07 and 08, scope map 05 and 06, requirements 05 and 08 to 12.
+- The check-in's folder, `steps/check-in/`, has no number: it comes
+  after the build, whose stages are not numbered yet.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
