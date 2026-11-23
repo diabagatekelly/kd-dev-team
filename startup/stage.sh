@@ -23,7 +23,12 @@ inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
 
 remember() {
   [ -n "${1:-}" ] || refuse "no folder was named"
-  case "$1" in "$root"/?*) set -- "${1#"$root"/}" ;; esac   # given by its full path: the folder inside the project
+  # Given by its full path: the folder inside the project. Both paths are read the way this shell
+  # writes them, since a full path on Windows may come as C:/... where the shell says /c/...
+  case "$1" in /*|[A-Za-z]:*)
+    above=$(cd "$(dirname "$1")" 2>/dev/null && pwd -P) && here=$(cd "$root" 2>/dev/null && pwd -P) || above=""
+    case "${above:+$above/$(basename "$1")}" in "$here"/?*) full="$above/$(basename "$1")"; set -- "${full#"$here"/}" ;; esac ;;
+  esac
   case "$1" in /*|[A-Za-z]:*|..|../*|*/..|*/../*) refuse "the planning folder is a folder inside the project: $1 is not" ;; esac
   mkdir -p "$(inside "$1")" || refuse "cannot make the folder $1 in $root"
   mkdir -p "$(dirname "$store")" || refuse "cannot write to $(dirname "$store")"
