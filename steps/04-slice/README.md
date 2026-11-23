@@ -1,10 +1,14 @@
 # Stage 4, the slice: the test, set before anything is built or run
 
-**State, 2026-11-23:** a proposal for the owner, in its second form
-(the owner, on the first: follow the principles kad's skill was built
-on; push back when a slice is made wider; cut the whole set and
-recommend where to start; and the check-in after a merge is this
-stage's, set included). Nothing here is agreed, built or run.
+**State, 2026-11-23:** agreed by the owner in this, its second form
+(decision 37). The first form was changed on the owner's reading:
+follow the principles kad's skill was built on; push back when a
+slice is made wider; cut the whole set and recommend where to start;
+and the check-in after a merge is this stage's, set included.
+Criteria only for the slice being worked on. **Nothing is built or
+run yet: the next step is the stage script and its unit tests, the
+scenarios, then the pilot, whose cost is reported before anything
+else runs.**
 
 ## What it is
 

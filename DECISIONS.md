@@ -307,6 +307,26 @@ asking is listed apart, so it can be overturned.
     names no ceiling for research: costs are still reported, and a
     pass over about $15 is still said first.
 
+## 2026-11-23: the slice stage
+
+37. **Stage 4, the slice, is tested as proposed in
+    `steps/04-slice/README.md`, in its second form** (the owner). It
+    carries every principle kad's skill was built from
+    (`.synthesis/product-slicer.md` in kad's repository). It cuts
+    the whole set of slices for the "now" activity, each row with
+    the items it covers and what it builds on, recommends where to
+    start, and the user chooses. Criteria are written only for the
+    slice being worked on, to stay agile. When the user widens a
+    slice the stage pushes back once, with the cost: the user may be
+    wrong and leans on the stage as the expert; after that their
+    word stands. The check-in after a merge (decisions 23 and 34) is
+    this stage's: it checks off what merged work names, places every
+    new issue without asking unless no row covers it, says whether
+    the requirements and the set still hold, and proposes a new set
+    when they do not; the same when work mid-slice changes the
+    "what". The gate is ten scenarios; about $70, a pilot of $5
+    first.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -453,5 +473,14 @@ asking is listed apart, so it can be overturned.
     earlier stage is run once then.
   - Where the approach stage's candidates come from (the user, or a
     search they say yes to) is settled when that stage is built.
+- The slice stage (decision 37), 2026-11-23:
+  - The set is a document of its own (`NNN_slices.md`), a new
+    numbered version once a slice has been built from it; a slice's
+    own document is in its folder.
+  - kad's three placeholder lines (security, reliability,
+    accessibility) are not carried: the questions stage draws those
+    for every slice.
+  - kad's arm is run on the cutting scenarios only; it had nothing
+    for the coming-back.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

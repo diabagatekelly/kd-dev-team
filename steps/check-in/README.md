@@ -1,6 +1,9 @@
 # The check-in after a merge: the test, set before anything is built or run
 
-**State, 2026-11-23: parked** (decision 34). Nothing here is agreed,
+**State, 2026-11-23: replaced** by the coming-back of the slice
+stage (`../04-slice/README.md`, decision 37). Kept as the record of
+the first proposal and for its comparison with kad. What follows was
+written when it was parked (decision 34): nothing here was agreed,
 built or run. The owner, on reading it: it is too early, and the
 slice stage should say where a new issue belongs, not the owner.
 It leans on a line the delivery stage writes, on a slice document

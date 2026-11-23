@@ -79,7 +79,7 @@ finds about half of what four find.
 | 1 | Problem | the problem, why now, constraints | `problem-framing-doc`, kept |
 | 2 | Scope | the steps of a large problem | `scope-map`, kept |
 | 3 | Requirements | who needs what, in and out of scope, and an inventory a script can read: dependencies, lasting things | `requirements-refinement`, kept; the inventory made machine-readable |
-| 4 | Slice | the thinnest cut and its criteria | `vertical-slicing`, `acceptance-criteria`, kept |
+| 4 | Slice | the whole set of thin slices of the "now", what each builds on, a recommended start; criteria for the chosen one only; after each merge, what is done, where each new issue belongs, and whether the list and the set still hold (decision 37) | `vertical-slicing`, `acceptance-criteria`, kept |
 | 5 | Approach | for each thing the slice needs that the app cannot do itself: the ways to meet it, compared on the user's limits from a short read of each candidate's documentation; committing to a dependency is the owner's | new (decision 36); in kad the choice was made inside the design and recorded as an `adr` |
 | 6 | Research | per dependency committed to: a dossier of cited facts, the plan's statements checked against them, open points with the test that would settle each; per lasting thing: its states | `domain-model`, kept and joined by the new dossier step |
 | 7 | Questions | the library's questions that matter for the slice, each with the things it applies to; two grids by script (each received field against the ways a value can be wrong; each state against each event) | new |
