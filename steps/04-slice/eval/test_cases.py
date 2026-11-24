@@ -229,7 +229,7 @@ class Checks(unittest.TestCase):
                          ["never-opens-the-users-file-by-shell", "says-the-file-is-not-opened-or-the-examples-invented"])
 
     def test_with_nothing_due_nothing_is_checked_off(self):
-        self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "The next stage is the approach, which is not built yet. "
+        self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "The next stage is research, which is not built yet. "
                                                               "Slice 1 is built and 1 of 4 requirements is checked off."), [])
         self.assertEqual(failed("10b-nothing-is-due", dict(cases.MID), "I've marked slice 2 built.", [("Edit", "{}")]),
                          ["names-the-next-stage", "checks-nothing-off", "edits-no-file"])

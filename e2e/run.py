@@ -16,11 +16,15 @@ What the user says, in this order:
 Where the brief says so, the user closes the session once a document has been written and comes
 back in a new one, which is given a fresh startup report and none of the conversation.
 
-A run goes on through the slice stage: once a slice's own document has been written, its merge is
+A run goes on through the slice stage and the approach: once a slice's own document has been
+written and it needs nothing from outside, or every need of its approach is decided, its merge is
 made up (the tracker's stand-in is given a merged pull request that names that document's
 criteria), the user comes back in a new session and says the slice is built and merged, and the
 run ends once the set says that slice is built (the coming-back), or four turns after the merge
-if it never does. With `--through slice` it ends once a slice's own document is written. With `--through
+if it never does. With `--through slice` it ends once a slice's own document is written. With
+`--through approach` it goes on from the chosen slice into the approach and ends once the approach's
+document is written with no need left waiting, four turns after it was written if one still
+waits, or after one more turn when the slice needs nothing from outside. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -33,7 +37,7 @@ texts has changed since, and the example is then run from its first message and 
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
-                          [--through merge|slice|requirements] [--from STAGE]
+                          [--through merge|approach|slice|requirements] [--from STAGE]
     python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
@@ -63,7 +67,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach")
 MERGED = 7   # the number of the made-up pull request
 
 
@@ -96,6 +100,13 @@ class Brief:
         self.topics.setdefault("proceed", ("whether to go on, begin or continue with the next stage or step", "Yes, go on."))
         # Asked where to start, any user takes the slice recommended unless their brief says otherwise.
         self.topics.setdefault("start", ("where to start, which slice to begin with or build first", "Start with the one you recommend."))
+        # The approach's three questions: asked for candidates, any user has none; asked whether it may
+        # search, says no; asked to commit, takes what is recommended. A brief says otherwise where it matters.
+        self.topics.setdefault("candidates", ("whether the user has a provider, a service or a tool in mind for something "
+                                              "needed from outside, or has ruled any out", "None in mind, and none ruled out."))
+        self.topics.setdefault("search", ("whether the assistant may search the web for candidates", "No, don't search."))
+        self.topics.setdefault("commit", ("whether to commit to, take or go with the way recommended for something needed "
+                                          "from outside", "Yes, take what you recommend."))
         self.merged = section(text, "After the merge") or "That slice is built and merged. What's next?"
         self.not_known = section(text, "Not known") or "I don't know yet."
         self.go_on = section(text, "Nothing asked") or "Go on."
@@ -216,13 +227,37 @@ def present(planning):
         found.add("slices")
     if planning.is_dir() and any(planning.glob("slice-*/*_slice.md")):
         found.add("slice")
+    if planning.is_dir() and any(planning.glob("slice-*/*_approach.md")):
+        found.add("approach")
     return found
+
+
+def needs_nothing(planning):
+    """Whether the slice's document written last says it needs nothing from outside: the first line
+    under that heading is the word `none` alone, as the stage script reads it."""
+    written = sorted(planning.glob("slice-*/*_slice.md"), key=lambda path: path.name)
+    inside = False
+    for line in (written[-1].read_text(encoding="utf-8", errors="replace").splitlines() if written else []):
+        if re.match(r"#+\s", line):
+            inside = bool(re.search(r"needs? from outside", line, re.I))
+        elif inside and re.sub(r"[`*_\s]", "", line):
+            return bool(re.fullmatch(r"none\.?", re.sub(r"[`*_\s]", "", line), re.I))
+    return False
+
+
+def waiting(planning):
+    """How many needs of the approach written last still wait for the user's decision, or None when
+    no approach is written."""
+    written = sorted(planning.glob("slice-*/*_approach.md"), key=lambda path: path.name)
+    if not written:
+        return None
+    return len(re.findall(r"(?im)^\W*decision\W*:\W*waiting", written[-1].read_text(encoding="utf-8", errors="replace")))
 
 
 def in_order(names):
     """Whether documents, by their file names, are numbered from 000 with no gap, in the order the
     stages write them."""
-    stages = ["problem", "scope-map", "requirements", "slices", "slice"]
+    stages = ["problem", "scope-map", "requirements", "slices", "slice", "approach"]
     numbered = sorted(name for name in names if re.match(r"\d{3}_", name))
     return (len(numbered) == len(names) and len(names) >= 3 and [int(name[:3]) for name in numbered] == list(range(len(names)))
             and all(re.match(rf"\d{{3}}_{stage}(?:-v\d+)?\.md$", name) for name, stage in zip(numbered, stages)))
@@ -291,6 +326,10 @@ def keep(out, example, stage, plugin):
         if name in wanted or path.name == "sources.md":
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
+    if stage == "approach":   # the pages its quotes are from: research reads them and does not fetch them again
+        for path in sorted(planning.glob("slice-*/pages/*.txt")):
+            (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
     # changes nothing in these documents.
     earlier = {"slices": "slice"}
@@ -342,9 +381,10 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
     if start:   # the user comes back to documents already written
         said, seen = brief.back, present(planning)
-    sessions, merged, back = [], "", None
+    sessions, merged, back, since = [], "", None, 0
     for _ in range(max_turns):
         had_list = through == "requirements" and "requirements" in present(planning)
+        no_need = through == "approach" and "slice" in present(planning) and needs_nothing(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
         cost += spent
         if session not in sessions:
@@ -354,6 +394,19 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if had_list:
             ended = "the list was shown and the user's answers taken"
             break
+        if through == "approach":
+            left = waiting(planning)
+            if left is None and no_need:
+                ended = "the slice needs nothing from outside: no approach was written"
+                break
+            if left == 0:
+                ended = "the approach was written and every need decided"
+                break
+            if left:
+                since += 1
+                if since == 4:
+                    ended = f"the approach was written and four turns later {left} of its needs still waited"
+                    break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -374,7 +427,15 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "slice" and "slice" in appeared:
             ended = "the chosen slice was written"
             break
-        if through == "merge" and "slice" in appeared:   # the slice is built and merged while the user is away
+        # The slice is built and merged while the user is away: once it needs nothing from outside, or
+        # once every need of its approach is decided. A need that goes on waiting is given four turns.
+        left = waiting(planning) if through == "merge" and not merged and "slice" in seen else None
+        if left:
+            since += 1
+            if since == 4:
+                ended = f"the approach was written and four turns later {left} of its needs still waited"
+                break
+        if through == "merge" and not merged and "slice" in seen and (left == 0 or needs_nothing(planning)):
             merged, back = merge(project, planning), 0
             number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
             session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged
@@ -404,6 +465,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                # Each document under the number and name the stage script gives it, so the next session finds it.
                "numbered_in_order": in_order([path.name for path in documents if path.name != "sources.md"]),
                "merged": merged, "slices": marks(planning)[0], "boxes": marks(planning)[1],
+               "needs_waiting": waiting(planning),
                "documents": [path.relative_to(project).as_posix() for path in documents]}
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary
@@ -417,7 +479,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()

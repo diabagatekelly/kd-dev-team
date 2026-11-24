@@ -355,6 +355,31 @@ asking is listed apart, so it can be overturned.
     lists cut no wider than kad's). Haiku was tried with the final
     text and does not hold (66 of 85): it gives way on a wider cut.
 
+## 2026-11-23: the approach stage
+
+40. **Stage 5, the approach, is tested as proposed in
+    `steps/05-approach/README.md`** (the owner: "Yes and yes"), at
+    about $90, with a pilot of about $6 first whose real cost is
+    reported before the rest is run. And the point put to them with
+    it: when the user names no candidate and says no to a search,
+    the need stays `waiting`; the stage offers no name it happens to
+    know, not even as an unchecked lead. Memory is not a source of
+    candidates.
+
+## 2026-11-24: the approach stage holds
+
+41. **The approach stage holds with the text of 153 lines in
+    `steps/05-approach/eval/approach-skill.md`, on the session's
+    model, Sonnet 5.5** (the owner: "Yes let's hold", on the result
+    in `steps/05-approach/README.md`: Sonnet 65 of 65 over five runs
+    of thirteen cases with the final text, every quote on its page;
+    every earlier stage once, 63 of 64 and the one a scenario at
+    fault; the four examples through the approach; on the owner's
+    real choice nothing stated without a quote). Haiku was tried
+    with the final text and does not hold (57 of 65): it records a
+    short answer by hand without the stage's text. The short read is
+    six pages a candidate, the limits first, not the four proposed.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -585,5 +610,84 @@ asking is listed apart, so it can be overturned.
     form; `e2e/run.py` carries an example on through a set, a chosen
     slice and one made-up merge (`--through requirements` for the
     earlier ending).
+- The approach stage as proposed (`steps/05-approach/README.md`),
+  2026-11-23, agreed the same day (decision 40):
+  - Candidates come from the documents (a provider set as a limit),
+    the user, or a search the user says yes to; never from memory.
+    With neither, the need waits. At most three are kept a need.
+  - The search is the tool's own web search, for names and addresses
+    only. If it does not work from a session in the VM (the pilot
+    checks), candidates come from the user alone.
+  - A candidate's pages are read with `research/page.py`, four a
+    candidate at most, and kept in the slice's `pages/` folder, one
+    place for this stage and research.
+  - A provider fixed by a limit still gets the short read, against
+    what the slice needs of it.
+  - The way that commits to nothing is a row of every table where
+    there is one.
+  - Every need of the slice is put to the user in one message, not
+    one question a decision as kad did.
+  - The one question also asks what the user has already ruled out,
+    which gives "approaches the user considered and rejected" its
+    home.
+  - Every commitment is recorded; kad's three checks for whether a
+    decision earns a record wait for the design and the stack.
+  - The stage script skips the approach when the slice's needs are
+    `none`, and keeps it as next while a need is `waiting`. The
+    slice text and the routing table are not changed for it.
+  - kad's arm is `architecture-design` with `adr`, on Sonnet, on the
+    four cases it has something for. Opus is run bare once a case.
+  - The outcome is counted on one real choice of the owner's, from
+    kad's own records of it (private); the README names no provider.
+- The approach stage as built, 2026-11-23:
+  - A need the user meets themselves is written `Decision: without`,
+    with nothing asked: there is nothing to commit to.
+  - When a site is refused the document is still written, the
+    candidate's row saying `not read`, the need `waiting`: the stage
+    script then keeps the approach as next without being told why.
+  - A change made in place leaves a line `Changed: <date>: <what and
+    why>` under its need.
+  - The stage script also says two things nobody asked for: that an
+    approach's decisions and its "Committed to" disagree, and that
+    research numbered before the approach now standing is older
+    than it. Each thing committed to gets its research document's
+    name from its own (`Postbox` is `postbox.md`).
+  - The report names the page reader through the startup scripts'
+    folder (`startup/../research/page.py`), so that every stage's
+    canned reports stay free of this machine's paths.
+  - Three of the slice stage's cases and one of its checks named the
+    approach as the next stage for slices that need nothing from
+    outside. They now name research; the slice text is unchanged.
+    Those cases are run again with every earlier stage's.
+  - The end-to-end driver's user, asked for a candidate, has none;
+    asked whether to search, says no; asked to commit, takes what is
+    recommended. A brief says otherwise where an example needs it. A
+    run through the approach ends when no need waits, four turns
+    after the approach was written if one still does, or a turn
+    after the slice when it needs nothing.
+  - A pass may allow the search tool (`ALLOW_TOOLS`), which only
+    this stage's cases ask for.
+- The approach stage as run, 2026-11-24:
+  - The routing table gained one rule, for every stage: a stage's
+    text is loaded before anything of it is written or recorded, and
+    the user's answer to a stage's question, however short, is that
+    stage's work. Haiku recorded short answers by hand without it.
+    Every earlier stage's cases were run again with it.
+  - The quote check reads again, once, a page that is quoted and has
+    no saved copy, before calling the quote wrong: it uses the same
+    reader, so a site not allowed is still not read.
+  - The stage is put to the owner as holding on Sonnet 5.5 (65 of
+    65) and not on Haiku 5.5 (57 of 65), after three rounds of tuning
+    where two were planned; the third cost $0.43.
+  - The short read is six pages a candidate, the user's limits
+    first, where the proposal the owner agreed said four: on the
+    real choice four left the price page unread in two runs of
+    three. Said to the owner when the stage is put to them.
+  - The five-run pass was run three times ($24 where $11 was
+    guessed): the text changed twice after the first, once for the
+    read and once for a page's instruction.
+  - The examples could not start from their kept documents (the
+    routing table changed), so the pass from the first message
+    stood for both; it stopped at the approach, not at a merge.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

@@ -1,31 +1,28 @@
-# Requirements: Walkers record their walks
+# Requirements: Invoice each client for the month
 
-- [ ] **record-walk**: A walker can record a walk they did for a client (30 or 60 minutes, with a second dog from the same home where there is one), so that it is kept safe in place of their paper sheet.
-- [x] **record-extra-walk**: A walker can record a one-off extra walk for a client, in addition to the client's regular walks.
-- [ ] **owner-sees-walks**: The owner can see the walks of all the walkers in one place.
+- [ ] **monthly-invoices**: The business owner can get, for each client, an invoice for the month made from that month's walks, without typing it by hand.
+- [ ] **send-payment-links**: The business owner can have each client receive a Tallypay payment link for their invoice.
+- [ ] **regular-walks**: The business owner can state a client's regular weekly walks once, change them, or stop them, so that each month's invoice includes them without being typed again.
+- [ ] **one-off-extras**: The business owner can add a one-off extra walk to a client's month.
+- [ ] **walk-pricing**: The business owner can have each walk charged by its length (30 or 60 minutes, priced differently), with a second dog from the same home at half price.
 
 ## Out for now
-- Preparing each client's invoice from the walks (activity 2), including what each walk costs: the price of a 30 or 60 minute walk, half price for a second dog from the same home, and no charge for a walk cancelled with a day's notice but a charge for a later one.
-- Sending clients a Tallypay payment link (activity 3).
-- Chasing clients who pay late (activity 4).
-- Paying the walkers through this: the problem document says it is not decided.
+- Keeping a record of each walk, so no walker's sheet is lost or guessed (activity 1 on the scope map, "next").
+- Chasing clients who have not paid (activity 3, "later").
 
 ## Limits that apply
-- **Stay with Tallypay**: does not apply here. Recording walks does not touch payments.
-- **Walkers only use their phones**: a walker must be able to record a walk from their phone alone.
-- **Addresses and door codes seen only by the owner and the walker for that client**: wherever walks are shown to a walker, they see a client's address and door code only for their own clients. The owner sees them for all.
+- Staying with Tallypay: the payment link each client receives is a Tallypay one.
 
 ## Not yet confirmed
-Most important first.
-1. **Regular walks** (bears on record-walk). A regular client has the same walks every week until they change or stop. Who sets up, changes and stops a client's regular walks: the owner, the walker, or either? Does a walker still confirm each week that a regular walk happened, or is it taken as having happened unless they say otherwise? The answer decides what a walker has to do each week.
-2. **Cancelled walks** (bears on record-walk). Who records that a walk was cancelled, and does the day it was cancelled get recorded too, since a day's notice decides whether it is charged? Are walks where nobody was home recorded as well?
-3. **Which clients a walker may record walks for** (bears on record-walk). Is each client always walked by the same walker, or can any walker walk any client? Who says which walker a client belongs to?
-4. **Putting a mistake right** (bears on record-walk). If a walker records a walk wrongly, can they correct or remove it, or only the owner?
-5. **When a walk is recorded** (bears on record-walk). Today the sheets are handed in at the end of the month. Do walkers record each walk as it happens, at the end of the day or week, or at the end of the month? Can a walk be recorded for an earlier day?
-6. **What a walker sees of their own walks** (bears on record-walk). Does a walker need to look back at the walks they have recorded, or only to record them?
-7. **Past sheets** (bears on owner-sees-walks). Does anything from the existing paper sheets (this month's, or earlier) need to be brought across, or does it start fresh?
+1. **Which clients the price list covers** (bears on **walk-pricing**): the price list has one row for each of 12 different clients, against about sixty clients in all. If the other clients are priced some other way, or not yet listed, an item for pricing them is added.
+2. **What a price's "since" date means** (bears on **walk-pricing**): each price has a date it applies from. If a price changes part-way through a month, the walks before and after may be charged differently; if not, a month is always charged at one price.
+3. **Putting a mistake right** (bears on **monthly-invoices** and **send-payment-links**): whether an invoice or link already sent may need to be corrected or cancelled, and by whom. If so, an item is added.
+4. **When and how many at once** (bears on **send-payment-links**): whether all sixty or so go out together on a set day each month, or one at a time as each is ready.
+5. **What else exists today that must come across** (bears on **regular-walks**): whether a client list, with each client's regular walks, exists that the new way must start from. The price list is the one thing named so far (see `sources.md`).
 
 ## Outside systems and lasting things
-- Walks: kept over time, recorded by walkers. Regular walks repeat each week until changed or stopped.
-- Clients: the product keeps track of them, along with their address and door code.
-- Outside systems: none for this activity.
+- Tallypay: the card service that makes the payment links.
+- Client: about sixty regular clients, each invoiced monthly.
+- Walk: what a walker did for a client, as written on the paper sheets today; a regular walk repeats weekly until changed or stopped, and an extra is one-off.
+- Invoice: one per client per month.
+- Price list: the owner's list of prices, kept in a file on their own machine (described in `sources.md`).

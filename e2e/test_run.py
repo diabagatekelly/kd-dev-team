@@ -293,7 +293,7 @@ class Run(unittest.TestCase):
         '    if n == 4: pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | open |\\n")\n'
         '    if n == 5:\n'
         '        pathlib.Path("plans/slice-002").mkdir(exist_ok=True)\n'
-        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
+        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Needs from outside\\nnone\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
         '    if n == 6:\n'
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
@@ -364,6 +364,82 @@ class Run(unittest.TestCase):
         fake = self.THROUGH.replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
         summary, _ = self.through(fake=fake)
         self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
+
+    # Carried on from the chosen slice into the approach (stage 5).
+    APPROACH = THROUGH.replace('## Needs from outside\\nnone\\n', '## Needs from outside\\nA way to tell the member.\\n').replace(
+        '    if n == 6:\n', '    if n == 6: pathlib.Path("plans/slice-002/005_approach.md").write_text("## A way to tell\\n**Decision:** waiting\\n")\n'
+                         '    if n == 7: pathlib.Path("plans/slice-002/005_approach.md").write_text("## A way to tell\\nDecision: without\\n")\n'
+                         '    if n == 99:\n')
+
+    # The user has something new to say as each document appears, or the run would end as stuck.
+    SPOKEN = BRIEF.replace("| scope-map | Put the second one first. |", "| scope-map | Put the second one first. |\n"
+                           "| slices | The first. |\n| slice | Fine. |\n| approach | Take it. |")
+
+    def test_carried_through_the_approach_it_ends_once_no_need_waits(self):
+        summary, sessions = self.through(fake=self.APPROACH, brief=self.SPOKEN, through="approach")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
+                         ("the approach was written and every need decided", 7, 0))
+        self.assertEqual(summary["merged"], "")
+        self.assertIn("plans/slice-002/005_approach.md", summary["documents"])
+
+    def test_carried_through_a_merge_the_slice_is_merged_only_once_its_approach_is_decided(self):
+        fake = self.APPROACH.replace("    if n == 99:\n", "    if n == 8:\n")
+        summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
+                         ("the slice was merged and the session came back to the set", 8, 0))
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[7], "That slice is built and merged. What's next?")
+        self.assertNotIn("merged", said[6])
+
+    def test_carried_through_a_merge_a_need_that_goes_on_waiting_ends_the_run_unmerged(self):
+        summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN)
+        self.assertEqual((summary["ended"], summary["merged"]),
+                         ("the approach was written and four turns later 1 of its needs still waited", ""))
+
+    def test_a_need_that_goes_on_waiting_is_given_four_turns(self):
+        summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN, through="approach")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
+                         ("the approach was written and four turns later 1 of its needs still waited", 9, 1))
+
+    def test_a_slice_that_needs_nothing_ends_a_turn_later_with_no_approach(self):
+        for place, none in enumerate(("none", "`None.`")):
+            with self.subTest(none):
+                fake = self.APPROACH.replace("A way to tell the member.", none).replace("if n == 6:", "if n == 96:").replace("if n == 7:", "if n == 97:")
+                summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="approach", out=f"out-{place}")   # by number: Windows takes out-none and out-None for one folder
+                self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
+                                 ("the slice needs nothing from outside: no approach was written", 6, None))
+
+    def test_a_slice_with_no_such_section_is_taken_to_need_something(self):
+        fake = self.THROUGH.replace('## Needs from outside\\nnone\\n\\n', '')
+        summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="approach", turns=7)
+        self.assertEqual(summary["ended"], "the turns ran out")
+
+    def test_asked_about_the_approach_the_user_has_plain_answers_unless_the_brief_says_otherwise(self):
+        brief = run.Brief(BRIEF)
+        self.assertEqual(brief.reply({"asked": ["candidates", "search", "commit"], "uncovered": 0}, set(), False),
+                         "None in mind, and none ruled out. No, don't search. Yes, take what you recommend.")
+        other = run.Brief(BRIEF.replace("| who | who it is for | The club. |", "| search | may it search | Yes, search. |"))
+        self.assertEqual(other.reply({"asked": ["search"], "uncovered": 0}, set(), False), "Yes, search.")
+
+    def test_documents_numbered_on_through_the_approach_are_in_order(self):
+        self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_slice.md",
+                                      "005_approach.md"]))
+        self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_approach.md"]))
+
+    def test_the_approach_is_kept_with_the_pages_its_quotes_are_from(self):
+        self.kept()
+        planning = self.folder / "done" / "project" / "plans"
+        (planning / "slice-002" / "pages").mkdir()
+        (planning / "slice-002" / "pages" / "docs.example-start.txt").write_text("URL: https://docs.example/start\nwords")
+        (planning / "slice-002" / "005_approach.md").write_text("kept")
+        plugin = self.folder / "plugin"
+        kept = run.keep(self.folder / "done", self.example, "approach", plugin)
+        self.assertTrue((kept / "slice-002" / "005_approach.md").exists())
+        self.assertTrue((kept / "slice-002" / "pages" / "docs.example-start.txt").exists())
+        self.assertEqual(sorted(json.loads((kept / "made-with.json").read_text())), ["problem", "routing-table.md", "slice"])
+        without = run.keep(self.folder / "done", self.example, "slice", plugin)
+        self.assertFalse((without / "slice-002" / "pages").exists())
+        self.assertFalse((without / "slice-002" / "005_approach.md").exists())
 
     # An example is started from its documents as its last good run left them (decision 38).
     def kept(self):

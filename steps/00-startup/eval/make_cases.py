@@ -36,16 +36,19 @@ DOCUMENTS = {
                        "books, to find a title\n\n## Lasting things\n\n- a proposal\n",
     "slice-001/004_slice.md": "# Slice 1: propose a book\n\nA member proposes a book and every member sees it "
                           "on the list.\n",
+    "slice-001/005_approach.md": "# Approach: slice 1\n\n## A public catalogue of books, to find a title\n"
+                                 "Decision: committed: Shelfmark (the user, 2026-11-23: \"Yes, Shelfmark.\")\n\n"
+                                 "## Committed to\n- Shelfmark: https://docs.shelfmark.example/, for finding a title.\n",
     "003_slices.md": "# Slices: the list\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
                      "| 1 | Propose a book and see it on the list | propose-a-book | nothing | chosen |\n",
 }
 THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.md"]
 THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.md"]
 # The first stage with no text of its own, and the documents that make it next: scenario 21. It
-# moves on each time a stage is adopted (the slice on 2026-11-23, decision 39). KD_TRIAL names a
-# stage whose text is loaded on trial, before the owner has said it holds (`e2e/regress.py
-# NAME=TEXT`): the next one to be tried takes its place here.
-NOT_BUILT = (r"\bapproach", THROUGH_A_SLICE)
+# moves on each time a stage is adopted (the slice on 2026-11-23, decision 39; the approach on
+# 2026-11-24, decision 41). KD_TRIAL names a stage whose text is loaded on trial, before the owner
+# has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
+NOT_BUILT = (r"\bresearch", [*THROUGH_A_SLICE, "slice-001/005_approach.md"])
 
 
 def pull(number, title, branch, unresolved=0):

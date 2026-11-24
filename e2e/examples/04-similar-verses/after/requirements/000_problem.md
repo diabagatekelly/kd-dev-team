@@ -1,7 +1,7 @@
-# Problem: Practising the mutashabihat of the Qur'an
+# Problem: Practising the mutashabihat
 
 ## The problem
-- We find out we have confused a similar verse only when a teacher or a listener stops us.
+- We find out we have confused a mutashabih when a teacher or a listener stops us.
 - We mark the place in our own copy and keep some pairs in a notebook.
 - We own a printed book that lists these verses, but it is something to look things up in, not something to practise with.
 - Reading the two verses side by side helps for a few days.
@@ -15,7 +15,7 @@
 - The text of the Qur'an must be shown exactly, with nothing changed or approximated. This is not negotiable.
 
 ## Open questions
-- Does a list of the similar verses exist in a form an app could use? We have never looked.
-- Is there a source for the text of the Qur'an itself? We have never looked.
+- Does a list of the similar verses exist in a form that could be used by an app? We have never looked.
+- Is there a source for the text itself? We have never looked.
 - What may it cost?
 - Who would look after it?

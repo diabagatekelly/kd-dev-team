@@ -17,6 +17,8 @@ root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$(pwd -P)
 # plugin keeps its data: each printed command carries it.
 SELF="sh \"$(cd "$(dirname "$0")" && pwd)/stage.sh\""
 [ -z "${CLAUDE_PLUGIN_DATA:-}" ] || SELF="CLAUDE_PLUGIN_DATA=\"$CLAUDE_PLUGIN_DATA\" $SELF"
+# The page reader is in the plugin's research folder, beside this script's own.
+PAGE="python3 \"$(cd "$(dirname "$0")" && pwd)/../research/page.py\""
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
@@ -70,6 +72,35 @@ next_number() {
   (cd "$dir" && ls -d [0-9][0-9][0-9]_* slice-[0-9]*/[0-9][0-9][0-9]_* 2>/dev/null) \
     | sed 's|.*/||' | awk '{n = substr($0, 1, 3) + 0; if (n >= max) max = n + 1} END {printf "%03d\n", max}'
 }
+
+# What the chosen slice's own document says it needs from outside: "none" where the first line
+# under that heading is the word alone, "some" for anything else, nothing where it has no such heading.
+NEEDS='
+/^#+[ \t]/ { inside = tolower($0) ~ /needs? from outside/; next }
+inside && !said { line = $0; gsub(/[`*_ \t\r]/, "", line); if (line == "") next; said = 1; print (tolower(line) ~ /^none\.?$/ ? "none" : "some") }'
+
+# The approach, counted (its condition 19). Lines that start with "@" are for this script: how many
+# needs still wait for the user, how many decisions commit to something, how many things "Committed
+# to" lists. The rest is the list research starts from: a line a thing, with the document it gets.
+APPROACH='
+function trim(s) { gsub(/^[ \t\r]+|[ \t\r.]+$/, "", s); return s }
+/^#+[ \t]/ { inside = tolower($0) ~ /committed to/; next }
+{ line = $0; gsub(/[`*]/, "", line); line = trim(line) }
+tolower(line) ~ /^decision:/ {
+  sub(/^[^:]*:[ \t]*/, "", line); low = tolower(line)
+  if (low ~ /^waiting/) waiting++; else if (low ~ /^(committed|fixed by a limit)/) commits++
+  next
+}
+inside && $0 ~ /^[ \t]*[-*][ \t]/ {
+  sub(/^[-*][ \t]+/, "", line); if (tolower(line) ~ /^(none|nothing)$/) next
+  name = line; address = "no address given"; need = ""
+  if (match(line, /https?:\/\/[^ \t,)>]+/)) address = substr(line, RSTART, RLENGTH)
+  if (match(line, /:[ \t]/)) name = substr(line, 1, RSTART - 1)
+  if (match(line, /,? for /)) need = trim(substr(line, RSTART + RLENGTH))
+  file = tolower(name); gsub(/[^a-z0-9]+/, "-", file); gsub(/^-|-$/, "", file)
+  listed++; printf "  - %s%s (its documentation: %s; its document: @RESEARCH@%s.md)\n", name, (need == "" ? "" : ", for " need), address, file
+}
+END { print "@waiting " waiting + 0; print "@commits " commits + 0; print "@listed " listed + 0 }'
 
 # The requirements as a list to check off (decision 23): how many items, how many checked, and
 # any item the acceptance criteria could not point to. An item is a line "- [ ] **its-name**: ...".
@@ -272,7 +303,9 @@ report() {
     slice=$(cd "$dir" && ls -d slice-[0-9]* 2>/dev/null | sort | tail -1)
     slice=${slice:-slice-001}
   fi
-  found=""; missing=""; next=""; disorder=""
+  found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
+  own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
+  [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
     case "$document" in
       SLICE/*) [ -n "$slice" ] || continue; under="$slice/"; document=${document#SLICE/} ;;
@@ -282,6 +315,24 @@ report() {
     case "$document" in
       */) [ -n "$is" ] && [ -n "$(ls "$dir/$under$is" 2>/dev/null)" ] && there=yes || there=no; is="$is/" ;;
       *) [ -n "$is" ] && there=yes || there=no ;;
+    esac
+    case "$name" in
+      approach)
+        if [ "$there" = yes ]; then
+          approach="$under$is"
+          counted=$(awk "$APPROACH" "$dir/$approach")
+          # A need the user has not decided keeps the approach as the next stage, in the same document.
+          if [ "$(say "$counted" | awk '$1 == "@waiting" { print $2 }')" != 0 ]; then
+            missing="${missing:+$missing, }$name"
+            [ -n "$next" ] || next="approach (its document: $folder/$approach, corrected in place: $(say "$counted" | awk '$1 == "@waiting" { print $2 }') of its needs still waiting for the user's decision)"
+            continue
+          fi
+        elif [ "$needs" = none ]; then
+          # Nothing to compare and nothing to commit to: the stage is not done and not missing.
+          skipped="- approach: not needed, slice ${chosen:-${slice#slice-}} needs nothing from outside ($under$own)"
+          continue
+        fi ;;
+      research) [ "$there" = yes ] && research="$under$is" ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -335,6 +386,33 @@ STAGES
       say "- next stage by the documents: slice (every slice of the set is built and $(told unchecked) of the requirements are not checked: the set does not cover the list)"; return 0
     fi
   fi
+  [ -z "$skipped" ] || say "$skipped"
+  if [ -n "$approach" ]; then
+    commits=$(say "$counted" | awk '$1 == "@commits" { print $2 }'); listed=$(say "$counted" | awk '$1 == "@listed" { print $2 }')
+    [ "$commits" = "$listed" ] || say "- the decisions of $approach commit to $commits and its \"Committed to\" lists $listed: research starts from that list, so the two must agree"
+    if [ -n "$research" ]; then
+      say "- a changed approach is a new document, the earlier one left as it is: $folder/$slice/${number}_approach.md"
+      # A document's number is its place in the order they were made: research numbered before the approach is older than it.
+      [ "$(say "${research#"$slice"/}" | cut -c1-3)" -gt "$(say "${approach#"$slice"/}" | cut -c1-3)" ] \
+        || say "- research ($research) was written before the approach that now stands ($approach): what it holds of a thing no longer committed to does not stand"
+    else
+      say "- a changed approach is corrected in place ($folder/$approach): no research is written from it yet"
+    fi
+  fi
+  case "$next" in
+    research*)
+      if [ -n "$approach" ] && [ "$listed" != 0 ]; then
+        say "- to research, committed to in $folder/$approach:"
+        say "$counted" | grep -v '^@' | sed "s|@RESEARCH@|$folder/$slice/${number}_research/|"
+      elif [ -n "$approach" ]; then
+        say "- nothing is committed to in $folder/$approach: no outside system is researched"
+      fi ;;
+  esac
+  case "$next" in
+    approach*|research*)
+      say "- a page of documentation is read with: $PAGE fetch URL --to $folder/$slice/pages"
+      say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT" ;;
+  esac
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; it is built when merged work names its criteria.
   say "- every planning document of slice ${chosen:-${slice#slice-}} exists"

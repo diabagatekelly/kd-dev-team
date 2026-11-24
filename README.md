@@ -28,6 +28,7 @@ design are recorded under `next-plugin/validation/`.
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
 | `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
+| `steps/05-approach/eval/approach-skill.md` | stage 5's text, 153 lines, adopted on Sonnet 5.5 (decision 41): each thing the chosen slice needs from outside compared on the user's limits from the candidates' own pages, one way recommended, the commitment asked and recorded |
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -36,8 +37,8 @@ design are recorded under `next-plugin/validation/`.
 
 ## Where the work stands (2026-11-23)
 
-Stages 0 to 4 hold (startup, the problem, the scope map, the
-requirements, the slice), all on Sonnet 5.5. After the owner said
+Stages 0 to 5 hold (startup, the problem, the scope map, the
+requirements, the slice, the approach), all on Sonnet 5.5. After the owner said
 each of the first four holds, they were run together, end to end,
 and their texts changed from what those runs found (decisions 28 to
 32). Where each stands:
@@ -99,14 +100,27 @@ slices are cut from them, and a dependency is chosen after.
   and the closing pass the owner asked for was $29.
 - What is tested where, for every stage from here: decision 38.
 
-**Next, in this order:**
+**Stage 5, the approach, holds** (decision 41,
+`steps/05-approach/README.md`), on Sonnet 5.5: where a dependency is
+committed to. Its text is adopted and its thirteen cases join the
+regression build (77 scenarios over six stages).
 
-1. **The approach (stage 5):** where a dependency is committed to.
-   Not proposed yet.
-2. **Research (stage 6): paused at its pilot**
+- Sonnet 65 of 65 over five runs of thirteen cases with the final
+  text, every quote on its page; Haiku 57 of 65, and does not hold.
+- $75.11 against $90 agreed.
+- The examples' kept documents reach the approach
+  (`examples/NAME/after/approach/`); a run through a merge waits for
+  the approach to be decided.
+
+**Next:**
+
+1. **Research (stage 6): paused at its pilot**
    (`steps/06-research/README.md`): $2.17 spent, about $40 to
    finish, in its new place after the approach. Its scenarios were
-   moved to the slice's folder so that they still build.
+   moved to the slice's folder so that they still build. Before it
+   resumes: its cases' made-up approach is rewritten in the form
+   stage 5 settled, and it reads the pages the approach kept
+   (`slice-NNN/pages/`) before fetching any.
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
@@ -143,11 +157,12 @@ free checks only, no model judge:
   without the checks of form.
 - `python3 -I e2e/run.py e2e/examples/NAME --out FOLDER` runs one
   example end to end with its scripted user, through a set of
-  slices, a chosen slice and one made-up merge, after
+  slices, a chosen slice, its approach and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
-- `--from requirements` starts an example from the documents its
-  last good run left (`--keep requirements RUN` keeps them); it is
-  refused once an earlier stage's text has changed.
+- `--from requirements` (or `slice`, or `approach`) starts an example
+  from the documents its last good run left (`--keep STAGE` on that
+  run keeps them); it is refused once an earlier stage's text or the
+  routing table has changed.
 - A text not yet adopted is loaded on trial with `NAME=TEXT` after
   either of `e2e/regress.py` and `e2e/make_plugin.py`.
 - The VM stops when the command that started it returns: a pass is
@@ -184,6 +199,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
   `startup/`, `research/`, `steps/03-requirements/eval/`,
-  `steps/04-slice/eval/`, `steps/06-research/eval/` and `e2e/`.
+  `steps/04-slice/eval/`, `steps/05-approach/eval/`,
+  `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.
