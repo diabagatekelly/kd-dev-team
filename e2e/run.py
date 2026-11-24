@@ -353,6 +353,8 @@ def keep(out, example, stage, plugin):
     brief = Brief((example / "brief.md").read_text(encoding="utf-8"))
     planning, kept = out / "project" / brief.folder, example / "after" / stage
     wanted = DOCUMENTS[:DOCUMENTS.index(stage) + 1]
+    if not any(planning.rglob("*.md")):   # asked of a place no run has finished in: nothing is kept, nothing is lost
+        raise SystemExit(f"nothing to keep: no run has left documents in {planning}. --keep keeps a finished run's documents and runs nothing.")
     shutil.rmtree(kept, ignore_errors=True)
     kept.mkdir(parents=True)
     for path in sorted(planning.rglob("*.md")):

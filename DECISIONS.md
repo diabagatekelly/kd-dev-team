@@ -771,5 +771,28 @@ asking is listed apart, so it can be overturned.
   - The end-to-end driver ends a run through research once a
     research document is written, or a turn after there is nothing
     to research; a run where none is ever written ends as stuck.
+- Research as tuned and closed, 2026-11-24:
+  - A page over 300 lines is given as its headings, each with its
+    lines, and read a part at a time with `page.py lines`: a
+    session's shell cut the real provider's reference pages, and
+    the session then searched for the words it had thought of. The
+    numbers (300 lines a page, 150 a part) are a first guess.
+  - A twelfth case holds a fact deep in a long made-up page, so the
+    bar at five runs is 60 of 60, not 55 of 55.
+  - The text grew from 137 to 149 lines over two rounds: the
+    reference pages are read whatever the criteria say; a long page
+    by its parts; what names a thing on the other side and whether
+    that name can change; how a failure is told from a success; an
+    open point is searched for in the kept pages before it is left
+    open.
+  - Case 6b passed in every run on Sonnet, so the stage script still
+    counts research as written when pages were refused, and the
+    routing table's rule brings the session back.
+  - The key's patterns are not changed after a run. Where a fact is
+    in the documents in other words, both numbers are given: by the
+    pattern, and as read.
+  - A check that fails a good answer is corrected with a unit test
+    and the kept runs graded again for nothing; the count as first
+    graded is given beside the corrected one.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

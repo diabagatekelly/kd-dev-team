@@ -493,6 +493,16 @@ class Run(unittest.TestCase):
         self.assertEqual((kept / "slice-002" / "006_research" / "states.md").read_text(), "kept")
         self.assertFalse((run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin") / "slice-002" / "006_research").exists())
 
+    def test_keeping_a_place_no_run_finished_in_keeps_nothing_and_loses_nothing(self):
+        # Found before the stage was put to the owner: --keep given with a run's options ran nothing and emptied what was kept.
+        self.kept()
+        before = run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin")
+        names = sorted(path.name for path in before.rglob("*"))
+        with self.assertRaises(SystemExit) as refused:
+            run.keep(self.folder / "never-run", self.example, "approach", self.folder / "plugin")
+        self.assertIn("nothing to keep", str(refused.exception))
+        self.assertEqual(sorted(path.name for path in before.rglob("*")), names)
+
     def test_the_approach_is_kept_with_the_pages_its_quotes_are_from(self):
         self.kept()
         planning = self.folder / "done" / "project" / "plans"
