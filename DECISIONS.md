@@ -653,5 +653,17 @@ asking is listed apart, so it can be overturned.
     after the slice when it needs nothing.
   - A pass may allow the search tool (`ALLOW_TOOLS`), which only
     this stage's cases ask for.
+- The approach stage as run, 2026-11-24:
+  - The routing table gained one rule, for every stage: a stage's
+    text is loaded before anything of it is written or recorded, and
+    the user's answer to a stage's question, however short, is that
+    stage's work. Haiku recorded short answers by hand without it.
+    Every earlier stage's cases were run again with it.
+  - The quote check reads again, once, a page that is quoted and has
+    no saved copy, before calling the quote wrong: it uses the same
+    reader, so a site not allowed is still not read.
+  - The stage is put to the owner as holding on Sonnet 5.5 (65 of
+    65) and not on Haiku 5.5 (52 of 65), after three rounds of tuning
+    where two were planned; the third cost $0.43.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

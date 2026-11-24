@@ -1,13 +1,77 @@
 # Stage 5, the approach: the test, set before anything is built or run
 
-**State, 2026-11-23: agreed (decision 40), at about $90 with a pilot
-of about $6 first. Built, and tested without a model:** the stage
-script's part (16 unit tests), the driver's (7), thirteen cases for
-three arms and their checks (23), and a text of 143 lines
-(`eval/approach-skill.md`). **Run so far: the pilot only, each case
-once** (below). No case has run more than once, nothing has run on
-Opus, on the real choice, on the examples or on the earlier stages'
-cases with the changed stage script.
+**State, 2026-11-24: agreed (decision 40) at about $90; $36.45 spent.
+The text (150 lines, `eval/approach-skill.md`) passes its thirteen
+cases 65 times of 65 on Sonnet 5.5 and 52 of 65 on Haiku 5.5: the
+stage holds on Sonnet and not on Haiku.** Every earlier stage's cases
+pass with the changed stage script, the changed routing table and
+this text loaded (66 of 66 runs, one scenario of mine corrected on
+the way). **No session has yet run:** the four examples through the
+approach, and the real choice. The examples' kept documents can no
+longer be started from (`--from`): the routing table changed, so
+they are run from the first message.
+
+## The runs after the pilot (2026-11-24)
+
+| Pass | Arm | Model | Pass every check | But for form | Cost |
+|---|---|---|---|---|---|
+| Three runs a case | our text, 143 lines | Sonnet 5.5 | 39 of 39 | 39 of 39 | $4.72 |
+| | our text | Haiku 5.5 | 25 of 39 | 25 of 39 | $0.40 |
+| | bare | Sonnet 5.5 | 0 of 39 | 10 of 39 | $4.81 |
+| | bare | Haiku 5.5 | 0 of 39 | 5 of 39 | $0.33 |
+| | bare, once a case | Opus 5.5 | 2 of 13 | 5 of 13 | $2.85 |
+| | kad's `architecture-design` with `adr` (five cases) | Sonnet 5.5 | 0 of 15 | 4 of 15 | $2.22 |
+| Tuning, three rounds | our text | Haiku 5.5, Sonnet 5.5 | Haiku 25, then 31 of 39 | | $3.08 |
+| **Five runs a case, the final text (150 lines)** | our text | **Sonnet 5.5** | **65 of 65** | 65 of 65 | $7.76 |
+| | our text | Haiku 5.5 | 52 of 65 | 52 of 65 | $0.62 |
+| Every earlier stage once (64 scenarios) | everything adopted, this text on trial | Sonnet 5.5 | 63 of 64, then the one 3 of 3 | | $4.92 |
+
+The three-run counts are after four checks of mine were corrected and
+the runs graded again for nothing (as first graded: Sonnet 35 of 39,
+Haiku 22). Every quote in every approach the runs with our text left
+was on its page: 286 of 286 in the three runs on Sonnet, 446 of 446
+and 456 of 456 in the five runs on Sonnet and Haiku.
+
+**Haiku.** Of its 13 failing runs of 65, 8 are a short answer of the
+user's ("Yes, go with Postbox", "Go with Lettera") recorded by hand
+without the stage's text being loaded, so without its form and, twice,
+without the pushing back; 3 recommend the service where going on
+by hand meets the criterion; 2 are single faults. The routing table
+now says a stage's text is loaded before an answer is recorded, which
+took those from 10 of 39 to 8 of 65, not to none.
+
+**Beside kad's skills, as read (no model judges).** On the first case
+kad's `architecture-design` read the same pages and recommended the
+same service with the same two quotes. It wrote no document, so
+research would have nothing to start from; it never weighed going on
+by hand, so where that is enough (case 8) it recommended a service
+three times of three; and it went on to an interface and an adapter,
+which is the design's. Its pushing back and its "one decision at a
+time" are sound and were kept or changed on purpose (the table
+below). The bare model on Sonnet reads the pages and quotes them
+correctly; what it lacks is the same: the way without, the decision
+left waiting, and the record research starts from.
+
+What these runs found, each now a unit test, a case or a line of a
+text (decision 29):
+
+- A session's shell kept no file from one command to the next, so the
+  pages' copies were gone when the quote check ran and every quote was
+  "no saved page". The check now reads such a page again, once.
+- Four checks were wrong: a window meant for what was written into
+  the approach ran on into what a later command printed; "EU hosting",
+  where a service keeps data, was read as a later stage's word; "Say
+  which, and I'll record it" was read as not asking; the price and
+  the question had to be within 900 characters of each other.
+- The made-up approach of the change-of-mind cases had a column no
+  limit of the user's backed; Haiku took it for a limit, twice.
+- Startup's scenario of a stage not built still named the approach
+  with the approach on trial. It moves on to research.
+- The text gained seven lines: the way without is judged by the
+  criteria's own words and looked at first; a choice that breaks a
+  limit is pushed back on even where the recommendation already said
+  so; on a change of mind the approach is read first and the research
+  that no longer stands is named.
 
 ## The pilot (2026-11-23, $4.74 of the $6 guessed)
 
