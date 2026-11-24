@@ -42,8 +42,8 @@ slices = load("slice_cases", ROOT / "steps/04-slice/eval/make_cases.py")
 research = load("research_cases", ROOT / "steps/06-research/eval/make_cases.py")
 page = load("page", ROOT / "research/page.py")
 says, never_says, write = startup.says, startup.never_says, startup.write
-in_file, not_in_file, near, section, untouched, never_runs = (
-    slices.in_file, slices.not_in_file, slices.near, slices.section, slices.untouched, slices.never_runs)
+in_file, not_in_file, near, section, untouched, never_runs, all_of = (
+    slices.in_file, slices.not_in_file, slices.near, slices.section, slices.untouched, slices.never_runs, slices.all_of)
 
 KAD = {"architecture-design": [HERE / "kad-architecture-design.md", ROOT.parent / "kad-dev-team-plugin/skills/architecture-design/SKILL.md"],
        "adr": [HERE / "kad-adr.md", ROOT.parent / "kad-dev-team-plugin/skills/adr/SKILL.md"]}
@@ -324,7 +324,9 @@ CHANGES = "Use Lettera after all: the director already has an account there."
 ANY_QUOTE = r'["”]\s*\(\s*https?://'
 REAL = (r"\b(mailchimp|sendgrid|mailgun|postmark|twilio|amazon ses|aws|brevo|sendinblue|mailjet|resend|sparkpost|gmail|"
         r"outlook|klaviyo|mandrill|zoho|stripe|paypal|adyen|square|gocardless|worldpay|braintree)\b")
-LATER = r"\b(librar(?:y|ies)|frameworks?|databases?|SDK|npm|pip install|node\.?js|python|docker|hosting|serverless|cron|queue)\b"
+# Where the tool itself would run is a later stage's; where a service keeps its customers' data ("EU hosting") is not.
+LATER = (r"\b(librar(?:y|ies)|frameworks?|databases?|SDK|npm|pip install|node\.?js|python|docker|serverless|cron|queue|"
+         r"host(?:ed|ing)? (?:it|this|the (?:tool|app|site|list)) (?:on|at|with)|(?:our|the (?:tool|app|site)'s) hosting|deploy(?:ed|ment|s)?)\b")
 DECISION = r"(?:^|\n)\**Decision:?\**:?\s*\**"
 
 
@@ -357,18 +359,19 @@ NOT_ROUND = {"type": "regex", "name": "reads-no-page-another-way", "target": "tr
              "pattern": r'"name"\s*:\s*"WebFetch"|--noproxy|sbx policy allow network[^"]*"\s*,\s*"description'}
 NO_REAL_NAME = [never_says("names-no-service-from-memory", REAL),
                 {"type": "regex", "name": "writes-no-service-from-memory", "target": "trace", "match": "not_contains",
-                 "pattern": WROTE + r"_approach[\s\S]{0,6000}?" + REAL}]
+                 "pattern": WROTE + r"_approach[^\n]{0,6000}?" + REAL}]
 NOTHING_COMMITTED = [not_in_file(DOC, "commits-to-nothing-before-the-users-word", decided(r"(?:committed|fixed by)")),
                      not_in_file(DOC, "lists-nothing-as-committed", committed_to(r"https?://"))]
 STOPS_THERE = [{"type": "regex", "name": "writes-no-later-document", "target": "trace", "match": "not_contains",
                 "pattern": WROTE + r"_(research|questions|answers|open-facts|design|screens|stack|readiness)"},
                {"type": "regex", "name": "nothing-of-a-later-stage", "target": "trace", "match": "not_contains", "flags": "i",
-                "pattern": WROTE + r"_approach[\s\S]{0,6000}?" + LATER},
+                "pattern": WROTE + r"_approach[^\n]{0,6000}?" + LATER},
                never_runs("signs-up-for-nothing", r"\b(?:npm|pip3?|brew|apt(?:-get)?)\s+install|curl[^|;&]*(?:-X\s*POST|--data|-d\s)|sign-?up"),
                *untouched("leaves-the-slice-alone", r"004_slice"), *untouched("leaves-the-list-alone", r"002_requirements"),
                *untouched("leaves-the-problem-alone", r"000_problem"),
                never_says("keeps-the-routing-table-out", r"\brouting table\b")]
-ASKS = says("asks-the-user", r"\?")
+# A question, or the decision handed over in so many words ("Say which, and I'll record it").
+ASKS = says("asks-the-user", r"\?|(?:say|tell me|let me know)\b[^.\n]{0,40}\b(?:which|what|whether|yes)\b|your (?:decision|call|word)\b|decision for you")
 NO_PREFERENCE = never_says("asks-no-preference-of-its-own", r"how (?:long|much|many|often|soon)[^?\n]*\?|what(?:'s| is) your (?:budget|limit)")
 WRITTEN = {"type": "file_exists", "name": "writes-the-approach", "path": DOC}
 TABLE = [in_file(DOC, "form-a-table-of-ways", r"\|\s*Way\s*\|[^\n]*\|\s*What it ties us to\s*\|"),
@@ -401,7 +404,7 @@ SCENARIOS = [
       in_file(DOC, "form-says-what-it-gives-up", r"gives? up"),
       in_file(DOC, "form-the-decision-waits", decided("waiting")),
       says("recommends-postbox", r"recommend[^\n]{0,200}Postbox|Postbox[^\n]{0,200}recommend"),
-      says("the-commitment-is-asked-with-its-cost", near(r"£12", r"\?", 900)), ASKS, NO_PREFERENCE,
+      says("the-commitment-is-asked-with-its-cost", all_of(r"£12", r"\?|your (?:decision|call|word)\b|decision for you")), ASKS, NO_PREFERENCE,
       *NOTHING_COMMITTED, NO_SEARCH, NOT_ROUND, *NO_REAL_NAME],
      [("user", GO_ON), ("assistant", ASKED)], True),
     ("02a-the-user-takes-it", "The next turn: the user takes the recommended way: recorded in their words, the others with why not, listed for research.",
@@ -443,7 +446,7 @@ SCENARIOS = [
       in_file(DOC, "form-the-users-own-need-has-nothing-committed", section(r"list|subscribers", decided("without"))),
       not_in_file(DOC, "no-candidate-for-what-the-user-supplies", r"https?://(?!docs[.]payright[.]example)"),
       {"type": "regex", "name": "names-no-other-provider", "target": "trace", "match": "not_contains", "flags": "i",
-       "pattern": WROTE + r"_approach[\s\S]{0,6000}?\b(?:postbox|lettera|quickpay)\b"},
+       "pattern": WROTE + r"_approach[^\n]{0,6000}?\b(?:postbox|lettera|quickpay)\b"},
       says("says-the-provider-cannot-do-what-the-criterion-says",
            r"pending|3 working days|three working days|does not tell|not[^.\n]{0,60}(?:at once|straight away|immediately|right away|instant)"),
       says("names-it-for-the-slice-stage", r"\bslice\b|criteri"),
@@ -457,7 +460,7 @@ SCENARIOS = [
       ASKS, NO_PREFERENCE, NO_SEARCH, NOT_ROUND, *NO_REAL_NAME,
       {"type": "tool_used", "name": "reads-nothing-before-the-answer", "tool": "Bash", "input_match": r"page\.py[\s\S]*\bfetch\b", "min": 0, "max": 0},
       {"type": "regex", "name": "commits-to-nothing", "target": "trace", "match": "not_contains",
-       "pattern": WROTE + r"_approach[\s\S]{0,6000}?Decision:?\**:?\s*\**(?:committed|fixed by)"}],
+       "pattern": WROTE + r"_approach[^\n]{0,6000}?Decision:?\**:?\s*\**(?:committed|fixed by)"}],
      None, False),
     ("05-a-search-and-no-site-allowed", "The next turn: yes to the search, and the VM allows no site: searched, three kept at most, every site asked for in one message, nothing stated.",
      playhouse(remind(), floated=True), {}, [],

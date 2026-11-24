@@ -51,3 +51,6 @@ Whatever the user asks for:
   down.
 - A stage with no text of its own here is not built yet. Say so and
   stop: do not do its work some other way, and do not offer to.
+- A stage is done with its text: load it before anything of the stage
+  is written or recorded. The user's answer to a stage's question,
+  however short, is that stage's work.

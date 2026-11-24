@@ -90,7 +90,10 @@ here`, and the need is `waiting`.
 
 **The table.** One a need, a row a way. The way without is a row
 wherever the need can be met with nothing committed to: what the
-person does instead, and which criteria that meets. A cell about a
+person does instead, and which criteria that meets. Judge it by the
+criteria's own words, not by the need's name or the thin path: a
+criterion that does not say the thing happens by itself is met by a
+person doing it. A cell about a
 candidate is the page's own words, exact and unbroken, 25 at most,
 with the page's address; or `not said on the pages read`. Nothing
 from memory, a price least of all. A way that breaks a limit or
@@ -130,7 +133,9 @@ each, commit to nothing, and name the two ways out: a narrower
 slice, which is the slice stage's, or a limit moved, which is the
 user's.
 
-**A change of mind.** Do as the report says of a changed approach.
+**A change of mind.** Read the approach as it stands: the way now
+named is usually a row of it already. Do as the report says of a
+changed approach.
 Corrected in place: the decision, "Not taken" and "Committed to"
 rewritten, and a line `Changed: <date>: <what, and why in their
 words>` under the need. A new document: the whole approach under

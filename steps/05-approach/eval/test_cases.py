@@ -81,6 +81,29 @@ class Checks(unittest.TestCase):
         self.assertEqual(failed("01-two-candidates-on-two-limits", files, "Postbox is recorded.", [FETCH]),
                          ["recommends-postbox", "the-commitment-is-asked-with-its-cost", "asks-the-user"])
 
+    def test_a_decision_handed_over_without_a_question_mark_still_asks(self):
+        # Found by the three-run pass: "Decision for you: Postbox, Lettera, or without. Say which" was read as not asking.
+        said = "I recommend without for now; Postbox is £12 a month if you want it sent for you. Decision for you: Postbox, Lettera, or without. Say which, and I'll record it."
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, said, [FETCH]), [])
+
+    def test_the_cost_and_the_question_may_be_far_apart_in_the_reply(self):
+        # Found by the three-run pass: the price in a table at the top, the question at the foot, 900 characters on.
+        said = "I recommend Postbox: £12 a month. " + "What the pages did not settle. " * 60 + "Do you commit to Postbox?"
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, said, [FETCH]), [])
+
+    def test_what_a_later_command_printed_is_not_read_as_written_into_the_approach(self):
+        # Found by the three-run pass: the report printed after the write says "Docker Sandboxes", and the
+        # check's window ran on from the write into it.
+        record = wrote(DOC, cases.WAITING) + "\n" + json.dumps({"stdout": "this session is inside a VM (Docker Sandboxes); Mailgun"})
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH], record), [])
+
+    def test_where_a_service_keeps_data_is_not_a_later_stages_word_and_where_the_tool_runs_is(self):
+        # Found by the three-run pass: "the search results named EU hosting, none named the UK" failed the check.
+        text = cases.WAITING + "\nNot settled by this read: the search results named EU hosting, none named the UK.\n"
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: text}, ASK_1, [FETCH], wrote(DOC, text)), [])
+        text = cases.WAITING + "\nWe would host the tool on a small server and deploy it weekly.\n"
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: text}, ASK_1, [FETCH], wrote(DOC, text)), ["nothing-of-a-later-stage"])
+
     def test_more_than_four_pages_of_one_candidate_fails(self):
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 5), ["at-most-four-pages-of-postbox"])
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1), ["reads-with-the-page-command"])

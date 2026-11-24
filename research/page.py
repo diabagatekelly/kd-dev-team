@@ -154,15 +154,24 @@ def check(documents, pages):
     return wrong
 
 
-def main(arguments):
+def main(arguments, curl="curl"):
     if len(arguments) >= 4 and arguments[0] == "fetch" and arguments[2] == "--to":
-        code, text = fetch(arguments[1], arguments[3])
+        code, text = fetch(arguments[1], arguments[3], curl)
         sys.stdout.write(text)
         return code
     if len(arguments) >= 3 and arguments[0] == "check":
         documents = {path: pathlib.Path(path).read_text(encoding="utf-8", errors="replace") for path in arguments[2:]}
         # A copy that could not be kept in the folder is looked for where fetch put it instead.
-        wrong = check(documents, {**pages_in(ELSEWHERE()), **pages_in(arguments[1])})
+        def pages():
+            return {**pages_in(ELSEWHERE()), **pages_in(arguments[1])}
+        # A page quoted whose copy is nowhere (a folder for temporary files that did not last) is read
+        # again, once, before any quote from it is called wrong.
+        kept = {address.rstrip("/") for address in pages()}
+        again = sorted({url.rstrip("/").split("#")[0] for text in documents.values() for _, url in PAIR.findall(text)} - kept)
+        for url in again:
+            if fetch(url, arguments[1], curl)[0] == 0:
+                print(f"- read again, its copy was not kept: {url}")
+        wrong = check(documents, pages())
         pairs = sum(len(PAIR.findall(text)) for text in documents.values())
         print("\n".join(wrong + [f"{pairs} quotes, {len(wrong)} wrong"]))
         return 1 if wrong else 0

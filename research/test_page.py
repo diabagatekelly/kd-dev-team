@@ -29,6 +29,9 @@ class Fetch(unittest.TestCase):
         self.curl.chmod(self.curl.stat().st_mode | stat.S_IEXEC)
         (self.folder / "body").write_text(HTML)
         os.environ["BODY"] = str(self.folder / "body")
+        # each test its own "elsewhere": the machine's one would carry a copy from test to test
+        elsewhere, page.ELSEWHERE = page.ELSEWHERE, lambda: self.folder / "research-pages"
+        self.addCleanup(setattr, page, "ELSEWHERE", elsewhere)
 
     def fetch(self, code, url="https://docs.example/payments", to=None):
         os.environ["CODE"] = code
@@ -82,6 +85,33 @@ class Fetch(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()) as out:
             code = page.main(["check", str(blocked / "pages"), str(document)])
         self.assertEqual((code, out.getvalue().strip()), (0, "1 quotes, 0 wrong"))
+
+    def checked(self, pages, text):
+        document = self.folder / "approach.md"
+        document.write_text(text)
+        import contextlib, io
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = page.main(["check", str(pages), str(document)], curl=str(self.curl))
+        return code, out.getvalue().strip().splitlines()
+
+    def test_a_page_whose_copy_did_not_last_is_read_again_by_the_check(self):
+        # Found by the approach's three-run pass: a session's shell kept no file from one command to the
+        # next, so the copies were gone when the check ran and every quote was "no saved page".
+        os.environ["CODE"] = "200"
+        code, said = self.checked(self.folder / "pages", '| A way | "A new payment has the status pending" (https://docs.example/payments) |\n')
+        self.assertEqual((code, said), (0, ["- read again, its copy was not kept: https://docs.example/payments", "1 quotes, 0 wrong"]))
+
+    def test_a_page_read_again_still_has_to_hold_the_quote(self):
+        os.environ["CODE"] = "200"
+        code, said = self.checked(self.folder / "pages", '| A way | "A payment is known at once" (https://docs.example/payments) |\n')
+        self.assertEqual(code, 1)
+        self.assertIn("not on its page", said[-2])
+
+    def test_a_page_that_cannot_be_read_again_is_still_named_as_never_saved(self):
+        os.environ["CODE"] = "403"
+        code, said = self.checked(self.folder / "pages", '| A way | "A new payment" (https://docs.example/payments) |\n')
+        self.assertEqual(code, 1)
+        self.assertIn("no saved page for https://docs.example/payments", said[0])
 
     def test_a_link_is_followed_by_where_it_leads_so_the_next_page_can_be_found(self):
         (self.folder / "body").write_text('<p>See <a href="/refunds">Refunds</a>, <a href="https://other.example/x">this</a> '
