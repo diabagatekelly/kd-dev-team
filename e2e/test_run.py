@@ -389,10 +389,10 @@ class Run(unittest.TestCase):
                          ("the approach was written and four turns later 1 of its needs still waited", 9, 1))
 
     def test_a_slice_that_needs_nothing_ends_a_turn_later_with_no_approach(self):
-        for none in ("none", "`None.`"):
+        for place, none in enumerate(("none", "`None.`")):
             with self.subTest(none):
                 fake = self.APPROACH.replace("A way to tell the member.", none).replace("if n == 6:", "if n == 96:").replace("if n == 7:", "if n == 97:")
-                summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="approach", out="out-" + none.strip("`."))
+                summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="approach", out=f"out-{place}")   # by number: Windows takes out-none and out-None for one folder
                 self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
                                  ("the slice needs nothing from outside: no approach was written", 6, None))
 
