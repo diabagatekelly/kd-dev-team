@@ -112,6 +112,17 @@ class Checks(unittest.TestCase):
         self.assertEqual({line.count("|") for line in cases.BOTH_FIT.splitlines() if line.startswith("|")}, {5})
         self.assertEqual({line.count("|") for line in cases.WAITING.splitlines() if line.startswith("|")}, {6})
 
+    def test_three_candidates_are_counted_by_their_rows_not_by_the_sites_asked_for(self):
+        # Found by the five-run pass: three candidates, one of them on two sites, four commands, and the check failed.
+        rows = lambda *names: ("# Approach: slice 1\n\n## Sending a subscriber an email\n\n| Way | Does what the slice needs | What it ties us to |\n|---|---|---|\n"
+                               "| Without: by hand | no | nothing |\n" + "".join(f"| {name} (https://{name}.example/) | not read: {name}.example is not allowed here | not read |\n" for name in names)
+                               + "\nDecision: waiting\n\n## Committed to\nNothing.\n")
+        said = "Please allow these:\n" + "sbx policy allow network --sandbox VM a.example\n" * 4
+        calls = [("WebSearch", '{"query": "email service"}')]
+        self.assertEqual(failed("05-a-search-and-no-site-allowed", {DOC: rows("Alpha", "Beta", "Gamma")}, said, calls), [])
+        self.assertEqual(failed("05-a-search-and-no-site-allowed", {DOC: rows("Alpha", "Beta", "Gamma", "Delta")}, said, calls),
+                         ["keeps-three-candidates-at-most"])
+
     def test_more_than_six_pages_of_one_candidate_fails(self):
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 7), ["at-most-six-pages-of-postbox"])
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1), ["reads-with-the-page-command"])
@@ -218,7 +229,7 @@ Decision: waiting
         self.assertFalse(any("(?" + flag in json.dumps(check) for checks in CHECKS.values() for check in checks for flag in "ims"))
         priced = unread.replace("| not read |\n", "| from £9 a month |\n")
         self.assertEqual(failed("05-a-search-and-no-site-allowed", {DOC: priced}, said + (" sbx policy allow network x" * 3), [search]),
-                         ["keeps-three-candidates-at-most", "states-nothing-of-a-site-it-could-not-read"])
+                         ["states-nothing-of-a-site-it-could-not-read"])
 
     def test_a_site_refused_a_silence_and_an_instruction_are_each_said(self):
         text = cases.WAITING.replace(cases.EMAIL_ROWS["Lettera"] % ("Breaks the limit: ", "Breaks the limit: "),
