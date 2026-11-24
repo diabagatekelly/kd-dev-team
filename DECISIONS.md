@@ -813,5 +813,56 @@ asking is listed apart, so it can be overturned.
   - A check that fails a good answer is corrected with a unit test
     and the kept runs graded again for nothing; the count as first
     graded is given beside the corrected one.
+- The questions stage as proposed (`steps/07-questions/README.md`),
+  2026-11-24; not yet agreed:
+  - The stage leaves a folder, as research does: `kept.md` is the
+    session's, `questions.md` is drawn by script and never written
+    by hand. The stage script's name for it changes from a document
+    to a folder when the stage is agreed.
+  - The script is Python, like the page reader: planning runs in
+    the project's VM, which is Linux.
+  - A kind of action the slice does nothing of may be dropped whole
+    with one reason, and entries may share a row: E3's triage wrote
+    a line for each of the 250, which is most of what a run costs.
+    Whether dropping by kind loses an entry a defect depended on is
+    what the count on the two real plans shows.
+  - A kept question applies only to a thing the documents or
+    `kept.md` name: E3 lost the things a triage did not think of.
+  - What the slice takes in is listed by the session and held to
+    the criteria and research by script; no stage before this one
+    lists fields, and changing research to list them would stale an
+    adopted stage for a list this one can check.
+  - Which ways a value can be wrong are drawn by its kind (a choice
+    is not "too long"), every way for a kind called `other`: E2
+    spent a third of its cells on what could not happen. The table
+    of kinds is a first guess.
+  - Settings get one rule, always drawn: a build reads settings no
+    plan names (E4).
+  - Two parts carried from kad by script and not by the session:
+    each sensitive value against the five places it leaks to, and
+    the seven questions kad's two skills asked the owner first.
+  - An event of the state grid is each criterion of the slice, five
+    that hold for anything (again, a reload, a restart, a second
+    copy, time), and each thing committed to being down, slow or
+    acting with its reply lost. A provider's errors by name are not
+    events: research writes them as facts, and the library's
+    questions on calls are applied to each request.
+  - Whether the questions are stale is a mark of every document
+    they were drawn from, kept in `questions.md`'s first lines.
+  - A lasting thing the slice creates that the requirements' list
+    does not name is walked: one sentence in research's text, and a
+    check here. Research's cases are run again.
+  - The requirements' own open questions are not carried into
+    `questions.md`: they are the requirements stage's, and the
+    slice already says which of its parts wait for them.
+  - Arms: bare, our text, kad's two skills together on two cases,
+    and E3's triage brief on the first real plan only, where it was
+    measured. Opus only where Sonnet with the text does not hold.
+  - The defects the triage is counted against came from wider
+    slices than this plugin cuts: each is marked as within the thin
+    slice or not before any run, and only those within count.
+  - The two library entries the gap count is expected to call for
+    are proposed after the count, not before: the library is not
+    changed while it is being measured.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

@@ -140,6 +140,11 @@ regression build (89 scenarios over seven stages).
    are counted again after those stages, by the same keys, to show
    the gaps are closed.
 
+   **Proposed, nothing paid run** (`steps/07-questions/README.md`):
+   the library triaged by a session, the grids drawn by
+   `questions/questions.py` (built, with its unit tests), ten
+   cases, about $135 with a pilot of about $10 first.
+
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
 stage's coming-back.
@@ -217,7 +222,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
   counts and costs. Nothing that quotes a real project is kept here.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
-  `startup/`, `research/`, `steps/03-requirements/eval/`,
+  `startup/`, `research/`, `questions/`, `steps/03-requirements/eval/`,
   `steps/04-slice/eval/`, `steps/05-approach/eval/`,
   `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
