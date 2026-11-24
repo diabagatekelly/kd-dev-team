@@ -1,8 +1,86 @@
 # Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-24: agreed at about $90 (decision 43); the pilot,
-the three runs and two rounds of tuning are run; the closing passes
-are running.** Research stays a stage up front (decision 42).
+**State, 2026-11-24: every pass agreed is run, $81.34 of the $90
+agreed (decision 43). Put to the owner; not adopted.** Research
+stays a stage up front (decision 42).
+
+## The closing passes (2026-11-24), final text of 149 lines
+
+| Pass | Model | Result | Cost |
+|---|---|---|---|
+| The twelve cases, five runs | Sonnet 5.5 | 60 of 60 (59 as first graded) | $12.83 |
+| The twelve cases, five runs | Haiku 5.5 | 39 of 60 | $1.08 |
+| Every earlier stage's cases once, research on trial | Sonnet 5.5 | 76 of 77 | $6.24 |
+| The one case that failed there, with its next turn, five runs | Sonnet 5.5 | 10 of 10 | $0.97 |
+| The second plan, three real runs (not tuned on) | Sonnet 5.5 | 7, 10 and 11 of the key's 11: 84%; 7 in every run | $4.18 |
+| The four examples from their kept documents through research | Sonnet 5.5 | 4 of 4 wrote it, in order | $1.18 |
+| The four examples from the first message, each in a fresh place | Sonnet 5.5 | 3 of 4 wrote it; the fourth ended by a fault of the driver | $15.96 |
+| That example again, the driver corrected | Sonnet 5.5 | wrote it | $4.02 |
+
+**Against the bar.**
+
+- **Every case in every run: met on Sonnet,** 60 of 60. As first
+  graded it was 59: a reply that laid the choice out ("Do the
+  reading. Say so and I'll start.") failed a check that wanted a
+  question mark. The check is corrected with a unit test and the
+  runs graded again for nothing.
+- **No quote off its page: met.** Every quote of every run of the
+  cases, on both models, is on the page it names.
+- **The benchmark, on the plan the text was not tuned on:** 84% of
+  the key's facts by its patterns, against 80%: met. In every one
+  of the three runs, 7 of 11, against two thirds: one short. As
+  read, one of the four the first run misses is there in other
+  words (that access lasts until the connection is removed), which
+  is 8 of 11. **On the plan it was tuned on:** 76% against 80%, not
+  met by the patterns; 85% as read; 10 of 13 in every run, met.
+  The patterns are not changed after a run.
+- **Haiku does not hold:** 39 of 60. It does not load the text when
+  told to skip the reading (0 of 5 on the second turn) or when the
+  site is allowed (1 of 5), and it writes a dead end as a row
+  without recording it for the owner (1 of 5). Sonnet is the model
+  proposed.
+
+**What the closing passes met** (decision 29):
+
+| What it met | Now |
+|---|---|
+| A check wanted a question mark where the reading was offered as a choice | the check takes an offer either way: unit test; the runs graded again |
+| In the pass of every earlier stage, the slice stage wrote the tool the user had floated into the slice document, once ("whether and how is for the approach stage") | the case and its next turn five times more: 10 of 10. Counted as a miss of one run in eleven of an adopted stage; nothing changed |
+| I gave the driver `--keep` with a run's options: it ran nothing and emptied the folder kept | keeping refuses a place where no run finished: unit test |
+| Example 1 from the first message ended as stuck: "Yes, go on" was the user's whole reply after the slice, after the approach and before research, and the driver took the same words three times for a user with nothing left to say | the same words are not stuck while each turn leaves a new document: unit test; the example run again in a fresh place, and written |
+
+**Read, from the four examples.** All four commit to nothing at
+their first slice, so each wrote `states.md` alone, from the
+planning documents: every row names the document and line it comes
+from, and what the walk asks for and no document says is written
+`not said in the documents` (eight rows in example 2, three or more
+in 1 and 3). Example 4's slice touches no lasting thing and its
+`states.md` says so in a line. Two things seen and left as they
+are:
+
+- In example 3 the session walked a thing the slice creates that
+  the requirements' list does not name, and said so; in example 4
+  it did not add such a thing, and said so. The text speaks only of
+  the list. Either is said in the reply; which is right is for the
+  questions stage's test to show.
+- In example 3 the scripted user answered three of the
+  requirements' open questions in the turn that asked for research.
+  The session recorded them in the requirements and then wrote the
+  research. The text does not speak of it; the routing table's rule
+  (an answer to a stage's question is that stage's work) did.
+
+**What no session has run.**
+
+- Research inside the plugin as adopted: every run had the text on
+  trial beside the adopted stages. Adoption changes the plugin's
+  list and startup's case of a stage not built; those are run when
+  the owner says the stage holds.
+- An example that commits to something, end to end. The reading of
+  a provider is shown by the twelve cases and the two real plans.
+- The text after any change: none was made after the five runs. The
+  two corrections since are to a check and to the driver.
+- Opus with the text. A second slice. The real run on the owner's
+  Mac.
 
 ## The runs after the pilot (2026-11-24)
 
@@ -268,7 +346,7 @@ and that is the principle carried.
 
 **The gate: free checks, on a made-up provider.** The playhouse of
 the approach's cases, and PayRight's pages served by the stand-in:
-what the pages say is known. Eleven cases:
+what the pages say is known. Eleven cases as proposed; a twelfth, a fact deep in a long page, was added in the tuning:
 
 | # | The situation | Must |
 |---|---|---|
@@ -327,7 +405,8 @@ nothing is a recommendation.
   Opus only where Sonnet with the text does not hold (about $15
   more, said first). The benchmark: three runs a plan on Sonnet.
 - **Bar:**
-  - every case in every run: 55 of 55 at five runs;
+  - every case in every run: 55 of 55 at five runs (60 of 60 once
+    the twelfth case was added);
   - no quote that is not on its page;
   - on the benchmark, at least 80% of the key's facts in the
     document on average and at least two thirds of them in all
@@ -406,6 +485,11 @@ pilot: $0.10 to $0.19), a real run at $1.10.
 | The four examples from their kept documents through research, twice while it is built | $4 |
 | The four examples once from the first message, each in a fresh place | $22 |
 | **In all** | **about $90** |
+
+**As run: $81.34.** The pilot $5.23; the three runs and the first
+plan's six real runs $17.12; two rounds of tuning $12.53; the
+closing passes $46.46, of which the four examples from the first
+message $19.98.
 
 The $40 guessed at the first pilot was made before decision 38: it
 had no five runs on Haiku, no pass of the four examples from the

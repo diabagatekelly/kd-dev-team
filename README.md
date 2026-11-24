@@ -114,13 +114,16 @@ regression build (77 scenarios over six stages).
 
 **Next:**
 
-1. **Research (stage 6): agreed at about $90, and piloted in its
-   new place** (`steps/06-research/README.md`, 2026-11-24): $5.23
-   spent. With the text on Sonnet 10 of 11 cases pass once, the
-   eleventh a script's fault since fixed; one real run holds 9 of
-   its key's 13 facts, under the bar. One point of the proposal is
-   still the owner's to settle. The owner keeps research up front
-   (decision 42).
+1. **Research (stage 6): every pass agreed is run, $81.34 of about
+   $90, and it is put to the owner** (`steps/06-research/README.md`,
+   2026-11-24). With the text on Sonnet all twelve cases pass in
+   five runs of five, and no quote is off its page; on Haiku 39 of
+   60. On a real plan the text was not tuned on, three runs hold
+   84% of the facts the plan as built got wrong (the bar: 80%), 7
+   of 11 in every run (the bar: two thirds, one short). On the plan
+   it was tuned on, 76% by the key's patterns, 85% as read. The
+   four examples carry on through research from the first message.
+   Not adopted until the owner says it holds.
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
