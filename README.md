@@ -100,19 +100,27 @@ slices are cut from them, and a dependency is chosen after.
   and the closing pass the owner asked for was $29.
 - What is tested where, for every stage from here: decision 38.
 
-**Next, in this order:**
-
 **Stage 5, the approach, holds** (decision 41,
 `steps/05-approach/README.md`), on Sonnet 5.5: where a dependency is
 committed to. Its text is adopted and its thirteen cases join the
-regression build.
+regression build (77 scenarios over six stages).
+
+- Sonnet 65 of 65 over five runs of thirteen cases with the final
+  text, every quote on its page; Haiku 57 of 65, and does not hold.
+- $75.11 against $90 agreed.
+- The examples' kept documents reach the approach
+  (`examples/NAME/after/approach/`); a run through a merge waits for
+  the approach to be decided.
 
 **Next:**
 
 1. **Research (stage 6): paused at its pilot**
    (`steps/06-research/README.md`): $2.17 spent, about $40 to
    finish, in its new place after the approach. Its scenarios were
-   moved to the slice's folder so that they still build.
+   moved to the slice's folder so that they still build. Before it
+   resumes: its cases' made-up approach is rewritten in the form
+   stage 5 settled, and it reads the pages the approach kept
+   (`slice-NNN/pages/`) before fetching any.
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
@@ -149,11 +157,12 @@ free checks only, no model judge:
   without the checks of form.
 - `python3 -I e2e/run.py e2e/examples/NAME --out FOLDER` runs one
   example end to end with its scripted user, through a set of
-  slices, a chosen slice and one made-up merge, after
+  slices, a chosen slice, its approach and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
-- `--from requirements` starts an example from the documents its
-  last good run left (`--keep requirements RUN` keeps them); it is
-  refused once an earlier stage's text has changed.
+- `--from requirements` (or `slice`, or `approach`) starts an example
+  from the documents its last good run left (`--keep STAGE` on that
+  run keeps them); it is refused once an earlier stage's text or the
+  routing table has changed.
 - A text not yet adopted is loaded on trial with `NAME=TEXT` after
   either of `e2e/regress.py` and `e2e/make_plugin.py`.
 - The VM stops when the command that started it returns: a pass is
