@@ -141,6 +141,8 @@ class Fixtures(unittest.TestCase):
         for command in ('python3 "/p/startup/../research/page.py" fetch https://docs.payright.example/ --to planning/slice-001/pages', loop):
             self.assertRegex(command, any_page)
         self.assertRegex(loop, of_the_reference)
+        # Found by the first tuning round: the addresses came before the command, in the loop's list.
+        self.assertRegex('for u in https://api.payright.example/errors https://api.payright.example/statuses; do python3 $P/research/page.py fetch $u --to p; done', of_the_reference)
         self.assertNotRegex('python3 page.py fetch https://docs.payright.example/ --to p', of_the_reference)
         for command in ("python3 page.py kept planning/slice-001/pages", "python3 page.py check planning/slice-001/pages payright.md"):
             self.assertNotRegex(command, any_page)
