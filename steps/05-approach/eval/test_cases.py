@@ -295,7 +295,8 @@ class Fixtures(unittest.TestCase):
             self.assertEqual(len(out.getvalue().splitlines()), 5 if arm == "kad" else 13)
         case = HERE / "plugin-text" / "evals" / "02a-the-user-takes-it"
         self.assertIn("WebSearch", (case / "case.yaml").read_text(encoding="utf-8"))
-        self.assertIn('python3 "@STARTUP@/../research/page.py" fetch URL --to planning/slice-001/pages', (case / "report.txt").read_text(encoding="utf-8"))
+        # The path's start is the plugin's own folder in the VM; on Windows, where no case is run, the shell writes it its own way.
+        self.assertIn('/../research/page.py" fetch URL --to planning/slice-001/pages', (case / "report.txt").read_text(encoding="utf-8"))
         self.assertTrue((HERE / "plugin-text" / "research" / "page.py").exists())
         self.assertTrue((case / "project" / "planning" / "slice-001" / "pages" / "docs.postbox.example-pricing.txt").exists())
 
