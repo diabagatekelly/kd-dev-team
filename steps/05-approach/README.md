@@ -1,15 +1,17 @@
 # Stage 5, the approach: the test, set before anything is built or run
 
-**State, 2026-11-24: agreed (decision 40) at about $90; $36.45 spent.
-The text (150 lines, `eval/approach-skill.md`) passes its thirteen
-cases 65 times of 65 on Sonnet 5.5 and 52 of 65 on Haiku 5.5: the
+**State, 2026-11-24: agreed (decision 40) at about $90; $74.42 spent.
+The text (153 lines, `eval/approach-skill.md`) passes its thirteen
+cases 65 times of 65 on Sonnet 5.5 and 57 of 65 on Haiku 5.5: the
 stage holds on Sonnet and not on Haiku.** Every earlier stage's cases
-pass with the changed stage script, the changed routing table and
-this text loaded (66 of 66 runs, one scenario of mine corrected on
-the way). **No session has yet run:** the four examples through the
-approach, and the real choice. The examples' kept documents can no
-longer be started from (`--from`): the routing table changed, so
-they are run from the first message.
+pass with the changed stage script and routing table; the four
+examples ran from the first message through the approach; the real
+choice ran six times and a real search once. **What no session has
+run with the final text:** the earlier stages' cases, the examples
+and the real choice ran with the text as it stood before its last
+edits (the limits-first read for the examples and the first three
+real runs; the line on a page's instruction for all of them). The
+real run on the owner's Mac is held off.
 
 ## The runs after the pilot (2026-11-24)
 
@@ -22,9 +24,15 @@ they are run from the first message.
 | | bare, once a case | Opus 5.5 | 2 of 13 | 5 of 13 | $2.85 |
 | | kad's `architecture-design` with `adr` (five cases) | Sonnet 5.5 | 0 of 15 | 4 of 15 | $2.22 |
 | Tuning, three rounds | our text | Haiku 5.5, Sonnet 5.5 | Haiku 25, then 31 of 39 | | $3.08 |
-| **Five runs a case, the final text (150 lines)** | our text | **Sonnet 5.5** | **65 of 65** | 65 of 65 | $7.76 |
+| Five runs a case, the text at 150 lines | our text | Sonnet 5.5 | 65 of 65 | 65 of 65 | $7.76 |
 | | our text | Haiku 5.5 | 52 of 65 | 52 of 65 | $0.62 |
 | Every earlier stage once (64 scenarios) | everything adopted, this text on trial | Sonnet 5.5 | 63 of 64, then the one 3 of 3 | | $4.92 |
+| Five runs again, the read changed to limits first | our text | Sonnet 5.5 | 64 of 65 | | $7.56 |
+| | our text | Haiku 5.5 | 55 of 65 | | $0.66 |
+| **Five runs, the final text (153 lines)** | our text | **Sonnet 5.5** | **65 of 65** | 65 of 65 | $7.49 |
+| | our text | Haiku 5.5 | 57 of 65 | 57 of 65 | $0.69 |
+| The four examples from the first message through the approach, the fourth twice | everything adopted, this text on trial | Sonnet 5.5 | read, not graded (below) | | $19.18 |
+| The real choice: three runs, a search, three runs again | our text | Sonnet 5.5 | counted against its key (below) | | $2.39 |
 
 The three-run counts are after four checks of mine were corrected and
 the runs graded again for nothing (as first graded: Sonnet 35 of 39,
@@ -32,7 +40,7 @@ Haiku 22). Every quote in every approach the runs with our text left
 was on its page: 286 of 286 in the three runs on Sonnet, 446 of 446
 and 456 of 456 in the five runs on Sonnet and Haiku.
 
-**Haiku.** Of its 13 failing runs of 65, 8 are a short answer of the
+**Haiku.** Of its 13 failing runs of 65 in the first five-run pass (8 of 65 in the last), 8 are a short answer of the
 user's ("Yes, go with Postbox", "Go with Lettera") recorded by hand
 without the stage's text being loaded, so without its form and, twice,
 without the pushing back; 3 recommend the service where going on
@@ -52,8 +60,47 @@ below). The bare model on Sonnet reads the pages and quotes them
 correctly; what it lacks is the same: the way without, the decision
 left waiting, and the record research starts from.
 
+**The four examples.** Examples 1 and 3: the chosen slice needs
+nothing from outside and no approach was written. Example 2: the one
+need is a list the user keeps; the approach says `without` and asks
+nothing. Example 4, the one with something to find: the first run
+ended stuck at the slice stage (a question of the user's was open,
+the session offered three numbered ways on, the scripted user had
+only "Yes, go on"); with an answer for that in its brief, the second
+run searched, kept the search's finds as leads "not read", and
+recommended supplying the text and one pair by hand, which meets the
+slice's two criteria; the user took it.
+
+**The real choice (private; counted by `eval/real_choice.py` against a
+key written before any run).** One need, three candidates the user
+names, the real pages. In all six runs nothing was stated without a
+quote and every quote was on its page (12, 12, 19, then 10, 13, 14).
+Of the eleven statements kad's records rested the choice on, the
+tables held 5, 5 and 8 as quotes from the candidate's own site; two
+of those three runs never opened the first candidate's billing page,
+and left the user's first limit, cost, as "not said" for it. With
+the read changed to limits first, six pages a candidate where the
+proposal said four: 6, 8 and 6, the free plan and its cap found in
+all three. A statement not in a table is a page not read in a short
+read, not a statement got wrong; one candidate's price is on a site
+the VM does not allow, and every run said so. Five runs of six
+recommend a different candidate from the one kad's records chose,
+each naming what choosing it would be accepting unseen. That is a
+count, not a verdict: the choice is the owner's. The search run sent
+two searches with nothing of the user's in them, kept three, and
+asked for the one site it could not read.
+
 What these runs found, each now a unit test, a case or a line of a
 text (decision 29):
+
+- On the real choice the short read spent its pages on what the
+  criteria need and left a limit's page unread. The text now reads
+  the limits first, six pages a candidate; the check allows six.
+- One run of 65 on Sonnet read a page that told its reader what to
+  do, did not do it, and did not say so. The text now says the reply
+  always names the page and what it asked; 65 of 65 after.
+- A check counted three candidates by the commands for allowing
+  sites; one candidate on two sites failed it. It counts rows.
 
 - A session's shell kept no file from one command to the next, so the
   pages' copies were gone when the quote check ran and every quote was
@@ -67,7 +114,7 @@ text (decision 29):
   limit of the user's backed; Haiku took it for a limit, twice.
 - Startup's scenario of a stage not built still named the approach
   with the approach on trial. It moves on to research.
-- The text gained seven lines: the way without is judged by the
+- The text gained ten lines in all: the way without is judged by the
   criteria's own words and looked at first; a choice that breaks a
   limit is pushed back on even where the recommendation already said
   so; on a change of mind the approach is read first and the research

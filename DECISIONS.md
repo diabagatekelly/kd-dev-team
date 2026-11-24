@@ -663,7 +663,17 @@ asking is listed apart, so it can be overturned.
     no saved copy, before calling the quote wrong: it uses the same
     reader, so a site not allowed is still not read.
   - The stage is put to the owner as holding on Sonnet 5.5 (65 of
-    65) and not on Haiku 5.5 (52 of 65), after three rounds of tuning
+    65) and not on Haiku 5.5 (57 of 65), after three rounds of tuning
     where two were planned; the third cost $0.43.
+  - The short read is six pages a candidate, the user's limits
+    first, where the proposal the owner agreed said four: on the
+    real choice four left the price page unread in two runs of
+    three. Said to the owner when the stage is put to them.
+  - The five-run pass was run three times ($24 where $11 was
+    guessed): the text changed twice after the first, once for the
+    read and once for a page's instruction.
+  - The examples could not start from their kept documents (the
+    routing table changed), so the pass from the first message
+    stood for both; it stopped at the approach, not at a merge.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
