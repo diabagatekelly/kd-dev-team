@@ -355,6 +355,17 @@ asking is listed apart, so it can be overturned.
     lists cut no wider than kad's). Haiku was tried with the final
     text and does not hold (66 of 85): it gives way on a wider cut.
 
+## 2026-11-23: the approach stage
+
+40. **Stage 5, the approach, is tested as proposed in
+    `steps/05-approach/README.md`** (the owner: "Yes and yes"), at
+    about $90, with a pilot of about $6 first whose real cost is
+    reported before the rest is run. And the point put to them with
+    it: when the user names no candidate and says no to a search,
+    the need stays `waiting`; the stage offers no name it happens to
+    know, not even as an unchecked lead. Memory is not a source of
+    candidates.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -586,7 +597,7 @@ asking is listed apart, so it can be overturned.
     slice and one made-up merge (`--through requirements` for the
     earlier ending).
 - The approach stage as proposed (`steps/05-approach/README.md`),
-  2026-11-23; not agreed yet, and nothing of it built:
+  2026-11-23, agreed the same day (decision 40):
   - Candidates come from the documents (a provider set as a limit),
     the user, or a search the user says yes to; never from memory.
     With neither, the need waits. At most three are kept a need.
@@ -614,5 +625,33 @@ asking is listed apart, so it can be overturned.
     four cases it has something for. Opus is run bare once a case.
   - The outcome is counted on one real choice of the owner's, from
     kad's own records of it (private); the README names no provider.
+- The approach stage as built, 2026-11-23:
+  - A need the user meets themselves is written `Decision: without`,
+    with nothing asked: there is nothing to commit to.
+  - When a site is refused the document is still written, the
+    candidate's row saying `not read`, the need `waiting`: the stage
+    script then keeps the approach as next without being told why.
+  - A change made in place leaves a line `Changed: <date>: <what and
+    why>` under its need.
+  - The stage script also says two things nobody asked for: that an
+    approach's decisions and its "Committed to" disagree, and that
+    research numbered before the approach now standing is older
+    than it. Each thing committed to gets its research document's
+    name from its own (`Postbox` is `postbox.md`).
+  - The report names the page reader through the startup scripts'
+    folder (`startup/../research/page.py`), so that every stage's
+    canned reports stay free of this machine's paths.
+  - Three of the slice stage's cases and one of its checks named the
+    approach as the next stage for slices that need nothing from
+    outside. They now name research; the slice text is unchanged.
+    Those cases are run again with every earlier stage's.
+  - The end-to-end driver's user, asked for a candidate, has none;
+    asked whether to search, says no; asked to commit, takes what is
+    recommended. A brief says otherwise where an example needs it. A
+    run through the approach ends when no need waits, four turns
+    after the approach was written if one still does, or a turn
+    after the slice when it needs nothing.
+  - A pass may allow the search tool (`ALLOW_TOOLS`), which only
+    this stage's cases ask for.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

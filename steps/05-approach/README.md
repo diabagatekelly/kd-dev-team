@@ -1,7 +1,10 @@
 # Stage 5, the approach: the test, set before anything is built or run
 
-**State, 2026-11-23: proposed, not agreed.** Nothing is built and
-nothing has run. The order of the stages is decision 36: the slice
+**State, 2026-11-23: agreed (decision 40), at about $90 with a pilot
+of about $6 first. Built, and tested without a model:** the stage
+script's part (16 unit tests), the driver's (7), thirteen cases for
+three arms and their checks (23), and a text of 143 lines
+(`eval/approach-skill.md`). **No session has run any of it yet.** The order of the stages is decision 36: the slice
 says what is needed, this stage is where a dependency is committed
 to, and research reads in full only what was committed to.
 

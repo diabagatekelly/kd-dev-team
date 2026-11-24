@@ -47,6 +47,8 @@ def main(folder, trial=None):
     (folder / "startup").mkdir()
     for script in [*(ROOT / "startup").glob("*.sh"), ROOT / "startup" / "tracker.jq"]:
         shutil.copy(script, folder / "startup" / script.name)
+    # The page reader the stage script names for the approach and research.
+    write(folder / "research" / "page.py", (ROOT / "research" / "page.py").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

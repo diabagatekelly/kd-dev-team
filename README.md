@@ -102,8 +102,9 @@ slices are cut from them, and a dependency is chosen after.
 **Next, in this order:**
 
 1. **The approach (stage 5):** where a dependency is committed to.
-   Proposed in `steps/05-approach/README.md`, not agreed: nothing of
-   it is built or run.
+   Agreed as proposed in `steps/05-approach/README.md` (decision
+   40), at about $90. Its scripts, thirteen cases and text are built
+   and unit-tested; no session has run them yet.
 2. **Research (stage 6): paused at its pilot**
    (`steps/06-research/README.md`): $2.17 spent, about $40 to
    finish, in its new place after the approach. Its scenarios were
@@ -185,6 +186,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
   `startup/`, `research/`, `steps/03-requirements/eval/`,
-  `steps/04-slice/eval/`, `steps/06-research/eval/` and `e2e/`.
+  `steps/04-slice/eval/`, `steps/05-approach/eval/`,
+  `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a
   frozen text before its hash is taken.
