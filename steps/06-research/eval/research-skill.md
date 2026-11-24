@@ -121,8 +121,8 @@ name no other provider, and finish the research.
 **After a changed approach.** The report says which documents are
 still to write and which no longer stand. Write only those still to
 write, in the same folder. A document that no longer stands is left
-as it is but for a first line saying so and naming the approach that
-replaced it; its pages are not read again. In `states.md`, the rows
+as it is but for a first line, which you add, saying so and naming
+the approach that replaced it; its pages are not read again. In `states.md`, the rows
 that came from it are written again from the pages of what is now
 committed to.
 

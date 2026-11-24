@@ -192,8 +192,8 @@ def main(arguments, curl="curl"):
             return {**pages_in(ELSEWHERE()), **pages_in(arguments[1])}
         # A page quoted whose copy is nowhere (a folder for temporary files that did not last) is read
         # again, once, before any quote from it is called wrong.
-        kept = {address.rstrip("/") for address in pages()}
-        again = sorted({url.rstrip("/").split("#")[0] for text in documents.values() for _, url in PAIR.findall(text)} - kept)
+        have = {address.rstrip("/") for address in pages()}
+        again = sorted({url.rstrip("/").split("#")[0] for text in documents.values() for _, url in PAIR.findall(text)} - have)
         for url in again:
             if fetch(url, arguments[1], curl)[0] == 0:
                 print(f"- read again, its copy was not kept: {url}")

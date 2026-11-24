@@ -342,7 +342,9 @@ report() {
       research)
         # Research, counted (its condition 17): a document a thing committed to, under the name the
         # approach's list gives it, and the states of the lasting things unless the requirements name none.
-        [ "$there" = yes ] && research="$under$is" && rfolder="$under${is%/}"
+        # The folder is the one already there, written in or not; research is written from once it holds something.
+        [ -z "${is%/}" ] || rfolder="$under${is%/}"
+        [ "$there" = yes ] && research="$under$is"
         wanted=$(say "$counted" | grep -v '^@' | sed 's|.*@RESEARCH@\(.*\))$|\1|')
         inventory=""; [ -z "$list" ] || inventory=$(awk "$INVENTORY" "$dir/$list")
         [ "$inventory" = none ] || wanted="$wanted states.md"
@@ -361,8 +363,10 @@ report() {
           continue
         elif [ -n "$owed" ]; then
           missing="${missing:+$missing, }$name"
-          if [ -n "$rfolder" ]; then
+          if [ -n "$research" ]; then
             [ -n "$next" ] || next="research (its document: $folder/$rfolder/, still to write there: $owed)"
+          elif [ -n "$rfolder" ]; then
+            [ -n "$next" ] || next="research (its document: $folder/$rfolder/, to write there: $owed)"
           else
             [ -n "$next" ] || next="research (its document: $folder/$under${number}_research/, to write there: $owed)"
           fi
@@ -429,7 +433,7 @@ STAGES
     if [ -n "$research" ]; then
       say "- a changed approach is a new document, the earlier one left as it is: $folder/$slice/${number}_approach.md"
       for file in $stale; do
-        say "- no longer stands, its thing is not committed to in $approach: $folder/$rfolder/$file (left as it is, and said so in its first line)"
+        say "- no longer stands, its thing is not committed to in $approach: $folder/$rfolder/$file (it is left as it is, but for a first line to be added that says so)"
       done
     else
       say "- a changed approach is corrected in place ($folder/$approach): no research is written from it yet"

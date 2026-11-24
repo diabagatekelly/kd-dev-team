@@ -144,6 +144,14 @@ class Fetch(unittest.TestCase):
         self.assertEqual(page.kept(self.folder / "pages"),
                          "- kept: https://docs.example/payments\n- kept: https://docs.example/refunds\n2 pages kept\n")
 
+    def test_the_listing_is_given_by_the_command_itself(self):
+        # Found by the pilot: the command crashed in every run that used it; only the function had been tested.
+        import contextlib, io
+        self.fetch("200")
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = page.main(["kept", str(self.folder / "pages")])
+        self.assertEqual((code, out.getvalue()), (0, "- kept: https://docs.example/payments\n1 pages kept\n"))
+
     def test_a_folder_with_no_page_says_none_is_kept(self):
         self.assertEqual(page.kept(self.folder / "nothing"), "0 pages kept\n")
 

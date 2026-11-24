@@ -90,6 +90,20 @@ class Fixtures(unittest.TestCase):
                 if path.is_file():
                     self.assertIsNone(re.search(cases.REAL.replace("|quickpay", ""), path.read_text(encoding="utf-8"), re.I), path)
 
+    def test_saying_that_nothing_was_recommended_is_no_recommendation(self):
+        # Found by the pilot: "I recommended nothing and changed no other document." failed a good run.
+        pattern = next(check["pattern"] for check in cases.STOPS_THERE if check["name"] == "recommends-nothing")
+        self.assertNotRegex("I recommended nothing and changed no other document.", pattern)
+        self.assertNotRegex("I recommended no provider.", pattern)
+        self.assertRegex("I recommend moving to another provider.", pattern)
+        self.assertRegex("I recommended CardWay earlier.", pattern)
+
+    def test_a_statement_of_the_approach_may_be_quoted_with_its_page_when_nothing_is_read(self):
+        # Found by the pilot: the approach's own quote, repeated as a statement of the documents, is no fact from memory.
+        names = [line for line in (self.case("09b") / "case.yaml").read_text().splitlines() if "quotes-no-page" in line]
+        self.assertEqual(len(names), 1)
+        self.assertIn("quotes-no-page-for-a-state", names[0])
+
     def test_a_check_for_a_fetch_reads_the_command_as_a_session_writes_it(self):
         any_page, of_the_reference = cases.fetched("x")["input_match"], cases.fetched("x", cases.API)["input_match"]
         loop = 'for u in errors statuses; do python3 "$P/page.py" fetch "https://api.payright.example/$u" --to p; done'

@@ -371,7 +371,7 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, "
                       "still to write there: lettera.md)", out)
         self.assertIn("- no longer stands, its thing is not committed to in slice-001/007_approach.md: "
-                      "planning/slice-001/006_research/postbox.md (left as it is, and said so in its first line)\n", out)
+                      "planning/slice-001/006_research/postbox.md (it is left as it is, but for a first line to be added that says so)\n", out)
         self.assertIn("- a changed approach is a new document, the earlier one left as it is: planning/slice-001/008_approach.md", out)
         self.machine.document("slice-001/006_research/lettera.md")
         out = self.report()
@@ -403,7 +403,10 @@ class Stage(unittest.TestCase):
                      slices={1: the_slice("record-a-loan / 1")})
         self.machine.document("slice-001/005_approach.md")
         (self.machine.project / "planning" / "slice-001" / "006_research").mkdir()
-        self.assertIn("- next stage by the documents: research", self.report())
+        out = self.report()
+        # Found by the pilot: with the folder there and empty, the report named a second one, 007_research.
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, to write there: states.md)", out)
+        self.assertNotIn("007_research", out)
 
     def test_the_chosen_slice_is_the_one_read_whatever_other_folders_exist(self):
         out = self.planned(the_set(row(1, "chosen", "record-a-loan"), row(2, "built", "record-a-return"),

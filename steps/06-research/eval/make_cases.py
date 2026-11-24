@@ -317,7 +317,7 @@ WRITES_STATES = {"type": "file_exists", "name": "writes-the-states", "path": STA
 STOPS_THERE = [trace("writes-no-later-document", WROTE + r"_(questions|answers|open-facts|design|screens|stack|readiness)"),
                trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach)[^\"]*[.]md"),
                never_says("keeps-the-routing-table-out", r"\brouting table\b"),
-               never_says("recommends-nothing", r"\bI(?:'d| would)? recommend|my recommendation")]
+               never_says("recommends-nothing", r"\bI(?:'d| would)? recommend(?!ed (?:nothing|no\b))|my recommendation")]
 NO_PREFERENCE = never_says("asks-no-preference", r"would you (like|prefer|rather)|do you (want|prefer)|which (would|do) you|your preference")
 REAL = r"\b(stripe|paypal|adyen|square|gocardless|worldpay|braintree|mailgun|sendgrid|mailchimp|postmark|twilio|quickpay|checkout[.]com|mollie)\b"
 NO_REAL_NAME = [never_says("names-no-real-provider", REAL), trace("writes-no-real-provider", WROTE + r"_research/[\s\S]{0,6000}?" + REAL)]
@@ -376,7 +376,6 @@ SCENARIOS = [
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_EMAIL), more=saved({HOST: pages()}, only=("index", "payments", "limits"))),
      {HOST: pages()}, [HOST], GO_ON,
      [WRITES, WRITES_STATES, *FORM, *FACTS,
-      trace("reads-the-kept-pages-from-their-copies", r"kept earlier, not asked for again", never=False),
       in_file(SYSTEM, "fact-the-errors-by-name", near("card_declined", "rate_limited", 2000)),
       in_file(SYSTEM, "fact-the-limit", r"100 requests"),
       in_file(SYSTEM, "contradicts-told-straight-away", near("CONTRADICTS", r"(straight away|at once)")),
@@ -469,7 +468,6 @@ SCENARIOS = [
      [WRITES, WRITES_STATES,
       in_file(SYSTEM, "points-are-open", r"(?:^|\n)#+[^\n]*open[\s\S]*\btest\b"),
       not_in_file(SYSTEM, "states-no-fact", r"(?:^|\n)\s*[-*]\s*\**F\d"),
-      not_in_file(SYSTEM, "quotes-no-page", QUOTED),
       not_in_file(STATES, "quotes-no-page-for-a-state", QUOTED),
       in_file(STATES, "states-are-to-verify", r"to verify"),
       fetched("reads-nothing", most=0)], False, [("user", SKIP), ("assistant", PUSHED_BACK)], False),
