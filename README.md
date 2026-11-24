@@ -114,13 +114,13 @@ regression build (77 scenarios over six stages).
 
 **Next:**
 
-1. **Research (stage 6): paused at its pilot**
-   (`steps/06-research/README.md`): $2.17 spent, about $40 to
-   finish, in its new place after the approach. Its scenarios were
-   moved to the slice's folder so that they still build. Before it
-   resumes: its cases' made-up approach is rewritten in the form
-   stage 5 settled, and it reads the pages the approach kept
-   (`slice-NNN/pages/`) before fetching any.
+1. **Research (stage 6): its test in its new place is proposed to
+   the owner** (`steps/06-research/README.md`, 2026-11-24): eleven
+   cases, the benchmark on two real plans, about $90, a pilot of
+   about $5 first. Nothing paid is run until it is agreed. Done
+   free: its cases' made-up approach is in the form stage 5 settled,
+   and startup's scenario of a stage not built moves on when
+   research is on trial.
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice

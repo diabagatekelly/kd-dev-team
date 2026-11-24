@@ -62,21 +62,35 @@ class Stage(unittest.TestCase):
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         return done.stdout
 
-    def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
-        # Found by the regression pass with the approach on trial: the scenario still named the
-        # approach as not built, and the session, rightly, did the approach.
+    def not_built(self, trial=""):
+        """Startup's cases as built with that stage's text on trial, their documents laid in the project."""
         import importlib.util
+        import os
+        from unittest import mock
         spec = importlib.util.spec_from_file_location(
             "startup_cases", pathlib.Path(__file__).resolve().parent.parent / "steps/00-startup/eval/make_cases.py")
         cases = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cases)
+        with mock.patch.dict(os.environ, {"KD_TRIAL": trial}):
+            spec.loader.exec_module(cases)
         folder = self.machine.project / "planning"
         for name in cases.NOT_BUILT[1]:
             (folder / name).parent.mkdir(parents=True, exist_ok=True)
             (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8")
         self.machine.run("stage.sh", "remember", "planning")
+        return cases.NOT_BUILT[0]
+
+    def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
+        # Found by the regression pass with the approach on trial: the scenario still named the
+        # approach as not built, and the session, rightly, did the approach.
+        named = self.not_built()
         self.assertIn("- next stage by the documents: research", self.report())
-        self.assertRegex("research", cases.NOT_BUILT[0])
+        self.assertRegex("research", named)
+
+    def test_with_research_on_trial_the_scenario_of_a_stage_not_built_moves_on_to_the_questions(self):
+        named = self.not_built(trial="research")
+        self.assertIn("- next stage by the documents: questions", self.report())
+        self.assertRegex("questions", named)
+        self.assertNotRegex("research", named)
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()

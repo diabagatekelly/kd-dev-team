@@ -8,6 +8,7 @@ The output is a small plugin, `plugin/`, whose one hook hands a session that rep
 Usage: python3 -I make_cases.py [--table]   (rewrites plugin/ beside this file)
 """
 import json
+import os
 import pathlib
 import shutil
 import sys
@@ -39,6 +40,9 @@ DOCUMENTS = {
     "slice-001/005_approach.md": "# Approach: slice 1\n\n## A public catalogue of books, to find a title\n"
                                  "Decision: committed: Shelfmark (the user, 2026-11-23: \"Yes, Shelfmark.\")\n\n"
                                  "## Committed to\n- Shelfmark: https://docs.shelfmark.example/, for finding a title.\n",
+    "slice-001/006_research/shelfmark.md": "# Research: Shelfmark\n\n## What the activity needs from it\n"
+                                           "- F1: A title is found by its words. \"Search by any words of the title.\" "
+                                           "(https://docs.shelfmark.example/search)\n",
     "003_slices.md": "# Slices: the list\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
                      "| 1 | Propose a book and see it on the list | propose-a-book | nothing | chosen |\n",
 }
@@ -48,7 +52,9 @@ THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.
 # moves on each time a stage is adopted (the slice on 2026-11-23, decision 39; the approach on
 # 2026-11-24, decision 41). KD_TRIAL names a stage whose text is loaded on trial, before the owner
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
-NOT_BUILT = (r"\bresearch", [*THROUGH_A_SLICE, "slice-001/005_approach.md"])
+THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
+NOT_BUILT = ((r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md"])
+             if "research" in os.environ.get("KD_TRIAL", "").split(",") else (r"\bresearch", THROUGH_AN_APPROACH))
 
 
 def pull(number, title, branch, unresolved=0):

@@ -6,10 +6,11 @@ the documentation of a made-up payment provider, PayRight, served by the stand-i
 its pages say is known, so what a run found can be counted. An arm adds nothing for this stage
 (`bare`) or this repository's own text (`brief`, from `research-skill.md`).
 
-Two things the report would say are added to it here by hand until the stage script says them:
-which things are to be researched, each with its document, and the command that reads a page. The
-bare arm's routing table is without its last line (a stage with no text is not built), or it
-would rightly stop.
+The made-up approach is in the form stage 5 settled, and the report's list of what to research and
+its page command are the stage script's own. A thing the approach does not commit to (a lasting
+thing, a system with no provider) is still added to the report by hand, until the stage's test in
+its new place is agreed. The bare arm's routing table is without its last line (a stage with no
+text is not built), or it would rightly stop.
 
 Usage: python3 -I make_cases.py ARM      (rewrites plugin-ARM/ beside this file; not kept in git)
 """
@@ -39,13 +40,31 @@ HOST = "docs.payright.example"
 SITE = f"https://{HOST}"
 # Research follows the slice and the approach (decision 36): its documents are in the slice's folder.
 FOLDER = "planning/slice-001/006_research"
+APPROACH = f"""# Approach: slice 1
+
+## Taking a card payment for a renewal
+What the slice needs of it: a subscriber pays for the renewal by card (renew-and-pay / 1).
+Held to: card payments stay with PayRight (000_problem.md, Constraints).
+
+| Way | Does what the slice needs | Card payments stay with PayRight | What it ties us to |
+|---|---|---|---|
+| PayRight ({SITE}/) | "To take a payment, send POST /v1/payments" ({SITE}/payments) | the limit itself | not said on the pages read |
+
+Recommended: PayRight, because the contract fixes it. It gives up nothing the slice needs.
+Not settled by this read: how long a payment takes to settle, and what a refund needs.
+Decision: fixed by a limit: PayRight
+Not taken: no other way was looked at: the provider is the user's limit.
+
+## Committed to
+- PayRight: {SITE}/, for taking a card payment for a renewal.
+"""
 BEFORE = {"003_slices.md": "# Slices: Renew a season ticket\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
                            "| 1 | Renew a season ticket and pay for it | renew-and-pay, see-what-is-not-renewed, refund-a-renewal | nothing | chosen |\n",
           "slice-001/004_slice.md": "# Slice 1: Renew a season ticket and pay for it\n\n## Thin path\nA subscriber renews "
                                     "their season ticket and pays for it by card.\n",
-          "slice-001/005_approach.md": "# Approach: slice 1\n\nCard payments stay with PayRight, as the problem document says.\n"}
+          # In the form stage 5 settled (decision 41): a "Decision:" line a need and the list research starts from.
+          "slice-001/005_approach.md": APPROACH}
 SYSTEM, THING = f"{FOLDER}/payright.md", f"{FOLDER}/renewal-payment.md"
-PAGE_COMMAND = f'- a page of documentation is read with: python3 "@RESEARCH@/page.py" fetch URL --to {FOLDER}/pages\n'
 
 PROBLEM = """# Problem: Season tickets at the playhouse
 
@@ -260,8 +279,11 @@ def main(arm):
         done = machine.run("report.sh")
         assert done.returncode == 0 and "next stage by the documents: research" in done.stdout, done.stdout
         report = done.stdout.replace(str(startup.STARTUP), "@STARTUP@").replace(machine.data.as_posix(), "@DATA@")
-        report += "- to research, from the requirements' inventory: " + "; ".join(
-            f"{thing}, {kind} (its document: {document})" for thing, kind, document in things) + "\n" + PAGE_COMMAND
+        assert "- to research, committed to in planning/slice-001/005_approach.md:" in report and "page.py" in report, report
+        # A thing the approach does not commit to is still listed by hand, until the stage script reads the inventory.
+        extra = [f"{thing}, {kind} (its document: {document})" for thing, kind, document in things if thing != "PayRight"]
+        if extra:
+            report += "- to research, from the requirements' inventory: " + "; ".join(extra) + "\n"
         machine.set("web/allowed", HOST if allowed else "api.anthropic.com")
         for page, text in site.items():
             machine.set(f"web/pages/{HOST}/{page}", text)

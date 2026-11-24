@@ -399,6 +399,9 @@ asking is listed apart, so it can be overturned.
   owner's Mac.
 - **Approaches the user considered and rejected:** kad's skill asked
   and recorded them; no stage here does yet.
+- **A second slice that commits to a thing already researched**
+  (whether the earlier document is carried forward, and what is read
+  again): when an example reaches a second slice's research.
 - **A dependency the user did not name** (a library the design or
   the stack picks) has no way back to research in the order as
   written: with the design and stack stages.
@@ -689,5 +692,32 @@ asking is listed apart, so it can be overturned.
   - The examples could not start from their kept documents (the
     routing table changed), so the pass from the first message
     stood for both; it stopped at the approach, not at a merge.
+- Research in its new place, as proposed (`steps/06-research/README.md`),
+  2026-11-24; not yet agreed:
+  - One document a thing committed to, under the name the stage
+    script already gives; the states of every lasting thing in one
+    `states.md` a slice, so that the questions stage's grid has one
+    place to read.
+  - A page the approach kept is given back from its copy by the page
+    command itself: a script's work, by unit test, not a line of the
+    text a session might skip.
+  - After a change of mind the research folder is kept: the newly
+    committed thing gets its document there, and the document of a
+    thing no longer committed to is left with a first line saying it
+    no longer stands. The stage script names research as next again
+    until every thing committed to has its document.
+  - When the full read shows the commitment cannot do what a
+    criterion needs, research says so and changes nothing: the
+    approach's change of mind and the slice stage already have that
+    work.
+  - The benchmark's approach documents are written by hand from
+    kad's records of what was chosen (private).
+  - Raw runs go to the audit repository under `06-research/`; the
+    first pilot's stay under `04-research/`, the stage's number then.
+  - Startup's scenario of a stage not built names the questions when
+    research is on trial (`KD_TRIAL`), with a made-up research
+    document; a unit test.
+  - The cost put to the owner is about $90, not the $40 guessed at
+    the first pilot, which predates decision 38.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
