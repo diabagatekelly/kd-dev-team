@@ -79,6 +79,12 @@ NEEDS='
 /^#+[ \t]/ { inside = tolower($0) ~ /needs? from outside/; next }
 inside && !said { line = $0; gsub(/[`*_ \t\r]/, "", line); if (line == "") next; said = 1; print (tolower(line) ~ /^none\.?$/ ? "none" : "some") }'
 
+# What the requirements list says of outside systems and lasting things: "none" where the first
+# line under that heading is the word alone, "some" for anything else, nothing where it does not say.
+INVENTORY='
+/^#+[ \t]/ { inside = tolower($0) ~ /outside systems and lasting things/; next }
+inside && !said { line = $0; gsub(/[`*_ \t\r]/, "", line); if (line == "") next; said = 1; print (tolower(line) ~ /^none\.?$/ ? "none" : "some") }'
+
 # The approach, counted (its condition 19). Lines that start with "@" are for this script: how many
 # needs still wait for the user, how many decisions commit to something, how many things "Committed
 # to" lists. The rest is the list research starts from: a line a thing, with the document it gets.
@@ -304,6 +310,7 @@ report() {
     slice=${slice:-slice-001}
   fi
   found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
+  rfolder=""; stale=""
   own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
   [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
@@ -332,7 +339,36 @@ report() {
           skipped="- approach: not needed, slice ${chosen:-${slice#slice-}} needs nothing from outside ($under$own)"
           continue
         fi ;;
-      research) [ "$there" = yes ] && research="$under$is" ;;
+      research)
+        # Research, counted (its condition 17): a document a thing committed to, under the name the
+        # approach's list gives it, and the states of the lasting things unless the requirements name none.
+        [ "$there" = yes ] && research="$under$is" && rfolder="$under${is%/}"
+        wanted=$(say "$counted" | grep -v '^@' | sed 's|.*@RESEARCH@\(.*\))$|\1|')
+        inventory=""; [ -z "$list" ] || inventory=$(awk "$INVENTORY" "$dir/$list")
+        [ "$inventory" = none ] || wanted="$wanted states.md"
+        owed=""
+        for file in $wanted; do
+          [ -n "$rfolder" ] && [ -f "$dir/$rfolder/$file" ] || owed="${owed:+$owed, }$file"
+        done
+        if [ -n "$rfolder" ]; then
+          for file in $(cd "$dir/$rfolder" && ls *.md 2>/dev/null); do
+            case " $(say $wanted) " in *" $file "*) ;; *) [ "$file" = states.md ] || stale="$stale $file" ;; esac
+          done
+        fi
+        if [ -z "$(say $wanted)" ]; then
+          skipped="${skipped:+$skipped
+}- research: not needed, nothing is committed to and the requirements name no lasting thing ($list)"
+          continue
+        elif [ -n "$owed" ]; then
+          missing="${missing:+$missing, }$name"
+          if [ -n "$rfolder" ]; then
+            [ -n "$next" ] || next="research (its document: $folder/$rfolder/, still to write there: $owed)"
+          else
+            [ -n "$next" ] || next="research (its document: $folder/$under${number}_research/, to write there: $owed)"
+          fi
+          continue
+        fi
+        there=yes ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -392,9 +428,9 @@ STAGES
     [ "$commits" = "$listed" ] || say "- the decisions of $approach commit to $commits and its \"Committed to\" lists $listed: research starts from that list, so the two must agree"
     if [ -n "$research" ]; then
       say "- a changed approach is a new document, the earlier one left as it is: $folder/$slice/${number}_approach.md"
-      # A document's number is its place in the order they were made: research numbered before the approach is older than it.
-      [ "$(say "${research#"$slice"/}" | cut -c1-3)" -gt "$(say "${approach#"$slice"/}" | cut -c1-3)" ] \
-        || say "- research ($research) was written before the approach that now stands ($approach): what it holds of a thing no longer committed to does not stand"
+      for file in $stale; do
+        say "- no longer stands, its thing is not committed to in $approach: $folder/$rfolder/$file (left as it is, and said so in its first line)"
+      done
     else
       say "- a changed approach is corrected in place ($folder/$approach): no research is written from it yet"
     fi
@@ -403,7 +439,7 @@ STAGES
     research*)
       if [ -n "$approach" ] && [ "$listed" != 0 ]; then
         say "- to research, committed to in $folder/$approach:"
-        say "$counted" | grep -v '^@' | sed "s|@RESEARCH@|$folder/$slice/${number}_research/|"
+        say "$counted" | grep -v '^@' | sed "s|@RESEARCH@|$folder/${rfolder:-$slice/${number}_research}/|"
       elif [ -n "$approach" ]; then
         say "- nothing is committed to in $folder/$approach: no outside system is researched"
       fi ;;
@@ -411,7 +447,9 @@ STAGES
   case "$next" in
     approach*|research*)
       say "- a page of documentation is read with: $PAGE fetch URL --to $folder/$slice/pages"
-      say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT" ;;
+      say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT"
+      kept=$(ls "$dir/$slice/pages"/*.txt 2>/dev/null | wc -l | tr -d ' ')
+      [ "$kept" = 0 ] || say "- $kept pages are already kept in $folder/$slice/pages, read from their copies: $PAGE kept $folder/$slice/pages" ;;
   esac
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; it is built when merged work names its criteria.

@@ -43,6 +43,8 @@ DOCUMENTS = {
     "slice-001/006_research/shelfmark.md": "# Research: Shelfmark\n\n## What the activity needs from it\n"
                                            "- F1: A title is found by its words. \"Search by any words of the title.\" "
                                            "(https://docs.shelfmark.example/search)\n",
+    "slice-001/006_research/states.md": "# States\n\n## A proposal\n\n| State | Entered by | What the person can do | Way out | Source |\n"
+                                        "|---|---|---|---|---|\n| `proposed` | a member adds a book | withdraw it | withdraw -> `withdrawn` | 002_requirements.md |\n",
     "003_slices.md": "# Slices: the list\n\n| # | Slice | Items | Builds on | State |\n|---|---|---|---|---|\n"
                      "| 1 | Propose a book and see it on the list | propose-a-book | nothing | chosen |\n",
 }
@@ -53,7 +55,7 @@ THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.
 # 2026-11-24, decision 41). KD_TRIAL names a stage whose text is loaded on trial, before the owner
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
 THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
-NOT_BUILT = ((r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md"])
+NOT_BUILT = ((r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"])
              if "research" in os.environ.get("KD_TRIAL", "").split(",") else (r"\bresearch", THROUGH_AN_APPROACH))
 
 

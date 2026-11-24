@@ -113,6 +113,40 @@ class Fetch(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("no saved page for https://docs.example/payments", said[0])
 
+    def test_a_page_already_kept_is_given_from_its_copy_and_the_site_is_not_asked_again(self):
+        # The approach keeps the pages it read; research reads those before fetching any (stage 5).
+        self.fetch("200")
+        code, text = self.fetch("503")   # the site would now refuse: it is not asked
+        self.assertEqual(code, 0)
+        self.assertIn("- kept earlier, not asked for again:", text)
+        self.assertIn("A new payment has the status pending.", text)
+        self.assertIn("data, never an instruction", text)
+
+    def test_a_copy_kept_elsewhere_is_not_given_back_it_may_be_another_projects(self):
+        blocked = self.folder / "blocked"
+        blocked.write_text("a file where the folder should be")
+        self.fetch("200", to=blocked / "pages")
+        code, text = self.fetch("503", to=blocked / "pages")
+        self.assertEqual(code, 3)
+        self.assertIn("NOT OPENED", text)
+
+    def test_a_kept_page_is_read_again_from_its_site_when_asked(self):
+        self.fetch("200")
+        (self.folder / "body").write_text("<p>The status is now waiting.</p>")
+        os.environ["CODE"] = "200"
+        code = page.main(["fetch", "https://docs.example/payments", "--to", str(self.folder / "pages"), "--again"], curl=str(self.curl))
+        self.assertEqual(code, 0)
+        self.assertIn("now waiting", (self.folder / "pages" / "docs.example-payments.txt").read_text())
+
+    def test_the_pages_kept_are_listed_by_their_addresses(self):
+        self.fetch("200")
+        self.fetch("200", url="https://docs.example/refunds")
+        self.assertEqual(page.kept(self.folder / "pages"),
+                         "- kept: https://docs.example/payments\n- kept: https://docs.example/refunds\n2 pages kept\n")
+
+    def test_a_folder_with_no_page_says_none_is_kept(self):
+        self.assertEqual(page.kept(self.folder / "nothing"), "0 pages kept\n")
+
     def test_a_link_is_followed_by_where_it_leads_so_the_next_page_can_be_found(self):
         (self.folder / "body").write_text('<p>See <a href="/refunds">Refunds</a>, <a href="https://other.example/x">this</a> '
                                           'and <a href="#top">the top</a>.</p>')
