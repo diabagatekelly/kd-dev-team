@@ -70,6 +70,11 @@ def as_text(body, base=""):
     return "\n".join(line for line in lines if line) + "\n"
 
 
+def ELSEWHERE():
+    """Where a page's copy is kept when the folder given cannot be written."""
+    return pathlib.Path(tempfile.gettempdir()) / "research-pages"
+
+
 def file_for(url):
     """The name a page is saved under: its address, with what a file name cannot hold made a hyphen."""
     parts = urllib.parse.urlsplit(url)
@@ -105,7 +110,7 @@ def fetch(url, folder, curl="curl"):
     first = ""
     # Kept in the folder given; where that cannot be written, in this machine's folder for
     # temporary files, so the page can still be checked against what is quoted from it.
-    for place in (pathlib.Path(folder), pathlib.Path(tempfile.gettempdir()) / "research-pages"):
+    for place in (pathlib.Path(folder), ELSEWHERE()):
         saved = place / file_for(url)
         try:
             saved.parent.mkdir(parents=True, exist_ok=True)
@@ -156,7 +161,8 @@ def main(arguments):
         return code
     if len(arguments) >= 3 and arguments[0] == "check":
         documents = {path: pathlib.Path(path).read_text(encoding="utf-8", errors="replace") for path in arguments[2:]}
-        wrong = check(documents, pages_in(arguments[1]))
+        # A copy that could not be kept in the folder is looked for where fetch put it instead.
+        wrong = check(documents, {**pages_in(ELSEWHERE()), **pages_in(arguments[1])})
         pairs = sum(len(PAIR.findall(text)) for text in documents.values())
         print("\n".join(wrong + [f"{pairs} quotes, {len(wrong)} wrong"]))
         return 1 if wrong else 0

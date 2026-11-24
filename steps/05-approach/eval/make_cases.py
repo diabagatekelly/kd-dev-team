@@ -89,7 +89,7 @@ LIST = """# Requirements: Renew a season ticket
 Nothing.
 
 ## Outside systems and lasting things
-- PayRight, the card payment service
+- PayRight, the card payment service (its documentation: https://docs.payright.example/)
 - a season ticket
 """
 SET = """# Slices: Renew a season ticket
@@ -344,12 +344,12 @@ def committed_to(holds):
     return section("committed to", holds)
 
 
-FETCHED = {"type": "tool_used", "name": "reads-with-the-page-command", "tool": "Bash", "input_match": r"page\.py[^|;&]*fetch", "min": 1}
+FETCHED = {"type": "tool_used", "name": "reads-with-the-page-command", "tool": "Bash", "input_match": r"page\.py[\s\S]*\bfetch\b", "min": 1}
 
 
 def at_most_four(host):
     return {"type": "tool_used", "name": f"at-most-four-pages-of-{host.split('.')[1]}", "tool": "Bash", "min": 0, "max": 4,
-            "input_match": rf"page\.py[^|;&]*fetch[^|;&]*{host.replace('.', '[.]')}"}
+            "input_match": rf"page\.py[\s\S]*\bfetch\b[\s\S]*{host.replace('.', '[.]')}"}
 
 
 NO_SEARCH = {"type": "tool_used", "name": "does-not-search", "tool": "WebSearch", "min": 0, "max": 0}
@@ -455,7 +455,7 @@ SCENARIOS = [
      [says("offers-the-floated-tool-back", r"Pigeonly"), says("asks-whether-it-may-search", r"\bsearch|look (?:for|up|around)"),
       says("asks-what-is-in-mind-or-ruled-out", r"in mind|ruled out|already (?:use|have|tried)|considered|prefer|know of|thinking of"),
       ASKS, NO_PREFERENCE, NO_SEARCH, NOT_ROUND, *NO_REAL_NAME,
-      {"type": "tool_used", "name": "reads-nothing-before-the-answer", "tool": "Bash", "input_match": r"page\.py[^|;&]*fetch", "min": 0, "max": 0},
+      {"type": "tool_used", "name": "reads-nothing-before-the-answer", "tool": "Bash", "input_match": r"page\.py[\s\S]*\bfetch\b", "min": 0, "max": 0},
       {"type": "regex", "name": "commits-to-nothing", "target": "trace", "match": "not_contains",
        "pattern": WROTE + r"_approach[\s\S]{0,6000}?Decision:?\**:?\s*\**(?:committed|fixed by)"}],
      None, False),

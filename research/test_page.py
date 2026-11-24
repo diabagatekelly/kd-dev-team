@@ -70,6 +70,19 @@ class Fetch(unittest.TestCase):
         self.assertRegex(said.splitlines()[1], r"^- saved: .*research-pages")
         self.assertIn("status pending", said)
 
+    def test_a_page_kept_elsewhere_is_still_found_by_the_check(self):
+        # Found by the approach's pilot: the copy was kept elsewhere, the check looked only in the folder
+        # given, and a session reported every quote as wrong.
+        blocked = self.folder / "a-file"
+        blocked.write_text("")
+        self.fetch("200", to=blocked / "pages")
+        document = self.folder / "approach.md"
+        document.write_text('| A way | "A new payment has the status pending" (https://docs.example/payments) |\n')
+        import contextlib, io
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = page.main(["check", str(blocked / "pages"), str(document)])
+        self.assertEqual((code, out.getvalue().strip()), (0, "1 quotes, 0 wrong"))
+
     def test_a_link_is_followed_by_where_it_leads_so_the_next_page_can_be_found(self):
         (self.folder / "body").write_text('<p>See <a href="/refunds">Refunds</a>, <a href="https://other.example/x">this</a> '
                                           'and <a href="#top">the top</a>.</p>')

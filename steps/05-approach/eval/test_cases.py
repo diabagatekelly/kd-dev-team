@@ -85,6 +85,16 @@ class Checks(unittest.TestCase):
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 5), ["at-most-four-pages-of-postbox"])
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1), ["reads-with-the-page-command"])
 
+    def test_a_page_read_through_a_variable_or_in_a_loop_is_still_read_with_the_command(self):
+        loop = ("Bash", json.dumps({"command": 'P="/p/startup/../research/page.py"; for u in https://docs.postbox.example/ https://docs.lettera.example/; '
+                                               'do python3 "$P" fetch $u --to planning/slice-001/pages; done'}))
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [loop]), [])
+        check = ("Bash", json.dumps({"command": 'python3 "/p/research/page.py" check planning/slice-001/pages planning/slice-001/005_approach.md'}))
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [check]), ["reads-with-the-page-command"])
+
+    def test_the_fixed_providers_documentation_has_its_address_in_the_documents(self):
+        self.assertIn("https://docs.payright.example/", cases.playhouse(cases.PAY)["002_requirements.md"])
+
     def test_a_later_stages_word_a_changed_criterion_or_a_sign_up_fails(self):
         text = cases.WAITING + "\nWe would call it from a Python library on a cron.\n"
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: text}, ASK_1, [FETCH], wrote(DOC, text)), ["nothing-of-a-later-stage"])
