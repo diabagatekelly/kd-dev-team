@@ -177,7 +177,7 @@ free checks only, no model judge:
   slices, a chosen slice, its approach and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
 - `--through research` carries an example on from the approach
-  through research. `--from requirements` (or `slice`, or `approach`) starts an example
+  through research. `--from requirements` (or `slice`, `approach`, or `research`) starts an example
   from the documents its last good run left (`--keep STAGE` on that
   run keeps them); it is refused once an earlier stage's text or the
   routing table has changed.
