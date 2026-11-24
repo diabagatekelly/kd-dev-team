@@ -121,8 +121,9 @@ their words; each way not taken with its reason; the line under
 "Committed to".
 
 When the user picks a way the table shows breaking a limit of theirs
-or failing a criterion, record nothing yet. Say once what it costs
-them, with the quote, and offer the recommended way again. If they
+or failing a criterion, record nothing yet, even where your
+recommendation already said so: the choice is new. Say once what it
+costs them, with the quote, and offer the recommended way again. If they
 still want it, it is theirs: record it in their words, and say which
 limit or criterion it changes and that the requirements stage (or
 the slice stage, for a criterion) takes that up. Change neither
@@ -140,7 +141,8 @@ Corrected in place: the decision, "Not taken" and "Committed to"
 rewritten, and a line `Changed: <date>: <what, and why in their
 words>` under the need. A new document: the whole approach under
 the name the report gives, the earlier one left as it is, and your
-reply says which research no longer stands.
+reply names each research document written from a way no longer
+committed to: it no longer stands.
 
 **Stop there.** Nothing is signed up for, installed, created or
 paid. No library, language, storage or hosting; no structure; no
