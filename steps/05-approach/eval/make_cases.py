@@ -249,6 +249,15 @@ WITHOUT_FAILS = "Does not meet remind-before-lapse / 1: someone at the office ha
 
 def email_need(decision, cap=20, uk=True, changed=""):
     breaks = "Breaks the limit: "
+    text = _email_need(decision, cap, uk, changed, breaks)
+    if uk:
+        return text
+    # No rule about where data is kept: no column for it (a column is a limit of the user's, and no other).
+    return "\n".join("|".join(cell for place, cell in enumerate(line.split("|")) if place != 4) if line.startswith("|") else line
+                     for line in text.split("\n"))
+
+
+def _email_need(decision, cap, uk, changed, breaks):
     return f"""## Sending a subscriber an email
 What the slice needs of it: an email sent on a set day with nobody at the office doing anything (remind-before-lapse / 1).
 Held to: no more than £{cap} a month on any new service{" and subscribers' addresses kept in the UK" if uk else ""} (000_problem.md, Constraints; 002_requirements.md, Limits that apply).

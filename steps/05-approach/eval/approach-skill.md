@@ -104,8 +104,9 @@ leaving. When the document is written, run the report's check
 command on it and put right what it finds.
 
 **Recommend.** One way a need, from the table, and what it gives up.
-Where the way without meets every criterion, recommend it: nothing
-is committed to before a slice needs it. Say what the read did not
+Look at the way without first: where it meets every criterion it is
+the recommendation, whatever a candidate offers besides. Nothing is
+committed to before a slice needs it. Say what the read did not
 settle; where the choice hangs on it, say what the user would be
 accepting unseen.
 

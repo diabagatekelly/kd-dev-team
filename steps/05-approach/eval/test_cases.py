@@ -104,6 +104,14 @@ class Checks(unittest.TestCase):
         text = cases.WAITING + "\nWe would host the tool on a small server and deploy it weekly.\n"
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: text}, ASK_1, [FETCH], wrote(DOC, text)), ["nothing-of-a-later-stage"])
 
+    def test_an_approach_at_the_start_has_no_column_that_is_not_a_limit_of_the_users(self):
+        # Found by tuning: with no rule about where data is kept the made-up approach still had a column
+        # for it, and a session took the column for a limit and pushed back on the user's change of mind.
+        self.assertNotIn("addresses are kept", cases.BOTH_FIT)
+        self.assertNotIn("United States", cases.BOTH_FIT)
+        self.assertEqual({line.count("|") for line in cases.BOTH_FIT.splitlines() if line.startswith("|")}, {5})
+        self.assertEqual({line.count("|") for line in cases.WAITING.splitlines() if line.startswith("|")}, {6})
+
     def test_more_than_four_pages_of_one_candidate_fails(self):
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 5), ["at-most-four-pages-of-postbox"])
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1), ["reads-with-the-page-command"])
