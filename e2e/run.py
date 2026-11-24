@@ -485,7 +485,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             merged, back = merge(project, planning), 0
             number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
             session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged
-        same = same + 1 if said == turn["user"] else 0
+        same = same + 1 if said == turn["user"] and not appeared else 0   # a turn that left a new document moved on
         if same == 2:   # said twice running, and this would be the third time
             ended = "stuck: the user had only the same thing to say"
             break

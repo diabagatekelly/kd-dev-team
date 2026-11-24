@@ -248,7 +248,7 @@ class Run(unittest.TestCase):
         summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 20,
                           command=(sys.executable, str(fake)))
         self.assertEqual(summary["ended"], "stuck: the user had only the same thing to say")
-        self.assertEqual(summary["session_turns"], 3)   # said twice, and about to be said a third time
+        self.assertEqual(summary["session_turns"], 4)   # said twice with no new document, and about to be said a third time
 
     def test_a_request_with_no_question_mark_still_reaches_the_sorter(self):
         # Found by an end-to-end run: "give me the path" was taken for nothing asked, and the user said "Go on."
@@ -439,6 +439,11 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["research"], ["plans/slice-002/006_research/states.md"])
         self.assertIn("plans/slice-002/006_research/states.md", summary["documents"])
         self.assertEqual(summary["merged"], "")
+
+    def test_the_same_word_to_go_on_is_not_stuck_while_a_document_appears_each_turn(self):
+        # Found by example 1 from the first message: "Yes, go on" after the slice, the approach and before research ended the run as stuck.
+        summary, _ = self.through(fake=self.RESEARCH, brief=BRIEF, through="research")
+        self.assertEqual(summary["ended"], "the research was written")
 
     def test_research_that_is_never_written_ends_the_run_as_stuck(self):
         summary, _ = self.through(fake=self.RESEARCH.replace("if n == 8:", "if n == 98:"), brief=self.SPOKEN, through="research")
