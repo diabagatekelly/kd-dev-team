@@ -1,10 +1,71 @@
 # Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-24: agreed at about $90 (the owner: the cost and
-point 3 "fine"; point 1 below was asked about and is not yet
-agreed). The pilot in its new place is run: $5.23 of the $5
-guessed. Nothing else paid is run until its cost is reported.**
-Research stays a stage up front (decision 42).
+**State, 2026-11-24: agreed at about $90 (decision 43); the pilot,
+the three runs and two rounds of tuning are run; the closing passes
+are running.** Research stays a stage up front (decision 42).
+
+## The runs after the pilot (2026-11-24)
+
+| Pass | Arm | Model | Pass every check | Cost |
+|---|---|---|---|---|
+| Three runs a case (eleven cases) | our text, 141 lines | Sonnet 5.5 | 33 of 33 | $6.67 |
+| | our text | Haiku 5.5 | 16 of 33 | $0.52 |
+| | bare | Sonnet 5.5 | 10 of 33 | $4.69 |
+| | bare | Haiku 5.5 | 9 of 33 | $0.40 |
+| | kad's `domain-model` (two cases) | Sonnet 5.5 | 0 of 6 | $0.60 |
+| The first plan, three real runs | our text | Sonnet 5.5 | 8, 9, 8 of the key's 13: 64%; 7 in every run | $3.07 |
+| | bare | Sonnet 5.5 | 6, 4, 4: 36% | $1.17 |
+| Tuning, first round: a long page read by its parts | our text, 145 lines, every case once | Sonnet 5.5 | 12 of 12 | $2.49 |
+| | the new case of a long page, four runs | Sonnet 5.5 | 4 of 4 (bare: 0 of 3) | $1.61 |
+| | our text, every case once | Haiku 5.5 | 7 of 12 | $0.21 |
+| | the first plan, three real runs | Sonnet 5.5 | 9, 10, 9: 71%; 7 in every run | $3.80 |
+| Tuning, second round: the first plan, three real runs | our text, 149 lines | Sonnet 5.5 | 10, 10, 10: 76%; 10 in every run | $4.42 |
+
+The counts of the cases are after checks of mine that failed good
+answers were corrected and the kept runs graded again for nothing
+(as first graded: 31 of 33 on Sonnet in the three runs, 10 of 12 in
+the tuning). In every run with our text on Sonnet every quote was
+on its page: 857 in the three runs of the cases, and 312, 348 and
+343 in the three sets of real runs.
+
+**The benchmark, as it stands on the first plan.** By the key's
+patterns as written before any run, 76% against the 80% set, and 10
+of 13 in every run against the two thirds set. As read, two of the
+three facts counted missing are in the documents in other words (the
+login typed into the provider's own screen where a bank has none, in
+two runs; an account's identifier changing, in one), which is 85%;
+the third, how long a first pull takes, is on a page no run opened.
+The patterns are not changed after the runs: both numbers are given.
+
+**What the three runs and the tuning found** (decision 29):
+
+- **A long page was never read to its end.** The real provider's
+  reference pages are 60 to 220 KB. A session's shell cut the page
+  command's output, and the session then searched the saved copy for
+  the words it thought of: the pages holding the missing facts had
+  been fetched in all three runs. One run wrote "the pages give no
+  minutes" of a wait that a page it had fetched states. The page
+  reader now gives a page over 300 lines as its headings, each with
+  its lines, and a command reads a part (eleven unit tests); the
+  text says to read every part about a call the slice makes, the
+  errors and the limits, and not to search in place of reading. A
+  twelfth case holds a fact deep in a long made-up page: 4 of 4 with
+  the text, 0 of 3 bare.
+- **The text gained twelve lines in all:** the reference pages are
+  read whatever the criteria say; a long page by its parts; what
+  names a thing on the other side and whether that can change; how a
+  failure is told from a success; an open point is searched for in
+  the kept pages before it is left open.
+- **Five checks were wrong,** each corrected with a unit test: the
+  tool's patterns have no `\A` for the start of a file; "the card's
+  bank refused the payment", quoted from a page now read, was taken
+  for a page refused, and so was "None: both were opened after the
+  site was allowed"; a loop that names the addresses before the
+  command was not counted as reading them; "the payments page" was
+  not taken as naming the page.
+- **Haiku with the text** does not hold: it does not load the text
+  when told to skip the reading or when the site is allowed, and
+  writes a dead end as a row without recording it for the owner.
 
 ## The pilot in its new place (2026-11-24, $5.23)
 
