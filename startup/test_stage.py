@@ -168,7 +168,8 @@ class Stage(unittest.TestCase):
 
     # The approach, counted (its condition 19).
     ONE = the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it"))
-    PAGE = 'python3 "' + pathlib.Path(__file__).resolve().parent.as_posix() + '/../research/page.py"'
+    # The end of the reader's path: its start is written as the shell writes it, which on Windows is not as Python does.
+    PAGE = '/startup/../research/page.py"'
 
     def approached(self, text, needs="A way to tell the member."):
         self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1", needs=needs)})
@@ -200,9 +201,9 @@ class Stage(unittest.TestCase):
 
     def test_the_page_command_is_given_while_the_approach_or_research_is_next(self):
         out = self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1")})
-        self.assertIn(f"- a page of documentation is read with: {self.PAGE} fetch URL --to planning/slice-001/pages\n"
-                      f"  and every quote written from one is then looked for in its saved page: {self.PAGE} check "
-                      "planning/slice-001/pages DOCUMENT\n", out)
+        self.assertRegex(out, r'\n- a page of documentation is read with: python3 "[^"\n]+' + self.PAGE + r" fetch URL --to planning/slice-001/pages\n"
+                              r'  and every quote written from one is then looked for in its saved page: python3 "[^"\n]+' + self.PAGE
+                              + r" check planning/slice-001/pages DOCUMENT\n")
         self.assertIn(" fetch URL --to planning/slice-001/pages", self.approached(the_approach("Decision: without")))
         self.machine.document("slice-001/006_research/a.md")
         self.assertNotIn("page.py", self.report())
