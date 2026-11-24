@@ -114,14 +114,13 @@ regression build (77 scenarios over six stages).
 
 **Next:**
 
-1. **Research (stage 6): its test in its new place is proposed to
-   the owner** (`steps/06-research/README.md`, 2026-11-24): eleven
-   cases, the benchmark on two real plans, about $90, a pilot of
-   about $5 first. Nothing paid is run until it is agreed. Built
-   free, with unit tests, and run by no session yet: the stage
-   script's count of research, the page reader's kept copies, the
-   eleven cases, the revised text and the driver's `--through
-   research`. The owner keeps research up front (decision 42).
+1. **Research (stage 6): agreed at about $90, and piloted in its
+   new place** (`steps/06-research/README.md`, 2026-11-24): $5.23
+   spent. With the text on Sonnet 10 of 11 cases pass once, the
+   eleventh a script's fault since fixed; one real run holds 9 of
+   its key's 13 facts, under the bar. One point of the proposal is
+   still the owner's to settle. The owner keeps research up front
+   (decision 42).
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice

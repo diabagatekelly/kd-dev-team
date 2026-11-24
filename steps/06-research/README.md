@@ -1,16 +1,62 @@
 # Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-24: proposed to the owner in its new place, after the
-approach (decisions 36 and 41). The owner has kept research as a
-stage up front (decision 42); the cost and the two points below are
-not yet agreed, and no paid run has been made since the first pilot
-($2.17, 2026-11-23, further down).** Built free, with unit tests:
-the stage script's count (condition 17), the page reader's kept
-copies, the eleven cases in three arms (`eval/make_cases.py`), the
-text revised to 137 lines (`eval/research-skill.md`), the driver's
-`--through research`, and startup's scenario of a stage not built
-moving on when research is on trial. **No session has run any of
-it.**
+**State, 2026-11-24: agreed at about $90 (the owner: the cost and
+point 3 "fine"; point 1 below was asked about and is not yet
+agreed). The pilot in its new place is run: $5.23 of the $5
+guessed. Nothing else paid is run until its cost is reported.**
+Research stays a stage up front (decision 42).
+
+## The pilot in its new place (2026-11-24, $5.23)
+
+Each of the eleven cases once; kad's skill on the two cases of
+states; one real run on the first plan.
+
+| Arm | Model | Pass every check | Cost |
+|---|---|---|---|
+| Our text, 137 lines | Sonnet 5.5 | 10 of 11 | $2.31 |
+| Our text | Haiku 5.5 | 6 of 11 | $0.18 |
+| Bare | Sonnet 5.5 | 1 of 11 | $1.53 |
+| Bare | Haiku 5.5 | 3 of 11 | $0.11 |
+| kad's `domain-model` (two cases) | Sonnet 5.5 | 0 of 2 | $0.21 |
+| One real run, our text | Sonnet 5.5 | 9 of the key's 13 facts | $0.89 |
+
+One run each: these say where each arm stands, not whether it
+holds. The counts are after two checks of mine were corrected and
+the runs graded again for nothing (as first graded, the text on
+Sonnet passed 7). With the text on Sonnet every quote was on its
+page: 304 in the eleven runs, 86 in the real one.
+
+- **The one failure with the text on Sonnet was my script's:** the
+  document was sound and written in a folder numbered 007, which the
+  report named once the empty 006 folder existed.
+- **Bare, Sonnet reads and quotes well** and lacks what nothing
+  tells it: the marks on what the documents say, the open points
+  with a test, the states of a thing the product keeps (it wrote
+  none), the pushing back when told to skip the reading (it wrote
+  from the approach at once).
+- **kad's skill** wrote nothing in either case: it stopped to ask
+  its one question a dead end first, as it was built to, and so
+  recommended.
+- **Haiku with the text** did not load the text on the two "skip
+  the reading" cases, and did not finish the document when the site
+  was allowed.
+- **The real run** (three minutes, 19 pages, 13 of them kept by the
+  approach; 46 facts, 14 statements checked, 11 open points, 10
+  states): 9 of the key's 13 facts, under the bar of 80%. The four
+  missing are all on the provider's error pages and on how long a
+  first pull takes, which it wrote as an open point: pages it did
+  not open. The first pilot's run read 25 pages and held 11. For
+  the tuning.
+
+What the pilot found, each now a unit test (decision 29):
+
+| What it met | Now |
+|---|---|
+| The command that lists the kept pages crashed every time it was used: only its function had a test | a unit test through the command itself |
+| With the research folder there and empty, the report named a second folder, and a session rightly wrote there | the folder already there is the one named: unit test |
+| "It is left as it is, and said so in its first line" read as though the line were already there | the report and the text say the line is to be added |
+| "I recommended nothing" failed the check for a recommendation; the approach's own quote, repeated as a statement of the documents, failed "quotes no page" | both checks corrected, with unit tests; the kept runs graded again |
+| A check that a kept page was read from its copy looked for the page command's words, and sessions read the copies as files | dropped: that a kept page is not asked for again is the script's, by unit test |
 
 ## What it is
 
