@@ -1,6 +1,6 @@
 # Stage 5, the approach: the test, set before anything is built or run
 
-**State, 2026-11-24: agreed (decision 40) at about $90; $74.42 spent.
+**State, 2026-11-24: agreed (decision 40) at about $90; $75.11 spent.
 The text (153 lines, `eval/approach-skill.md`) passes its thirteen
 cases 65 times of 65 on Sonnet 5.5 and 57 of 65 on Haiku 5.5: the
 stage holds on Sonnet and not on Haiku.** Every earlier stage's cases
@@ -12,7 +12,12 @@ and the real choice ran with the text as it stood before its last
 edits (the limits-first read for the examples and the first three
 real runs; the line on a page's instruction for all of them). The
 real run on the owner's Mac is held off. **The owner has said the
-stage holds (decision 41).**
+stage holds (decision 41).** On adopting it: an end-to-end run
+through a merge now waits for the approach to be decided before the
+merge is made up; the examples' kept documents were refreshed
+through the approach (made with the text two small edits before the
+final one, and marked as current); examples 2 and 4 were run from
+them through a merge and came back to the set ($0.58).
 
 ## The runs after the pilot (2026-11-24)
 
