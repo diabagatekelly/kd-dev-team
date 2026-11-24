@@ -410,6 +410,25 @@ asking is listed apart, so it can be overturned.
     the planner's choice or the owner's decision, `to verify` rows
     become tests, a state with no way out goes to the owner's list.
 
+44. **The research stage holds, on Sonnet 5.5** (the owner: "Yes",
+    2026-11-24, after asking how much the missed facts matter and
+    whether later stages would catch them). Its text is adopted
+    (149 lines), its twelve cases join the regression build,
+    startup's case of a stage not built moves on to the questions,
+    and an end-to-end run merges a slice only once its research is
+    written or there is nothing to research. Adopted knowing what
+    it does not meet: on the plan it was tuned on, 76% of the key's
+    facts by pattern against 80% (85% as read); on the other, 7 of
+    11 in every run against two thirds. **The owner's condition:**
+    before the questions, answers and tests stages (7 to 9) are put
+    to the owner stacked on this one, it is verified that the gaps
+    research leaves are closed by then: for both real plans, each
+    fact of the key that a research run lacks is counted again
+    after those stages, by the same keys, and any still missing is
+    named with its kind. A provider-specific fact no general
+    question prompts for (an identifier that changes later) is the
+    kind expected to remain, and its fix belongs to the questions
+    library.
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

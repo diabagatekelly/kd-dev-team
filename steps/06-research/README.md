@@ -1,8 +1,14 @@
 # Stage 6, research: the test, set before anything is built or run
 
-**State, 2026-11-24: every pass agreed is run, $81.34 of the $90
-agreed (decision 43). Put to the owner; not adopted.** Research
-stays a stage up front (decision 42).
+**State, 2026-11-24: adopted on Sonnet 5.5 (decision 44). Every pass
+agreed was run, $81.34 of the $90 agreed (decision 43), before the
+adoption checks.** Research stays a stage up front (decision 42).
+
+**Carried to stages 7 to 9 (the owner's condition, decision 44):**
+the gaps below are to be shown closed once the questions, answers
+and tests are stacked on this stage. For both real plans, each fact
+of the key that a research run lacks is counted again after those
+stages, by the same keys.
 
 ## The closing passes (2026-11-24), final text of 149 lines
 

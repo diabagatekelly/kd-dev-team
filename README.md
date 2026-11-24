@@ -29,7 +29,8 @@ design are recorded under `next-plugin/validation/`.
 
 | `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
 | `steps/05-approach/eval/approach-skill.md` | stage 5's text, 153 lines, adopted on Sonnet 5.5 (decision 41): each thing the chosen slice needs from outside compared on the user's limits from the candidates' own pages, one way recommended, the commitment asked and recorded |
-| `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
+| `steps/06-research/eval/research-skill.md` | stage 6's text, 149 lines, adopted on Sonnet 5.5 (decision 44): what the documentation says about each thing the approach committed to, every fact with its page and a quote, the plan's statements checked against it, what is not said left open with a test; and the states of each lasting thing the slice touches |
+| `research/` | for stages 5 and 6: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
@@ -37,8 +38,8 @@ design are recorded under `next-plugin/validation/`.
 
 ## Where the work stands (2026-11-23)
 
-Stages 0 to 5 hold (startup, the problem, the scope map, the
-requirements, the slice, the approach), all on Sonnet 5.5. After the owner said
+Stages 0 to 6 hold (startup, the problem, the scope map, the
+requirements, the slice, the approach, research), all on Sonnet 5.5. After the owner said
 each of the first four holds, they were run together, end to end,
 and their texts changed from what those runs found (decisions 28 to
 32). Where each stands:
@@ -112,18 +113,31 @@ regression build (77 scenarios over six stages).
   (`examples/NAME/after/approach/`); a run through a merge waits for
   the approach to be decided.
 
+**Stage 6, research, holds** (decision 44,
+`steps/06-research/README.md`), on Sonnet 5.5: facts before
+decisions. Its text is adopted and its twelve cases join the
+regression build (89 scenarios over seven stages).
+
+- Sonnet 60 of 60 over five runs of twelve cases with the final
+  text, every quote on its page; Haiku 39 of 60, and does not hold.
+- On two real plans, counted against the facts each plan as built
+  got wrong: 84% on the plan the text was not tuned on (7 of 11 in
+  every run), 76% on the one it was tuned on (85% as read).
+- Adopted with a condition of the owner's: the gaps it leaves are
+  shown closed once stages 7 to 9 are stacked on it, by the same
+  keys.
+- The examples' kept documents reach research
+  (`examples/NAME/after/research/`); a run through a merge waits for
+  the research to be written.
+
 **Next:**
 
-1. **Research (stage 6): every pass agreed is run, $81.34 of about
-   $90, and it is put to the owner** (`steps/06-research/README.md`,
-   2026-11-24). With the text on Sonnet all twelve cases pass in
-   five runs of five, and no quote is off its page; on Haiku 39 of
-   60. On a real plan the text was not tuned on, three runs hold
-   84% of the facts the plan as built got wrong (the bar: 80%), 7
-   of 11 in every run (the bar: two thirds, one short). On the plan
-   it was tuned on, 76% by the key's patterns, 85% as read. The
-   four examples carry on through research from the first message.
-   Not adopted until the owner says it holds.
+1. **The questions (stage 7).** Research (stage 6) is adopted on
+   Sonnet 5.5 (decision 44; `steps/06-research/README.md`). The
+   owner's condition travels with it: before stages 7 to 9 are put
+   to the owner, the facts research missed on the two real plans
+   are counted again after those stages, by the same keys, to show
+   the gaps are closed.
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice

@@ -481,7 +481,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             if since == 4:
                 ended = f"the approach was written and four turns later {left} of its needs still waited"
                 break
-        if through == "merge" and not merged and "slice" in seen and (left == 0 or needs_nothing(planning)):
+        # ... and once its research is written, or there is nothing to research (decision 44).
+        researched = bool(research(planning)) or nothing_to_research(planning)
+        if through == "merge" and not merged and "slice" in seen and (left == 0 or needs_nothing(planning)) and researched:
             merged, back = merge(project, planning), 0
             number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
             session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged

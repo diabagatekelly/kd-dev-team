@@ -81,13 +81,9 @@ class Stage(unittest.TestCase):
 
     def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
         # Found by the regression pass with the approach on trial: the scenario still named the
-        # approach as not built, and the session, rightly, did the approach.
+        # approach as not built, and the session, rightly, did the approach. With research adopted
+        # (decision 44) the first stage not built is the questions.
         named = self.not_built()
-        self.assertIn("- next stage by the documents: research", self.report())
-        self.assertRegex("research", named)
-
-    def test_with_research_on_trial_the_scenario_of_a_stage_not_built_moves_on_to_the_questions(self):
-        named = self.not_built(trial="research")
         self.assertIn("- next stage by the documents: questions", self.report())
         self.assertRegex("questions", named)
         self.assertNotRegex("research", named)

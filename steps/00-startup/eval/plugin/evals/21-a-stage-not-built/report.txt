@@ -14,14 +14,10 @@ Documents
 - after a stage is finished, read the documents again: CLAUDE_PLUGIN_DATA="@DATA@" sh "@STARTUP@/stage.sh" report
 - a file of the user's (a sheet, an export) is never opened here: the user runs, in a terminal on their own
   machine, this plugin's `sh startup/source.sh describe FILE`, and pastes what it prints
-- found: problem (000_problem.md), scope map (001_scope-map.md), requirements (002_requirements.md), the set of slices (003_slices.md), slice (slice-001/004_slice.md), approach (slice-001/005_approach.md)
+- found: problem (000_problem.md), scope map (001_scope-map.md), requirements (002_requirements.md), the set of slices (003_slices.md), slice (slice-001/004_slice.md), approach (slice-001/005_approach.md), research (slice-001/006_research/)
 - requirements (002_requirements.md): 0 items, 0 checked
 - slices (003_slices.md): 1 slice, 0 built, 1 chosen, 0 open
 - a slice names an item the requirements do not hold: propose-a-book (slice 1)
 - a changed set is corrected in place (planning/003_slices.md): no slice is built from it yet
-- a changed approach is corrected in place (planning/slice-001/005_approach.md): no research is written from it yet
-- to research, committed to in planning/slice-001/005_approach.md:
-  - Shelfmark, for finding a title (its documentation: https://docs.shelfmark.example/; its document: planning/slice-001/006_research/shelfmark.md)
-- a page of documentation is read with: python3 "@STARTUP@/../research/page.py" fetch URL --to planning/slice-001/pages
-  and every quote written from one is then looked for in its saved page: python3 "@STARTUP@/../research/page.py" check planning/slice-001/pages DOCUMENT
-- next stage by the documents: research (its document: planning/slice-001/006_research/)
+- a changed approach is a new document, the earlier one left as it is: planning/slice-001/007_approach.md
+- next stage by the documents: questions (its document: planning/slice-001/007_questions.md)

@@ -20,7 +20,8 @@ SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
           "scope-map": "steps/02-scope-map/eval/scope-map-skill.md",
           "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md",
           "slice": "steps/04-slice/eval/slice-skill.md",
-          "approach": "steps/05-approach/eval/approach-skill.md"}
+          "approach": "steps/05-approach/eval/approach-skill.md",
+          "research": "steps/06-research/eval/research-skill.md"}
 HOOK = """#!/bin/sh
 # The startup report of this machine and project, then what to do with it.
 sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"

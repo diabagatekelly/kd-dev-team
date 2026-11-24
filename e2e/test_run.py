@@ -298,11 +298,15 @@ class Run(unittest.TestCase):
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
 
+    def listing_nothing(self, fake):
+        return fake.replace('write_text("- [ ] **a**: b")', self.NONE_LISTED)
+
     def through(self, fake=None, brief=BRIEF, turns=20, through="merge", out="out"):
         # A second run in one test takes a folder of its own: on Windows a run's repository cannot be swept away.
         (self.example / "brief.md").write_text(brief)
         script = self.folder / "fake.py"
-        script.write_text(fake or self.THROUGH)
+        # A run through a merge with no fake of its own lists no lasting thing: nothing to research before the merge.
+        script.write_text(fake or (self.listing_nothing(self.THROUGH) if through == "merge" else self.THROUGH))
         (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
         summary = run.run(self.example, self.folder / out, self.folder / "plugin", "m", "s", turns,
                           command=(sys.executable, str(script)), through=through)
@@ -344,7 +348,7 @@ class Run(unittest.TestCase):
 
     def test_a_session_that_never_marks_the_merged_slice_is_given_four_turns(self):
         # Found by the pilot: asked what is next after a merge, a session names the coming-back and waits for the word.
-        summary, sessions = self.through(fake=self.THROUGH.replace("if n == 6:", "if n == 7:"))
+        summary, sessions = self.through(fake=self.listing_nothing(self.THROUGH).replace("if n == 6:", "if n == 7:"))
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the slice was merged and the session came back to the set", 7))
 
     def test_asked_where_to_start_the_user_takes_the_recommended_slice_unless_the_brief_says_otherwise(self):
@@ -361,7 +365,7 @@ class Run(unittest.TestCase):
         self.assertFalse(run.in_order(["001_scope-map.md", "002_requirements.md"]))
 
     def test_a_slice_with_no_criterion_it_can_read_is_merged_as_naming_nothing(self):
-        fake = self.THROUGH.replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
+        fake = self.listing_nothing(self.THROUGH).replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
         summary, _ = self.through(fake=fake)
         self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
 
@@ -383,13 +387,22 @@ class Run(unittest.TestCase):
         self.assertIn("plans/slice-002/005_approach.md", summary["documents"])
 
     def test_carried_through_a_merge_the_slice_is_merged_only_once_its_approach_is_decided(self):
-        fake = self.APPROACH.replace("    if n == 99:\n", "    if n == 8:\n")
+        fake = self.listing_nothing(self.APPROACH).replace("    if n == 99:\n", "    if n == 8:\n")
         summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
         self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
                          ("the slice was merged and the session came back to the set", 8, 0))
         said = [call[call.index("-p") + 1] for call in sessions]
         self.assertEqual(said[7], "That slice is built and merged. What's next?")
         self.assertNotIn("merged", said[6])
+
+    def test_carried_through_a_merge_the_slice_is_merged_only_once_its_research_is_written(self):
+        # Decision 44: research is adopted, so the made-up merge waits for it where there is something to research.
+        fake = self.RESEARCH.replace("    if n == 99:\n", "    if n == 9:\n")
+        summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
+        self.assertEqual(summary["ended"], "the slice was merged and the session came back to the set")
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[8], "That slice is built and merged. What's next?")
+        self.assertFalse(any("merged" in one for one in said[:8]))
 
     def test_carried_through_a_merge_a_need_that_goes_on_waiting_ends_the_run_unmerged(self):
         summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN)

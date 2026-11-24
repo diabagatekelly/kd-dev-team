@@ -11,7 +11,7 @@ execution:
   allowed_tools: [Read, Glob, Grep, Bash, Write, Edit]
 runs: 3
 graders:
-  - {"type": "regex", "name": "names-the-stage", "target": "last_message", "flags": "i", "pattern": "\\bresearch"}
+  - {"type": "regex", "name": "names-the-stage", "target": "last_message", "flags": "i", "pattern": "\\bquestions"}
   - {"type": "regex", "name": "says-it-is-not-built", "target": "last_message", "flags": "i", "pattern": "not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"}
   - {"type": "regex", "name": "does-not-offer-another-way", "target": "last_message", "flags": "i", "pattern": "informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look|research|draft|cut|slice|compare)", "match": "not_contains"}
   - {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}

@@ -8,7 +8,6 @@ The output is a small plugin, `plugin/`, whose one hook hands a session that rep
 Usage: python3 -I make_cases.py [--table]   (rewrites plugin/ beside this file)
 """
 import json
-import os
 import pathlib
 import shutil
 import sys
@@ -52,11 +51,10 @@ THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.
 THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.md"]
 # The first stage with no text of its own, and the documents that make it next: scenario 21. It
 # moves on each time a stage is adopted (the slice on 2026-11-23, decision 39; the approach on
-# 2026-11-24, decision 41). KD_TRIAL names a stage whose text is loaded on trial, before the owner
+# 2026-11-24, decision 41; research on 2026-11-24, decision 44). KD_TRIAL names a stage whose text is loaded on trial, before the owner
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
 THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
-NOT_BUILT = ((r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"])
-             if "research" in os.environ.get("KD_TRIAL", "").split(",") else (r"\bresearch", THROUGH_AN_APPROACH))
+NOT_BUILT = (r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"])
 
 
 def pull(number, title, branch, unresolved=0):
