@@ -4,7 +4,46 @@
 of about $6 first. Built, and tested without a model:** the stage
 script's part (16 unit tests), the driver's (7), thirteen cases for
 three arms and their checks (23), and a text of 143 lines
-(`eval/approach-skill.md`). **No session has run any of it yet.** The order of the stages is decision 36: the slice
+(`eval/approach-skill.md`). **Run so far: the pilot only, each case
+once** (below). No case has run more than once, nothing has run on
+Opus, on the real choice, on the examples or on the earlier stages'
+cases with the changed stage script.
+
+## The pilot (2026-11-23, $4.74 of the $6 guessed)
+
+Each of the thirteen cases once.
+
+| Arm | Model | Pass every check | But for form | Cost |
+|---|---|---|---|---|
+| Our text, 143 lines | Sonnet 5.5 | 13 of 13 | 13 of 13 | $1.70 |
+| Our text | Haiku 5.5 | 8 of 13 | 8 of 13 | $0.14 |
+| Bare | Sonnet 5.5 | 0 of 13 | 3 of 13 | $1.71 |
+| Bare | Haiku 5.5 | 0 of 13 | 0 of 13 | $0.13 |
+| kad's `architecture-design` with `adr` (five cases) | Sonnet 5.5 | 0 of 5 | 1 of 5 | $0.89 |
+
+One run each: these say where each arm stands, not whether it holds.
+With the text on Sonnet every quote in the documents the runs left was on its page (92
+quotes in 13 runs, none wrong). The search works from a session in
+the VM ($0.18 to find out), so candidates can come from a search as
+proposed. What the pilot found, each now a unit test (decision 29):
+
+- Two checks were wrong: a pattern the evaluation tool cannot read,
+  and the user's own £20 limit read as a price stated from an unread
+  site.
+- A session reads pages through a variable or a loop
+  (`P=...; python3 "$P" fetch`); the check wanted the command on one
+  plain line.
+- Case 3 gave the fixed provider no documentation address. The
+  session rightly read nothing and asked for one; the made-up
+  requirements now carry it.
+- A run's shell could not write the slice's `pages/` folder, the
+  copies were kept in the machine's temporary folder, and the quote
+  check looked only where it was told: a session reported nine good
+  quotes as wrong. `page.py check` now looks in both places.
+
+A run costs $0.12 on Sonnet, a cent on Haiku and $0.15 with kad's
+skills, against $0.15, a cent and $0.30 guessed: the table under
+"Cost" stands, with the three-run pass nearer $16 than $20. The order of the stages is decision 36: the slice
 says what is needed, this stage is where a dependency is committed
 to, and research reads in full only what was committed to.
 
