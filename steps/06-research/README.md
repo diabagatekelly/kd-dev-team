@@ -10,6 +10,22 @@ and tests are stacked on this stage. For both real plans, each fact
 of the key that a research run lacks is counted again after those
 stages, by the same keys.
 
+## Adopted: the checks after (2026-11-24, $2.93; $84.27 in all)
+
+With research in the plugin as adopted and no text on trial:
+
+| Check | Result | Cost |
+|---|---|---|
+| The twelve cases once, Sonnet | 12 of 12 (11 as first graded) | $2.49 |
+| Startup's case of a stage not built, three runs: the questions are named, and not improvised | 3 of 3 | $0.16 |
+| Example 2 from its kept research through a merge | merged once the research was there; the session came back to the set | $0.28 |
+
+The one failure as first graded was a check of mine: the dead end
+was recorded for the owner under the state's name, `lost`, with
+whose the money now is, and the check wanted the word "dispute".
+Corrected with a unit test; every kept run graded again for nothing
+(Sonnet 60 of 60 and Haiku 39 of 60 still).
+
 ## The closing passes (2026-11-24), final text of 149 lines
 
 | Pass | Model | Result | Cost |
@@ -77,10 +93,10 @@ are:
 
 **What no session has run.**
 
-- Research inside the plugin as adopted: every run had the text on
-  trial beside the adopted stages. Adoption changes the plugin's
-  list and startup's case of a stage not built; those are run when
-  the owner says the stage holds.
+- Research inside the plugin as adopted had not been run when this
+  was put to the owner; it has since (above). Not run as adopted:
+  the earlier stages' cases, and the four examples from the first
+  message (the text and the scripts are the ones those passes ran).
 - An example that commits to something, end to end. The reading of
   a provider is shown by the twelve cases and the two real plans.
 - The text after any change: none was made after the five runs. The

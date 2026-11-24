@@ -126,6 +126,7 @@ regression build (89 scenarios over seven stages).
 - Adopted with a condition of the owner's: the gaps it leaves are
   shown closed once stages 7 to 9 are stacked on it, by the same
   keys.
+- $84.27 against $90 agreed, the checks after adoption included.
 - The examples' kept documents reach research
   (`examples/NAME/after/research/`); a run through a merge waits for
   the research to be written.

@@ -336,6 +336,8 @@ WRITES_STATES = {"type": "file_exists", "name": "writes-the-states", "path": STA
 # Nothing of a later stage, and nothing of an earlier one changed: the ways back are said, not taken.
 # An offer is a question or a choice laid out: "Say so and I'll start" asks as surely as a question mark.
 OFFERS = r"\?|\bsay so\b|\bsay the word\b|\byour (?:call|choice|options)\b|\btell me\b|\blet me know\b"
+# The dead end is a dispute lost: a run may name the state `lost` and say whose the money now is.
+DEAD_END = r"(?:^|\n)#+[^\n]*owner[\s\S]*(?:disput|`lost`|cardholder|chargeback)"
 STOPS_THERE = [trace("writes-no-later-document", WROTE + r"_(questions|answers|open-facts|design|screens|stack|readiness)"),
                trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach)[^\"]*[.]md"),
                never_says("keeps-the-routing-table-out", r"\brouting table\b"),
@@ -424,7 +426,7 @@ SCENARIOS = [
     ("04-a-lasting-thing-with-a-dead-end", "A lasting thing held at the provider: every state a row with its quote; the one with no way out recorded for the owner, not asked.",
      playhouse(), {HOST: pages()}, [HOST], GO_ON,
      [WRITES, WRITES_STATES, *STATE_ROWS,
-      in_file(STATES, "the-dead-end-is-for-the-owner", r"(?:^|\n)#+[^\n]*owner[\s\S]*disput"),
+      in_file(STATES, "the-dead-end-is-for-the-owner", DEAD_END),
       in_file(STATES, "states-have-a-source", rf"(?:{QUOTED}[\s\S]*?){{3}}"),
       never_says("does-not-ask-about-the-dead-end", r"disput[^.?\n]*\?|\?[^.?\n]*disput[^.?\n]*\?")], False, None, True),
     ("05-nothing-committed-to-and-a-thing-the-product-keeps",

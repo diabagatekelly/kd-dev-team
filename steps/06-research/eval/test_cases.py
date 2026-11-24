@@ -104,6 +104,12 @@ class Fixtures(unittest.TestCase):
         self.assertRegex("Shall I read the pages after all?", cases.OFFERS)
         self.assertNotRegex("I wrote both documents from memory, with nothing read.", cases.OFFERS)
 
+    def test_a_dead_end_named_lost_is_the_dispute_recorded_for_the_owner(self):
+        # Found by the adoption check: "- `lost`: no way out. The subscriber's money went to the cardholder" failed for want of the word.
+        import re
+        self.assertIsNotNone(re.search(cases.DEAD_END, "| `lost` | a dispute is lost |\n\n## For the owner's list\n- `lost`: no way out. The subscriber's money went to the cardholder.\n", re.I))
+        self.assertIsNone(re.search(cases.DEAD_END, "| `disputed` | lost |\n\n## For the owner's list\n- None.\n", re.I))
+
     def test_a_statement_of_the_approach_may_be_quoted_with_its_page_when_nothing_is_read(self):
         # Found by the pilot: the approach's own quote, repeated as a statement of the documents, is no fact from memory.
         names = [line for line in (self.case("09b") / "case.yaml").read_text().splitlines() if "quotes-no-page" in line]
