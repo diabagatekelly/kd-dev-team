@@ -117,10 +117,11 @@ regression build (77 scenarios over six stages).
 1. **Research (stage 6): its test in its new place is proposed to
    the owner** (`steps/06-research/README.md`, 2026-11-24): eleven
    cases, the benchmark on two real plans, about $90, a pilot of
-   about $5 first. Nothing paid is run until it is agreed. Done
-   free: its cases' made-up approach is in the form stage 5 settled,
-   and startup's scenario of a stage not built moves on when
-   research is on trial.
+   about $5 first. Nothing paid is run until it is agreed. Built
+   free, with unit tests, and run by no session yet: the stage
+   script's count of research, the page reader's kept copies, the
+   eleven cases, the revised text and the driver's `--through
+   research`. The owner keeps research up front (decision 42).
 
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
@@ -159,7 +160,8 @@ free checks only, no model judge:
   example end to end with its scripted user, through a set of
   slices, a chosen slice, its approach and one made-up merge, after
   `python3 -I e2e/make_plugin.py`.
-- `--from requirements` (or `slice`, or `approach`) starts an example
+- `--through research` carries an example on from the approach
+  through research. `--from requirements` (or `slice`, or `approach`) starts an example
   from the documents its last good run left (`--keep STAGE` on that
   run keeps them); it is refused once an earlier stage's text or the
   routing table has changed.

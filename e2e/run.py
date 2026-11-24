@@ -24,7 +24,9 @@ run ends once the set says that slice is built (the coming-back), or four turns 
 if it never does. With `--through slice` it ends once a slice's own document is written. With
 `--through approach` it goes on from the chosen slice into the approach and ends once the approach's
 document is written with no need left waiting, four turns after it was written if one still
-waits, or after one more turn when the slice needs nothing from outside. With `--through
+waits, or after one more turn when the slice needs nothing from outside. With `--through research`
+it goes on from there and ends once a research document is written, or after one more turn when
+there is nothing to research. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -37,7 +39,7 @@ texts has changed since, and the example is then run from its first message and 
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
-                          [--through merge|approach|slice|requirements] [--from STAGE]
+                          [--through merge|research|approach|slice|requirements] [--from STAGE]
     python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
@@ -67,7 +69,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research")
 MERGED = 7   # the number of the made-up pull request
 
 
@@ -229,7 +231,39 @@ def present(planning):
         found.add("slice")
     if planning.is_dir() and any(planning.glob("slice-*/*_approach.md")):
         found.add("approach")
+    if research(planning):
+        found.add("research")
     return found
+
+
+def research(planning):
+    """The research documents written, each in its slice's research folder."""
+    return sorted(planning.glob("slice-*/*_research/*.md")) if planning.is_dir() else []
+
+
+def first_under(text, heading):
+    """The first line that says something under the heading that matches, without its marks; None
+    where there is no such heading."""
+    inside, found = False, None
+    for line in text.splitlines():
+        if re.match(r"#+\s", line):
+            inside = bool(re.search(heading, line, re.I))
+            found = "" if inside and found is None else found
+        elif inside and not found and re.sub(r"[`*_\s]", "", line):
+            found = re.sub(r"^[-*]\s+|[`*_]", "", line.strip())
+    return found
+
+
+def nothing_to_research(planning):
+    """Whether the stage script would skip research: nothing under the latest approach's "Committed
+    to", and the requirements' list of outside systems and lasting things says `none`."""
+    def latest(pattern):
+        written = sorted(planning.glob(pattern), key=lambda path: path.name)
+        return written[-1].read_text(encoding="utf-8", errors="replace") if written else ""
+    committed = first_under(latest("slice-*/*_approach.md"), r"committed to") or "none"
+    listed = first_under(latest("[0-9][0-9][0-9]_requirements*.md"), r"outside systems and lasting things")
+    is_none = lambda line: bool(re.fullmatch(r"(none|nothing)\.?", line.strip(), re.I))
+    return is_none(committed) and listed is not None and is_none(listed)
 
 
 def needs_nothing(planning):
@@ -326,8 +360,8 @@ def keep(out, example, stage, plugin):
         if name in wanted or path.name == "sources.md":
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    if stage == "approach":   # the pages its quotes are from: research reads them and does not fetch them again
-        for path in sorted(planning.glob("slice-*/pages/*.txt")):
+    if stage in ("approach", "research"):   # the pages its quotes are from: research reads them and does not fetch them again
+        for path in [*sorted(planning.glob("slice-*/pages/*.txt")), *(research(planning) if stage == "research" else [])]:
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
@@ -385,6 +419,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     for _ in range(max_turns):
         had_list = through == "requirements" and "requirements" in present(planning)
         no_need = through == "approach" and "slice" in present(planning) and needs_nothing(planning)
+        settled = (through == "research" and "slice" in present(planning)
+                   and (waiting(planning) == 0 or (waiting(planning) is None and needs_nothing(planning))))
+        no_research = settled and nothing_to_research(planning)
         reply, session, spent = ask(command, said, project, session_extra + (["--resume", session] if session else []), env)
         cost += spent
         if session not in sessions:
@@ -407,6 +444,13 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                 if since == 4:
                     ended = f"the approach was written and four turns later {left} of its needs still waited"
                     break
+        if through == "research":
+            if research(planning):
+                ended = "the research was written"
+                break
+            if no_research:
+                ended = "nothing is committed to and the list names no lasting thing: no research was written"
+                break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -429,7 +473,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through == "merge" and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
@@ -463,7 +507,9 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                                           if any(path.name in call for path in (example / "files").glob("*"))]
                if (example / "files").is_dir() else [],
                # Each document under the number and name the stage script gives it, so the next session finds it.
-               "numbered_in_order": in_order([path.name for path in documents if path.name != "sources.md"]),
+               # A research document has its folder's number, not one of its own.
+               "numbered_in_order": in_order([path.name for path in documents if path.name != "sources.md" and path not in research(planning)]),
+               "research": [path.relative_to(project).as_posix() for path in research(planning)],
                "merged": merged, "slices": marks(planning)[0], "boxes": marks(planning)[1],
                "needs_waiting": waiting(planning),
                "documents": [path.relative_to(project).as_posix() for path in documents]}
@@ -479,7 +525,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "approach", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "research", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()

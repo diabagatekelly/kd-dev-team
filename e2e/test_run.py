@@ -426,6 +426,73 @@ class Run(unittest.TestCase):
                                       "005_approach.md"]))
         self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_approach.md"]))
 
+    # Carried on through research (stage 6).
+    RESEARCH = APPROACH.replace('    if n == 99:\n', '    if n == 8:\n'
+                                '        pathlib.Path("plans/slice-002/006_research").mkdir(exist_ok=True)\n'
+                                '        pathlib.Path("plans/slice-002/006_research/states.md").write_text("# States\\n")\n'
+                                '    if n == 99:\n')
+    NONE_LISTED = 'write_text("- [ ] **a**: b\\n\\n## Outside systems and lasting things\\nnone\\n")'
+
+    def test_carried_through_research_it_ends_once_a_research_document_is_written(self):
+        summary, _ = self.through(fake=self.RESEARCH, brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the research was written", 8))
+        self.assertEqual(summary["research"], ["plans/slice-002/006_research/states.md"])
+        self.assertIn("plans/slice-002/006_research/states.md", summary["documents"])
+        self.assertEqual(summary["merged"], "")
+
+    def test_research_that_is_never_written_ends_the_run_as_stuck(self):
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 8:", "if n == 98:"), brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["research"]), ("stuck: the user had only the same thing to say", []))
+
+    def test_a_research_document_is_no_break_in_the_numbering(self):
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace('if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map")',
+                                     'if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map"); '
+                                     'pathlib.Path("plans/000_problem.md").write_text("p"); pathlib.Path("plans/slice-001/005_research").mkdir(parents=True); '
+                                     'pathlib.Path("plans/slice-001/005_research/states.md").write_text("s")'))
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 10,
+                          command=(sys.executable, str(fake)))
+        self.assertTrue(summary["numbered_in_order"])
+        self.assertEqual(summary["research"], ["plans/slice-001/005_research/states.md"])
+
+    def test_a_need_that_goes_on_waiting_ends_a_run_through_research_too(self):
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 7:", "if n == 97:").replace("if n == 8:", "if n == 98:"),
+                                  brief=self.SPOKEN, through="research")
+        self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
+
+    def test_with_nothing_committed_to_and_no_lasting_thing_listed_it_ends_a_turn_later_with_no_research(self):
+        fake = (self.APPROACH.replace("A way to tell the member.", "none").replace("if n == 6:", "if n == 96:").replace("if n == 7:", "if n == 97:")
+                .replace('write_text("- [ ] **a**: b")', self.NONE_LISTED))
+        self.assertIn("lasting things", fake)
+        summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["research"]),
+                         ("nothing is committed to and the list names no lasting thing: no research was written", 6, []))
+
+    def test_what_is_left_to_research_is_read_as_the_stage_script_reads_it(self):
+        planning = self.folder / "read" / "plans"
+        (planning / "slice-001").mkdir(parents=True)
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n\n## Outside systems and lasting things\n`None.`\n")
+        self.assertTrue(run.nothing_to_research(planning))              # no approach: nothing is committed to
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: without\n\n## Committed to\nNothing.\n")
+        self.assertTrue(run.nothing_to_research(planning))
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: committed: Postbox\n\n## Committed to\n- Postbox: https://p.example/\n")
+        self.assertFalse(run.nothing_to_research(planning))
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: without\n\n## Committed to\n- none\n")
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n\n## Outside systems and lasting things\n- a loan\n")
+        self.assertFalse(run.nothing_to_research(planning))
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n")   # a list that does not say is taken to have something
+        self.assertFalse(run.nothing_to_research(planning))
+
+    def test_research_is_kept_with_its_documents(self):
+        self.kept()
+        planning = self.folder / "done" / "project" / "plans"
+        (planning / "slice-002" / "006_research").mkdir()
+        (planning / "slice-002" / "006_research" / "states.md").write_text("kept")
+        kept = run.keep(self.folder / "done", self.example, "research", self.folder / "plugin")
+        self.assertEqual((kept / "slice-002" / "006_research" / "states.md").read_text(), "kept")
+        self.assertFalse((run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin") / "slice-002" / "006_research").exists())
+
     def test_the_approach_is_kept_with_the_pages_its_quotes_are_from(self):
         self.kept()
         planning = self.folder / "done" / "project" / "plans"

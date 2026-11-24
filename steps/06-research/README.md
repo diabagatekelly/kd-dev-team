@@ -1,14 +1,16 @@
 # Stage 6, research: the test, set before anything is built or run
 
 **State, 2026-11-24: proposed to the owner in its new place, after the
-approach (decisions 36 and 41). Nothing below is agreed yet and no
-paid run has been made since the first pilot ($2.17, 2026-11-23,
-further down).** What was agreed when the stage was fourth (decision
-35) stands but for what the new order changes: where the list comes
-from, where the pages are, and the ways back to the approach and the
-slice. Free so far, with unit tests: startup's scenario of a stage
-not built moves on to the questions when research is on trial; the
-cases' made-up approach is in the form stage 5 settled.
+approach (decisions 36 and 41). The owner has kept research as a
+stage up front (decision 42); the cost and the two points below are
+not yet agreed, and no paid run has been made since the first pilot
+($2.17, 2026-11-23, further down).** Built free, with unit tests:
+the stage script's count (condition 17), the page reader's kept
+copies, the eleven cases in three arms (`eval/make_cases.py`), the
+text revised to 137 lines (`eval/research-skill.md`), the driver's
+`--through research`, and startup's scenario of a stage not built
+moving on when research is on trial. **No session has run any of
+it.**
 
 ## What it is
 
@@ -212,7 +214,7 @@ nothing is a recommendation.
 - **Arms:** the bare model (every adopted text, the report, nothing
   for this stage); kad's `domain-model` on the two cases of states
   (4 and 5), all it has something for; our text (96 lines at the
-  first pilot, revised for the above, as short as holds).
+  first pilot, 137 as revised for the above; as short as holds).
 - **Models:** Haiku and Sonnet 5.5, three runs bare and with the
   text; then five runs on each with the final text (decision 38).
   Opus only where Sonnet with the text does not hold (about $15

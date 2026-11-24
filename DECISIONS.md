@@ -380,6 +380,19 @@ asking is listed apart, so it can be overturned.
     short answer by hand without the stage's text. The short read is
     six pages a candidate, the limits first, not the four proposed.
 
+## 2026-11-24: research stays a stage, before the questions
+
+42. **Research is done up front, as a stage of its own, and the
+    approach stays as adopted** (the owner). Asked whether to write
+    the questions first and look up only what they need, and whether
+    the approach was overkill, the owner weighed it and kept both:
+    the approach "is already built and cheap", and "having all the
+    facts in a doc when we go to formulate and answer questions will
+    add valuable big picture context". The comparison of the two
+    orders on the first real plan (about $8) was offered and is not
+    run. Whether every line of the approach's text earns its place
+    has not been tested; it is not asked for.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -719,5 +732,27 @@ asking is listed apart, so it can be overturned.
     document; a unit test.
   - The cost put to the owner is about $90, not the $40 guessed at
     the first pilot, which predates decision 38.
+- Research as built, free, 2026-11-24 (nothing paid run yet):
+  - `states.md` is always written where the requirements' list of
+    outside systems and lasting things is not `none`; when the slice
+    touches none of them it says so in one line. A list that does
+    not have that heading is taken to have something.
+  - The stage script names the documents still to write on the line
+    that names research as next, and a research document whose thing
+    is no longer committed to as no longer standing.
+  - A kept page is given back only from the slice's own `pages/`
+    folder, never from the machine's folder for temporary files,
+    which may hold another project's copy; `--again` asks the site.
+  - When a second site is refused mid-read, what opened is written
+    and the rest listed under "Not opened"; the stage script then
+    counts research as written, and it is the user's "I've allowed
+    it" that brings the session back to finish (the routing table's
+    rule that an answer to a stage's question is that stage's work).
+    Case 6b tests exactly that; the script is changed if it fails.
+  - The cases' arms are `bare`, `text` and `kad` (kad's
+    `domain-model`, on cases 4 and 5), as for the approach.
+  - The end-to-end driver ends a run through research once a
+    research document is written, or a turn after there is nothing
+    to research; a run where none is ever written ends as stuck.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
