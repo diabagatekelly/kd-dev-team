@@ -597,7 +597,8 @@ def main(arm):
     # The page reader, where the report's command looks for it.
     write(plugin / "research" / "page.py", (ROOT / "research/page.py").read_text(encoding="utf-8"))
     for name, source in load("make_plugin", ROOT / "e2e/make_plugin.py").SKILLS.items():
-        write(plugin / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
+        if name != "approach":   # this stage's own text is one arm's, not every arm's
+            write(plugin / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     used = [{"type": "tool_used", "name": "uses-the-stage-text", "tool": "Skill", "min": 1}]
     if arm == "kad":
         for name, sources in KAD.items():

@@ -11,7 +11,8 @@ run with the final text:** the earlier stages' cases, the examples
 and the real choice ran with the text as it stood before its last
 edits (the limits-first read for the examples and the first three
 real runs; the line on a page's instruction for all of them). The
-real run on the owner's Mac is held off.
+real run on the owner's Mac is held off. **The owner has said the
+stage holds (decision 41).**
 
 ## The runs after the pilot (2026-11-24)
 

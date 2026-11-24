@@ -62,24 +62,21 @@ class Stage(unittest.TestCase):
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         return done.stdout
 
-    def test_the_startup_scenario_of_a_stage_not_built_moves_past_a_stage_on_trial(self):
+    def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
         # Found by the regression pass with the approach on trial: the scenario still named the
         # approach as not built, and the session, rightly, did the approach.
-        import importlib.util, os, unittest.mock
-        for trial, stage in (("", "approach"), ("approach", "research")):
-            with self.subTest(trial), unittest.mock.patch.dict(os.environ, {"KD_TRIAL": trial}):
-                spec = importlib.util.spec_from_file_location(
-                    "startup_cases", pathlib.Path(__file__).resolve().parent.parent / "steps/00-startup/eval/make_cases.py")
-                cases = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(cases)
-                folder = self.machine.project / "planning"
-                shutil.rmtree(folder, ignore_errors=True)
-                for name in cases.NOT_BUILT[1]:
-                    (folder / name).parent.mkdir(parents=True, exist_ok=True)
-                    (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8")
-                self.machine.run("stage.sh", "remember", "planning")
-                self.assertIn(f"- next stage by the documents: {stage}", self.report())
-                self.assertRegex(stage, cases.NOT_BUILT[0])
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "startup_cases", pathlib.Path(__file__).resolve().parent.parent / "steps/00-startup/eval/make_cases.py")
+        cases = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cases)
+        folder = self.machine.project / "planning"
+        for name in cases.NOT_BUILT[1]:
+            (folder / name).parent.mkdir(parents=True, exist_ok=True)
+            (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8")
+        self.machine.run("stage.sh", "remember", "planning")
+        self.assertIn("- next stage by the documents: research", self.report())
+        self.assertRegex("research", cases.NOT_BUILT[0])
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()

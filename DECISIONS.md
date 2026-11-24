@@ -366,6 +366,20 @@ asking is listed apart, so it can be overturned.
     know, not even as an unchecked lead. Memory is not a source of
     candidates.
 
+## 2026-11-24: the approach stage holds
+
+41. **The approach stage holds with the text of 153 lines in
+    `steps/05-approach/eval/approach-skill.md`, on the session's
+    model, Sonnet 5.5** (the owner: "Yes let's hold", on the result
+    in `steps/05-approach/README.md`: Sonnet 65 of 65 over five runs
+    of thirteen cases with the final text, every quote on its page;
+    every earlier stage once, 63 of 64 and the one a scenario at
+    fault; the four examples through the approach; on the owner's
+    real choice nothing stated without a quote). Haiku was tried
+    with the final text and does not hold (57 of 65): it records a
+    short answer by hand without the stage's text. The short read is
+    six pages a candidate, the limits first, not the four proposed.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

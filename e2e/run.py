@@ -16,7 +16,8 @@ What the user says, in this order:
 Where the brief says so, the user closes the session once a document has been written and comes
 back in a new one, which is given a fresh startup report and none of the conversation.
 
-A run goes on through the slice stage: once a slice's own document has been written, its merge is
+A run goes on through the slice stage and the approach: once a slice's own document has been
+written and it needs nothing from outside, or every need of its approach is decided, its merge is
 made up (the tracker's stand-in is given a merged pull request that names that document's
 criteria), the user comes back in a new session and says the slice is built and merged, and the
 run ends once the set says that slice is built (the coming-back), or four turns after the merge
@@ -426,7 +427,15 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "slice" and "slice" in appeared:
             ended = "the chosen slice was written"
             break
-        if through == "merge" and "slice" in appeared:   # the slice is built and merged while the user is away
+        # The slice is built and merged while the user is away: once it needs nothing from outside, or
+        # once every need of its approach is decided. A need that goes on waiting is given four turns.
+        left = waiting(planning) if through == "merge" and not merged and "slice" in seen else None
+        if left:
+            since += 1
+            if since == 4:
+                ended = f"the approach was written and four turns later {left} of its needs still waited"
+                break
+        if through == "merge" and not merged and "slice" in seen and (left == 0 or needs_nothing(planning)):
             merged, back = merge(project, planning), 0
             number_merged = int((re.search(r"slice (\d+)", merged) or re.search(r"(0)", "0")).group(1))
             session, said, turn["new_session_next"], turn["merged"] = None, brief.merged, True, merged

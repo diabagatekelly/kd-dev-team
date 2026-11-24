@@ -28,6 +28,7 @@ design are recorded under `next-plugin/validation/`.
 | `startup/` | stage 0's scripts, each with unit tests and stand-ins for the VM tool and the tracker: `machine.sh` (the system, the VM tool, its sign-in, its locks; `secure` and `install`), `tracker.sh` (open pull requests and issues, and what merged pull requests say they complete), `stage.sh` (the next stage by the documents that exist; the requirements and the set of slices counted; when a coming-back to the slices is due, and exactly what to mark), `audit.sh` (the audit switch), `report.sh` (the one report a session is given) and `source.sh` (the shape of a file of the user's, never a cell; where a value of it is written down). Adopted with the routing table in `steps/00-startup/eval/routing-table.md`, on Sonnet 5.5 (decision 17); the test and its result are in `steps/00-startup/` |
 
 | `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
+| `steps/05-approach/eval/approach-skill.md` | stage 5's text, 153 lines, adopted on Sonnet 5.5 (decision 41): each thing the chosen slice needs from outside compared on the user's limits from the candidates' own pages, one way recommended, the commitment asked and recorded |
 | `research/` | for stage 6, not adopted: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -36,8 +37,8 @@ design are recorded under `next-plugin/validation/`.
 
 ## Where the work stands (2026-11-23)
 
-Stages 0 to 4 hold (startup, the problem, the scope map, the
-requirements, the slice), all on Sonnet 5.5. After the owner said
+Stages 0 to 5 hold (startup, the problem, the scope map, the
+requirements, the slice, the approach), all on Sonnet 5.5. After the owner said
 each of the first four holds, they were run together, end to end,
 and their texts changed from what those runs found (decisions 28 to
 32). Where each stands:
@@ -101,11 +102,14 @@ slices are cut from them, and a dependency is chosen after.
 
 **Next, in this order:**
 
-1. **The approach (stage 5):** where a dependency is committed to.
-   Agreed as proposed in `steps/05-approach/README.md` (decision
-   40), at about $90. Its scripts, thirteen cases and text are built
-   and unit-tested; no session has run them yet.
-2. **Research (stage 6): paused at its pilot**
+**Stage 5, the approach, holds** (decision 41,
+`steps/05-approach/README.md`), on Sonnet 5.5: where a dependency is
+committed to. Its text is adopted and its thirteen cases join the
+regression build.
+
+**Next:**
+
+1. **Research (stage 6): paused at its pilot**
    (`steps/06-research/README.md`): $2.17 spent, about $40 to
    finish, in its new place after the approach. Its scenarios were
    moved to the slice's folder so that they still build.

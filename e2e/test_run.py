@@ -293,7 +293,7 @@ class Run(unittest.TestCase):
         '    if n == 4: pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | open |\\n")\n'
         '    if n == 5:\n'
         '        pathlib.Path("plans/slice-002").mkdir(exist_ok=True)\n'
-        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
+        '        pathlib.Path("plans/slice-002/004_slice.md").write_text("# Slice 2: Do b\\n\\n## Criteria\\n- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.\\n\\n## Needs from outside\\nnone\\n\\n## Left for later\\n- **not one**: later.\\n")\n'
         '    if n == 6:\n'
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
@@ -366,8 +366,7 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
 
     # Carried on from the chosen slice into the approach (stage 5).
-    NEED = '- **a/2**: Given p, when q, then r.\\n\\n## Needs from outside\\nA way to tell the member.\\n'
-    APPROACH = THROUGH.replace('- **a/2**: Given p, when q, then r.\\n', NEED).replace(
+    APPROACH = THROUGH.replace('## Needs from outside\\nnone\\n', '## Needs from outside\\nA way to tell the member.\\n').replace(
         '    if n == 6:\n', '    if n == 6: pathlib.Path("plans/slice-002/005_approach.md").write_text("## A way to tell\\n**Decision:** waiting\\n")\n'
                          '    if n == 7: pathlib.Path("plans/slice-002/005_approach.md").write_text("## A way to tell\\nDecision: without\\n")\n'
                          '    if n == 99:\n')
@@ -383,6 +382,20 @@ class Run(unittest.TestCase):
         self.assertEqual(summary["merged"], "")
         self.assertIn("plans/slice-002/005_approach.md", summary["documents"])
 
+    def test_carried_through_a_merge_the_slice_is_merged_only_once_its_approach_is_decided(self):
+        fake = self.APPROACH.replace("    if n == 99:\n", "    if n == 8:\n")
+        summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
+                         ("the slice was merged and the session came back to the set", 8, 0))
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[7], "That slice is built and merged. What's next?")
+        self.assertNotIn("merged", said[6])
+
+    def test_carried_through_a_merge_a_need_that_goes_on_waiting_ends_the_run_unmerged(self):
+        summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN)
+        self.assertEqual((summary["ended"], summary["merged"]),
+                         ("the approach was written and four turns later 1 of its needs still waited", ""))
+
     def test_a_need_that_goes_on_waiting_is_given_four_turns(self):
         summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN, through="approach")
         self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
@@ -397,7 +410,8 @@ class Run(unittest.TestCase):
                                  ("the slice needs nothing from outside: no approach was written", 6, None))
 
     def test_a_slice_with_no_such_section_is_taken_to_need_something(self):
-        summary, _ = self.through(brief=self.SPOKEN, through="approach", turns=7)
+        fake = self.THROUGH.replace('## Needs from outside\\nnone\\n\\n', '')
+        summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="approach", turns=7)
         self.assertEqual(summary["ended"], "the turns ran out")
 
     def test_asked_about_the_approach_the_user_has_plain_answers_unless_the_brief_says_otherwise(self):
