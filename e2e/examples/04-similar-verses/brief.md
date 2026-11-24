@@ -31,6 +31,9 @@ planning
 | decide-for-me | a choice between kinds of practice, which one to start with | I'm not ready to decide that. |
 | confirm | whether a document or a list is right, or anything is missing, unwanted or in the wrong order | That's right as far as it goes. |
 | how-built | how it should be built, what technology | I have no idea. |
+| candidates | whether they have a source, a provider or a service in mind for something needed from outside, or have ruled any out | None in mind and none ruled out. I've never looked. |
+| search | whether the assistant may search the web for candidates | Yes, please search. |
+| sites | being asked to allow a website for the VM, or to run a command that allows one | Not today. Leave those waiting for now. |
 
 ## Not known
 I don't know yet.
