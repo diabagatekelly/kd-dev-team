@@ -393,6 +393,23 @@ asking is listed apart, so it can be overturned.
     run. Whether every line of the approach's text earns its place
     has not been tested; it is not asked for.
 
+## 2026-11-24: how the research stage is measured, in its new place
+
+43. **Stage 6, research, is tested as proposed in
+    `steps/06-research/README.md`** (the owner: "Fine" to the cost
+    and to the third point, then "yes and yes"), at about $90, the
+    pilot's real cost reported first ($5.23). With it, two points:
+    the states of a lasting thing the product itself keeps are
+    written here, from the planning documents alone, a gap written
+    as "not said in the documents" for the questions stage; and a
+    user who says to skip the reading is told once what that costs
+    and offered the reading again, and if they insist every point
+    is written open with its test and nothing as a fact. The owner
+    asked how the states feed the questions and was told: sourced
+    rows are facts, "not said" rows become questions answered as
+    the planner's choice or the owner's decision, `to verify` rows
+    become tests, a state with no way out goes to the owner's list.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
