@@ -29,6 +29,7 @@ planning
 | sound | whether sound or recitation matters | I don't know yet. |
 | memorised | whether it should know what the person has memorised | I haven't decided. |
 | decide-for-me | a choice between kinds of practice, which one to start with | I'm not ready to decide that. |
+| start-anyway | whether to choose or start a slice although a question of theirs is still open, or which of several numbered options for going on they want | Choose slice 1 now, and mark what waits on my decision. |
 | confirm | whether a document or a list is right, or anything is missing, unwanted or in the wrong order | That's right as far as it goes. |
 | how-built | how it should be built, what technology | I have no idea. |
 | candidates | whether they have a source, a provider or a service in mind for something needed from outside, or have ruled any out | None in mind and none ruled out. I've never looked. |
