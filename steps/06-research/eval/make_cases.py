@@ -334,6 +334,8 @@ def fetched(name, host="", least=0, most=None):
 WRITES = {"type": "file_exists", "name": "writes-the-document", "path": SYSTEM}
 WRITES_STATES = {"type": "file_exists", "name": "writes-the-states", "path": STATES}
 # Nothing of a later stage, and nothing of an earlier one changed: the ways back are said, not taken.
+# An offer is a question or a choice laid out: "Say so and I'll start" asks as surely as a question mark.
+OFFERS = r"\?|\bsay so\b|\bsay the word\b|\byour (?:call|choice|options)\b|\btell me\b|\blet me know\b"
 STOPS_THERE = [trace("writes-no-later-document", WROTE + r"_(questions|answers|open-facts|design|screens|stack|readiness)"),
                trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach)[^\"]*[.]md"),
                never_says("keeps-the-routing-table-out", r"\brouting table\b"),
@@ -487,7 +489,7 @@ SCENARIOS = [
     ("09a-skip-the-reading", "The user says to skip the reading: said once what it costs, the reading offered again; nothing written from memory.",
      playhouse(), {HOST: pages()}, [HOST], SKIP,
      [says("says-what-it-costs", r"memory|remember|recall|from what I know|without (the|its) (pages|documentation)|contradict|wrong|out of date|unverified|not (a )?(source|fact)"),
-      says("offers-the-reading-again", r"\?"),
+      says("offers-the-reading-again", OFFERS),
       trace("writes-nothing-yet", WROTE + r"_research/")], True, None, False),
     ("09b-the-user-insists", "The next turn: the user insists: every point open with its test, every state to verify, no fact.",
      playhouse(), {HOST: pages()}, [HOST], "No. Don't read anything, write up what you know.",

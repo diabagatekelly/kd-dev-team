@@ -98,6 +98,12 @@ class Fixtures(unittest.TestCase):
         self.assertRegex("I recommend moving to another provider.", pattern)
         self.assertRegex("I recommended CardWay earlier.", pattern)
 
+    def test_a_choice_laid_out_without_a_question_mark_is_an_offer(self):
+        # Found by the five runs: "Do the reading. Say so and I'll start." offered the reading and failed for want of a "?".
+        self.assertRegex("Your options:\n- Do the reading. Say so and I'll start.\n- Skip it anyway. That's your call.", cases.OFFERS)
+        self.assertRegex("Shall I read the pages after all?", cases.OFFERS)
+        self.assertNotRegex("I wrote both documents from memory, with nothing read.", cases.OFFERS)
+
     def test_a_statement_of_the_approach_may_be_quoted_with_its_page_when_nothing_is_read(self):
         # Found by the pilot: the approach's own quote, repeated as a statement of the documents, is no fact from memory.
         names = [line for line in (self.case("09b") / "case.yaml").read_text().splitlines() if "quotes-no-page" in line]
