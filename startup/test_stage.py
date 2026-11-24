@@ -15,7 +15,7 @@ LIST = """# Requirements: Borrow and return a tool
 ## Out for now
 - Reserving a tool.
 """
-THE_REST = ["approach", "research/a", "questions", "answers", "open-facts", "design", "screens", "stack", "readiness",
+THE_REST = ["approach", "research/states", "questions", "answers", "open-facts", "design", "screens", "stack", "readiness",
             "owner-list"]
 
 
@@ -62,21 +62,31 @@ class Stage(unittest.TestCase):
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         return done.stdout
 
-    def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
-        # Found by the regression pass with the approach on trial: the scenario still named the
-        # approach as not built, and the session, rightly, did the approach.
+    def not_built(self, trial=""):
+        """Startup's cases as built with that stage's text on trial, their documents laid in the project."""
         import importlib.util
+        import os
+        from unittest import mock
         spec = importlib.util.spec_from_file_location(
             "startup_cases", pathlib.Path(__file__).resolve().parent.parent / "steps/00-startup/eval/make_cases.py")
         cases = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cases)
+        with mock.patch.dict(os.environ, {"KD_TRIAL": trial}):
+            spec.loader.exec_module(cases)
         folder = self.machine.project / "planning"
         for name in cases.NOT_BUILT[1]:
             (folder / name).parent.mkdir(parents=True, exist_ok=True)
             (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8")
         self.machine.run("stage.sh", "remember", "planning")
-        self.assertIn("- next stage by the documents: research", self.report())
-        self.assertRegex("research", cases.NOT_BUILT[0])
+        return cases.NOT_BUILT[0]
+
+    def test_the_startup_scenario_of_a_stage_not_built_has_the_documents_that_make_that_stage_next(self):
+        # Found by the regression pass with the approach on trial: the scenario still named the
+        # approach as not built, and the session, rightly, did the approach. With research adopted
+        # (decision 44) the first stage not built is the questions.
+        named = self.not_built()
+        self.assertIn("- next stage by the documents: questions", self.report())
+        self.assertRegex("questions", named)
+        self.assertNotRegex("research", named)
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()
@@ -177,9 +187,9 @@ class Stage(unittest.TestCase):
         self.assertIn("slice (slice-001/004_slice.md)", out)
         self.assertIn("- next stage by the documents: approach (its document: planning/slice-001/005_approach.md)", out)
         self.machine.document("slice-001/005_approach.md")
-        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/)",
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, to write there: states.md)",
                       self.report())
-        self.machine.document("slice-001/006_research/a-dependency.md")
+        self.machine.document("slice-001/006_research/states.md")
         self.assertIn("- next stage by the documents: questions", self.report())
 
     # The approach, counted (its condition 19).
@@ -197,7 +207,7 @@ class Stage(unittest.TestCase):
             with self.subTest(none):
                 out = self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1", needs=none)})
                 self.assertIn("- approach: not needed, slice 1 needs nothing from outside (slice-001/004_slice.md)\n", out)
-                self.assertIn("- next stage by the documents: research (its document: planning/slice-001/005_research/)", out)
+                self.assertIn("- next stage by the documents: research (its document: planning/slice-001/005_research/, to write there: states.md)", out)
                 self.assertNotIn("out of order", out)
                 self.assertNotIn("to research, committed to", out)
 
@@ -221,7 +231,7 @@ class Stage(unittest.TestCase):
                               r'  and every quote written from one is then looked for in its saved page: python3 "[^"\n]+' + self.PAGE
                               + r" check planning/slice-001/pages DOCUMENT\n")
         self.assertIn(" fetch URL --to planning/slice-001/pages", self.approached(the_approach("Decision: without")))
-        self.machine.document("slice-001/006_research/a.md")
+        self.machine.document("slice-001/006_research/states.md")
         self.assertNotIn("page.py", self.report())
 
     def test_the_page_command_is_not_given_before_the_slice(self):
@@ -253,7 +263,8 @@ class Stage(unittest.TestCase):
                       "https://docs.postbox.example/start; its document: planning/slice-001/006_research/postbox.md)\n"
                       "  - PayRight Cards, for taking a card payment (its documentation: https://docs.payright.example/; "
                       "its document: planning/slice-001/006_research/payright-cards.md)\n", out)
-        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/)", out)
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, "
+                      "to write there: postbox.md, payright-cards.md, states.md)", out)
         self.assertNotIn("must agree", out)
 
     def test_a_thing_committed_to_with_no_address_is_listed_as_having_none(self):
@@ -277,23 +288,99 @@ class Stage(unittest.TestCase):
         out = self.approached(the_approach("Decision: without"))
         self.assertIn("- a changed approach is corrected in place (planning/slice-001/005_approach.md): no research is "
                       "written from it yet\n", out)
-        self.machine.document("slice-001/006_research/a.md")
+        self.machine.document("slice-001/006_research/states.md")
         out = self.report()
         self.assertIn("- a changed approach is a new document, the earlier one left as it is: "
                       "planning/slice-001/007_approach.md\n", out)
         self.assertNotIn("was written before the approach", out)
 
-    def test_research_older_than_the_approach_that_stands_is_said_not_to_stand(self):
-        self.approached(the_approach("Decision: without"))
-        self.machine.document("slice-001/006_research/a.md")
+    # Research, counted (its condition 17).
+    POSTBOX = dict(committed=["Postbox: https://docs.postbox.example/, for telling the member."])
+    INVENTORY = "\n## Outside systems and lasting things\n%s\n"
+
+    def researched(self, *documents, approach=None, inventory=None):
+        self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1")},
+                     list_text=LIST + (self.INVENTORY % inventory if inventory else ""))
+        (self.machine.project / "planning/slice-001/005_approach.md").write_text(
+            approach or the_approach("Decision: committed: Postbox", **self.POSTBOX), encoding="utf-8")
+        for name in documents:
+            self.machine.document(f"slice-001/006_research/{name}")
+        return self.report()
+
+    def test_research_is_done_when_every_thing_committed_to_has_its_document_and_the_states_are_written(self):
+        out = self.researched("postbox.md", "states.md", inventory="- a loan")
+        self.assertIn("research (slice-001/006_research/)", out)
+        self.assertIn("- next stage by the documents: questions", out)
+
+    def test_a_thing_committed_to_with_no_document_keeps_research_as_the_next_stage_in_the_same_folder(self):
+        out = self.researched("states.md", inventory="- a loan")
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, "
+                      "still to write there: postbox.md)", out)
+        self.assertIn("its document: planning/slice-001/006_research/postbox.md)", out)
+        self.assertNotIn("007_research", out)
+        self.assertNotIn("research (slice-001/006_research/)", out.split("- found:")[1].splitlines()[0])
+        self.assertNotIn("out of order", out)
+
+    def test_the_states_not_written_keep_research_as_the_next_stage(self):
+        for inventory in ("- a loan", None):   # a list that does not say is taken to have something
+            with self.subTest(inventory):
+                out = self.researched("postbox.md", inventory=inventory)
+                self.assertIn("still to write there: states.md)", out)
+
+    def test_an_inventory_of_none_needs_no_states(self):
+        for none in ("none", "None.", "`none`"):
+            with self.subTest(none):
+                out = self.researched("postbox.md", inventory=none)
+                self.assertIn("- next stage by the documents: questions", out)
+
+    def test_before_any_research_what_is_to_be_written_is_said(self):
+        out = self.researched(inventory="- a loan")
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, "
+                      "to write there: postbox.md, states.md)", out)
+        out = self.report()
+
+    def test_nothing_committed_to_and_an_inventory_of_none_skips_research(self):
+        out = self.researched(approach=the_approach("Decision: without"), inventory="none")
+        self.assertIn("- research: not needed, nothing is committed to and the requirements name no lasting thing (002_requirements.md)\n", out)
+        self.assertIn("- next stage by the documents: questions", out)
+        self.assertNotIn("out of order", out)
+        self.assertNotIn("page.py", out)
+
+    def test_a_slice_that_needs_nothing_and_an_inventory_of_none_skips_the_approach_and_research(self):
+        out = self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1", needs="none")}, list_text=LIST + self.INVENTORY % "none")
+        self.assertIn("- approach: not needed", out)
+        self.assertIn("- research: not needed", out)
+        self.assertIn("- next stage by the documents: questions (its document: planning/slice-001/005_questions.md)", out)
+
+    def test_nothing_committed_to_still_has_the_states_to_write(self):
+        out = self.researched(approach=the_approach("Decision: without"), inventory="- a loan")
+        self.assertIn("to write there: states.md)", out)
+        self.assertIn("- nothing is committed to in planning/slice-001/005_approach.md: no outside system is researched\n", out)
+
+    def test_after_a_changed_approach_research_is_next_again_for_what_is_newly_committed_to(self):
+        self.researched("postbox.md", "states.md", inventory="- a loan")
         (self.machine.project / "planning/slice-001/007_approach.md").write_text(
             the_approach("Decision: committed: Lettera", committed=["Lettera: https://lettera.example/docs, for telling the member."]),
             encoding="utf-8")
         out = self.report()
         self.assertIn("approach (slice-001/007_approach.md)", out)
-        self.assertIn("- research (slice-001/006_research/) was written before the approach that now stands "
-                      "(slice-001/007_approach.md): what it holds of a thing no longer committed to does not stand\n", out)
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, "
+                      "still to write there: lettera.md)", out)
+        self.assertIn("- no longer stands, its thing is not committed to in slice-001/007_approach.md: "
+                      "planning/slice-001/006_research/postbox.md (it is left as it is, but for a first line to be added that says so)\n", out)
         self.assertIn("- a changed approach is a new document, the earlier one left as it is: planning/slice-001/008_approach.md", out)
+        self.machine.document("slice-001/006_research/lettera.md")
+        out = self.report()
+        self.assertIn("- next stage by the documents: questions", out)
+        self.assertIn("- no longer stands", out)
+
+    def test_the_pages_already_kept_are_counted_with_the_command_that_lists_them(self):
+        self.researched(inventory="- a loan")
+        self.assertNotIn("already kept", self.report())
+        for name in ("docs.postbox.example.txt", "docs.postbox.example-pricing.txt"):
+            self.machine.document(f"slice-001/pages/{name}")
+        self.assertRegex(self.report(), r'\n- 2 pages are already kept in planning/slice-001/pages, read from their copies: '
+                                        r'python3 "[^"\n]+' + self.PAGE + r" kept planning/slice-001/pages\n")
 
     def test_a_new_approach_with_a_need_waiting_is_the_one_counted(self):
         self.approached(the_approach("Decision: without"))
@@ -312,7 +399,10 @@ class Stage(unittest.TestCase):
                      slices={1: the_slice("record-a-loan / 1")})
         self.machine.document("slice-001/005_approach.md")
         (self.machine.project / "planning" / "slice-001" / "006_research").mkdir()
-        self.assertIn("- next stage by the documents: research", self.report())
+        out = self.report()
+        # Found by the pilot: with the folder there and empty, the report named a second one, 007_research.
+        self.assertIn("- next stage by the documents: research (its document: planning/slice-001/006_research/, to write there: states.md)", out)
+        self.assertNotIn("007_research", out)
 
     def test_the_chosen_slice_is_the_one_read_whatever_other_folders_exist(self):
         out = self.planned(the_set(row(1, "chosen", "record-a-loan"), row(2, "built", "record-a-return"),

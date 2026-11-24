@@ -248,7 +248,7 @@ class Run(unittest.TestCase):
         summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 20,
                           command=(sys.executable, str(fake)))
         self.assertEqual(summary["ended"], "stuck: the user had only the same thing to say")
-        self.assertEqual(summary["session_turns"], 3)   # said twice, and about to be said a third time
+        self.assertEqual(summary["session_turns"], 4)   # said twice with no new document, and about to be said a third time
 
     def test_a_request_with_no_question_mark_still_reaches_the_sorter(self):
         # Found by an end-to-end run: "give me the path" was taken for nothing asked, and the user said "Go on."
@@ -298,11 +298,15 @@ class Run(unittest.TestCase):
         '        pathlib.Path("plans/003_slices.md").write_text("| # | Slice | Items | Builds on | State |\\n|---|---|---|---|---|\\n| 2 | Do b | a | nothing | built |\\n")\n'
         '        pathlib.Path("plans/002_requirements.md").write_text("- [x] **a**: b")')
 
+    def listing_nothing(self, fake):
+        return fake.replace('write_text("- [ ] **a**: b")', self.NONE_LISTED)
+
     def through(self, fake=None, brief=BRIEF, turns=20, through="merge", out="out"):
         # A second run in one test takes a folder of its own: on Windows a run's repository cannot be swept away.
         (self.example / "brief.md").write_text(brief)
         script = self.folder / "fake.py"
-        script.write_text(fake or self.THROUGH)
+        # A run through a merge with no fake of its own lists no lasting thing: nothing to research before the merge.
+        script.write_text(fake or (self.listing_nothing(self.THROUGH) if through == "merge" else self.THROUGH))
         (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
         summary = run.run(self.example, self.folder / out, self.folder / "plugin", "m", "s", turns,
                           command=(sys.executable, str(script)), through=through)
@@ -344,7 +348,7 @@ class Run(unittest.TestCase):
 
     def test_a_session_that_never_marks_the_merged_slice_is_given_four_turns(self):
         # Found by the pilot: asked what is next after a merge, a session names the coming-back and waits for the word.
-        summary, sessions = self.through(fake=self.THROUGH.replace("if n == 6:", "if n == 7:"))
+        summary, sessions = self.through(fake=self.listing_nothing(self.THROUGH).replace("if n == 6:", "if n == 7:"))
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the slice was merged and the session came back to the set", 7))
 
     def test_asked_where_to_start_the_user_takes_the_recommended_slice_unless_the_brief_says_otherwise(self):
@@ -361,7 +365,7 @@ class Run(unittest.TestCase):
         self.assertFalse(run.in_order(["001_scope-map.md", "002_requirements.md"]))
 
     def test_a_slice_with_no_criterion_it_can_read_is_merged_as_naming_nothing(self):
-        fake = self.THROUGH.replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
+        fake = self.listing_nothing(self.THROUGH).replace("- **a / 1**: Given x, when y, then z.\\n- **a/2**: Given p, when q, then r.", "1. Given x, when y, then z.")
         summary, _ = self.through(fake=fake)
         self.assertEqual(summary["merged"], "nothing: no criterion was found in the slice's document")
 
@@ -383,13 +387,22 @@ class Run(unittest.TestCase):
         self.assertIn("plans/slice-002/005_approach.md", summary["documents"])
 
     def test_carried_through_a_merge_the_slice_is_merged_only_once_its_approach_is_decided(self):
-        fake = self.APPROACH.replace("    if n == 99:\n", "    if n == 8:\n")
+        fake = self.listing_nothing(self.APPROACH).replace("    if n == 99:\n", "    if n == 8:\n")
         summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
         self.assertEqual((summary["ended"], summary["session_turns"], summary["needs_waiting"]),
                          ("the slice was merged and the session came back to the set", 8, 0))
         said = [call[call.index("-p") + 1] for call in sessions]
         self.assertEqual(said[7], "That slice is built and merged. What's next?")
         self.assertNotIn("merged", said[6])
+
+    def test_carried_through_a_merge_the_slice_is_merged_only_once_its_research_is_written(self):
+        # Decision 44: research is adopted, so the made-up merge waits for it where there is something to research.
+        fake = self.RESEARCH.replace("    if n == 99:\n", "    if n == 9:\n")
+        summary, sessions = self.through(fake=fake, brief=self.SPOKEN)
+        self.assertEqual(summary["ended"], "the slice was merged and the session came back to the set")
+        said = [call[call.index("-p") + 1] for call in sessions]
+        self.assertEqual(said[8], "That slice is built and merged. What's next?")
+        self.assertFalse(any("merged" in one for one in said[:8]))
 
     def test_carried_through_a_merge_a_need_that_goes_on_waiting_ends_the_run_unmerged(self):
         summary, _ = self.through(fake=self.APPROACH.replace("if n == 7:", "if n == 98:"), brief=self.SPOKEN)
@@ -425,6 +438,88 @@ class Run(unittest.TestCase):
         self.assertTrue(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_slice.md",
                                       "005_approach.md"]))
         self.assertFalse(run.in_order(["000_problem.md", "001_scope-map.md", "002_requirements.md", "003_slices.md", "004_approach.md"]))
+
+    # Carried on through research (stage 6).
+    RESEARCH = APPROACH.replace('    if n == 99:\n', '    if n == 8:\n'
+                                '        pathlib.Path("plans/slice-002/006_research").mkdir(exist_ok=True)\n'
+                                '        pathlib.Path("plans/slice-002/006_research/states.md").write_text("# States\\n")\n'
+                                '    if n == 99:\n')
+    NONE_LISTED = 'write_text("- [ ] **a**: b\\n\\n## Outside systems and lasting things\\nnone\\n")'
+
+    def test_carried_through_research_it_ends_once_a_research_document_is_written(self):
+        summary, _ = self.through(fake=self.RESEARCH, brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the research was written", 8))
+        self.assertEqual(summary["research"], ["plans/slice-002/006_research/states.md"])
+        self.assertIn("plans/slice-002/006_research/states.md", summary["documents"])
+        self.assertEqual(summary["merged"], "")
+
+    def test_the_same_word_to_go_on_is_not_stuck_while_a_document_appears_each_turn(self):
+        # Found by example 1 from the first message: "Yes, go on" after the slice, the approach and before research ended the run as stuck.
+        summary, _ = self.through(fake=self.RESEARCH, brief=BRIEF, through="research")
+        self.assertEqual(summary["ended"], "the research was written")
+
+    def test_research_that_is_never_written_ends_the_run_as_stuck(self):
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 8:", "if n == 98:"), brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["research"]), ("stuck: the user had only the same thing to say", []))
+
+    def test_a_research_document_is_no_break_in_the_numbering(self):
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace('if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map")',
+                                     'if n == 2: pathlib.Path("plans/001_scope-map.md").write_text("a map"); '
+                                     'pathlib.Path("plans/000_problem.md").write_text("p"); pathlib.Path("plans/slice-001/005_research").mkdir(parents=True); '
+                                     'pathlib.Path("plans/slice-001/005_research/states.md").write_text("s")'))
+        (self.folder / "sorter.json").write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 10,
+                          command=(sys.executable, str(fake)))
+        self.assertTrue(summary["numbered_in_order"])
+        self.assertEqual(summary["research"], ["plans/slice-001/005_research/states.md"])
+
+    def test_a_need_that_goes_on_waiting_ends_a_run_through_research_too(self):
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 7:", "if n == 97:").replace("if n == 8:", "if n == 98:"),
+                                  brief=self.SPOKEN, through="research")
+        self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
+
+    def test_with_nothing_committed_to_and_no_lasting_thing_listed_it_ends_a_turn_later_with_no_research(self):
+        fake = (self.APPROACH.replace("A way to tell the member.", "none").replace("if n == 6:", "if n == 96:").replace("if n == 7:", "if n == 97:")
+                .replace('write_text("- [ ] **a**: b")', self.NONE_LISTED))
+        self.assertIn("lasting things", fake)
+        summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="research")
+        self.assertEqual((summary["ended"], summary["session_turns"], summary["research"]),
+                         ("nothing is committed to and the list names no lasting thing: no research was written", 6, []))
+
+    def test_what_is_left_to_research_is_read_as_the_stage_script_reads_it(self):
+        planning = self.folder / "read" / "plans"
+        (planning / "slice-001").mkdir(parents=True)
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n\n## Outside systems and lasting things\n`None.`\n")
+        self.assertTrue(run.nothing_to_research(planning))              # no approach: nothing is committed to
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: without\n\n## Committed to\nNothing.\n")
+        self.assertTrue(run.nothing_to_research(planning))
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: committed: Postbox\n\n## Committed to\n- Postbox: https://p.example/\n")
+        self.assertFalse(run.nothing_to_research(planning))
+        (planning / "slice-001" / "005_approach.md").write_text("Decision: without\n\n## Committed to\n- none\n")
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n\n## Outside systems and lasting things\n- a loan\n")
+        self.assertFalse(run.nothing_to_research(planning))
+        (planning / "002_requirements.md").write_text("- [ ] **a**: b\n")   # a list that does not say is taken to have something
+        self.assertFalse(run.nothing_to_research(planning))
+
+    def test_research_is_kept_with_its_documents(self):
+        self.kept()
+        planning = self.folder / "done" / "project" / "plans"
+        (planning / "slice-002" / "006_research").mkdir()
+        (planning / "slice-002" / "006_research" / "states.md").write_text("kept")
+        kept = run.keep(self.folder / "done", self.example, "research", self.folder / "plugin")
+        self.assertEqual((kept / "slice-002" / "006_research" / "states.md").read_text(), "kept")
+        self.assertFalse((run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin") / "slice-002" / "006_research").exists())
+
+    def test_keeping_a_place_no_run_finished_in_keeps_nothing_and_loses_nothing(self):
+        # Found before the stage was put to the owner: --keep given with a run's options ran nothing and emptied what was kept.
+        self.kept()
+        before = run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin")
+        names = sorted(path.name for path in before.rglob("*"))
+        with self.assertRaises(SystemExit) as refused:
+            run.keep(self.folder / "never-run", self.example, "approach", self.folder / "plugin")
+        self.assertIn("nothing to keep", str(refused.exception))
+        self.assertEqual(sorted(path.name for path in before.rglob("*")), names)
 
     def test_the_approach_is_kept_with_the_pages_its_quotes_are_from(self):
         self.kept()

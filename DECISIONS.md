@@ -380,6 +380,55 @@ asking is listed apart, so it can be overturned.
     short answer by hand without the stage's text. The short read is
     six pages a candidate, the limits first, not the four proposed.
 
+## 2026-11-24: research stays a stage, before the questions
+
+42. **Research is done up front, as a stage of its own, and the
+    approach stays as adopted** (the owner). Asked whether to write
+    the questions first and look up only what they need, and whether
+    the approach was overkill, the owner weighed it and kept both:
+    the approach "is already built and cheap", and "having all the
+    facts in a doc when we go to formulate and answer questions will
+    add valuable big picture context". The comparison of the two
+    orders on the first real plan (about $8) was offered and is not
+    run. Whether every line of the approach's text earns its place
+    has not been tested; it is not asked for.
+
+## 2026-11-24: how the research stage is measured, in its new place
+
+43. **Stage 6, research, is tested as proposed in
+    `steps/06-research/README.md`** (the owner: "Fine" to the cost
+    and to the third point, then "yes and yes"), at about $90, the
+    pilot's real cost reported first ($5.23). With it, two points:
+    the states of a lasting thing the product itself keeps are
+    written here, from the planning documents alone, a gap written
+    as "not said in the documents" for the questions stage; and a
+    user who says to skip the reading is told once what that costs
+    and offered the reading again, and if they insist every point
+    is written open with its test and nothing as a fact. The owner
+    asked how the states feed the questions and was told: sourced
+    rows are facts, "not said" rows become questions answered as
+    the planner's choice or the owner's decision, `to verify` rows
+    become tests, a state with no way out goes to the owner's list.
+
+44. **The research stage holds, on Sonnet 5.5** (the owner: "Yes",
+    2026-11-24, after asking how much the missed facts matter and
+    whether later stages would catch them). Its text is adopted
+    (149 lines), its twelve cases join the regression build,
+    startup's case of a stage not built moves on to the questions,
+    and an end-to-end run merges a slice only once its research is
+    written or there is nothing to research. Adopted knowing what
+    it does not meet: on the plan it was tuned on, 76% of the key's
+    facts by pattern against 80% (85% as read); on the other, 7 of
+    11 in every run against two thirds. **The owner's condition:**
+    before the questions, answers and tests stages (7 to 9) are put
+    to the owner stacked on this one, it is verified that the gaps
+    research leaves are closed by then: for both real plans, each
+    fact of the key that a research run lacks is counted again
+    after those stages, by the same keys, and any still missing is
+    named with its kind. A provider-specific fact no general
+    question prompts for (an identifier that changes later) is the
+    kind expected to remain, and its fix belongs to the questions
+    library.
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
@@ -399,6 +448,9 @@ asking is listed apart, so it can be overturned.
   owner's Mac.
 - **Approaches the user considered and rejected:** kad's skill asked
   and recorded them; no stage here does yet.
+- **A second slice that commits to a thing already researched**
+  (whether the earlier document is carried forward, and what is read
+  again): when an example reaches a second slice's research.
 - **A dependency the user did not name** (a library the design or
   the stack picks) has no way back to research in the order as
   written: with the design and stack stages.
@@ -689,5 +741,77 @@ asking is listed apart, so it can be overturned.
   - The examples could not start from their kept documents (the
     routing table changed), so the pass from the first message
     stood for both; it stopped at the approach, not at a merge.
+- Research in its new place, as proposed (`steps/06-research/README.md`),
+  2026-11-24; not yet agreed:
+  - One document a thing committed to, under the name the stage
+    script already gives; the states of every lasting thing in one
+    `states.md` a slice, so that the questions stage's grid has one
+    place to read.
+  - A page the approach kept is given back from its copy by the page
+    command itself: a script's work, by unit test, not a line of the
+    text a session might skip.
+  - After a change of mind the research folder is kept: the newly
+    committed thing gets its document there, and the document of a
+    thing no longer committed to is left with a first line saying it
+    no longer stands. The stage script names research as next again
+    until every thing committed to has its document.
+  - When the full read shows the commitment cannot do what a
+    criterion needs, research says so and changes nothing: the
+    approach's change of mind and the slice stage already have that
+    work.
+  - The benchmark's approach documents are written by hand from
+    kad's records of what was chosen (private).
+  - Raw runs go to the audit repository under `06-research/`; the
+    first pilot's stay under `04-research/`, the stage's number then.
+  - Startup's scenario of a stage not built names the questions when
+    research is on trial (`KD_TRIAL`), with a made-up research
+    document; a unit test.
+  - The cost put to the owner is about $90, not the $40 guessed at
+    the first pilot, which predates decision 38.
+- Research as built, free, 2026-11-24 (nothing paid run yet):
+  - `states.md` is always written where the requirements' list of
+    outside systems and lasting things is not `none`; when the slice
+    touches none of them it says so in one line. A list that does
+    not have that heading is taken to have something.
+  - The stage script names the documents still to write on the line
+    that names research as next, and a research document whose thing
+    is no longer committed to as no longer standing.
+  - A kept page is given back only from the slice's own `pages/`
+    folder, never from the machine's folder for temporary files,
+    which may hold another project's copy; `--again` asks the site.
+  - When a second site is refused mid-read, what opened is written
+    and the rest listed under "Not opened"; the stage script then
+    counts research as written, and it is the user's "I've allowed
+    it" that brings the session back to finish (the routing table's
+    rule that an answer to a stage's question is that stage's work).
+    Case 6b tests exactly that; the script is changed if it fails.
+  - The cases' arms are `bare`, `text` and `kad` (kad's
+    `domain-model`, on cases 4 and 5), as for the approach.
+  - The end-to-end driver ends a run through research once a
+    research document is written, or a turn after there is nothing
+    to research; a run where none is ever written ends as stuck.
+- Research as tuned and closed, 2026-11-24:
+  - A page over 300 lines is given as its headings, each with its
+    lines, and read a part at a time with `page.py lines`: a
+    session's shell cut the real provider's reference pages, and
+    the session then searched for the words it had thought of. The
+    numbers (300 lines a page, 150 a part) are a first guess.
+  - A twelfth case holds a fact deep in a long made-up page, so the
+    bar at five runs is 60 of 60, not 55 of 55.
+  - The text grew from 137 to 149 lines over two rounds: the
+    reference pages are read whatever the criteria say; a long page
+    by its parts; what names a thing on the other side and whether
+    that name can change; how a failure is told from a success; an
+    open point is searched for in the kept pages before it is left
+    open.
+  - Case 6b passed in every run on Sonnet, so the stage script still
+    counts research as written when pages were refused, and the
+    routing table's rule brings the session back.
+  - The key's patterns are not changed after a run. Where a fact is
+    in the documents in other words, both numbers are given: by the
+    pattern, and as read.
+  - A check that fails a good answer is corrected with a unit test
+    and the kept runs graded again for nothing; the count as first
+    graded is given beside the corrected one.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
