@@ -243,10 +243,10 @@ class Drawing(unittest.TestCase):
     def test_every_state_meets_every_criterion_every_fixed_event_and_every_commitment(self):
         text = self.drawn()
         events = 2 + len(questions.EVENTS) + len(questions.OUTSIDE)
-        self.assertEqual(text.count("- S."), 3 * events)
+        self.assertEqual(text.count("- S."), 3 * events - 2)   # two are already asked by the library
         self.assertIn("- S.renewal-payment.pending.renew-and-pay-2:", text)
         self.assertIn("- S.season-ticket.lapsed.restart:", text)
-        self.assertIn("- S.renewal-payment.lost.payright-lost: A renewal payment is `lost` and PayRight acted, and its reply never arrived", text)
+        self.assertIn("- S.season-ticket.lapsed.payright-lost: The season ticket is `lapsed` and PayRight acted, and its reply never arrived", text)
 
     def test_nothing_committed_to_gives_no_event_from_outside(self):
         folder, library = project(kept=KEPT.replace("call-external-02 | PayRight", "call-external-02 | payment-request"), approach=None)
@@ -271,6 +271,61 @@ class Drawing(unittest.TestCase):
         code, said = run("draw", folder, library)
         self.assertEqual(code, 0, said)
         self.assertIn("Nothing was left open.", (folder / "007_questions" / "questions.md").read_text(encoding="utf-8"))
+
+    def library_with(self, name, action, applies):
+        """The made-up library with one more entry, kept and applied to one thing."""
+        entries = LIBRARY + [{"id": name, "action": action, "failure": "f", "question": f"The question of {name}?", "source": {}}]
+        self.library.write_text(json.dumps(entries), encoding="utf-8")
+        (self.folder / "007_questions" / "kept.md").write_text(KEPT + f"| {name} | {applies} | it arises |\n", encoding="utf-8")
+
+    def test_a_way_a_kept_library_question_already_asks_of_the_same_value_is_not_drawn_again(self):
+        self.library_with("user-input-01", "user-input", "card-holder-name")
+        text = self.drawn()
+        self.assertNotIn("- V.card-holder-name.long:", text)
+        self.assertEqual(text.count("- V.card-holder-name."), 4)
+        self.assertIn("Not drawn, 1 already asked of the same thing by a library question above.", text)
+
+    def test_the_same_library_question_kept_for_another_thing_spares_nothing(self):
+        self.library_with("user-input-01", "user-input", "payment-request")
+        text = self.drawn()
+        self.assertEqual(text.count("- V.card-holder-name."), 5)
+        self.assertIn("- V.card-holder-name.long:", text)
+
+    def test_a_leak_a_kept_library_question_already_asks_of_the_same_value_is_not_drawn_again(self):
+        self.library_with("secrets-03", "secrets", "card-holder-name")
+        text = self.drawn()
+        self.assertNotIn("- X.card-holder-name.logs:", text)
+        self.assertEqual(text.count("- X.card-holder-name."), len(questions.EXITS) - 1)
+
+    def test_a_kept_question_on_settings_stands_for_the_rule_wherever_it_applies(self):
+        self.library_with("configuration-01", "configuration", "payment-request")
+        text = self.drawn()
+        self.assertEqual(text.count("- V.every-setting."), 1)
+        self.assertIn("- V.every-setting.outside:", text)
+
+    def test_a_dropped_question_on_settings_leaves_the_rule_whole(self):
+        self.library_with("configuration-01", "configuration", "dropped")
+        self.assertEqual(self.drawn().count("- V.every-setting."), 4)
+
+    def test_an_event_a_kept_library_question_already_asks_of_the_same_thing_is_drawn_for_none_of_its_states(self):
+        text = self.drawn()   # call-external-01, the reply lost, is kept for the renewal payment
+        self.assertNotIn("- S.renewal-payment.pending.payright-lost:", text)
+        self.assertNotIn("- S.renewal-payment.lost.payright-lost:", text)
+        self.assertIn("- S.season-ticket.lapsed.payright-lost:", text)
+        self.assertIn("Not drawn, 2 already asked", text)
+
+    def test_the_library_line_of_a_lasting_thing_names_each_of_its_states(self):
+        self.assertIn("- L.call-external-01.renewal-payment: A renewal payment (in each of its states: pending, lost): What if", self.drawn())
+
+    def test_every_question_said_to_ask_the_same_is_an_entry_of_the_real_library(self):
+        ids = {entry["id"] for entry in json.loads(questions.LIBRARY.read_text(encoding="utf-8"))}
+        named = {name for group in (questions.SAME, questions.SAME_SETTINGS) for names in group.values() for name in names}
+        self.assertEqual(named - ids, set())
+        self.assertEqual(set(questions.SAME) - set(questions.WAYS) - set(questions.EXITS) - set(questions.EVENTS) - set(questions.OUTSIDE), set())
+
+    def test_no_line_is_drawn_twice(self):
+        names = [line.split(":")[0] for line in self.drawn().splitlines() if line.startswith("- ")]
+        self.assertEqual(len(names), len(set(names)))
 
     def test_a_kept_file_with_a_problem_is_not_drawn_from(self):
         (self.folder / "007_questions" / "kept.md").write_text(KEPT.replace("| migration: all | dropped | nothing is stored before this slice |\n", ""), encoding="utf-8")

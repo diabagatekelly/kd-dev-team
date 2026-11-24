@@ -86,6 +86,29 @@ WHOLE = {
     "obligations": "Does a law, a contract or an outside system's terms bind how this is handled?",
     "prize": "What would someone who means harm want from what this slice adds?",
 }
+# The library comes first. A line of a grid is not drawn when a kept library question, applied to the
+# same thing, already asks it: the library's line stands, and no question is asked twice.
+SAME = {
+    "empty": ("user-input-02", "user-input-07"),
+    "missing": ("user-input-02",),
+    "malformed": ("receive-external-data-12",),
+    "edge": ("user-input-08",),
+    "outside": ("user-input-08", "receive-external-data-07"),
+    "long": ("user-input-01", "receive-external-data-10"),
+    "twice": ("user-input-09",),
+    "characters": ("user-input-03", "text-03"),
+    "logs": ("secrets-03", "logging-03"),
+    "again": ("user-action-01", "call-external-02", "long-operation-11"),
+    "reopened": ("user-action-02", "user-action-06"),
+    "restart": ("long-operation-06", "startup-read-04", "durable-write-12"),
+    "second": ("concurrency-01", "concurrency-12", "user-action-07"),
+    "time": ("lifecycle-04", "lifecycle-08", "long-operation-09"),
+    "down": ("call-external-07", "call-external-12"),
+    "slow": ("call-external-03", "call-external-04", "call-external-08"),
+    "lost": ("call-external-01",),
+}
+# The rule for settings is asked of no one thing, so a kept question on settings stands for it wherever it applies.
+SAME_SETTINGS = {"missing": ("configuration-01",), "empty": ("configuration-01",), "malformed": ("configuration-01",), "outside": ("configuration-02",)}
 OPEN_SOURCES = ("not said in the documents", "to verify")
 STAMP = "<!-- drawn from: %s -->"
 
@@ -273,43 +296,74 @@ def problems(kept, names, entries, sources=()):
 
 
 def draw(read, kept, entries):
-    """The questions, a line a cell, each with a name that does not change."""
+    """The questions, a line a cell, each with a name that does not change. The library first."""
     lines = ["# Questions", "", STAMP % stamp(read, kept["text"]), "",
              "Drawn by script from kept.md and the slice's documents. Nothing here is answered.", ""]
     _found, judged = problems(kept, known(read), entries)
     by_id = {entry["id"]: entry for entry in entries}
-    lines += ["## From the library", ""]
+    things, _dead = states(read["research"].get("states.md", ""))
+    lasting = {slug(thing): [state for state, _source, _row in table] for thing, table in things.items()}
+    asked = {}
     for name, applies in judged.items():
         for thing in applies:
-            lines.append(f"- L.{name}.{slug(thing)}: {thing}: {by_id[name]['question']}")
-    lines += ["", "## Each value taken in, each way it can be wrong", ""]
+            asked.setdefault(slug(thing), set()).add(name)
+
+    def already(thing, key):
+        """The kept library questions that ask this of this thing."""
+        return sorted(asked.get(slug(thing), set()).intersection(SAME.get(key, ())))
+
+    def section(title, drawn, spared, empty=None):
+        found = ["", f"## {title}", ""] + (drawn or ([empty] if empty else []))
+        if spared:
+            found.append(f"Not drawn, {spared} already asked of the same thing by a library question above.")
+        return found
+
+    drawn = []
+    for name, applies in judged.items():
+        for thing in applies:
+            each = f" (in each of its states: {', '.join(lasting[slug(thing)])})" if slug(thing) in lasting else ""
+            drawn.append(f"- L.{name}.{slug(thing)}: {thing}{each}: {by_id[name]['question']}")
+    lines += section("From the library", drawn, 0)[1:]
+
+    drawn, spared = [], 0
     for value in kept["values"]:
         for way in KINDS.get(value["kind"], KINDS["other"]):
-            lines.append(f"- V.{slug(value['name'])}.{way}: `{value['name']}` ({value['from']}) {WAYS[way]}: what does the product do, and what is the person told?")
+            if already(value["name"], way):
+                spared += 1
+                continue
+            drawn.append(f"- V.{slug(value['name'])}.{way}: `{value['name']}` ({value['from']}) {WAYS[way]}: what does the product do, and what is the person told?")
     for way in SETTINGS[1]:
-        lines.append(f"- V.{SETTINGS[0]}.{way}: any setting the build reads {WAYS[way]}: what does the product do at start, and who is told?")
-    lines += ["", "## Each sensitive value, each place it can leak to", ""]
+        if set(judged).intersection(name for name in SAME_SETTINGS[way] if judged.get(name)):
+            spared += 1
+            continue
+        drawn.append(f"- V.{SETTINGS[0]}.{way}: any setting the build reads {WAYS[way]}: what does the product do at start, and who is told?")
+    lines += section("Each value taken in, each way it can be wrong", drawn, spared)
+
+    drawn, spared = [], 0
     exposed = [value for value in kept["values"] if value["sensitive"] == "yes"]
     for value in exposed:
         for key, words in EXITS.items():
-            lines.append(f"- X.{slug(value['name'])}.{key}: can `{value['name']}` reach {words}, on the path that works and on each that fails?")
-    if not exposed:
-        lines.append("No value taken in is marked sensitive.")
-    lines += ["", "## Each state, each event", ""]
-    things, _dead = states(read["research"].get("states.md", ""))
-    events = [(slug(name), f"what {name} describes is done") for name in criteria(read["slice"])]
-    events += list(EVENTS.items())
-    events += [(f"{slug(name)}-{key}", words % name) for name in committed(read["approach"]) for key, words in OUTSIDE.items()]
-    if not things:
-        lines.append("No lasting thing has states written for this slice.")
+            if already(value["name"], key):
+                spared += 1
+                continue
+            drawn.append(f"- X.{slug(value['name'])}.{key}: can `{value['name']}` reach {words}, on the path that works and on each that fails?")
+    lines += section("Each sensitive value, each place it can leak to", drawn, spared, None if exposed else "No value taken in is marked sensitive.")
+
+    drawn, spared = [], 0
+    events = [(slug(name), slug(name), f"what {name} describes is done") for name in criteria(read["slice"])]
+    events += [(key, key, words) for key, words in EVENTS.items()]
+    events += [(f"{slug(name)}-{key}", key, words % name) for name in committed(read["approach"]) for key, words in OUTSIDE.items()]
     for thing, table in things.items():
         for state, _source, _row in table:
-            for key, words in events:
-                lines.append(f"- S.{slug(thing)}.{state}.{key}: {thing} is `{state}` and {words}: what happens to it, and what is the person shown?")
-    lines += ["", "## Asked of every slice", ""]
-    lines += [f"- W.{key}: {words}" for key, words in WHOLE.items()]
-    lines += ["", "## Carried from research", ""]
-    lines += [f"- {name}: {words}" for name, words in carried(read["research"])] or ["Nothing was left open."]
+            for name, key, words in events:
+                if already(thing, key):
+                    spared += 1
+                    continue
+                drawn.append(f"- S.{slug(thing)}.{state}.{name}: {thing} is `{state}` and {words}: what happens to it, and what is the person shown?")
+    lines += section("Each state, each event", drawn, spared, None if things else "No lasting thing has states written for this slice.")
+
+    lines += section("Asked of every slice", [f"- W.{key}: {words}" for key, words in WHOLE.items()], 0)
+    lines += section("Carried from research", [f"- {name}: {words}" for name, words in carried(read["research"])], 0, "Nothing was left open.")
     return "\n".join(lines) + "\n"
 
 

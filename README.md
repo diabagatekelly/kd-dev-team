@@ -142,7 +142,8 @@ regression build (89 scenarios over seven stages).
 
    **Proposed, nothing paid run** (`steps/07-questions/README.md`):
    the library triaged by a session, the grids drawn by
-   `questions/questions.py` (built, with its unit tests), ten
+   `questions/questions.py` (built, with its unit tests: the
+   library first, and no grid line the library already asks), ten
    cases, about $135 with a pilot of about $10 first.
 
 The parked check-in

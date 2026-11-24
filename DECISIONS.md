@@ -847,6 +847,16 @@ asking is listed apart, so it can be overturned.
     acting with its reply lost. A provider's errors by name are not
     events: research writes them as facts, and the library's
     questions on calls are applied to each request.
+  - The library first, and no question twice (the owner, asked
+    whether the stage uses the library: "Library first, then grid,
+    obviously no question should be duplicated"). A grid's line is
+    not drawn when a kept library question applied to the same
+    thing already asks it. Chosen here: the library's line is the
+    one that stands, naming each state of a lasting thing; "the
+    same thing" is the same value or lasting thing, so a question
+    kept for a request does not spare the lines of a thing's
+    states; which entries ask the same as which column is a fixed
+    table in the script, from a reading of the 250.
   - Whether the questions are stale is a mark of every document
     they were drawn from, kept in `questions.md`'s first lines.
   - A lasting thing the slice creates that the requirements' list

@@ -59,11 +59,27 @@ holds the session to the documents:
   document of the slice changes the stage script says the questions
   are stale.
 
-`questions/questions.py` (`things`, `draw`, `check`, `state`), 41
+**The library first, and no question twice.** The session goes
+through the library before anything is drawn, and the script then
+draws only what the library left unasked. A line of a grid is not
+drawn when a kept library question, applied to the same thing,
+already asks it: the reply that never arrives is one question of a
+thing, not one from the library and one more for each of its
+states. The library's line stands, names each state of a lasting
+thing so that it is answered for each, and the script says how many
+lines it spared. Which library questions ask the same as which
+column is a fixed table in the script (17 columns, 32 entries), a
+unit test holding it to the real library; an entry that is dropped,
+or kept for another thing, spares nothing, so the grid still
+catches what the triage let go. No entry is judged twice and no
+line has the same name as another.
+
+`questions/questions.py` (`things`, `draw`, `check`, `state`), 50
 unit tests, no model.
 
 **Sized for nothing on what is kept.** Without the library's part
-and the values, which need a session:
+and the values, which need a session, and so before any line is
+spared as already asked:
 
 | | Lasting things | States | Lines of state against event | Carried from research |
 |---|---|---|---|---|
@@ -217,8 +233,8 @@ each key written before any run:
   is two entries, each resting on a public page like the other 250,
   in kinds that are already at the checker's limit of twelve: the
   limit is raised when they are proposed, after the count.
-- **Size and steadiness:** entries kept, lines in all, and how many
-  entries all three runs keep.
+- **Size and steadiness:** entries kept, lines in all, lines spared
+  as already asked, and how many entries all three runs keep.
 
 **Quality: read, with reasons** (decision 18). The mark is kad's own
 reliability and security documents for the same two slices: each
@@ -244,6 +260,9 @@ file could be handed to the answers stage as it is.
   - in every run, `questions.md` passes the script's check: every
     entry accounted for, every thing known, drawn and not written;
   - no run asks the user a question or records an answer;
+  - read on the two real plans: no two lines of a `questions.md`
+    ask the same thing of the same thing (any pair found is added
+    to the script's table, with a unit test);
   - on both real plans, every run keeps an entry for every fully
     tied defect within the slice, and for all but one at most of
     the partly tied (E3's bar);
@@ -306,6 +325,8 @@ agreed and said before it is passed.
 - A second slice, and the lighter pass the design gives a slice
   that adds nothing new.
 - Whether the kinds of value and the ways each can be wrong are the
-  right table: a first guess, shown only by the four defects.
+  right table: a first guess, shown only by the four defects. The
+  table of which library questions ask the same as a grid's column
+  is my reading of the 250, checked by the read above.
 - Opus with the text, unless Sonnet does not hold. The real run on
   the owner's Mac.
