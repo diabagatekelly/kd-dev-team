@@ -112,8 +112,8 @@ class Checks(unittest.TestCase):
         self.assertEqual({line.count("|") for line in cases.BOTH_FIT.splitlines() if line.startswith("|")}, {5})
         self.assertEqual({line.count("|") for line in cases.WAITING.splitlines() if line.startswith("|")}, {6})
 
-    def test_more_than_four_pages_of_one_candidate_fails(self):
-        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 5), ["at-most-four-pages-of-postbox"])
+    def test_more_than_six_pages_of_one_candidate_fails(self):
+        self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1, [FETCH] * 7), ["at-most-six-pages-of-postbox"])
         self.assertEqual(failed("01-two-candidates-on-two-limits", {DOC: cases.WAITING}, ASK_1), ["reads-with-the-page-command"])
 
     def test_a_page_read_through_a_variable_or_in_a_loop_is_still_read_with_the_command(self):
@@ -306,9 +306,9 @@ class Fixtures(unittest.TestCase):
         self.assertEqual(cases.page.check(documents, pages), [])
         self.assertGreater(len(cases.page.PAIR.findall(cases.TWO_WAITING)), 10)
 
-    def test_no_candidate_has_more_than_four_pages_to_read(self):
+    def test_no_candidate_has_more_than_six_pages_to_read(self):
         for pages in (cases.postbox(), cases.lettera(), cases.paperboy()):
-            self.assertLessEqual(len(pages), 4)
+            self.assertLessEqual(len(pages), 6)
 
     def test_no_made_up_document_or_page_names_a_real_service(self):
         import re

@@ -204,8 +204,9 @@ VM does not allow is named with why, and the user allows it for that
 VM with the command the reader prints, on their own machine: the yes
 research already has. All the sites wanted are asked for in one
 message. A refusal is never worked round. A short read is the pages
-that answer the slice's need and the user's limits, four a candidate
-at most; the full read is research's. Pages are kept in
+that answer the user's limits first, then the slice's need, six a
+candidate at most (four as proposed; the real choice showed four
+left a limit's page unread, below); the full read is research's. Pages are kept in
 `slice-NNN/pages/`, one place for this stage and research, so a page
 read here is not fetched again there.
 

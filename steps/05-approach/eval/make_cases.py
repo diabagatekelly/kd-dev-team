@@ -358,8 +358,8 @@ def committed_to(holds):
 FETCHED = {"type": "tool_used", "name": "reads-with-the-page-command", "tool": "Bash", "input_match": r"page\.py[\s\S]*\bfetch\b", "min": 1}
 
 
-def at_most_four(host):
-    return {"type": "tool_used", "name": f"at-most-four-pages-of-{host.split('.')[1]}", "tool": "Bash", "min": 0, "max": 4,
+def at_most_six(host):
+    return {"type": "tool_used", "name": f"at-most-six-pages-of-{host.split('.')[1]}", "tool": "Bash", "min": 0, "max": 6,
             "input_match": rf"page\.py[\s\S]*\bfetch\b[\s\S]*{host.replace('.', '[.]')}"}
 
 
@@ -391,7 +391,7 @@ BOTH_READ = [in_file(DOC, "a-row-for-postbox", row_of("Postbox")), in_file(DOC, 
              in_file(DOC, "fact-what-postbox-costs", r"£12 a month"), in_file(DOC, "fact-what-lettera-costs", r"£35 a month"),
              in_file(DOC, "fact-where-postbox-keeps-data", r"London and Manchester"),
              in_file(DOC, "fact-where-lettera-keeps-data", r"United States"),
-             FETCHED, at_most_four(POSTBOX), at_most_four(LETTERA)]
+             FETCHED, at_most_six(POSTBOX), at_most_six(LETTERA)]
 OVER = r"break|over|above|exceed|more than|outside|not in the UK|fails?|does not meet|too (?:dear|expensive|much)|beyond"
 WITHOUT_RECOMMENDED = (r"(?:commit|sign up|take on|pay)[^.\n]{0,40}(?:to |for )?(?:nothing|no (?:service|provider))|"
                        r"no (?:service|provider|commitment)[^.\n]{0,80}(?:needed|yet|for (?:now|this slice))|"
@@ -447,7 +447,7 @@ SCENARIOS = [
     ("03-a-provider-set-as-a-limit", "A provider fixed by contract and a need the user meets themselves: the provider read against the criteria, no other named, nothing to choose.",
      playhouse(PAY, the_set=PAY_SET), {PAYRIGHT: research.pages()}, [PAYRIGHT],
      "approach (its document: planning/slice-001/005_approach.md)", GO_ON,
-     [WRITTEN, FETCHED, at_most_four(PAYRIGHT),
+     [WRITTEN, FETCHED, at_most_six(PAYRIGHT),
       in_file(DOC, "form-the-provider-is-quoted-with-its-page", quoted(PAYRIGHT)),
       in_file(DOC, "fact-a-payment-is-not-known-at-once", r"pending|3 working days|three working days|does not tell you"),
       in_file(DOC, "form-fixed-by-the-limit", decided(r"fixed by (?:a|the) limit:?\s*\**\[?PayRight")),
