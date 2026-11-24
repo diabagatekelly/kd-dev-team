@@ -29,12 +29,12 @@ class Fixtures(unittest.TestCase):
         return (self.case(start) / "report.txt").read_text(encoding="utf-8")
 
     def test_every_arm_builds_its_cases(self):
-        self.assertEqual(len(self.built), 11)
+        self.assertEqual(len(self.built), 12)
         arms = ["bare"] + (["kad"] if any(path.exists() for path in cases.KAD) else [])
         for arm in arms:
             with self.subTest(arm), contextlib.redirect_stdout(io.StringIO()) as out:
                 cases.main(arm)
-            self.assertEqual(len(out.getvalue().splitlines()), 2 if arm == "kad" else 11)
+            self.assertEqual(len(out.getvalue().splitlines()), 2 if arm == "kad" else 12)
 
     def test_only_the_text_arm_carries_the_stage_text_and_the_bare_arm_is_told_to_do_the_stage(self):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -103,6 +103,37 @@ class Fixtures(unittest.TestCase):
         names = [line for line in (self.case("09b") / "case.yaml").read_text().splitlines() if "quotes-no-page" in line]
         self.assertEqual(len(names), 1)
         self.assertIn("quotes-no-page-for-a-state", names[0])
+
+    def test_the_start_of_a_file_is_written_as_the_evaluation_tool_reads_it(self):
+        # Found by the three runs: the tool's patterns have no \\A, and a document that began "No longer stands" failed.
+        import re
+        text = (self.case("08") / "case.yaml").read_text()
+        self.assertNotIn("\\\\A", text)
+        pattern = cases.START + r"[\s\S]{0,300}?(no longer)"
+        self.assertRegex("> No longer stands: see payright.md\n\n# Research: CardWay", re.compile(pattern, re.I))
+        self.assertNotRegex("# Research\n" + "x" * 400 + "no longer", re.compile(pattern, re.I))
+
+    def test_a_refusal_in_a_quoted_error_is_not_a_page_refused(self):
+        # Found by the three runs: "the card's bank refused the payment", quoted from the page now read, failed a good run.
+        import json, re
+        check = next(json.loads(line[4:]) for line in (self.case("06b") / "case.yaml").read_text().splitlines()
+                     if "no-longer-says-they-were-not-opened" in line)
+        good = ('- F9: "the card\'s bank refused the payment" (https://api.payright.example/errors)\n\n## Not opened\n- None.\n')
+        bad = "## Not opened\n- https://api.payright.example/errors: answered 403.\n"
+        said = "## Not opened\n- None. https://api.payright.example/errors and https://api.payright.example/statuses were opened after the user allowed the site.\n"
+        for text in (good, said):
+            self.assertIsNone(re.search(check["pattern"], text, re.I))
+        self.assertIsNotNone(re.search(check["pattern"], bad, re.I))
+
+    def test_the_long_page_is_long_enough_to_come_as_its_headings_and_holds_its_fact_once(self):
+        case = self.case("10")
+        body = (case / "state/web/pages" / cases.HOST / "reference").read_text()
+        text = quotes.page.as_text(body)
+        self.assertGreater(len(text.splitlines()), quotes.page.LONG)
+        self.assertEqual(text.count("30 seconds"), 1)
+        self.assertNotIn("30 seconds", "".join(cases.pages().values()))
+        self.assertIn("/reference", (case / "state/web/pages" / cases.HOST / "index").read_text())
+        self.assertIn("this page is long", quotes.page.shown("u", "f", text))
 
     def test_a_check_for_a_fetch_reads_the_command_as_a_session_writes_it(self):
         any_page, of_the_reference = cases.fetched("x")["input_match"], cases.fetched("x", cases.API)["input_match"]

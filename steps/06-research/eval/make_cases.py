@@ -272,6 +272,25 @@ def pages(payments_extra="", limit="100", down=()):
     return {(name + ".down" if name in down else name): ("" if name in down else text) for name, text in out.items()}
 
 
+def reference():
+    """A long page of reference, as a real provider's is: sixty objects a field a line, and one thing
+    said nowhere else, deep in it."""
+    parts = ["<html><body><h1>API reference</h1><p>Every object and field of the PayRight API.</p>"]
+    for number in range(1, 61):
+        parts.append(f"<h2>Object {number}: record_{number}</h2>" + "".join(
+            f"<p><code>field_{number}_{field}</code>: a string, up to {field + 10} characters.</p>" for field in range(9)))
+        if number == 41:
+            parts.append("<h2>When no reply arrives</h2><p>If a request to take a payment gets no reply within 30 seconds, "
+                         "the payment may still have been taken. Ask for it with <code>GET /v1/payments?reference=</code> before sending it again.</p>")
+    return "".join(parts) + "</body></html>"
+
+
+def with_reference():
+    site = pages()
+    site["index"] = site["index"].replace("</ul>", f'<li><a href="{SITE}/reference">API reference</a></li></ul>')
+    return {**site, "reference": reference()}
+
+
 def split_site():
     """PayRight's guide on one site and its reference (errors, statuses) on another: ({host: pages})."""
     whole = pages()
@@ -301,6 +320,7 @@ def quoted(host=HOST):
 
 
 QUOTED = quoted()
+START = r"(?<![\s\S])"   # the start of a file: the evaluation tool's patterns have no \A
 WROTE = requirements.WROTE
 
 
@@ -434,7 +454,7 @@ SCENARIOS = [
       in_file(SYSTEM, "fact-the-errors-by-name", near("card_declined", "rate_limited", 2000)),
       in_file(SYSTEM, "fact-settling-takes-three-working-days", r"3 working days|three working days"),
       in_file(SYSTEM, "the-new-facts-are-quoted", quoted(API)),
-      not_in_file(SYSTEM, "no-longer-says-they-were-not-opened", API.replace(".", "[.]") + r"/(errors|statuses)[^\n]*(403|not allow|refused)"),
+      not_in_file(SYSTEM, "no-longer-says-they-were-not-opened", r"(?:^|\n)#+[^\n]*not opened[\s\S]*" + API.replace(".", "[.]") + r"/(errors|statuses)[^\n]*(403|not allow|refused|could not)"),
       in_file(STATES, "the-states-are-finished", r"\|\s*`?[a-z-]*disputed[a-z-]*`?\s*\|")],
      False, [("user", GO_ON), ("assistant", ASKED_FOR_THE_SITE)], False),
     ("07-the-full-read-overturns-a-criterion",
@@ -453,11 +473,17 @@ SCENARIOS = [
      {HOST: pages(), CARDWAY: CARDWAY_PAGES}, [HOST, CARDWAY], GO_ON,
      [WRITES, *FORM, *FACTS,
       in_file(f"{FOLDER}/cardway.md", "the-old-document-is-left", r"Create a charge with POST /charges"),
-      in_file(f"{FOLDER}/cardway.md", "the-old-document-says-it-no-longer-stands", r"\A[\s\S]{0,300}(no longer|does not stand|superseded|replaced)"),
+      in_file(f"{FOLDER}/cardway.md", "the-old-document-says-it-no-longer-stands", START + r"[\s\S]{0,300}?(no longer|does not stand|superseded|replaced)"),
       in_file(STATES, "the-states-are-from-what-is-now-committed-to", QUOTED),
       in_file(STATES, "the-states-are-walked-again", r"\|\s*`?[a-z-]*(settled|disputed)[a-z-]*`?\s*\|"),
       fetched("reads-nothing-of-what-is-no-longer-committed-to", CARDWAY, most=0),
       trace("deletes-nothing", r'"command"\s*:\s*"[^"]*\brm\s+[^"]*_research')], False, None, False),
+    ("10-a-long-page", "A page too long to print at once holds a fact nothing else does: it is read by its parts and the fact found.",
+     playhouse(), {HOST: with_reference()}, [HOST], GO_ON,
+     [WRITES, *FORM, *FACTS,
+      in_file(SYSTEM, "fact-deep-in-the-long-page", r"30 seconds"),
+      in_file(SYSTEM, "the-fact-is-quoted-from-that-page", r"30 seconds[^\n]*\(" + SITE.replace(".", "[.]") + r"/reference\)|reference\)[^\n]*30 seconds")],
+     False, None, False),
     ("09a-skip-the-reading", "The user says to skip the reading: said once what it costs, the reading offered again; nothing written from memory.",
      playhouse(), {HOST: pages()}, [HOST], SKIP,
      [says("says-what-it-costs", r"memory|remember|recall|from what I know|without (the|its) (pages|documentation)|contradict|wrong|out of date|unverified|not (a )?(source|fact)"),
