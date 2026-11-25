@@ -1,6 +1,6 @@
 # The security pass (after stage 7)
 
-**Being tested (decision 50); not yet put to the owner.** The owner decided it
+**Adopted on Sonnet 5.5 (2026-11-25, decision 51).** The owner decided it
 (decisions 46, 48, 49): a security pass of its own, right after the
 questions, that adds to the same list so that everything is answered
 together; nothing kad's security skill did is to be lost; and it is

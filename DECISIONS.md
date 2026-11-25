@@ -532,6 +532,18 @@ asking is listed apart, so it can be overturned.
     about $105, with a pilot of about $6 first whose real cost is
     reported before the rest is run.
 
+51. **The security pass holds, on Sonnet 5.5** (the owner: "Yes it's
+    fine"), with the text of 116 lines in
+    `steps/07b-security/eval/security-skill.md` and the script's
+    part of `questions/questions.py`: $98.59 of about $105. Its text
+    is adopted and its eight cases join the regression build. Known
+    and accepted with it: kad's security concerns for the two real
+    slices are asked in all three runs for 16 of 19 and 26 of 32,
+    counted before two fixed questions were added and not after;
+    nine concerns of the second plan wait for a design to be chosen;
+    a real slice draws about 700 questions; what no session has run
+    is listed in the stage's README.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,

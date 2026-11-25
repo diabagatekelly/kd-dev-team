@@ -65,7 +65,7 @@ _spec = importlib.util.spec_from_file_location("questions", HERE.parents[2] / "q
 _questions = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_questions)
 _skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
-_on_trial = "security" in os.environ.get("KD_TRIAL", "").split(",")
+_on_trial = True   # the security pass is adopted (2026-11-25, decision 51): the first stage not built is the answers
 _security = "Skipped at the user's word, 2026-11-25: \"Skip the security pass.\"\n" if _on_trial else ""
 _mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
                                                              "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()

@@ -93,14 +93,9 @@ class Stage(unittest.TestCase):
         # Found by the regression pass with the approach on trial: the scenario still named the
         # approach as not built, and the session, rightly, did the approach. With research adopted
         # (decision 44) the first stage not built is the questions.
-        # With the questions adopted (decision 48) it is the security pass (decision 46).
+        # With the questions adopted (decision 48) it was the security pass (decision 46), and with
+        # that adopted (decision 51) it is the answers.
         named = self.not_built()
-        self.assertIn("- next stage by the documents: security", self.report())
-        self.assertRegex("security", named)
-        self.assertNotRegex("questions", named)
-
-    def test_with_security_on_trial_that_scenario_moves_on_to_the_answers(self):
-        named = self.not_built("security")
         self.assertIn("- next stage by the documents: answers", self.report())
         self.assertRegex("answers", named)
         self.assertNotRegex("security", named)
