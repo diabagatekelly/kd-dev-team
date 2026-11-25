@@ -446,6 +446,24 @@ asking is listed apart, so it can be overturned.
     second question was put as one way or the other; the yes is
     read as a yes to the way proposed.)
 
+## 2026-11-25: a security pass of its own; kad's design skills kept
+
+46. **Security has a dedicated pass, run right after the questions,
+    which adds its own questions to the same list so that everything
+    is answered together** (the owner: "it make sense to run it right
+    after the questions so it can add its own and everything can be
+    answered"). The start is kad's `security-requirements` and its
+    persona, which held up in kad's audits (the built code's security
+    scored 4.5, then 4 in every assessment; reliability 3 in five of
+    six); stage 7's read against kad's documents found the questions
+    weakest on security. If kad's text is kept, whether it can be
+    trimmed is looked at, and tested like any other text. UX design
+    is kept from kad too (`design-system`, `screen-design`,
+    `accessibility-review`), and those, with the design and the
+    stack, are revisited thoroughly when stages 10, 11 and onward
+    are reached. Writing the slice up as a user story and creating
+    the repository both need a place in the pipeline.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
