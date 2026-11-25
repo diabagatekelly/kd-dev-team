@@ -307,6 +307,37 @@ again), that is about ten entries the library lacks. They are
 proposed to the owner as one change to the library, not added here:
 its kinds are at the checker's limit of twelve questions each.
 
+## Every earlier stage with this one on trial (2026-11-25, $12.07; $78.62 in all)
+
+What the changes outside this stage staled: the stage script, the
+routing table's new line, research's one sentence. Every earlier
+stage's cases once on Sonnet with all of it and this text loaded
+($8.97): 87 of 89.
+
+| Stage | Once | Then |
+|---|---|---|
+| Startup | 20 of 21 | the failing case 3 of 3 |
+| Problem | 8 of 8 | |
+| Scope map | 6 of 6 | |
+| Requirements | 12 of 12 | |
+| Slice | 17 of 17 | |
+| Approach | 12 of 13 | the failing case 3 of 3 |
+| Research | 12 of 12 | its two states cases five times: 9 of 10 |
+
+- Startup's case of a stage not built: the reply ended "I can look
+  at the requirements gap next"; the check took any "I can look" for
+  an offer to do the unbuilt stage. Narrowed; three of three.
+- The approach's search case: the pass was launched without the
+  search tool allowed (`ALLOW_TOOLS`), my error, and the session
+  said rightly that it could not search. Three of three with it.
+  The run-pass comment names the setting; the runbook now says the
+  approach's and research's passes need it.
+- Research, a lasting thing with a dead end, one run of five: the
+  run put another real dead end on the owner's list (a payment past
+  its refund window) and not the disputed one the check looks for.
+  The case stands as it is and catches it; research's text is not
+  changed for one run in five.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
