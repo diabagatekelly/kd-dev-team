@@ -88,7 +88,9 @@ and leave it.
 
 **Ask nothing, change nothing else.** No preference is asked of the
 user and no other document is changed. Asked what you need from
-them: nothing now; their decisions come to them once, as one list.
+them, or offered answers: nothing now. What waits for them is said,
+and comes to them once, as one list, after what is to test has been
+tested: do not ask for it here, and do not invite it.
 
 **The user decides something on the list.** Add to that answer
 `Decided: <the choice> (the user, <date>: "<their words>")`, write

@@ -113,7 +113,7 @@ class Checks(unittest.TestCase):
     def test_a_criterion_on_a_guess_a_fact_on_nothing_and_an_owner_with_no_options_fail(self):
         checks = self.checks(1)
         self.assertFalse(holds(checks["no-criterion-on-the-guess"], GOOD.replace("Harm: high\n", "Harm: high\nCriterion: Given x, when y, then z.\n")))
-        self.assertFalse(holds(checks["a-repeat-is-a-fact-from-the-providers-page"], GOOD.replace("payright F6", "what providers do")))
+        self.assertFalse(holds(checks["a-repeat-rests-on-the-providers-page"], GOOD.replace("payright F6", "what providers do")))
         self.assertFalse(holds(checks["a-dead-end-is-the-owners"], GOOD.replace("Options: the renewal stays recorded | the renewal is taken back\n", "")))
         self.assertFalse(holds(checks["the-key-out-of-the-records-is-chosen"], GOOD.replace("Kind: chosen", "Kind: owner")))
         self.assertFalse(holds(checks["a-criterion-of-absence"], GOOD.replace("nothing of the secret key appears in it", "the key is handled with care")))
