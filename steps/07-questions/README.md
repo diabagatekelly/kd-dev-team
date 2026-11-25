@@ -242,6 +242,71 @@ thing read side by side, the library's lines repeat none of its
 state lines (the script does not draw a library question a grid's
 column already asks).
 
+## Sonnet with no text for this stage (2026-11-25, $9.76; $66.55 in all)
+
+The bare arm on Sonnet: every adopted text, the report with its
+commands, the script, and nothing said of this stage. Every case
+three times ($9.28): 11 of 30, where the text has 50 of 50 after its
+last change. Bare, it never lists the status a reply brings back as
+a value taken in (three of three), goes on past a skip without
+saying what it costs or recording it (six of six), asks the user
+about the product when asked what it needs (three of three), and
+leaves a thing kept with no states out in two runs of three.
+
+The first real plan once ($0.48): 76 library entries kept against
+188 to 207 with the text; two fully tied defects and one partly tied
+are lost (none with the text in six runs). The malformed-value lines
+and the facts research lacks come out the same, since the script
+draws them. The text earns its place by the library's part; the
+grids hold without it.
+
+E3's brief was not run again: its measured figures (345 to 493
+lines, its ties) are the bar the text already meets, and a second
+measure of it would decide nothing.
+
+## Set beside kad's documents for the same slices (free)
+
+The bar was that nothing kad's reliability and security documents
+name for the two slices goes unasked. It is not met. Read by two
+sessions that could change nothing, the unasked ones then checked
+by hand against the library (line numbers are in the audit
+repository):
+
+| | Concerns kad names | Asked in all three drawings | Out of the slice |
+|---|---|---|---|
+| First plan | 38 | 28 | 0 |
+| Second plan | 70 | 49 | 1 |
+
+What is unasked or asked too loosely to force an answer is of three
+sorts, none of them the provider's own:
+
+- **Kinds the library has no question for:** what the product
+  listens on and who on the network can reach it, a request with a
+  foreign host name included; the page framed or read by another
+  site, and a second layer of page policy; a third party's script
+  running inside the page; a dependency with a published advisory;
+  data that is not a credential, unreadable at rest and in backups;
+  secrets in a reply that succeeded (the leak grid's exits are
+  errors, records and samples).
+- **Questions of a design not yet chosen:** six about a lock file
+  (a stale claim, a takeover cut short, a planted claim). They exist
+  only once a lock is the answer to "what stops two copies", which
+  is asked. They are the answers' or the tests' to raise.
+- **Asked, loosely:** a reply that never stops paging; work that
+  arrives while the product closes; one reference shown to the
+  person and written in every record; expected failures told from
+  unexpected ones in the records.
+
+One drawing of six did not list the provider's secret as a value,
+so its leak lines cover fewer values: the session's judgement,
+varying.
+
+With the two facts of the benchmark (a login typed into the
+provider's own component; an identifier that changes on linking
+again), that is about ten entries the library lacks. They are
+proposed to the owner as one change to the library, not added here:
+its kinds are at the checker's limit of twelve questions each.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
