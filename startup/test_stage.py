@@ -415,6 +415,41 @@ class Stage(unittest.TestCase):
         self.assertNotIn("questions.py", out)
         self.assertNotIn("out of order", out)
 
+    # The answers (stage 8): answers.md is the session's, answered.md the script's, with their mark.
+    def answered(self, drawn=True):
+        self.secured()
+        folder = self.machine.project / "planning/slice-001"
+        (folder / "008_answers.md").write_text("# Answers\n", encoding="utf-8")
+        if drawn:
+            mark = the_questions_script().cksum((folder / "007_questions/questions.md").read_bytes() + (folder / "008_answers.md").read_bytes())
+            (folder / "008_answered.md").write_text(f"# Answered\n\n<!-- drawn from: {mark} -->\n", encoding="utf-8")
+        return folder
+
+    def test_with_the_answers_next_the_report_gives_the_two_commands(self):
+        out = self.secured()
+        self.assertRegex(out, r"- the questions no answer settles yet, sixty at a time: python3 \".*answers\.py\" next planning/slice-001")
+        self.assertRegex(out, r"checked and drawn by script once none is left: python3 \".*answers\.py\" draw planning/slice-001")
+
+    def test_answers_written_in_and_not_drawn_keep_the_answers_next(self):
+        self.answered(drawn=False)
+        out = self.report()
+        self.assertIn("- next stage by the documents: answers (its document: planning/slice-001/008_answers.md, written in, and not yet drawn: "
+                      "the questions no answer settles are still to answer)", out)
+        self.assertIn("answers.py", out)
+
+    def test_the_answers_are_done_once_drawn_from_the_questions_and_answers_as_they_stand(self):
+        self.answered()
+        out = self.report()
+        self.assertIn("answers (slice-001/008_answers.md)", out)
+        self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md)", out)
+        self.assertNotIn("answers.py", out)
+
+    def test_answers_or_questions_changed_after_the_drawing_are_to_be_drawn_again(self):
+        folder = self.answered()
+        (folder / "008_answers.md").write_text("# Answers\n\nChanged.\n", encoding="utf-8")
+        self.assertIn("answers (its document: planning/slice-001/008_answers.md, to draw again: the questions or the answers changed after "
+                      "slice-001/008_answered.md was drawn; only what the change brings is answered)", self.report())
+
     def test_a_security_file_changed_after_the_drawing_has_the_questions_drawn_again(self):
         self.secured()
         (self.machine.project / "planning/slice-001/007_questions/security.md").write_text("# Security\n\nChanged.\n", encoding="utf-8")
@@ -564,6 +599,9 @@ class Stage(unittest.TestCase):
         together = b"".join(path.read_bytes() for path in [at.parent / "004_slice.md", at.parent / "005_approach.md",
                                                            *sorted((at.parent / "006_research").glob("*.md")), at / "kept.md", at / "security.md"])
         (at / "questions.md").write_text(f"<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
+        answers = next(at.parent.glob("*_answers.md"))
+        mark = the_questions_script().cksum((at / "questions.md").read_bytes() + answers.read_bytes())
+        answers.with_name(answers.name.replace("_answers", "_answered")).write_text(f"<!-- drawn from: {mark} -->\n", encoding="utf-8")
         out = self.report()
         self.assertIn("- every planning document of slice 1 exists", out)
         self.assertIn("- next stage by the documents: none, slice 1 is planned and ready to build", out)

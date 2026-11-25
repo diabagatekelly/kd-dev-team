@@ -21,6 +21,8 @@ SELF="sh \"$(cd "$(dirname "$0")" && pwd)/stage.sh\""
 PAGE="python3 \"$(cd "$(dirname "$0")" && pwd)/../research/page.py\""
 # The script that draws a slice's questions is beside it.
 QUESTIONS="python3 \"$(cd "$(dirname "$0")" && pwd)/../questions/questions.py\""
+# And the one that says which questions no answer settles yet, and draws the answers.
+ANSWERS="python3 \"$(cd "$(dirname "$0")" && pwd)/../answers/answers.py\""
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
@@ -430,6 +432,22 @@ report() {
           fi
         fi
         continue ;;
+      answers)
+        # The answers, counted: answers.md is the session's, and answered.md is drawn from it by
+        # script once every question is settled. They are done only while that drawing carries the
+        # mark of the questions and the answers as they stand.
+        if [ "$there" = yes ]; then
+          answered="$under${is%_answers.md}_answered.md"
+          if [ -f "$dir/$answered" ] && grep -q "drawn from: $( (cat "$dir/$qfolder/questions.md" "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }') " "$dir/$answered"; then
+            found="${found:+$found, }answers ($under$is)"
+            continue
+          fi
+          [ -f "$dir/$answered" ] && owes="to draw again: the questions or the answers changed after $answered was drawn; only what the change brings is answered" \
+            || owes="written in, and not yet drawn: the questions no answer settles are still to answer"
+          missing="${missing:+$missing, }$name"
+          [ -n "$next" ] || next="answers (its document: $folder/$under$is, $owes)"
+          continue
+        fi ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -516,6 +534,9 @@ STAGES
     security*)
       say "- what kept.md lists and the documents name: $QUESTIONS things $folder/$slice"
       say "  the questions are drawn again with security.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
+    answers*)
+      say "- the questions no answer settles yet, sixty at a time: $ANSWERS next $folder/$slice"
+      say "  the answers are checked and drawn by script once none is left: $ANSWERS draw $folder/$slice" ;;
     questions*)
       say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"
       say "  the questions of a kind, every kind read, four or five at a time: $QUESTIONS library KIND KIND ..."
