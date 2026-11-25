@@ -429,6 +429,23 @@ asking is listed apart, so it can be overturned.
     question prompts for (an identifier that changes later) is the
     kind expected to remain, and its fix belongs to the questions
     library.
+## 2026-11-24: how the questions stage is measured
+
+45. **Stage 7, the questions, is tested as proposed in
+    `steps/07-questions/README.md`** (the owner: "Yes and yes, go
+    ahead"), at about $135, with a pilot of about $10 first whose
+    real cost is reported before the rest is run. Before the yes
+    the owner set one rule: "Library first, then grid, obviously no
+    question should be duplicated". And the point put to them with
+    it: a user who says to skip the questions is told once what
+    that costs and that the stage asks them nothing, and offered it
+    again; if they insist, the library is not gone through, the
+    folder records that it was skipped at their word, what the
+    script draws with no judgement is drawn all the same, and the
+    skipping goes to the owner's list as a risk accepted. (The
+    second question was put as one way or the other; the yes is
+    read as a yes to the way proposed.)
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

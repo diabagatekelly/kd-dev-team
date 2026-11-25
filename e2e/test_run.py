@@ -458,6 +458,27 @@ class Run(unittest.TestCase):
         summary, _ = self.through(fake=self.RESEARCH, brief=BRIEF, through="research")
         self.assertEqual(summary["ended"], "the research was written")
 
+    # Carried on through the questions (stage 7).
+    QUESTIONS = RESEARCH.replace('    if n == 99:\n', '    if n == 9:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions").mkdir(exist_ok=True)\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/kept.md").write_text("# Kept\\n")\n'
+                                 '    if n == 10:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/questions.md").write_text("# Questions\\n")\n'
+                                 '    if n == 99:\n')
+
+    def test_carried_through_the_questions_it_ends_once_they_are_drawn_and_not_when_only_kept(self):
+        summary, _ = self.through(fake=self.QUESTIONS, brief=self.SPOKEN, through="questions")
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the questions were drawn", 10))
+        self.assertEqual(summary["questions"], ["plans/slice-002/007_questions/questions.md"])
+        self.assertEqual(summary["merged"], "")
+        # What the session and the script write in the questions folder carries the folder's number, not one of its own.
+        planning = self.folder / "out" / "project" / "plans"
+        self.assertEqual(sorted(path.name for path in run.in_a_folder_of_its_stage(planning)), ["kept.md", "questions.md", "states.md"])
+
+    def test_the_questions_never_drawn_end_the_run_as_stuck(self):
+        summary, _ = self.through(fake=self.QUESTIONS.replace("if n == 10:", "if n == 98:"), brief=self.SPOKEN, through="questions")
+        self.assertEqual((summary["ended"], summary["questions"]), ("stuck: the user had only the same thing to say", []))
+
     def test_research_that_is_never_written_ends_the_run_as_stuck(self):
         summary, _ = self.through(fake=self.RESEARCH.replace("if n == 8:", "if n == 98:"), brief=self.SPOKEN, through="research")
         self.assertEqual((summary["ended"], summary["research"]), ("stuck: the user had only the same thing to say", []))

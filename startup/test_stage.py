@@ -1,3 +1,5 @@
+import importlib.util
+import io
 import pathlib
 import shutil
 import unittest
@@ -40,6 +42,13 @@ def the_approach(*decisions, committed=()):
             + "".join(f"## Need {place}\n\n| Way | What it ties us to |\n|---|---|\n| Without | nothing |\n\n"
                       f"Recommended: a way.\n{decision}\n\n" for place, decision in enumerate(decisions, 1))
             + "## Committed to\n" + ("".join(f"- {line}\n" for line in committed) or "Nothing.\n"))
+
+
+def the_questions_script():
+    spec = importlib.util.spec_from_file_location("questions", pathlib.Path(__file__).resolve().parent.parent / "questions/questions.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 THREE = the_set(row(1, "open", "record-a-loan"), row(2, "open", "record-a-return", on="1"),
@@ -87,6 +96,12 @@ class Stage(unittest.TestCase):
         self.assertIn("- next stage by the documents: questions", self.report())
         self.assertRegex("questions", named)
         self.assertNotRegex("research", named)
+
+    def test_with_the_questions_on_trial_that_scenario_moves_on_to_the_answers(self):
+        named = self.not_built("questions")
+        self.assertIn("- next stage by the documents: answers", self.report())
+        self.assertRegex("answers", named)
+        self.assertNotRegex("questions", named)
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()
@@ -350,7 +365,88 @@ class Stage(unittest.TestCase):
         out = self.planned(self.ONE, slices={1: the_slice("record-a-loan / 1", needs="none")}, list_text=LIST + self.INVENTORY % "none")
         self.assertIn("- approach: not needed", out)
         self.assertIn("- research: not needed", out)
-        self.assertIn("- next stage by the documents: questions (its document: planning/slice-001/005_questions.md)", out)
+        self.assertIn("- next stage by the documents: questions (its document: planning/slice-001/005_questions/, "
+                      "to write there: kept.md; questions.md is then drawn from it)", out)
+
+    # The questions, counted (stage 7): a folder; kept.md is the session's, questions.md the script's.
+    def asked(self, kept="Kept.\n", basis="kept.md", draw=True, folder="007_questions"):
+        """A researched slice with its questions folder, drawn by the script's own mark where asked."""
+        self.researched("postbox.md", "states.md", inventory="- a loan")
+        at = self.machine.project / "planning/slice-001" / folder
+        at.mkdir()
+        if kept is not None:
+            (at / basis).write_text(kept, encoding="utf-8")
+        if draw:
+            self.draw(at, basis)
+        return self.report()
+
+    def draw(self, at, basis="kept.md"):
+        slice_folder = at.parent
+        together = b"".join((slice_folder / name).read_bytes() for name in
+                            ("004_slice.md", "005_approach.md", "006_research/postbox.md", "006_research/states.md", f"{at.name}/{basis}"))
+        (at / "questions.md").write_text(f"# Questions\n\n<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
+
+    def test_the_questions_are_done_when_drawn_from_the_documents_as_they_stand(self):
+        out = self.asked()
+        self.assertIn("questions (slice-001/007_questions/)", out)
+        self.assertIn("- next stage by the documents: answers (its document: planning/slice-001/008_answers.md)", out)
+        self.assertNotIn("questions.py", out)
+        self.assertNotIn("out of order", out)
+
+    def test_while_the_questions_are_next_the_commands_that_read_the_library_and_draw_are_given(self):
+        out = self.researched("postbox.md", "states.md", inventory="- a loan")
+        self.assertIn("- next stage by the documents: questions (its document: planning/slice-001/007_questions/, to write there: kept.md", out)
+        self.assertRegex(out, r'questions\.py" things planning/slice-001\n')
+        self.assertRegex(out, r'questions\.py" library KIND KIND')
+        self.assertRegex(out, r'questions\.py" draw planning/slice-001\n')
+        self.assertNotIn("page.py", out)
+
+    def test_an_empty_questions_folder_is_the_one_named_and_is_not_the_questions_done(self):
+        out = self.asked(kept=None, draw=False)
+        self.assertIn("questions (its document: planning/slice-001/007_questions/, to write there: kept.md", out)
+        self.assertNotIn("008_questions", out)
+
+    def test_a_kept_file_not_yet_drawn_from_keeps_the_questions_next(self):
+        out = self.asked(draw=False)
+        self.assertIn("questions (its document: planning/slice-001/007_questions/, kept.md is written there; questions.md is still to be drawn from it)", out)
+
+    def test_a_document_changed_after_the_drawing_makes_the_questions_next_again(self):
+        for changed in ("004_slice.md", "005_approach.md", "006_research/states.md", "007_questions/kept.md"):
+            with self.subTest(changed):
+                self.setUp()
+                self.asked()
+                with (self.machine.project / "planning/slice-001" / changed).open("a", encoding="utf-8") as handle:
+                    handle.write("One more line.\n")
+                out = self.report()
+                self.assertIn("questions (its document: planning/slice-001/007_questions/, to draw again: a document of the slice, or kept.md, changed", out)
+                self.assertNotIn("questions (slice-001/007_questions/)", out)
+
+    def test_a_drawing_with_no_mark_is_not_the_questions_done(self):
+        self.asked(draw=False)
+        (self.machine.project / "planning/slice-001/007_questions/questions.md").write_text("# Questions\n\nWritten by hand.\n", encoding="utf-8")
+        self.assertIn("to draw again", self.report())
+
+    def test_skipped_at_the_users_word_is_done_once_drawn_and_is_said(self):
+        out = self.asked(kept="Skipped at the user's word.\n", basis="skipped.md")
+        self.assertIn("- questions: skipped at the user's word (slice-001/007_questions/skipped.md); what needs no judgement is drawn, "
+                      "and the skipping is for the owner's list\n", out)
+        self.assertIn("- next stage by the documents: answers", out)
+
+    def test_skipped_and_not_yet_drawn_keeps_the_questions_next(self):
+        out = self.asked(kept="Skipped at the user's word.\n", basis="skipped.md", draw=False)
+        self.assertIn("skipped.md is written there; questions.md is still to be drawn from it", out)
+
+    def test_what_the_script_draws_is_what_this_script_counts_as_drawn(self):
+        script = the_questions_script()
+        rows = "".join(f"| {kind}: all | dropped | the slice does nothing of the kind |\n" for kind in
+                       sorted({entry["action"] for entry in __import__("json").loads(script.LIBRARY.read_text(encoding="utf-8"))}))
+        for basis, text in (("kept.md", "# Kept\n\n## Library\n| Entry | Applies to | Why |\n|---|---|---|\n" + rows), ("skipped.md", "Skipped.\n")):
+            with self.subTest(basis):
+                self.setUp()
+                self.asked(kept=text, basis=basis, draw=False)
+                said = io.StringIO()
+                self.assertEqual(script.main(["draw", str(self.machine.project / "planning/slice-001")], said), 0, said.getvalue())
+                self.assertIn("- next stage by the documents: answers", self.report())
 
     def test_nothing_committed_to_still_has_the_states_to_write(self):
         out = self.researched(approach=the_approach("Decision: without"), inventory="- a loan")
@@ -417,6 +513,13 @@ class Stage(unittest.TestCase):
         out = self.planned(the_set(row(1, "chosen", "record-a-loan, record-a-return, see-who-has-it")),
                            documents=[f"slice-001/{5 + place:03d}_{name}.md" for place, name in enumerate(THE_REST)],
                            slices={1: the_slice("record-a-loan / 1")})
+        at = self.machine.project / "planning/slice-001/007_questions"
+        at.mkdir()
+        (at / "kept.md").write_text("Kept.\n", encoding="utf-8")
+        together = b"".join(path.read_bytes() for path in [at.parent / "004_slice.md", at.parent / "005_approach.md",
+                                                           *sorted((at.parent / "006_research").glob("*.md")), at / "kept.md"])
+        (at / "questions.md").write_text(f"<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
+        out = self.report()
         self.assertIn("- every planning document of slice 1 exists", out)
         self.assertIn("- next stage by the documents: none, slice 1 is planned and ready to build", out)
 

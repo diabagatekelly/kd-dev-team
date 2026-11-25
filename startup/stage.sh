@@ -19,6 +19,8 @@ SELF="sh \"$(cd "$(dirname "$0")" && pwd)/stage.sh\""
 [ -z "${CLAUDE_PLUGIN_DATA:-}" ] || SELF="CLAUDE_PLUGIN_DATA=\"$CLAUDE_PLUGIN_DATA\" $SELF"
 # The page reader is in the plugin's research folder, beside this script's own.
 PAGE="python3 \"$(cd "$(dirname "$0")" && pwd)/../research/page.py\""
+# The script that draws a slice's questions is beside it.
+QUESTIONS="python3 \"$(cd "$(dirname "$0")" && pwd)/../questions/questions.py\""
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
@@ -53,7 +55,7 @@ the set of slices|slices*.md
 slice|SLICE/slice.md
 approach|SLICE/approach.md
 research|SLICE/research/
-questions|SLICE/questions.md
+questions|SLICE/questions/
 answers|SLICE/answers.md
 tests of open facts|SLICE/open-facts.md
 design|SLICE/design.md
@@ -310,7 +312,7 @@ report() {
     slice=${slice:-slice-001}
   fi
   found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
-  rfolder=""; stale=""
+  rfolder=""; stale=""; qfolder=""; qstate=""
   own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
   [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
@@ -373,6 +375,37 @@ report() {
           continue
         fi
         there=yes ;;
+      questions)
+        # The questions, counted: kept.md is the session's (or skipped.md, the user's word), and
+        # questions.md is drawn from it by script. They are done only while the drawing carries the
+        # mark of the documents as they stand: the slice, the approach, research, and kept.md.
+        [ -z "${is%/}" ] || qfolder="$under${is%/}"
+        qstate=none; basis=kept.md
+        [ -z "$qfolder" ] || [ -f "$dir/$qfolder/kept.md" ] || basis=skipped.md
+        if [ -n "$qfolder" ] && [ -f "$dir/$qfolder/$basis" ]; then
+          qstate=kept
+          if [ -f "$dir/$qfolder/questions.md" ]; then
+            mark=$( (cd "$dir" && { cat "$slice/$own"; [ -z "$approach" ] || cat "$approach"
+                      [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do cat "$rfolder/$file"; done
+                      cat "$qfolder/$basis"; }) 2>/dev/null | cksum | awk '{ print $1 }')
+            grep -q "drawn from: $mark " "$dir/$qfolder/questions.md" && qstate=drawn || qstate=stale
+          fi
+        fi
+        if [ "$qstate" = drawn ]; then
+          there=yes
+          [ "$basis" = kept.md ] || skipped="${skipped:+$skipped
+}- questions: skipped at the user's word ($qfolder/skipped.md); what needs no judgement is drawn, and the skipping is for the owner's list"
+        else
+          missing="${missing:+$missing, }$name"
+          at="$folder/${qfolder:-$under${number}_questions}/"
+          case "$qstate" in
+            none) owes="to write there: kept.md; questions.md is then drawn from it" ;;
+            kept) owes="$basis is written there; questions.md is still to be drawn from it" ;;
+            *) owes="to draw again: a document of the slice, or $basis, changed after questions.md was drawn; kept.md is looked at again only for what the change brings or removes" ;;
+          esac
+          [ -n "$next" ] || next="questions (its document: $at, $owes)"
+          continue
+        fi ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -454,6 +487,12 @@ STAGES
       say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT"
       kept=$(ls "$dir/$slice/pages"/*.txt 2>/dev/null | wc -l | tr -d ' ')
       [ "$kept" = 0 ] || say "- $kept pages are already kept in $folder/$slice/pages, read from their copies: $PAGE kept $folder/$slice/pages" ;;
+  esac
+  case "$next" in
+    questions*)
+      say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"
+      say "  the questions of a kind, every kind read, four or five at a time: $QUESTIONS library KIND KIND ..."
+      say "  the questions are drawn from kept.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
   esac
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; it is built when merged work names its criteria.

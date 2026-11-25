@@ -51,6 +51,9 @@ def main(folder, trial=None):
         shutil.copy(script, folder / "startup" / script.name)
     # The page reader the stage script names for the approach and research.
     write(folder / "research" / "page.py", (ROOT / "research" / "page.py").read_text(encoding="utf-8"))
+    # The script that draws a slice's questions, and the library it reads.
+    write(folder / "questions" / "questions.py", (ROOT / "questions" / "questions.py").read_text(encoding="utf-8"))
+    write(folder / "library" / "library.json", (ROOT / "library" / "library.json").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

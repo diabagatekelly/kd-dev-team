@@ -143,6 +143,13 @@ class Carried(unittest.TestCase):
         names = [name for name, _words in questions.carried({"states.md": STATES})]
         self.assertEqual(names, ["C.states.renewal-payment.lost", "C.states.season-ticket.lapsed", "C.states.dead-end.1"])
 
+    def test_the_document_of_a_thing_no_longer_committed_to_carries_nothing(self):
+        both = {"payright.md": PAYRIGHT, "cardway.md": PAYRIGHT.replace("O1:", "O7:"), "states.md": STATES}
+        names = [name for name, _words in questions.carried(both, {"cardway"})]
+        self.assertIn("C.cardway.O7", names)
+        self.assertNotIn("C.payright.O1", names)
+        self.assertIn("C.states.dead-end.1", names)
+
     def test_nothing_researched_carries_nothing(self):
         self.assertEqual(questions.carried({}), [])
 
@@ -338,6 +345,19 @@ class Drawing(unittest.TestCase):
         self.assertEqual(self.drawn(), self.drawn())
 
 
+class TheMark(unittest.TestCase):
+    def test_it_is_the_number_the_systems_own_command_prints(self):
+        self.assertEqual(questions.cksum(b""), 4294967295)
+        self.assertEqual(questions.cksum(b"123456789"), 930766865)
+
+    def test_it_is_of_the_bytes_of_the_documents_in_order_then_the_kept_file(self):
+        folder, library = project()
+        read, _entries, kept = questions.load(folder, library)
+        together = b"".join((folder / name).read_bytes() for name in
+                            ("004_slice.md", "005_approach.md", "006_research/payright.md", "006_research/states.md", "007_questions/kept.md"))
+        self.assertEqual(questions.stamp(read, kept["text"]), str(questions.cksum(together)))
+
+
 class TheCommand(unittest.TestCase):
     def setUp(self):
         self.folder, self.library = project()
@@ -346,8 +366,23 @@ class TheCommand(unittest.TestCase):
         code, said = run("things", self.folder, self.library)
         self.assertEqual(code, 0)
         self.assertIn("renewal-payment (lasting thing: A renewal payment)", said)
-        self.assertIn("  call-external-01: What if the reply never arrives?", said)
-        self.assertEqual(said.count("\nmigration\n"), 1)
+        self.assertIn("  call-external (2), migration (2)\n", said)
+        self.assertNotIn("What if the reply never arrives?", said)
+
+    def test_the_questions_of_the_kinds_named_are_printed_and_a_kind_it_does_not_have_is_said(self):
+        out = io.StringIO()
+        self.assertEqual(questions.show(["migration"], out, self.library), 0)
+        self.assertEqual(out.getvalue(), "\nmigration\n  migration-01: What of what is already stored?\n  migration-02: What if it stops halfway?\n")
+        out = io.StringIO()
+        self.assertEqual(questions.show(["weather", "migration"], out, self.library), 1)
+        self.assertIn("weather: the library has no such kind", out.getvalue())
+        self.assertIn("migration-02", out.getvalue())
+
+    def test_five_kinds_of_the_real_library_fit_what_a_shell_shows(self):
+        out = io.StringIO()
+        self.assertEqual(questions.main(["library", "call-external", "receive-external-data", "sync", "limits", "durable-write"], out), 0)
+        self.assertEqual(out.getvalue().count("\n  "), 60)
+        self.assertLess(len(out.getvalue()), 15000)
 
     def test_with_no_kept_file_nothing_is_drawn_and_the_state_is_none(self):
         folder, library = project(kept=None)
@@ -383,6 +418,40 @@ class TheCommand(unittest.TestCase):
     def test_a_check_before_any_drawing_fails(self):
         self.assertEqual(run("check", self.folder, self.library)[0], 1)
 
+    def test_the_drawing_says_how_many_questions_of_each_part_and_how_many_it_spared(self):
+        code, said = run("draw", self.folder, self.library)
+        self.assertEqual(code, 0)
+        self.assertRegex(said, r"^drawn: .*questions\.md: \d+ questions: 3 from the library, 11 of values, 5 of leaks, 28 of states, 7 of every slice, 6 carried from research; 2 not drawn")
+
+    def test_a_folder_that_cannot_be_written_is_said_and_nothing_is_to_be_written_by_hand(self):
+        target = self.folder / "007_questions" / "questions.md"
+        target.mkdir()   # a folder where the file would go: writing it fails on every system
+        code, said = run("draw", self.folder, self.library)
+        self.assertEqual(code, 0)
+        self.assertIn("drawn, and not written", said)
+        self.assertIn("do not write it by hand", said)
+
+    def test_skipped_at_the_users_word_draws_what_needs_no_judgement_and_says_so(self):
+        folder, library = project(kept=None)
+        (folder / "007_questions" / "skipped.md").write_text("Skipped at the user's word, 2026-11-24: \"skip it\".\n", encoding="utf-8")
+        self.assertEqual(run("state", folder, library)[1], "kept\n")
+        code, said = run("draw", folder, library)
+        self.assertEqual(code, 0, said)
+        text = (folder / "007_questions" / "questions.md").read_text(encoding="utf-8")
+        self.assertIn("skipped at the user's word", text)
+        self.assertIn("Not gone through.", text)
+        self.assertNotIn("- L.", text)
+        self.assertEqual(text.count("- S."), 3 * (2 + len(questions.EVENTS) + len(questions.OUTSIDE)))
+        self.assertEqual(text.count("- W."), len(questions.WHOLE))
+        self.assertIn("- C.payright.O1:", text)
+        self.assertEqual(run("state", folder, library)[1], "skipped\n")
+        self.assertEqual(run("check", folder, library), (0, "ok\n"))
+
+    def test_a_kept_file_written_after_a_skip_is_the_one_drawn_from(self):
+        (self.folder / "007_questions" / "skipped.md").write_text("Skipped.\n", encoding="utf-8")
+        run("draw", self.folder, self.library)
+        self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n")
+
     def test_a_command_it_does_not_have_prints_how_it_is_used(self):
         out = io.StringIO()
         self.assertEqual(questions.main(["answer", "x"], out), 2)
@@ -391,7 +460,8 @@ class TheCommand(unittest.TestCase):
     def test_the_real_library_is_read_where_none_is_named(self):
         out = io.StringIO()
         self.assertEqual(questions.main(["things", str(self.folder)], out), 0)
-        self.assertEqual(out.getvalue().count("\n  "), 5 + 250)
+        self.assertIn("call-external (12)", out.getvalue())
+        self.assertIn("startup-read (10)", out.getvalue())
 
 
 if __name__ == "__main__":

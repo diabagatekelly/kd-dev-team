@@ -82,7 +82,9 @@ and the approach's table.
 
 **`states.md`:** a table for each lasting thing of the requirements'
 "Outside systems and lasting things" that the slice's criteria
-touch.
+touch, and for each thing a criterion of the slice creates and
+keeps, whether or not that list names it: say in your reply which
+were not on the list.
 
 ```markdown
 # States

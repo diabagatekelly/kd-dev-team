@@ -12,14 +12,17 @@ drawn here, from the documents as they stand:
   - the questions asked of every slice, whatever it does;
   - what research left open, carried as it is.
 
-Usage: python3 -I questions.py things SLICE     what a question may apply to, and the library to read
+Usage: python3 -I questions.py things SLICE     what a question may apply to, and the library's kinds
+       python3 -I questions.py library KIND...  the questions of those kinds (a few kinds at a time: a shell cuts long output)
        python3 -I questions.py draw SLICE       check kept.md, then write questions.md beside it
        python3 -I questions.py check SLICE      kept.md holds, and questions.md is what draw writes
-       python3 -I questions.py state SLICE      none | kept | drawn | stale: <what changed>
+       python3 -I questions.py state SLICE      none | kept | drawn | skipped | stale: <what changed>
 
 SLICE is the chosen slice's folder (planning/slice-001). Nothing here answers a question.
+
+Where the user has said to skip the stage, the folder holds `skipped.md` (their words and the date)
+and no kept.md: the library is not gone through, and what needs no judgement is drawn all the same.
 """
-import hashlib
 import json
 import pathlib
 import re
@@ -179,11 +182,14 @@ def states(states_text):
     return things, dead
 
 
-def carried(research):
-    """What research left open: [(id, what it says)] from {document name: text}."""
+def carried(research, standing=None):
+    """What research left open: [(id, what it says)] from {document name: text}. Where the things
+    now committed to are given, the document of a thing no longer committed to carries nothing."""
     found = []
     for name, text in sorted(research.items()):
         stem = slug(pathlib.Path(name).stem)
+        if standing is not None and stem != "states" and stem not in standing:
+            continue
         if stem == "states":
             things, dead = states(text)
             for thing, table in things.items():
@@ -209,10 +215,9 @@ def read_slice(folder):
         return found[-1] if found else None
 
     slice_doc, approach, research, kept = latest("[0-9]*_slice.md"), latest("[0-9]*_approach.md"), latest("[0-9]*_research"), latest("[0-9]*_questions")
-    documents = {}
-    for path in [slice_doc, approach] + (sorted(research.glob("*.md")) if research else []):
-        if path and path.is_file():
-            documents[path.relative_to(folder).as_posix()] = path.read_text(encoding="utf-8")
+    # In the order the stage script reads them for the same mark: the slice, the approach, research by name.
+    documents = [path.read_bytes() for path in [slice_doc, approach] + (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])
+                 if path and path.is_file()]
     return {
         "folder": folder,
         "slice": slice_doc.read_text(encoding="utf-8") if slice_doc else "",
@@ -299,6 +304,9 @@ def draw(read, kept, entries):
     """The questions, a line a cell, each with a name that does not change. The library first."""
     lines = ["# Questions", "", STAMP % stamp(read, kept["text"]), "",
              "Drawn by script from kept.md and the slice's documents. Nothing here is answered.", ""]
+    if kept.get("skipped"):
+        lines[4] = ("Drawn by script from the slice's documents alone. The library was not gone through and no value was listed: "
+                    "skipped at the user's word (skipped.md), a risk for the owner's list. Nothing here is answered.")
     _found, judged = problems(kept, known(read), entries)
     by_id = {entry["id"]: entry for entry in entries}
     things, _dead = states(read["research"].get("states.md", ""))
@@ -323,7 +331,7 @@ def draw(read, kept, entries):
         for thing in applies:
             each = f" (in each of its states: {', '.join(lasting[slug(thing)])})" if slug(thing) in lasting else ""
             drawn.append(f"- L.{name}.{slug(thing)}: {thing}{each}: {by_id[name]['question']}")
-    lines += section("From the library", drawn, 0)[1:]
+    lines += section("From the library", drawn, 0, "Not gone through." if kept.get("skipped") else None)[1:]
 
     drawn, spared = [], 0
     for value in kept["values"]:
@@ -363,17 +371,30 @@ def draw(read, kept, entries):
     lines += section("Each state, each event", drawn, spared, None if things else "No lasting thing has states written for this slice.")
 
     lines += section("Asked of every slice", [f"- W.{key}: {words}" for key, words in WHOLE.items()], 0)
-    lines += section("Carried from research", [f"- {name}: {words}" for name, words in carried(read["research"])], 0, "Nothing was left open.")
+    lines += section("Carried from research", [f"- {name}: {words}" for name, words in carried(read["research"], {slug(name) for name in committed(read["approach"])})],
+                     0, "Nothing was left open.")
     return "\n".join(lines) + "\n"
 
 
-def stamp(read, kept_text):
-    """One short mark of every document the questions were drawn from."""
-    digest = hashlib.sha256()
-    for name, text in sorted(read["documents"].items()):
-        digest.update(name.encode() + b"\0" + text.encode() + b"\0")
-    digest.update(kept_text.encode())
-    return digest.hexdigest()[:16]
+def cksum(data):
+    """The number the system's own `cksum` prints for these bytes, so that the stage script, which
+    is plain shell, can tell without this script whether the questions are stale."""
+    crc = 0
+    size, tail = len(data), bytearray()
+    while size:
+        tail.append(size & 0xFF)
+        size >>= 8
+    for byte in bytes(data) + bytes(tail):
+        top = ((crc >> 24) ^ byte) << 24
+        for _bit in range(8):
+            top = ((top << 1) ^ 0x04C11DB7) if top & 0x80000000 else (top << 1)
+        crc = ((crc << 8) ^ top) & 0xFFFFFFFF
+    return crc ^ 0xFFFFFFFF
+
+
+def stamp(read, kept_bytes):
+    """One mark of every document the questions were drawn from: `cat` of them, through `cksum`."""
+    return str(cksum(b"".join(read["documents"]) + kept_bytes))
 
 
 def load(folder, library=LIBRARY):
@@ -381,9 +402,11 @@ def load(folder, library=LIBRARY):
     entries = json.loads(pathlib.Path(library).read_text(encoding="utf-8"))
     path = read["questions"] / "kept.md" if read["questions"] else None
     kept = None
+    skipped = read["questions"] / "skipped.md" if read["questions"] else None
     if path and path.is_file():
-        text = path.read_text(encoding="utf-8")
-        kept = {**read_kept(text), "text": text}
+        kept = {**read_kept(path.read_text(encoding="utf-8")), "text": path.read_bytes()}
+    elif skipped and skipped.is_file():
+        kept = {"values": [], "others": {}, "library": [], "text": skipped.read_bytes(), "skipped": True}
     return read, entries, kept
 
 
@@ -394,14 +417,34 @@ def state(folder, library=LIBRARY):
     drawn = read["questions"] / "questions.md"
     if not drawn.is_file():
         return "kept"
-    match = re.search(re.escape(STAMP).replace("%s", "([0-9a-f]+)"), drawn.read_text(encoding="utf-8"))
-    return "drawn" if match and match.group(1) == stamp(read, kept["text"]) else "stale: a document of the slice or kept.md changed after the questions were drawn"
+    match = re.search(re.escape(STAMP).replace("%s", "([0-9]+)"), drawn.read_text(encoding="utf-8"))
+    if match and match.group(1) == stamp(read, kept["text"]):
+        return "skipped" if kept.get("skipped") else "drawn"
+    return "stale: a document of the slice or kept.md changed after the questions were drawn"
+
+
+def show(kinds, out, library=None):
+    """The questions of the kinds named, a line each."""
+    entries = json.loads(pathlib.Path(library or LIBRARY).read_text(encoding="utf-8"))
+    code = 0
+    for kind in kinds:
+        found = [entry for entry in entries if entry["action"] == kind]
+        if not found:
+            print(f"{kind}: the library has no such kind", file=out)
+            code = 1
+            continue
+        print(f"\n{kind}", file=out)
+        for entry in found:
+            print(f"  {entry['id']}: {entry['question']}", file=out)
+    return code
 
 
 def main(arguments, out=sys.stdout):
-    if len(arguments) < 2 or arguments[0] not in ("things", "draw", "check", "state"):
+    if len(arguments) < 2 or arguments[0] not in ("things", "library", "draw", "check", "state"):
         print(__doc__, file=out)
         return 2
+    if arguments[0] == "library":
+        return show(arguments[1:], out)
     command, folder = arguments[0], arguments[1]
     library = arguments[2] if len(arguments) > 2 else LIBRARY
     read, entries, kept = load(folder, library)
@@ -412,26 +455,35 @@ def main(arguments, out=sys.stdout):
         print("A question may apply to:", file=out)
         for name, what in known(read).items():
             print(f"  {name} ({what})", file=out)
-        print("and to any value or other thing kept.md lists.\n\nThe library, by kind of action:", file=out)
-        kind = None
+        print("and to any value or other thing kept.md lists.\n\nThe library's kinds of action, each with how many questions it has:", file=out)
+        kinds = {}
         for entry in entries:
-            if entry["action"] != kind:
-                kind = entry["action"]
-                print(f"\n{kind}", file=out)
-            print(f"  {entry['id']}: {entry['question']}", file=out)
+            kinds[entry["action"]] = kinds.get(entry["action"], 0) + 1
+        print("  " + ", ".join(f"{kind} ({count})" for kind, count in kinds.items()), file=out)
+        print("Read every kind, four or five at a time: questions.py library KIND KIND ...", file=out)
         return 0
     if kept is None:
         print("no kept.md in the slice's questions folder: nothing to draw from", file=out)
         return 1
-    found, _judged = problems(kept, known(read), entries, criteria(read["slice"]) + list(read["research"]))
+    found = [] if kept.get("skipped") else problems(kept, known(read), entries, criteria(read["slice"]) + list(read["research"]))[0]
     if found:
         print("\n".join(found), file=out)
         return 1
     text = draw(read, kept, entries)
     target = read["questions"] / "questions.md"
     if command == "draw":
-        target.write_text(text, encoding="utf-8")
-        print(f"drawn: {target} ({sum(line.startswith('- ') for line in text.splitlines())} questions)", file=out)
+        count = {mark: sum(line.startswith(f"- {mark}.") for line in text.splitlines()) for mark in "LVXSWC"}
+        spared = sum(int(number) for number in re.findall(r"^Not drawn, (\d+) ", text, re.M))
+        said = (f"{sum(count.values())} questions: {count['L']} from the library, {count['V']} of values, {count['X']} of leaks, "
+                f"{count['S']} of states, {count['W']} of every slice, {count['C']} carried from research; "
+                f"{spared} not drawn, already asked by the library")
+        try:
+            target.write_text(text, encoding="utf-8", newline="\n")
+        except OSError as error:
+            # A shell that may not write the project: the drawing is right, and is said not to be kept.
+            print(f"drawn, and not written ({target}: {error.strerror}): {said}. Say so; do not write it by hand.", file=out)
+            return 0
+        print(f"drawn: {target}: {said}", file=out)
         return 0
     if not target.is_file() or target.read_text(encoding="utf-8") != text:
         print("questions.md is not what the script draws from the documents as they stand: draw it again", file=out)
