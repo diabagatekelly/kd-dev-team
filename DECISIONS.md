@@ -464,6 +464,17 @@ asking is listed apart, so it can be overturned.
     are reached. Writing the slice up as a user story and creating
     the repository both need a place in the pipeline.
 
+47. **The user story is written at stage 14, with the owner's list
+    and the planning pull request; the repository's remote is made at
+    stage 12** (the owner: "I'm ok with everything as described").
+    The story is written once, when the slice has its answers and its
+    security criteria, not early with placeholders as kad did. What
+    kad's planning skills did that stages 1 to 9 do not is accepted
+    as listed to the owner on 2026-11-25: what waits on stages 8, 12
+    and 14 is owed by those stages; the scope map's "sequencing
+    notes" and "model what any provider of the kind does" are not
+    carried.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
