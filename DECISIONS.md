@@ -527,6 +527,27 @@ asking is listed apart, so it can be overturned.
     until the new entries are in a row: right, and met at once by the
     cases' own fixture, which now accounts for all 290.
 
+- The security pass as built (decisions 46, 48, 49), 2026-11-25,
+  chosen without asking:
+  - It writes one file, `security.md`, in the questions' own folder,
+    and the questions are drawn again with it: one list, one mark.
+    The stage script counts it done when the drawing carries that
+    file's mark too.
+  - Six facts, each yes or no with its source, and `yes` where the
+    documents do not say; 28 fixed questions drawn only for the
+    facts that hold.
+  - Two more exits for every class of sensitive values: a reply
+    that succeeded, and where it is stored with every copy.
+  - A skip of the questions is not a skip of security: it is next
+    all the same, and has the same rule of its own (once what it
+    costs; on a second no, recorded and every fixed question drawn).
+  - After a change to the documents the questions stage brings
+    `kept.md` up to date and then loads the security text: one
+    sentence added to stage 7's adopted text, tested with its
+    re-run.
+  - Its folder is `steps/07b-security`: the stages after it keep
+    their numbers.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
