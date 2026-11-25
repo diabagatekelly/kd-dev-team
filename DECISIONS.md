@@ -527,6 +527,11 @@ asking is listed apart, so it can be overturned.
     until the new entries are in a row: right, and met at once by the
     cases' own fixture, which now accounts for all 290.
 
+50. **The security pass is tested as proposed in
+    `steps/07b-security/README.md`** (the owner: "Go ahead"), at
+    about $105, with a pilot of about $6 first whose real cost is
+    reported before the rest is run.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
