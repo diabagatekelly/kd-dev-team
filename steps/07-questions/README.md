@@ -59,6 +59,42 @@ What the pilot changed (decision 29):
 | A row left as it was, with one more thing, failed a check on its exact words | the check looks for the row and its criterion: unit test |
 | My count of the malformed-value key read the file as one text, and its patterns begin at a line's start: 0 of 4 | counted by `outcome.py lines`, with a unit test; the key is unchanged; 4 of 4 |
 
+## Sonnet beside Opus, on both real plans (2026-11-24, $3.26; $9.23 in all)
+
+The owner, on the pilot's 198 entries kept: "Maybe this is a task
+that opus might be better at, 198 seems like a lot." Read, about
+160 of the 198 were fair questions of that slice, and 35 to 40 had
+no weight for one person's tool on their own machine; whole kinds
+were kept in one row with one reason. The text was changed (each
+kept question judged by itself, in a row of its own; one dropped
+when its harm needs what the documents say the product does not
+have; the fewest things that cover a question), and the stage run
+once on each plan with each model:
+
+| | Pilot text, Sonnet | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| First plan: entries kept of 250 | 198 | 168 | 182 |
+| Things a kept entry | 3.2 | 1.05 | 1.07 |
+| Lines drawn | 1,027 | 505 | 537 |
+| Fully and partly tied defects kept | 18 of 18, 8 of 8 | 18 of 18, 8 of 8 | 18 of 18, 8 of 8 |
+| Malformed-value defects with a line | 4 of 4 | 4 of 4 | 4 of 4 |
+| Of the 38 entries read as without weight here, kept | 38 | 21 | 25 |
+| Second plan: entries kept | | 173 | 187 |
+| Lines drawn | | 539 | 637 |
+| Fully and partly tied defects kept | | 7 of 7, 3 of 3 | 7 of 7, 2 of 3 |
+| Of the 38, kept | | 19 | 31 |
+| Cost a run | $0.42 | $0.45 and $0.54 | $1.11 and $1.16 |
+
+One run each, so a difference of a few entries is within chance.
+What it shows: the text was the fault, not the model. Opus keeps
+more, not less, loses one partly tied defect where Sonnet loses
+none, and costs a little over twice as much. Every research gap
+that has a general question is asked for in all four runs. In all
+four the session also saw that the slice keeps a thing with no
+states (a transaction), and walked it before drawing. Sonnet stays
+the model proposed; Opus is not run further unless Sonnet does not
+hold.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists

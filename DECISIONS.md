@@ -891,5 +891,22 @@ asking is listed apart, so it can be overturned.
   - The two library entries the gap count is expected to call for
     are proposed after the count, not before: the library is not
     changed while it is being measured.
+- The questions stage after its pilot, 2026-11-24:
+  - Leaks are drawn for each class of sensitive values, not each
+    value: 24 values against five places was 120 lines asking the
+    same thing.
+  - A question is dropped when its harm needs what the documents
+    say the product does not have (many users, several people
+    running it, more than one installation), with the document's
+    line as the reason; where the documents do not say, it is
+    kept. This narrows "when unsure, keep", for the owner's "198
+    seems like a lot"; the count of tied defects kept is what
+    holds it.
+  - A kept question has a row and a reason of its own; only
+    dropped ones share a row. Sharing saved cost and let twelve
+    questions be kept as one.
+  - Opus was tried at the owner's suggestion, once on each real
+    plan beside Sonnet: it kept more and cost twice as much.
+    Sonnet stays the model proposed.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.
