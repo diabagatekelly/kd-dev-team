@@ -18,6 +18,15 @@ edit `questions.md`.
 **Read first.** The chosen slice, the requirements' limits, the
 approach, every research document, `states.md` and `kept.md`.
 
+**First: can it be made safe as it is cut?** Before anything is
+written, look for something the slice cannot be safe without that
+the documents say is not there or is out (nobody signs in; nothing
+of the kind is planned). If there is one, write nothing: say what is
+missing and what that forces, with one recommendation and not a list
+of ways. It is the slice's to decide, with the user, and this stage
+is done again after. Where the documents simply do not say, that is
+no stop: it is a question, asked already or a row of yours.
+
 **Facts about the slice.** Six, each `yes` or `no`, each with the
 criterion or the document's line that says so. Where the documents
 do not say, it is `yes`: a fact wrongly `no` loses its questions for
@@ -80,18 +89,12 @@ through and a name `kept.md` does not have: put right what it names
 and draw again. Where it says the drawing could not be written, say
 so and leave it.
 
-**It cannot be made safe as it is cut.** Only where the documents
-say that something the slice cannot be safe without is not there or
-is out (nobody signs in; nothing of the kind is planned). Where they
-simply do not say, that is a question, asked already or a row of
-yours: go on. Otherwise write nothing. Say what is missing and what
-that forces, with one recommendation and not a list of ways: it is
-the slice's to decide, with the user.
-
 **Answer nothing, ask nothing.** No control, no fix, no criterion
 and no recommendation of how, in `security.md` or in your reply. No
-preference is asked of the user: what is theirs to decide comes to
-them once, as one short list. Change no other document.
+preference is asked of the user. Asked what you need from them, or
+offered answers: nothing is needed now; the documents answer first,
+and what is theirs to decide comes to them once, as one short list.
+Change no other document.
 
 **Told to skip this stage.** Write nothing yet. Say once what
 skipping costs (nobody has looked at the slice as an attacker would

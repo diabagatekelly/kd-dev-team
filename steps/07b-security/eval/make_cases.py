@@ -136,7 +136,8 @@ SCENARIOS = [
       in_file("@SEC@", "the-earlier-rows-are-left",
               r"someone holding the secret key takes payments or gives refunds as the playhouse[\s\S]*a true event sent again later puts a refunded renewal back to paid"),
       in_file("@KEPT@", "the-new-value-is-taken-in", r"(?:^|\n)\|[^|\n]*(?:reason|note)[^|\n]*\|"),
-      *NOTHING_ANSWERED, *LEFT], "", None, False),
+      # A reason that is recorded may be given its table in states.md by the questions stage: the research document is left.
+      *NOTHING_ANSWERED, *[q.DOCUMENT_LEFT if check is q.RESEARCH_LEFT else check for check in LEFT]], "", None, False),
 ]
 BARE_TABLE = q.BARE_TABLE.replace("The questions stage", "The security stage")
 
