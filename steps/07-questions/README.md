@@ -154,6 +154,43 @@ What each failure was, read run by run, and what it became:
 Sonnet costs about $0.45 a run of a full case, not the $0.15 the
 proposal assumed: a pass of every case five times is about $20.
 
+## The real plans with the text as it stands (2026-11-24, $3.69; $34.96 in all)
+
+Three runs on each plan, each from a different kept research run,
+Sonnet. Counted by script against keys written before any run.
+
+| | Plan 1, three runs | Plan 2, three runs |
+|---|---|---|
+| Library questions kept, of 250 | 167, 169, 175 | 159, 177, 156 |
+| Kept by every run / by any run | 159 / 180 | 148 / 181 |
+| Defects fully tied to an entry, kept | 18 of 18, each run | 7 of 7, each run |
+| Defects partly tied, kept | 8 of 8, each run | 3 of 3, each run |
+| Malformed-value defects with a line | 4 of 4, each run | no key |
+| Research's missed facts, asked for | 1 of 1 with a general question, each run | 4 of 4, 1 of 1, none missed |
+| Missed facts with no general question | 1, 2, 2 | none |
+| Questions drawn in all | 541, 546, 608 | 578, 794, 775 |
+| Of which states | 192, 247, 284 | 243, 435, 444 |
+| Cost, time | $0.60 to $0.85, about 3 minutes | $0.48 to $0.55, about 2 minutes |
+
+- **The owner's condition on research (decision 44), counted.** Every
+  fact a research run missed that a general question can reach is
+  asked for by a line of the drawing. Two are not, in two runs of
+  three on plan 1, and both are the provider's own behaviour: the
+  login is typed into the provider's component where there is no
+  redirect, and an account's identifier changes when it is linked
+  again. No entry of the library asks either in general. Two entries
+  would: one on *where a credential is typed and who sees it*, one
+  on *whether an identifier the product keeps survives the thing
+  being connected again*. They are proposed, not added: two kinds are
+  at the library checker's cap of twelve.
+- **The state questions grew**, to as many as 444 lines, because
+  every run added one or two tables to `states.md` for things the
+  slice keeps that research (with its text of then) had not walked,
+  and each state is asked against five events, three ways each thing
+  committed to can fail, and every criterion. No key measures these
+  lines: the ties are counted on the library's part only. Left as
+  agreed; the answers stage will show what they cost to answer.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
