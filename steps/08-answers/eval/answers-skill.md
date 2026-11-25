@@ -42,29 +42,39 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
 1. `fact`: a document of the slice says it. Rest it on that
    document by name: a criterion (`item / n`), a research fact
    (the research document's own name and the fact: `payright F12`
-   where the document is `payright.md`), a line of the requirements. Never on what such
-   systems usually do.
+   where the document is `payright.md`), a line of the requirements.
+   Never on what such systems usually do.
 2. `not here`: the question does not arise in this slice. Say why
    in one line. A question wrongly dismissed is lost for good: where
    you are not sure, answer it.
 3. `test`: it turns on how something outside behaves, and no page
    read says. Say what is not known, the test that would settle it
    (`Test:`), and `Harm:` high, medium or low if the guess is wrong.
-   Write no criterion on the guess.
+   Write no criterion on the guess. An open point of the research
+   is a test, not a fact, however likely it looks.
 4. `owner`: only one of these four. A rule of the product in the
    user's own field that the documents cannot know. A matter of
    taste, or of how they want to experience the product. A risk, a
-   cost or an obligation they must accept. What is in or out. Give
+   cost or an obligation they must accept, and any choice that
+   cannot be taken back once made. What is in or out. Give
    `Options:` (two or more, separated by `|`), `Recommended:` one of
    them and why, `If left:` what happens while it is undecided, and
-   `Harm:`. Write no criterion: it waits for them.
+   `Harm:`. Write no criterion: it waits for them. What the
+   documents already decide is a fact, not asked again; how to
+   protect something is chosen, and only a risk left after that is
+   theirs.
 5. `chosen`: everything else. Good practice in security, in what a
    person is told and in what is recorded is applied, not asked. A
    technical problem with a known solution is solved: say what is
    chosen and, in `Rests on`, why. The user can overturn it later.
+   A choice says nothing of how something outside behaves that the
+   research does not say: name the fact it rests on, or choose what
+   holds either way and leave the rest to a test.
 
 **Criteria.** Write one where someone could see the behaviour go
-wrong, under the slice's item it belongs to:
+wrong, under the slice's item it belongs to. What an answer says
+the product does, or never does, and someone could check, has its
+criterion: a thing only said is a thing nobody tests.
 
 - one Given, one action or event, one outcome a person could check
   by looking. The outcome, never the mechanism;
