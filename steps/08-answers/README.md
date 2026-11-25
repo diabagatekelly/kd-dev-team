@@ -56,7 +56,7 @@ repository, `08-answers/README.md`); no model judged a run.
 |---|---|---|---|
 | Provider's behaviour stated on nothing the research says, of 30 sampled a plan | 6 and 4 | 4 and 8 | 5 and 8, nearly all now naming a fact that does not say it |
 | The owner's list, six runs | 9, 8, 8, 7, 5, 8 | 8, 9, 8, 8, 7, 8 | 10, 13, 8, 18, 7, 10 |
-| Items on it that are technical or already decided | 4 in six runs | 3, borderline | 3, 6, 0, 5, 1, 1 |
+| Items on it that are technical, already decided or said twice | 5 in six runs | 3, borderline | 2, 6, 0, 5, 1, 1 |
 | How fast it must be: put to the owner | in 1 run of 6 | in 0 | in 6 |
 | kad's security concerns with a criterion, a test or the owner (first plan, of 23) | 20, 17, 17 | 21, 19, 18 | 19, 20, 19 |
 | the same, second plan | 17, 19, 18 of 27 | 20, 20, 19 of 27 | 13, 14, 17 of 20, counted afresh |
