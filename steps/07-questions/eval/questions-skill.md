@@ -152,8 +152,9 @@ names it; an approach or research document newer than `kept.md`. In
 `kept.md`,
 change only what the change brings or removes: a kind dropped
 before that the slice now does; a value or thing now taken in; rows
-that applied to a thing no longer there. Leave the rest as it is,
-and draw again.
+that applied to a thing no longer there. Edit those rows in place;
+never write the file again whole: every other row stays word for
+word. Then draw again.
 
 **Stop there.** Say how many questions were drawn and of which
 parts, in the command's own numbers, which kinds were dropped whole

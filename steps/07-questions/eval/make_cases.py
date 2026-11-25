@@ -214,6 +214,7 @@ LATER = trace("writes-no-later-document", WROTE + r"_(answers|open-facts|design|
 EARLIER = trace("changes-no-earlier-document", WROTE + r"(00[0134]_(problem|scope-map|slices|slice)|_approach)[^\"]*[.]md")
 LIST_LEFT = trace("leaves-the-requirements-alone", WROTE + r"002_requirements[.]md")
 RESEARCH_LEFT = trace("leaves-research-alone", WROTE + r"_research/")
+DOCUMENT_LEFT = trace("leaves-the-research-document-alone", WROTE + r"_research/payright")   # a recorded thing may get its table in states.md
 NO_TABLE = never_says("keeps-the-routing-table-out", r"\brouting table\b")
 REAL = research.NO_REAL_NAME[0]
 GO_ON = research.GO_ON
@@ -238,7 +239,7 @@ SCENARIOS = [
       takes_in("marks-the-secret-key-sensitive", r"key|secret|credential", sensitive=SENSITIVE),
       takes_in("lists-the-refund-amount", r"amount|refund"),
       trace("fewer-than-500-lines-from-the-library", r"drawn[^\n]{0,300}?questions: [1-4]?\d?\d from the library", never=False),
-      *NOTHING_ANSWERED, LIST_LEFT, trace("leaves-the-research-document-alone", WROTE + r"_research/payright")], "", None, True),
+      *NOTHING_ANSWERED, LIST_LEFT, DOCUMENT_LEFT], "", None, True),
     ("02-nothing-committed-to",
      "Nothing is committed to and the product keeps one thing, some of its rows not said: the kinds on outside systems dropped, every state drawn, no provider named.",
      playhouse(the_slice=research.SEE_SLICE, the_approach=research.WITHOUT, inventory=(THE_TICKET,), the_set=research.SEE_SET,
@@ -281,7 +282,7 @@ SCENARIOS = [
      GO_ON + " What do you need from me? Just ask me how failures should be handled and I'll tell you.",
      [KEPT_WRITTEN, *DRAWN,
       says("says-nothing-is-needed-now", r"nothing (is )?(needed|from you|to ask)|no(thing)? (questions?|input) (for|from) you|do(?: not|n't) need|not needed|"
-                                         r"asks? (you )?nothing|none (for|from) you|later|once|one (short )?list"),
+                                         r"ask(?:s|ed)? (you )?nothing|none (for|from) you|later|once|one (short )?list"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
     ("07a-skip-the-stage", "The user says to skip the stage: said once what it costs, the stage offered again; nothing written yet.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), more=RESEARCHED), None, SKIP,
@@ -306,14 +307,15 @@ SCENARIOS = [
       takes_in("takes-in-the-reason", r"reason|note"),
       in_file("@KEPT@", "the-earlier-rows-are-left",
               r"a payment request can get no reply \(payright\.md O1\)[\s\S]*the slice ships no body of content[\s\S]*only the office should refund"),
-      *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
+      *NOTHING_ANSWERED, LIST_LEFT, DOCUMENT_LEFT], "", None, False),
     ("08b-the-approach-changed-after",
      "The approach changed and research was written again for another thing after the questions were drawn: nothing left that applies to the old thing, drawn again.",
      {**playhouse(the_approach=BY_CHOICE, inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), fixed=False,
                   more={**RESEARCHED, "slice-001/007_questions/kept.md": kept_file()})},
      CARDWAY_RESEARCHED, GO_ON,
      [*DRAWN,
-      not_in_file("@KEPT@", "nothing-applies-to-the-old-thing", r"payright\.md|\|[^|\n]*payright[^|\n]*\|[^|\n]*\|[ \t]*(?:\n|$)"),
+      not_in_file("@KEPT@", "nothing-applies-to-the-old-thing",
+                  r"\|[^|\n]*payright[^|\n]*\|[^|\n]*\|[ \t]*(?:\n|$)|\|[^|\n]*\|(?!\s*`?dropped)[^|\n]*\|[^\n]*payright\.md|(?:^|\n)- [^\n]*payright\.md"),
       in_file("@KEPT@", "the-new-thing-is-applied-to", r"cardway|charge"),
       in_file("@KEPT@", "the-earlier-rows-are-left", r"\| corpus: all \| dropped \| the slice ships no body of content \|"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
