@@ -152,9 +152,9 @@ names it; an approach or research document newer than `kept.md`. In
 `kept.md`,
 change only what the change brings or removes: a kind dropped
 before that the slice now does; a value or thing now taken in; rows
-that applied to a thing no longer there. Edit those rows in place;
-never write the file again whole: every other row stays word for
-word. Then draw again. Where the folder holds a `security.md`, load
+that applied to a thing no longer there. Edit those rows in place with
+your file tool, not through the shell; never write the file again
+whole: every other row stays word for word. Then draw again. Where the folder holds a `security.md`, load
 the security text next and look at that file again for what the
 change brings, whether or not `draw` refused anything of it.
 

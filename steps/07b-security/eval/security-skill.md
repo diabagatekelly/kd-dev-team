@@ -56,7 +56,7 @@ by the names `kept.md` uses:
   "access is gained"; never a control or a fix.
 - `Asked` is `yes`, or `no: ` and the reason it is dismissed, so
   nobody works it out again. A value that is public by design is not
-  a secret: dismiss it with that reason.
+  a secret: it has a row of its own, dismissed with that reason.
 - Every class and every other thing is in at least one row. A thing
   the slice plainly has that `kept.md` does not list is added to
   `kept.md`'s own list, with its source, and nothing else is changed

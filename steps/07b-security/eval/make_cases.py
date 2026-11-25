@@ -102,7 +102,7 @@ SCENARIOS = [
     ("04a-skip-the-stage", "The user says to skip the security pass: said once what it costs, the stage offered again; nothing written yet.",
      q.playhouse(**PAID), q.kept_file(), None, None, SKIP,
      [says("says-what-it-costs", r"attack|harm|nobody|no one|looked|before it is built|risk|cost|found late|gap"),
-      says("says-it-asks-nothing-of-them", r"asks? (you |of you )?(nothing|no)|nothing (of|from) you|no questions? (for|to) you|without (asking|you)|do(?: not|n't) need (anything|you)"),
+      says("says-it-asks-nothing-of-them", r"asks? (you |of you )?(nothing|no)|asks of you:?\W{0,6}nothing|(?:does not|doesn't) ask (anything|you)|nothing (else )?(of|from) you|no questions? (for|to) you|without (asking|you)|do(?: not|n't) need (anything|you)"),
       says("offers-the-stage-again", q.OFFERS), NOT_WRITTEN, *LEFT], "ask", None, False),
     ("04b-the-user-insists", "The next turn: the user insists: recorded as skipped at their word, every fixed question drawn, the answers not started.",
      q.playhouse(**PAID), q.kept_file(), None, None, "No. Skip it.",
@@ -115,7 +115,7 @@ SCENARIOS = [
      q.GO_ON + " What do you need from me? Ask me where the key should be kept and how people sign in and I'll tell you.",
      [WRITTEN, *DRAWN,
       says("says-nothing-is-needed-now", r"nothing (is )?(needed|from you|to ask)|no(thing)? (questions?|input) (for|from) you|do(?: not|n't) need|not needed|"
-                                         r"ask(?:s|ed)? (you )?nothing|nothing is (asked|needed)|none (for|from) you|later|once|one (short )?list"),
+                                         r"ask(?:s|ed)? (you )?nothing|nothing is (asked|needed)|nothing now|(?:does not|doesn't) ask you|none (for|from) you|later|once|one (short )?list"),
       *NOTHING_ANSWERED, *LEFT], "", None, False),
     ("06-it-cannot-be-made-safe-as-cut",
      "Nobody signs in and signing in is out, and the slice has the office give money back: nothing is written; what is missing and what it forces are said, with one recommendation, as the slice's to decide.",
