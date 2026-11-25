@@ -76,6 +76,52 @@ requirements 12 of 12, slice 17 of 17, approach 13 of 13, research
 12 of 12. Stage 7's ten cases ran five times with this text beside
 them (its README). 89 of 89; nothing moved.
 
+## The two real plans, set beside kad's documents (2026-11-25, $10.58; $68.97 in all)
+
+Stage 7 again on both plans, three runs each (their kept files
+predated the library's new kinds: $3.33), then this pass on each
+($2.42), and kad's skill once on each ($0.57). The drawings were
+read against kad's security and reliability documents for the same
+slices by two read-only sessions, each concern looked for in all
+three runs, a weak line counted as not asked (the lines and ids are
+in the audit repository, `07b-security/README.md`).
+
+| Asked in all three runs | Before this pass | With it |
+|---|---|---|
+| First plan, security | 8 of 16 | 16 of 19, none unasked in every run |
+| First plan, reliability | (28 of 38 with security) | 20 of 24 |
+| Second plan, security | 19 of 30 | 26 of 32 |
+| Second plan, reliability | (49 of 70 with security) | 33 of 45 |
+
+Each read counted the concerns afresh, so the totals differ.
+
+- **Asked in every run now:** what the product answers to and a
+  request under another host name; what a refusal gives away; the
+  page policy, framing and another party's script; a component with
+  a known flaw; data where it is stored and in copies; secrets in a
+  reply that succeeded. The six facts were the same in all six runs.
+- **In no run, and not this stage's:** nine concerns of the second
+  plan that exist only once a design is chosen (a lock file, a
+  claim, a retry during the close): the answers stage or the tests.
+- **Weak, and general:** whether a person's sign-in for the other
+  system passes through the product; how a credential first reaches
+  it. Two fixed questions were added under `calls-out` (30 in all).
+  One run lost the leak questions of a secret that stage 7 had not
+  listed as a value: the pass now adds a sensitive value `kept.md`
+  lacks. Run again on both plans ($2.23): the two questions are in
+  all six drawings and the missing value was added. Cases 01 and 03
+  five times on both models with it: 20 of 20 ($2.04).
+- **Left:** expected and unexpected outcomes told apart in the
+  records, and one reference from the screen to the record: weak in
+  both plans, reliability questions the library lacks.
+- **kad's skill** on the same documents writes nothing in one turn:
+  it first puts five or six questions to the owner. This pass asks
+  nothing.
+
+**The bar's line "every security concern in every run" is not met**
+(16 of 19 and 26 of 32 before the two questions were added; not
+counted again after).
+
 ## What it is
 
 A session writes one small file, `security.md`, beside `kept.md`:
