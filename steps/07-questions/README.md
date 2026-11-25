@@ -1,10 +1,63 @@
 # Stage 7, the questions: the test, set before anything paid is run
 
-**State, 2026-11-24: proposed. Nothing paid has run.** The script
-that draws the questions is built, with its unit tests, and was
-sized for nothing on the documents already kept (below). The text,
-the cases and the changes outside this stage wait for the owner's
-yes to the test and its cost.
+**State, 2026-11-24: agreed (decision 45), built, and the pilot
+run: $5.97 of about $135.** The text was changed after the pilot
+for what it found; nothing has run with the changed text yet.
+
+## The pilot (2026-11-24, $5.97)
+
+Each of the ten cases once; kad's two skills on two cases; one real
+run on the first plan, on top of a kept research run.
+
+| Arm | Model | Pass every check | Cost |
+|---|---|---|---|
+| Our text, 112 lines | Sonnet 5.5 | 6 of 10 | $2.32 |
+| Our text | Haiku 5.5 | 7 of 10 | $0.22 |
+| Bare | Sonnet 5.5 | 3 of 10 | $2.55 |
+| Bare | Haiku 5.5 | 2 of 10 | $0.19 |
+| kad's two skills (two cases) | Sonnet 5.5 | 0 of 2 | $0.27 |
+| One real run, our text | Sonnet 5.5 | below | $0.42 |
+
+One run each: these say where each arm stands, not whether it
+holds. A case costs $0.23 on Sonnet and 2 cents on Haiku, a real
+run $0.42: less than the $0.35 and $1.50 guessed.
+
+- **The script's part worked as built.** In every run that reached
+  it the command checked `kept.md`, refused what was wrong and drew;
+  no session wrote the drawing by hand. In the cases a session's
+  shell may not write the project, so the command says the drawing
+  was not kept; in the real run it wrote the file, and the script's
+  own check passes on it.
+- **The real run** (97 seconds): every defect the earlier judges
+  tied to the library has a kept entry, 18 of 18 fully tied and 8
+  of 8 partly; a line for 4 of 4 of the malformed-value defects;
+  of the three facts that research run lacks, one is asked for and
+  two have no general question, as read beforehand.
+- **Too many lines.** That run drew 1,027: 641 from the library
+  (198 of 250 entries kept, each applied to three things or more),
+  126 of values, 120 of leaks, 108 of states. Case 1, three
+  criteria, drew 1,060. The bare model, told nothing, applied a
+  question to fewer things (232 library lines on case 1). The first
+  text said to name "every such thing"; a session did.
+- **With the text, Sonnet failed four cases:** told to skip the
+  stage, it did not load the text at all (both turns); it did not
+  see that a renewal recorded by a criterion had no states; and one
+  check of mine failed a row that had rightly gained a thing.
+- **kad's skills** wrote nothing in either case: they stopped to
+  ask their questions first, as built.
+- **Haiku with the text** took the request to skip for the approach
+  stage's work, and loaded that text.
+
+What the pilot changed (decision 29):
+
+| What it met | Now |
+|---|---|
+| Each kept question applied to five things: over a thousand lines for a small slice | the text: the fewest things that cover a question, not a criterion and the thing it acts on; case 1 checks that the library's part is under 500 lines |
+| 120 lines of leaks: 24 values marked sensitive, each against five places | leaks are drawn for each class of sensitive values, not each value: the script, with unit tests; the text names the class |
+| Told to skip, the stage's text was never loaded | the text's own description says it is used when the user says to skip the questions or go past them |
+| A thing a criterion records had no states and was not noticed | the text: before anything else, each criterion is gone through for what it creates or keeps |
+| A row left as it was, with one more thing, failed a check on its exact words | the check looks for the row and its criterion: unit test |
+| My count of the malformed-value key read the file as one text, and its patterns begin at a line's start: 0 of 4 | counted by `outcome.py lines`, with a unit test; the key is unchanged; 4 of 4 |
 
 ## What it is
 
@@ -34,7 +87,7 @@ files:
 | A line for each kept library question and each thing it applies to | `kept.md` | the session, checked by script |
 | Each value taken in, against the ways a value of its kind can be wrong (empty, missing, malformed, at the edge, outside, too long, twice, naming what does not exist, unusual characters) | `kept.md`'s table of values | the session lists the values; the script crosses them |
 | One rule for every setting the build will read (missing, empty, malformed, outside) | nothing: always drawn | the script. A build reads settings no plan names (E4), so the rule is asked once |
-| Each sensitive value against the five places it can leak to (logs, an error's own message, an error shown, monitoring, test data) | the values marked sensitive | the session marks; the script crosses |
+| Each class of sensitive values against the five places it can leak to (logs, an error's own message, an error shown, monitoring, test data) | the values the session gives a class | the session marks; the script crosses |
 | Each state of each lasting thing, against each event: each criterion of the slice, the same action again, a reload partway, a restart, a second copy or person at once, time passing, and each thing committed to being down, slow, or acting with its reply lost | research's `states.md`, the slice, the approach | the script alone |
 | Seven questions asked of every slice (what an hour's outage costs, the target, who notices; what is sensitive, who may see whose, what binds, what an attacker wants) | nothing: always drawn | the script. In kad these were asked of the owner first; here they are answered at stage 8 from the documents, and only otherwise the owner's |
 | What research left open: every open point with its test, every statement the pages contradict or do not cover, every state `not said` or `to verify`, every dead end for the owner's list | research's documents | the script alone |
@@ -74,8 +127,8 @@ or kept for another thing, spares nothing, so the grid still
 catches what the triage let go. No entry is judged twice and no
 line has the same name as another.
 
-`questions/questions.py` (`things`, `draw`, `check`, `state`), 50
-unit tests, no model.
+`questions/questions.py` (`things`, `library`, `draw`, `check`,
+`state`), 67 unit tests, no model.
 
 **Sized for nothing on what is kept.** Without the library's part
 and the values, which need a session, and so before any line is

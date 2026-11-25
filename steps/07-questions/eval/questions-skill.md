@@ -1,6 +1,6 @@
 ---
 name: questions
-description: Decide which of the library's questions matter for the chosen slice and what the slice takes in, then have every question drawn by script. Use when the startup report names "questions" as the next stage, and when the user answers anything this stage said.
+description: Decide which of the library's questions matter for the chosen slice and what the slice takes in, then have every question drawn by script. Use when the startup report names "questions" as the next stage, when the user answers anything this stage said, and when the user says to skip the questions or to go past them to a later stage.
 ---
 
 # Questions
@@ -20,6 +20,11 @@ report's `things` command: it prints what a question may apply to,
 and the library's kinds. Read every kind with the `library` command,
 four or five kinds at a time, every question of each.
 
+Before anything else, go through the slice's criteria one by one
+and name what each creates or keeps over time (a record, a booking,
+a payment). Each of those needs its table in `states.md`: where one
+has none, see "A lasting thing with no states" below.
+
 **The library.** For every question: can what it describes arise
 from something this slice adds or changes, so that what the product
 then does would matter to whoever uses or maintains it?
@@ -33,12 +38,19 @@ then does would matter to whoever uses or maintains it?
 - A kind the slice does nothing of at all is dropped whole, in one
   row (`migration: all`). Never drop a whole kind to save reading:
   one question of it that can arise keeps that question.
-- A kept question applies to named things: a criterion, a lasting
-  thing or a thing committed to, by the names `things` printed; a
-  value of your table; or another thing you list (a request, a
-  screen, a message, a stored file, a credential), with the
-  criterion or research fact it comes from. Name the thing the
-  question is really about, and every such thing.
+- A kept question applies to named things: a lasting thing or a
+  thing committed to, by the names `things` printed; a value of
+  your table; another thing you list (a request, a screen, a
+  message, a stored file, a credential), with the criterion or
+  research fact it comes from; or, where none of those is what the
+  question is about, a criterion.
+- Apply it to the fewest things that cover it: the one thing the
+  question is about, most often. Not to a criterion and also to the
+  thing that criterion acts on; not to every value where one rule
+  for all of them is the answer (then to the screen or the request
+  that takes them). Each thing named is one more answer someone
+  must write: two or three things a question is usual, six is a
+  sign the thing was named too finely.
 
 **What the slice takes in.** Every value that reaches the slice
 from outside it: each value a person gives; each field of a reply
@@ -47,9 +59,11 @@ value read back from where it was stored; a credential. For each:
 a short name; its kind (`text`, `number`, `date`, `choice`,
 `identifier`, `file`, `list`, or `other` when unsure); where it
 comes from; whether someone would be harmed if another person saw
-it (`yes` or `no`: a credential, a person's own details, anything
-a limit of the user's protects); and its source, a criterion's
-name or a research document and fact.
+it: `no`, or the short name of the class of sensitive values it
+belongs to (`credentials`, `her-details`: a credential, a person's
+own details, anything a limit of the user's protects; few classes,
+the values that leak together in one); and its source, a
+criterion's name or a research document and fact.
 
 ```markdown
 # Kept: slice <n>
@@ -58,6 +72,7 @@ name or a research document and fact.
 | Value | Kind | From | Sensitive | Source |
 |---|---|---|---|---|
 | `short-name` | choice | <who or what gives it> | no | <item / n, or document.md F3> |
+| `another` | identifier | <who or what gives it> | credentials | <document.md F7> |
 
 ## Other things the slice has
 - `short-name`: <what it is> (<item / n, or document.md F3>)

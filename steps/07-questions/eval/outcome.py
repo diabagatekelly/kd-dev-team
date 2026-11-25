@@ -12,6 +12,11 @@
       question asks for it ({"fact": "pattern over the lines of questions.md", or null where no
       general question exists}): asked for, not asked for, or no general question.
 
+  outcome.py lines KEY.json QUESTIONS.md
+      For each name of the key ({"name": "pattern over the lines of questions.md"}), whether a
+      line is there. (`facts.py` reads a document as one text: a pattern that starts at a line's
+      start finds nothing with it.)
+
 The keys come from real projects and are kept apart from this repository.
 """
 import json
@@ -70,6 +75,13 @@ def main(arguments, out=sys.stdout):
         research = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in sorted(pathlib.Path(arguments[3]).glob("*.md")))
         for name, verdict in gaps(_load(arguments[1]), _load(arguments[2]), research, pathlib.Path(arguments[4]).read_text(encoding="utf-8")).items():
             print(f"{verdict:20} {name}", file=out)
+        return 0
+    if len(arguments) == 3 and arguments[0] == "lines":
+        text, key = pathlib.Path(arguments[2]).read_text(encoding="utf-8"), _load(arguments[1])
+        found = [name for name, pattern in key.items() if re.search(pattern, text, re.I | re.M)]
+        for name in key:
+            print(("a line     " if name in found else "no line    ") + name, file=out)
+        print(f"a line for {len(found)} of {len(key)}", file=out)
         return 0
     print(__doc__, file=out)
     return 2

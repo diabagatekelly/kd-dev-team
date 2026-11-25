@@ -202,8 +202,13 @@ class Checking(unittest.TestCase):
         self.assertIn("kind 'colour'", " ".join(self.found(values=values)))
         values = [{"name": "x", "kind": "text", "from": "the person", "sensitive": "no", "source": "somewhere"}]
         self.assertEqual(self.found(values=values), ["x: its source names no criterion and no research document"])
-        values = [{"name": "x", "kind": "text", "from": "the person", "sensitive": "maybe", "source": "renew-and-pay / 1"}]
-        self.assertEqual(self.found(values=values), ["x: sensitive is yes or no, not 'maybe'"])
+        values = [{"name": "x", "kind": "text", "from": "the person", "sensitive": " ", "source": "renew-and-pay / 1"}]
+        self.assertEqual(self.found(values=values), ["x: sensitive is `no`, or the name of the class of sensitive values it belongs to"])
+
+    def test_a_question_may_apply_to_a_class_of_sensitive_values(self):
+        values = [{"name": "x", "kind": "text", "from": "the person", "sensitive": "her details", "source": "renew-and-pay / 1"}]
+        rows = [{"entry": "call-external-01", "applies": "her details", "why": "w"}] + self.kept["library"][1:]
+        self.assertEqual(self.found(values=values, library=rows), [])
 
 
 class Drawing(unittest.TestCase):
@@ -232,8 +237,17 @@ class Drawing(unittest.TestCase):
 
     def test_a_sensitive_value_is_drawn_against_every_place_it_can_leak_to_and_no_other_value_is(self):
         text = self.drawn()
-        self.assertEqual(text.count("- X.card-holder-name."), len(questions.EXITS))
-        self.assertNotIn("- X.payment-status.", text)
+        self.assertEqual(text.count("- X.sensitive-values."), len(questions.EXITS))
+        self.assertIn("- X.sensitive-values.logs: can any of `card-holder-name` reach what the product logs", text)
+        self.assertNotIn("payment-status` reach", text)
+
+    def test_values_of_one_class_are_drawn_together_once_for_each_place(self):
+        kept = KEPT.replace("| the subscriber | yes |", "| the subscriber | her details |").replace(
+            "| `payment-status` | choice | PayRight | no |", "| `payment-status` | choice | PayRight | Her details |")
+        (self.folder / "007_questions" / "kept.md").write_text(kept, encoding="utf-8")
+        text = self.drawn()
+        self.assertEqual(text.count("- X."), len(questions.EXITS))
+        self.assertIn("- X.her-details.telemetry: can any of `payment-status`, `card-holder-name` reach", text)
 
     def test_no_sensitive_value_is_said_in_a_line(self):
         (self.folder / "007_questions" / "kept.md").write_text(KEPT.replace("| yes |", "| no |"), encoding="utf-8")
@@ -301,8 +315,14 @@ class Drawing(unittest.TestCase):
     def test_a_leak_a_kept_library_question_already_asks_of_the_same_value_is_not_drawn_again(self):
         self.library_with("secrets-03", "secrets", "card-holder-name")
         text = self.drawn()
-        self.assertNotIn("- X.card-holder-name.logs:", text)
-        self.assertEqual(text.count("- X.card-holder-name."), len(questions.EXITS) - 1)
+        self.assertNotIn("- X.sensitive-values.logs:", text)
+        self.assertEqual(text.count("- X.sensitive-values."), len(questions.EXITS) - 1)
+
+    def test_a_leak_asked_of_only_some_values_of_a_class_is_still_drawn_for_the_class(self):
+        self.library_with("secrets-03", "secrets", "card-holder-name")
+        path = self.folder / "007_questions" / "kept.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("| `payment-status` | choice | PayRight | no |", "| `payment-status` | choice | PayRight | yes |"), encoding="utf-8")
+        self.assertIn("- X.sensitive-values.logs:", self.drawn())
 
     def test_a_kept_question_on_settings_stands_for_the_rule_wherever_it_applies(self):
         self.library_with("configuration-01", "configuration", "payment-request")

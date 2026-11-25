@@ -161,8 +161,8 @@ KEEP = {
     "durable-write-02": ("A season ticket", "the renewal is shown as recorded"),
 }
 VALUES = [("payment-status", "choice", "PayRight", "no", "payright.md F2"),
-          ("card-token", "identifier", "PayRight's card form in her browser", "yes", "payright.md F7"),
-          ("payright-key", "other", "the playhouse's own settings", "yes", "payright.md F11"),
+          ("card-token", "identifier", "PayRight's card form in her browser", "credentials", "payright.md F7"),
+          ("payright-key", "other", "the playhouse's own settings", "credentials", "payright.md F11"),
           ("refund-amount", "number", "the office", "no", "refund-a-renewal / 1")]
 NO_CLOCK = "nothing in the slice depends on a date or on the clock"
 
@@ -215,6 +215,7 @@ def takes_in(name, value, origin="", sensitive=""):
     return in_file("@KEPT@", name, rf"(?:^|\n)\|[^|\n]*(?:{value})[^|\n]*\|[^|\n]*\|[^|\n]*{origin}[^|\n]*\|\s*{sensitive}")
 
 
+SENSITIVE = r"`?(?!no\b)[a-z]"   # the name of a class, or a plain yes
 KEPT_WRITTEN = {"type": "file_exists", "name": "writes-what-is-kept", "path": "@KEPT@"}
 DRAWN = [{"type": "tool_used", "name": "draws-with-the-command", "tool": "Bash", "min": 1, "input_match": r"questions\.py[\s\S]*\bdraw\b"},
          trace("the-command-drew", r"drawn(?:: |, and not written)[^\n]{0,600}?\d+ questions: ", never=False),
@@ -249,9 +250,10 @@ SCENARIOS = [
       keeps("receive-external-data-07", r"status"), keeps("secrets-03", r"key|secret|credential|token"), keeps("user-action-01"),
       drops("corpus"),
       takes_in("lists-the-status-received", r"status", origin="PayRight"),
-      takes_in("marks-the-card-token-sensitive", r"token|card", sensitive="yes"),
-      takes_in("marks-the-secret-key-sensitive", r"key|secret|credential", sensitive="yes"),
+      takes_in("marks-the-card-token-sensitive", r"token|card", sensitive=SENSITIVE),
+      takes_in("marks-the-secret-key-sensitive", r"key|secret|credential", sensitive=SENSITIVE),
       takes_in("lists-the-refund-amount", r"amount|refund"),
+      trace("fewer-than-500-lines-from-the-library", r"drawn[^\n]{0,300}?questions: [1-4]?\d?\d from the library", never=False),
       *NOTHING_ANSWERED, LIST_LEFT, trace("leaves-the-research-document-alone", WROTE + r"_research/payright")], "", None, True),
     ("02-nothing-committed-to",
      "Nothing is committed to and the product keeps one thing, some of its rows not said: the kinds on outside systems dropped, every state drawn, no provider named.",
@@ -327,7 +329,7 @@ SCENARIOS = [
      [*DRAWN,
       not_in_file("@KEPT@", "nothing-applies-to-the-old-thing", r"payright"),
       in_file("@KEPT@", "the-new-thing-is-applied-to", r"cardway|charge"),
-      in_file("@KEPT@", "the-earlier-rows-are-left", r"she starts a payment and may start it again"),
+      in_file("@KEPT@", "the-earlier-rows-are-left", r"user-action-01[^|\n]*\|[^|\n]*renew-and-pay"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
 ]
 BARE_TABLE = ("- The questions stage has no text of its own here: do it from this report and the documents. A later stage "

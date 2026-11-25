@@ -79,6 +79,13 @@ class TheCommand(unittest.TestCase):
         self.assertEqual(outcome.main(["gaps", str(self.folder / "facts.json"), str(self.folder / "asks.json"), str(self.folder / "research"), str(self.folder / "q.md")], out), 0)
         self.assertEqual(out.getvalue().splitlines(), ["asked for            slow", "no general question  renamed", "not asked for        limit"])
 
+    def test_a_line_is_looked_for_at_the_start_of_any_line(self):
+        # Found by the pilot: the key's patterns begin at a line's start, and the facts counter reads a document as one text.
+        (self.folder / "key.json").write_text(json.dumps({"status": r"^- V\.payment-status\.missing:", "date": r"^- V\.[a-z-]*date"}))
+        out = io.StringIO()
+        self.assertEqual(outcome.main(["lines", str(self.folder / "key.json"), str(self.folder / "q.md")], out), 0)
+        self.assertEqual(out.getvalue().splitlines(), ["a line     status", "no line    date", "a line for 1 of 2"])
+
     def test_anything_else_prints_how_it_is_used(self):
         out = io.StringIO()
         self.assertEqual(outcome.main(["count"], out), 2)

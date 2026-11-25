@@ -7,7 +7,7 @@ drawn here, from the documents as they stand:
 
   - a line for each kept question and each thing it applies to;
   - each value taken in against the ways a value of its kind can be wrong;
-  - each sensitive value against the five places it can leak to;
+  - each class of sensitive values against the five places it can leak to;
   - each state of each lasting thing (research's `states.md`) against each event that can reach it;
   - the questions asked of every slice, whatever it does;
   - what research left open, carried as it is.
@@ -240,6 +240,16 @@ def known(read):
     return names
 
 
+def classes(values):
+    """{class of sensitive values: its values}, in the order written. A bare `yes` is one class of its own."""
+    found = {}
+    for value in values:
+        name = slug(value["sensitive"])
+        if name and name != "no":
+            found.setdefault("sensitive-values" if name == "yes" else name, []).append(value["name"])
+    return found
+
+
 def read_kept(text):
     """kept.md as written by a session: the values taken in, the other things, the library's rows."""
     parts = {heading.lower(): lines for heading, lines in sections(text).items()}
@@ -271,12 +281,12 @@ def problems(kept, names, entries, sources=()):
     found, seen = [], {}
     ids = {entry["id"] for entry in entries}
     values = {slug(value["name"]) for value in kept["values"]}
-    things = set(names) | values | set(kept["others"])
+    things = set(names) | values | set(kept["others"]) | set(classes(kept["values"]))
     for value in kept["values"]:
         if value["kind"] not in KINDS:
             found.append(f"{value['name']}: kind {value['kind']!r} is not one of {', '.join(KINDS)}")
-        if value["sensitive"] not in ("yes", "no"):
-            found.append(f"{value['name']}: sensitive is yes or no, not {value['sensitive']!r}")
+        if not slug(value["sensitive"]):
+            found.append(f"{value['name']}: sensitive is `no`, or the name of the class of sensitive values it belongs to")
         if not value["source"].strip() or (sources and not any(mark in value["source"] for mark in sources)):
             found.append(f"{value['name']}: its source names no criterion and no research document")
     for row in kept["library"]:
@@ -348,14 +358,15 @@ def draw(read, kept, entries):
     lines += section("Each value taken in, each way it can be wrong", drawn, spared)
 
     drawn, spared = [], 0
-    exposed = [value for value in kept["values"] if value["sensitive"] == "yes"]
-    for value in exposed:
+    exposed = classes(kept["values"])
+    for name, members in exposed.items():
         for key, words in EXITS.items():
-            if already(value["name"], key):
+            # Asked already when a kept library question asks it of the class, or of every value in it.
+            if already(name, key) or all(already(member, key) for member in members):
                 spared += 1
                 continue
-            drawn.append(f"- X.{slug(value['name'])}.{key}: can `{value['name']}` reach {words}, on the path that works and on each that fails?")
-    lines += section("Each sensitive value, each place it can leak to", drawn, spared, None if exposed else "No value taken in is marked sensitive.")
+            drawn.append(f"- X.{name}.{key}: can any of {', '.join(f'`{member}`' for member in members)} reach {words}, on the path that works and on each that fails?")
+    lines += section("Each class of sensitive values, each place it can leak to", drawn, spared, None if exposed else "No value taken in is marked sensitive.")
 
     drawn, spared = [], 0
     events = [(slug(name), slug(name), f"what {name} describes is done") for name in criteria(read["slice"])]

@@ -117,6 +117,7 @@ class Fixtures(unittest.TestCase):
     def test_a_value_marked_sensitive_is_told_from_one_that_is_not(self):
         check = checks(self.case("01"))["marks-the-secret-key-sensitive"]
         self.assertTrue(passes(check, "| `payright-key` | other | the settings | yes | payright.md F11 |\n"))
+        self.assertTrue(passes(check, "| `payright-key` | other | the settings | `credentials` | payright.md F11 |\n"))
         self.assertFalse(passes(check, "| `payright-key` | other | the settings | no | payright.md F11 |\n"))
 
     def test_a_section_of_answers_fails_and_a_reason_that_uses_the_word_does_not(self):
@@ -135,6 +136,20 @@ class Fixtures(unittest.TestCase):
         self.assertTrue(passes(check, "drawn, and not written (x/questions.md: Read-only file system): 400 questions: 3 from the library"))
         self.assertTrue(passes(checks(self.case("02"))["draws-the-states"], said.getvalue()))
         self.assertTrue(passes(checks(self.case("03"))["draws-no-state"], "drawn: x: 40 questions: 20 from the library, 13 of values, 0 of leaks, 0 of states, 7 of every slice"))
+
+    def test_the_size_of_the_librarys_part_is_held_under_five_hundred_lines(self):
+        # Found by the pilot: with the first text a session applied each question to five things, 918 lines for three criteria.
+        check = checks(self.case("01"))["fewer-than-500-lines-from-the-library"]
+        self.assertTrue(passes(check, "drawn, and not written (x: Read-only file system): 587 questions: 456 from the library, 34 of values"))
+        self.assertTrue(passes(check, "drawn: x: 80 questions: 70 from the library, 3 of values"))
+        self.assertFalse(passes(check, "drawn: x: 1060 questions: 918 from the library, 43 of values"))
+        self.assertFalse(passes(check, "drawn: x: 600 questions: 500 from the library, 43 of values"))
+
+    def test_a_row_left_as_it_was_may_gain_a_thing(self):
+        # Found by the pilot: a row kept for the same criterion, with the refund added, failed a check on its exact words.
+        check = checks(self.case("08b"))["the-earlier-rows-are-left"]
+        self.assertTrue(passes(check, "| user-action-01 | renew-and-pay-1; refund-a-renewal-1 | either may start it again |"))
+        self.assertFalse(passes(check, "| user-action: all | dropped | nothing is started |"))
 
     def test_no_made_up_document_names_a_real_provider(self):
         for case in sorted((HERE / "plugin-text" / "evals").iterdir()):
