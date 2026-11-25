@@ -149,7 +149,7 @@ class Fixtures(unittest.TestCase):
         # Found by the three-run pass: the first fixture was too thin to be believed, and Sonnet wrote it all again.
         check = checks(self.case("08b"))["the-earlier-rows-are-left"]
         self.assertTrue(passes(check, cases.kept_file()))
-        self.assertFalse(passes(check, cases.kept_file().replace("no criterion signs anyone in or out", "nobody signs in")))
+        self.assertFalse(passes(check, cases.kept_file().replace("the slice ships no body of content", "no content")))
         self.assertTrue(passes(checks(self.case("08a"))["the-earlier-rows-are-left"], cases.kept_file()))
 
     def test_the_criterion_added_brings_what_the_earlier_file_dropped(self):
@@ -173,6 +173,9 @@ class Fixtures(unittest.TestCase):
         check = checks(self.case("04"))["lists-what-is-kept-ticket"]
         self.assertTrue(passes(check, "## What the slice creates and keeps\n- A renewal payment: renew-and-pay / 1\n- The season ticket: renew-and-pay / 1\n\n## What the slice takes in\n"))
         self.assertFalse(passes(check, "## What the slice creates and keeps\n- A renewal payment: renew-and-pay / 1\n\n## What the slice takes in\n| `season-ticket-id` |\n"))
+        # A thing named only in another thing's reason is not a thing listed.
+        self.assertFalse(passes(check, "## What the slice creates and keeps\n- A renewal payment: renew-and-pay / 1 (her season ticket is renewed)\n\n## What"))
+        self.assertIn("renew-and-pay / 3", (self.case("04") / "project/planning/slice-001/004_slice.md").read_text())
         self.assertTrue(passes(checks(self.case("03"))["says-nothing-is-kept"], "## What the slice creates and keeps\n- nothing\n\n## What"))
 
     def test_a_question_on_outside_systems_may_be_kept_for_the_offices_own_sheet_and_not_for_a_provider(self):

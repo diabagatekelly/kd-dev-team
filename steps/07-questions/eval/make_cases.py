@@ -152,6 +152,13 @@ NOTE = ("- **refund-a-renewal / 2**: Given the office refunds a renewal, when th
         "reason is kept with the refund and shown to the office beside it.\n")
 
 
+# A criterion that plainly keeps a thing of its own: found by the three-run pass, where "her renewal is recorded" was
+# read, fairly, as the payment's own record, so the case of a thing with no states tested a reading and not the rule.
+NEW_SEASON = ("- **renew-and-pay / 3**: Given her renewal is paid for, when the new season starts, then the office is shown her season "
+              "ticket for the new season as active and last season's as ended.\n")
+KEPT_TICKET_SLICE = PAY_SLICE.replace("\n## Needs from outside", NEW_SEASON + "\n## Needs from outside").replace("Three criteria", "Four criteria")
+
+
 def kept_file():
     """kept.md as a session of this stage wrote it for the first case (Sonnet, the three-run pass): every entry judged."""
     return (HERE / "kept-earlier.md").read_text(encoding="utf-8")
@@ -181,7 +188,7 @@ def keeps(entry, thing=None):
 def keeps_thing(thing):
     """The list of what the slice creates and keeps names that thing (or says nothing is kept)."""
     name = "says-nothing-is-kept" if thing == "nothing" else "lists-what-is-kept-" + re.sub(r"[^a-z]+", "-", thing.split("|")[0]).strip("-")
-    return in_file("@KEPT@", name, rf"creates and keeps[^\n]*\n(?:(?!\n## )[\s\S])*?(?:{thing})")
+    return in_file("@KEPT@", name, rf"creates and keeps[^\n]*(?:(?!\n## )[\s\S])*?\n\s*[-*]\s*`?[^:\n]*(?:{thing})")
 
 
 def drops(kind):
@@ -250,13 +257,13 @@ SCENARIOS = [
       trace("draws-no-state", r"drawn[^\n]{0,600}?, 0 of states", never=False),
       *NOTHING_ANSWERED, LIST_LEFT], "", None, False),
     ("04-a-thing-kept-with-no-states",
-     "A criterion records a renewal of a season ticket and the states have no table for it: named first, walked by research's rules, then drawn.",
-     playhouse(inventory=(THE_SYSTEM, THE_PAYMENT), more={**RESEARCHED, "slice-001/006_research/states.md": ONLY_THE_PAYMENT}), None, GO_ON,
-     [KEPT_WRITTEN, *DRAWN, keeps_thing("ticket|renewal(?! payment)"),
-      says("names-the-thing-with-no-states", near(r"season ticket|renewal(?! payment)", r"states|table|states\.md|walk", 300)),
-      in_file("planning/slice-001/006_research/states.md", "its-table-is-added", r"(?:^|\n)##[^\n]*(?:season ticket|renewal(?! payment))"),
+     "A criterion keeps a season ticket as active or ended and the states have no table for it: listed as kept, its table added by research's rules, then drawn.",
+     playhouse(the_slice=KEPT_TICKET_SLICE, inventory=(THE_SYSTEM, THE_PAYMENT), more={**RESEARCHED, "slice-001/006_research/states.md": ONLY_THE_PAYMENT}), None, GO_ON,
+     [KEPT_WRITTEN, *DRAWN, keeps_thing("ticket"),
+      says("names-the-thing-with-no-states", near(r"season ticket|season-ticket", r"states|table|states\.md|walk", 300)),
+      in_file("planning/slice-001/006_research/states.md", "its-table-is-added", r"(?:^|\n)##[^\n]*(?:season[ -]ticket)"),
       in_file("planning/slice-001/006_research/states.md", "its-rows-are-sourced-or-said-not-to-be",
-              r"(?:^|\n)##[^\n]*(?:season ticket|renewal(?! payment))[\s\S]*(00[0-4]_|not said in the documents)"),
+              r"(?:^|\n)##[^\n]*(?:season[ -]ticket)[\s\S]*(00[0-4]_|not said in the documents)"),
       in_file("planning/slice-001/006_research/states.md", "the-other-table-is-left", r"A disputed payment is frozen"),
       *NOTHING_ANSWERED, LIST_LEFT], "research", None, False),
     ("05-an-earlier-question-answered",
@@ -308,7 +315,7 @@ SCENARIOS = [
      [*DRAWN,
       not_in_file("@KEPT@", "nothing-applies-to-the-old-thing", r"payright\.md|\|[^|\n]*payright[^|\n]*\|[^|\n]*\|[ \t]*(?:\n|$)"),
       in_file("@KEPT@", "the-new-thing-is-applied-to", r"cardway|charge"),
-      in_file("@KEPT@", "the-earlier-rows-are-left", r"no criterion signs anyone in or out[\s\S]*the slice ships no body of content"),
+      in_file("@KEPT@", "the-earlier-rows-are-left", r"\| corpus: all \| dropped \| the slice ships no body of content \|"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
 ]
 BARE_TABLE = ("- The questions stage has no text of its own here: do it from this report and the documents. A later stage "
