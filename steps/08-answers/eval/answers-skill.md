@@ -62,14 +62,18 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
    `Harm:`. Write no criterion: it waits for them. What the
    documents already decide is a fact, not asked again; how to
    protect something is chosen, and only a risk left after that is
-   theirs.
+   theirs. How fast and how reliable it must be, and what law or
+   contract binds it, are theirs wherever the documents do not say:
+   the script refuses them chosen.
 5. `chosen`: everything else. Good practice in security, in what a
    person is told and in what is recorded is applied, not asked. A
    technical problem with a known solution is solved: say what is
    chosen and, in `Rests on`, why. The user can overturn it later.
    A choice says nothing of how something outside behaves that the
-   research does not say: name the fact it rests on, or choose what
-   holds either way and leave the rest to a test.
+   research does not say. An answer that speaks of a thing the slice
+   is committed to names the fact of its research document it rests
+   on (`payright F6`), and the script refuses it otherwise: choose
+   what holds either way and leave the rest to a test.
 
 **Criteria.** Write one where someone could see the behaviour go
 wrong, under the slice's item it belongs to. What an answer says

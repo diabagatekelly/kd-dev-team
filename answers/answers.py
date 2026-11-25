@@ -122,6 +122,10 @@ def problems(answers, ids, slice_read):
     found, seen, taken = [], set(), {}
     items = {name.split(" / ")[0] for name in questions.criteria(slice_read["slice"])}
     known = sources(slice_read)
+    # What the slice is committed to and has a research document for: an answer that speaks of one
+    # rests on a fact that document holds (met on the real plans: one answer in five did not).
+    facts = {name[:-3].lower(): set(re.findall(r"^- ([FOS]\d+)\b", text, re.M)) for name, text in slice_read["research"].items()}
+    outside = {questions.slug(name): name for name in questions.committed(slice_read["approach"]) if questions.slug(name) in facts}
     for answer in answers:
         name, kind = answer["name"], one(answer, "Kind").lower()
         say = lambda words: found.append(f"{name} (line {answer['line']}): {words}")   # noqa: E731
@@ -152,6 +156,21 @@ def problems(answers, ids, slice_read):
         for word in re.findall(r"([A-Za-z][\w.-]*),? (?:fact )?[FOS]\d+\b", one(answer, "Rests on")) if kind == "fact" and stems else []:
             if re.sub(r"\.md$", "", word).lower() not in stems | {"and", "or", "to", "through", "with", "also", "see", "fact", "facts"}:
                 say(f"'{word}' is no research document of the slice ({', '.join(sorted(stems))}): a research fact is named with its document")
+        if kind in ("fact", "chosen"):
+            rests, speaks = one(answer, "Rests on"), " ".join([one(answer, "Says"), *answer["fields"].get("Criterion", [])])
+            cited = {(stem.lower().removesuffix(".md"), mark) for stem, marks in re.findall(r"([A-Za-z][\w.-]*),? (?:fact )?((?:[FOS]\d+(?:,? (?:and |or )?)?)+)", rests)
+                     for mark in re.findall(r"[FOS]\d+", marks)}
+            for stem, mark in sorted(cited):
+                if stem in facts and mark not in facts[stem]:
+                    say(f"{stem} has no {mark}: a research fact is named as its document has it")
+                elif stem in facts and mark.startswith("O"):
+                    say(f"{stem} {mark} is an open point of the research: what rests on it is a `test`, or is chosen so as to hold either way")
+            for stem, thing in outside.items():
+                if re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I) and not any(doc == stem and mark[0] in "FS" for doc, mark in cited):
+                    say(f"it speaks of {thing} and rests on no fact of {stem}.md (`{stem} F1`): name the fact, or leave how {thing} behaves to a `test`")
+        owed = [each for each in took if each in ("W.target", "W.obligations")]
+        if owed and kind not in ("fact", "owner"):
+            say(f"{', '.join(owed)}: a target and an obligation are what the documents say (`fact`) or the owner's (`owner`), never chosen for them")
         if kind in ("owner", "test") and one(answer, "Harm") and one(answer, "Harm").lower().split()[0].strip(".,:;") not in HARMS:
             say(f"Harm is one of {', '.join(HARMS)}")
         if kind == "owner" and one(answer, "Options") and len([each for each in one(answer, "Options").split("|") if each.strip()]) < 2:

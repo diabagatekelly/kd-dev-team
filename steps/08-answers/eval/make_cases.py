@@ -81,8 +81,11 @@ def before(drawn, left=(), owner=""):
         groups.setdefault(".".join(name.split(".")[:2]), []).append(name)
     blocks = ["# Answers: slice 1\n"]
     for number, (group, names) in enumerate(groups.items(), 1):
-        blocks.append(f"## A{number}: {group}\nKind: chosen\nSays: Settled in an earlier session, as the design of this slice will carry it.\n"
-                      f"Rests on: applied as good practice; nothing here is the owner's.\nSettles: {', '.join(names)}\n")
+        said = ("Kind: fact\nSays: Settled in an earlier session.\nRests on: 002_requirements.md, the limits that apply.\n"
+                if group in ("W.target", "W.obligations") else   # never chosen for the owner: the script refuses it
+                "Kind: chosen\nSays: Settled in an earlier session, as the design of this slice will carry it.\n"
+                "Rests on: applied as good practice; nothing here is the owner's.\n")
+        blocks.append(f"## A{number}: {group}\n{said}Settles: {', '.join(names)}\n")
     return "\n".join(blocks) + ("\n" + owner if owner else "")
 
 

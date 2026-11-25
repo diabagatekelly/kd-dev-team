@@ -69,7 +69,9 @@ class Folder(unittest.TestCase):
         (self.slice / "006_research").mkdir(parents=True)
         (self.slice / "007_questions").mkdir()
         (self.slice / "004_slice.md").write_text(SLICE)
-        (self.slice / "006_research" / "payright.md").write_text("# PayRight\n")
+        (self.slice / "006_research" / "payright.md").write_text(
+            "# PayRight\n\n## Facts\n- F3: A request is refused after 30 seconds.\n- F4: A reply names the payment.\n\n## Open\n- O1: What a lost reply leaves.\n")
+        (self.slice / "005_approach.md").write_text("# Approach\n\n## Committed to\n- PayRight: https://docs.payright.example/, for taking a payment.\n")
         (self.slice / "007_questions" / "questions.md").write_text(QUESTIONS)
         (self.top / "planning" / "002_requirements.md").write_text("# Requirements\n")
 
@@ -164,9 +166,30 @@ class Refused(Folder):
             self.write(FACT.replace("payright F3", source) + REST)
             self.assertEqual(self.run_it("draw")[0], 0, source)
 
+    def test_a_research_fact_its_document_does_not_have(self):
+        self.assertIn("payright has no F9", self.refused(FACT.replace("payright F3", "payright F9")))
+
+    def test_a_fact_or_a_choice_resting_on_an_open_point(self):
+        said = self.refused(FACT.replace("payright F3", "payright F3 and O1"))
+        self.assertIn("payright O1 is an open point of the research", said)
+
+    def test_a_choice_that_speaks_of_what_is_committed_to_and_names_no_fact_of_it(self):
+        speaks = REST.replace("A renewal with no token is refused before anything is sent.", "PayRight refuses a renewal with no token.")
+        self.assertIn("A2 (line 11): it speaks of PayRight and rests on no fact of payright.md", self.refused(FACT + speaks))
+        self.write(FACT + speaks.replace("Rests on: nothing can be charged without it.", "Rests on: payright F4: nothing can be charged without it."))
+        self.assertEqual(self.run_it("draw")[0], 0)
+
+    def test_a_target_or_an_obligation_chosen_for_the_owner(self):
+        more = QUESTIONS + "- W.target: How often may it fail, and how slow is too slow?\n"
+        (self.slice / "007_questions" / "questions.md").write_text(more)
+        chosen = "\n## A6: Fast enough\nKind: chosen\nSays: Two seconds.\nRests on: it is a sum.\nSettles: W.target\n"
+        self.assertIn("W.target: a target and an obligation are what the documents say", self.refused(FACT + REST + chosen))
+        self.write(FACT + REST + chosen.replace("Kind: chosen", "Kind: fact").replace("it is a sum.", "002_requirements.md, Limits."))
+        self.assertEqual(self.run_it("draw")[0], 0)
+
     def test_a_fact_may_rest_on_a_criterion_or_a_planning_document(self):
         for source in ("renew-and-pay / 1", "002_requirements.md, Limits", "requirements.md"):
-            self.write(FACT.replace("payright F3", source) + REST)
+            self.write(FACT.replace("payright F3", source).replace("Given PayRight does not reply", "Given no reply comes") + REST)
             self.assertEqual(self.run_it("draw")[0], 0, source)
 
     def test_a_harm_that_is_none_of_the_three(self):
