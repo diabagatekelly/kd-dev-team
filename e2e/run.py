@@ -376,6 +376,9 @@ def keep(out, example, stage, plugin):
     wanted = DOCUMENTS[:DOCUMENTS.index(stage) + 1]
     if not any(planning.rglob("*.md")):   # asked of a place no run has finished in: nothing is kept, nothing is lost
         raise SystemExit(f"nothing to keep: no run has left documents in {planning}. --keep keeps a finished run's documents and runs nothing.")
+    if stage == "questions" and any(planning.glob("slice-*/*_questions/security.md")):
+        # Met on 2026-11-25: the drawing then carries security's mark, and a run started from it would find security done.
+        raise SystemExit("this run went on through security, and its drawing carries that file's mark: keep security, not questions")
     shutil.rmtree(kept, ignore_errors=True)
     kept.mkdir(parents=True)
     for path in sorted(planning.rglob("*.md")):

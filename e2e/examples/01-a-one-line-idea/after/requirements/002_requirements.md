@@ -1,23 +1,24 @@
-# Requirements: A member on the waiting list finds out where they are on it
+# Requirements: find out where they are on the waiting list
 
-- [ ] **see-own-place**: A member on the waiting list can find out where they are on the waiting list without phoning the person who keeps it, and sees only their own place, not other people's names.
-- [ ] **keep-the-list**: The person who keeps the waiting list can put the notebook's list in, in the order it is in now, and keep it up to date so that members see their right place.
+- [ ] **see-own-place**: A person on the waiting list can see their own place on it, and only their own.
+- [ ] **carry-over-list**: The person who keeps the list can have everyone in the paper notebook carried over to the waiting list, in the same order as in the notebook.
 
 ## Out for now
-- The committee offering a free plot to whoever is first (next on the scope map).
-- The committee showing the council that plots are given out fairly (later on the scope map).
+- Offering a free plot.
+- Showing the council that plots are given out fairly.
+- Showing people's names to everyone.
 
 ## Limits that apply
-- We can spend 10 pounds a month at most: whatever meets these items has to fit within that, running costs included.
-- The committee is five volunteers, none of us technical: whatever meets these items has to be kept going by them without technical help.
-- Many members are elderly, and several have no smartphone: a member with no smartphone must still be able to find their place, so see-own-place cannot depend on having one.
+- £10 a month at most: whatever this activity costs to run has to fit within it.
+- The committee are five volunteers, none of them technical: anything a committee member has to do for people to see where they stand must be something a non-technical volunteer can do.
+- Many members are elderly, and several have no smartphone: a person on the waiting list must be able to see where they stand without having a smartphone. The person who keeps the list could look it up for them, but would rather not be doing that every week.
 
 ## Not yet confirmed
-We do not know the answers to these yet.
-- **does** (bears on keep-the-list): What does keeping the list up to date take in? For example, people joining, people leaving, people being given a plot. This decides what the keeper must be able to do.
-- **which** (bears on see-own-place): How is one member told apart from another, so each sees their own place and no one else's? For example, does the keeper hold something for each person that is theirs alone?
-- **does** (bears on see-own-place): Is "where they are" just their number on the list, or does a member also need something more, such as how many are ahead of them or how long the wait is likely to be?
-- **put right** (bears on see-own-place, keep-the-list): If a member's place turns out wrong, who corrects it, and does the member need any way to say so?
+1. The person who keeps the notebook now keeps the list. Is putting people on it and taking them off part of this activity, and does anyone else do either? Bears on **see-own-place**: it could add items for keeping the list up to date, and settle who can do them.
+2. If a place on the list is wrong, or someone disputes it, does it need to be possible to correct it, and who may do that? Bears on **see-own-place** and **carry-over-list**: it could add an item for correcting the list.
+3. For anyone joining or already waiting, what decides their place: only when they joined, or can anything else move them up or down? Bears on **see-own-place**: it could change what a place means, or add an item for moving someone.
+4. The person who keeps the list could look up someone's place for them, but would rather not be doing that every week. Does it need to be possible for the list keeper to do this, may anyone else see a person's place, such as someone else acting for them or the committee, and who, if anyone, may see the whole list? Names are not to be shown to everyone. Bears on **see-own-place**: it could change who can see what, or add an item for looking up a place for someone.
 
 ## Outside systems and lasting things
-- The waiting list: the people waiting, in order, kept over time. No outside system is named in the documents.
+- Outside systems: none.
+- Lasting thing: the waiting list.

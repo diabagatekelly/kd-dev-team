@@ -555,6 +555,18 @@ class Run(unittest.TestCase):
         self.assertEqual((kept / "slice-002" / "006_research" / "states.md").read_text(), "kept")
         self.assertFalse((run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin") / "slice-002" / "006_research").exists())
 
+    def test_the_questions_of_a_run_that_went_on_through_security_are_not_kept_as_the_questions(self):
+        # Met on 2026-11-25, keeping the examples after the security pass: the drawing carried security's mark.
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002" / "007_questions"
+        folder.mkdir(parents=True)
+        (folder / "questions.md").write_text("drawn")
+        (folder / "security.md").write_text("written")
+        with self.assertRaises(SystemExit) as refused:
+            run.keep(self.folder / "done", self.example, "questions", self.folder / "plugin")
+        self.assertIn("keep security", str(refused.exception))
+        self.assertTrue((run.keep(self.folder / "done", self.example, "security", self.folder / "plugin") / "slice-002" / "007_questions" / "security.md").exists())
+
     def test_keeping_a_place_no_run_finished_in_keeps_nothing_and_loses_nothing(self):
         # Found before the stage was put to the owner: --keep given with a run's options ran nothing and emptied what was kept.
         self.kept()

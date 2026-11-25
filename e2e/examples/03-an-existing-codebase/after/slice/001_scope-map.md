@@ -1,13 +1,15 @@
-# Scope map: Knowing in advance who will miss a rehearsal
+# Scope map: hearing about absences too late
 
 | # | What the user does | What it covers | When |
 |---|---|---|---|
-| 1 | A singer tells us in advance that they'll miss a rehearsal | Instead of a text, a word to a friend, or nothing | now |
-| 2 | We see before the Thursday who will be missing, by voice part | So we know, for example, that the tenors are three short before the night | next |
+| 1 | Know before the night who will miss a rehearsal | Singers who will miss one let us know, and we find out which voice parts will be short while we can still rearrange the programme. | now |
+| 2 | Check whether a silent singer is still coming | A singer who misses three rehearsals in a row without a word is asked whether they're still coming; the secretary works this out. | next |
 
 ## Holds for every activity
-- Singers mustn't need a password: several are in their eighties.
-- The register is on a small computer at the church hall that the section leaders use.
+
+- Singers mustn't need a password, because several are in their eighties.
+- The register is on a small computer at the church hall, which the section leaders use.
 
 ## Open
-- Whether singers can reach the hall's computer from home. We think not, but we're not sure.
+
+- Can singers reach the hall's computer from home? We think not, but we're not sure.

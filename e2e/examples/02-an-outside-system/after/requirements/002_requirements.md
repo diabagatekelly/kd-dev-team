@@ -1,28 +1,27 @@
-# Requirements: Invoice each client for the month
+# Requirements: invoice the clients
 
-- [ ] **monthly-invoices**: The business owner can get, for each client, an invoice for the month made from that month's walks, without typing it by hand.
-- [ ] **send-payment-links**: The business owner can have each client receive a Tallypay payment link for their invoice.
-- [ ] **regular-walks**: The business owner can state a client's regular weekly walks once, change them, or stop them, so that each month's invoice includes them without being typed again.
-- [ ] **one-off-extras**: The business owner can add a one-off extra walk to a client's month.
-- [ ] **walk-pricing**: The business owner can have each walk charged by its length (30 or 60 minutes, priced differently), with a second dog from the same home at half price.
+- [ ] **monthly-client-invoice**: The owner can get each client a correct invoice for the month's walks, regular and one-off, priced from the price list by length (30 or 60 minutes) with a second dog from the same home at half price, and a cancelled walk charged only when less than a day's notice was given, with a payment link.
 
 ## Out for now
-- Keeping a record of each walk, so no walker's sheet is lost or guessed (activity 1 on the scope map, "next").
-- Chasing clients who have not paid (activity 3, "later").
+- Keeping track of the walks each walker did for each client, including the problem of lost sheets.
+- Seeing who has not paid, and chasing late payers.
 
 ## Limits that apply
-- Staying with Tallypay: the payment link each client receives is a Tallypay one.
+- Tallypay stays as the card service: each invoice's payment link is a Tallypay one.
 
 ## Not yet confirmed
-1. **Which clients the price list covers** (bears on **walk-pricing**): the price list has one row for each of 12 different clients, against about sixty clients in all. If the other clients are priced some other way, or not yet listed, an item for pricing them is added.
-2. **What a price's "since" date means** (bears on **walk-pricing**): each price has a date it applies from. If a price changes part-way through a month, the walks before and after may be charged differently; if not, a month is always charged at one price.
-3. **Putting a mistake right** (bears on **monthly-invoices** and **send-payment-links**): whether an invoice or link already sent may need to be corrected or cancelled, and by whom. If so, an item is added.
-4. **When and how many at once** (bears on **send-payment-links**): whether all sixty or so go out together on a set day each month, or one at a time as each is ready.
-5. **What else exists today that must come across** (bears on **regular-walks**): whether a client list, with each client's regular walks, exists that the new way must start from. The price list is the one thing named so far (see `sources.md`).
+Known so far: each walker writes every walk on a paper sheet and hands the sheets in at the end of the month. A regular client has the same walks every week until they change or stop, and there are one-off extras. A walk cancelled with a day's notice is not charged; one cancelled later than that is.
+
+1. For invoicing now, what do you need to be able to put in or change each month so the right walks are charged: every walk on the sheets, or each client's regular walks with only the changes and extras? And how do you find out about a late cancellation: is it on the walkers' sheets? (monthly-client-invoice; could add items for getting walks in or looking after regular walks.)
+2. The price list has a "Client" column with 12 different entries in 12 rows, and you have about sixty regular clients. Do some clients have their own prices, and what does everyone else pay? What are the four different entries under "Walk"? (monthly-client-invoice; could change how a walk is priced, or add an item for looking after a client's own prices.)
+3. Besides length, a second dog and late cancellation, does anything change what a client is charged, such as a walk that was missed without being cancelled? Are the one-off extras only extra walks? (monthly-client-invoice; could change what it charges, or add an item.)
+4. "Only me": does this mean you want to see and approve each invoice before the client gets it, that you alone do the invoicing, or both? And may the walkers see invoices? (monthly-client-invoice; could add an item for approving invoices, or a limit on access.)
+5. When an invoice turns out to be wrong, before or after the client has it, what do you need to be able to do? Answered "I don't know" on 2026-11-25. Also said that day: "That's everything that goes wrong"; it is not clear which question this answers, and it does not say what you need to do about a wrong invoice. (monthly-client-invoice; could add an item for putting it right.)
+6. When a price changes, or a new one is needed, do you need to be able to change it yourself? (monthly-client-invoice; could add an item for looking after prices.)
+7. What does "Since" in the price list mean? If it is when a price started, can one month's invoice need both an old and a new price? (monthly-client-invoice; could change how a walk is priced.)
+8. Does each client always get exactly one invoice a month, or can there be several, or one shared between clients? (monthly-client-invoice; could change what an invoice covers, or add an item.)
+9. Is there anything you have today that must come across, such as client details or earlier invoices? (Could add an item for bringing it across.)
 
 ## Outside systems and lasting things
-- Tallypay: the card service that makes the payment links.
-- Client: about sixty regular clients, each invoiced monthly.
-- Walk: what a walker did for a client, as written on the paper sheets today; a regular walk repeats weekly until changed or stopped, and an extra is one-off.
-- Invoice: one per client per month.
-- Price list: the owner's list of prices, kept in a file on their own machine (described in `sources.md`).
+- Outside system: Tallypay, the card service.
+- Lasting thing: invoice.

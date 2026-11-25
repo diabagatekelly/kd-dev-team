@@ -1,28 +1,28 @@
-# Requirements: Practise telling a pair apart from memory
+# Requirements: Practise telling apart from memory the ones we get wrong
 
-- [ ] **practise-from-memory**: A learner can practise telling the verses of a similar pair apart from memory, at the moment they reach one, on their own between tests.
-- [ ] **practise-my-misses**: A learner can practise the pairs they get wrong.
+- [ ] **practise-wrong-ones**: A reciter can practise, on their own, telling apart from memory the similar verses they get wrong, at the moment of reaching one.
 
 ## Out for now
-- Finding out which pairs I confuse (activity 2 on the scope map).
-- Keeping the pairs I confuse (activity 3).
-- Reading a pair side by side (activity 4).
-- Use by others who memorise: first it is for me only; if it worked, I would want others who memorise to use it.
-- Nothing exists yet in the project, so nothing already works.
+- Keeping track of where we slip: marked "next" on the scope map.
+- Comparing similar verses side by side: marked "later" on the scope map.
+- Use by others who memorise: we come first; if it works, we would want them to use it.
 
 ## Limits that apply
-- The text of the Qur'an is shown exactly, with nothing changed or approximated: every verse shown while practising is the text exactly.
+- The text of the Qur'an must be shown exactly, with nothing changed or approximated (not negotiable): any of the text shown during practice must meet this.
 
 ## Not yet confirmed
-1. **What you do and are shown** (bears on practise-from-memory): we only have a vague picture, from being tested: being given the start of a verse and carrying on, or being shown two wordings and asked which comes where. We do not know which, and there may be better ways we have not met. What we are shown when we get one wrong is not said yet.
-2. **Which pairs, and where they come from** (bears on practise-my-misses): we do not know yet how the product learns which pairs we get wrong, or whether a list of the similar verses exists in a usable form. We have never looked.
-3. **What a pair is** (bears on both): not known yet whether a pair is always exactly two verses or a set can have more, or whether a verse counts whole or can be a part of a verse.
-4. **How many at a time** (bears on practise-from-memory): not known yet whether one pair at a time or several in one go.
-5. **How long** (bears on practise-my-misses): not known yet whether a pair stops being one we practise once it is got right, and if so when.
-6. **Source for the text** (bears on both): we do not know whether a source for the exact text exists. We have never looked. Until it is answered, nothing can be shown.
-7. **A teacher** (bears on both): whether a teacher may also see how we do is not known yet. Only "others who memorise, later" has been said.
+1. **Which ones we get wrong** (practise-wrong-ones): where does practice get them from, given that keeping track of slips is "next"? The answer could add an item for saying which they are, or move part of that activity into this one.
+2. **What practising is** (practise-wrong-ones): what is the reciter given, and what do they then do? We have only a vague picture, from being tested: being given the start of a verse and carrying on, or being shown two wordings and asked which comes where. We don't know which, and we suspect there are better ways we haven't met. The answer could split or reword the item and add others.
+3. **Knowing the result** (practise-wrong-ones): how should the reciter find out whether they got it right: by checking themselves, by being told, or by someone listening? The answer could add an item, or bring in a second person.
+4. **What counts as one we get wrong** (practise-wrong-ones): the ones we get wrong matter most. Which pairs a reciter confuses differs from person to person and depends on what they have memorised and how. Still open: is it only the verse where the slip happened, or also the verses it gets confused with? Does it include slips noticed during practice, and does a verse ever stop counting? The answer could change what the item covers or add items.
+5. **Whether anyone else takes part** (practise-wrong-ones): does a teacher or anyone else need to see or do anything? The answer could add people and items for them.
+6. **Putting mistakes right** (practise-wrong-ones): if something is wrongly counted as a slip or as correct, does the reciter need to be able to change it? The answer could add an item.
+7. **What we already have** (practise-wrong-ones): do the places marked in our copy or the pairs in our notebook need to come across? The answer could add an item.
+8. **A list of the similar verses** (practise-wrong-ones): does one exist in a usable form? We have never looked. The answer could change where the similar verses come from, or what practice can cover.
+9. **A source for the text** (practise-wrong-ones): is there one? We have never looked. The answer decides whether the text can be shown within the limit above.
+10. **Every similar verse** (practise-wrong-ones): should practice also cover every similar verse there is, beyond the ones we get wrong? We don't know. The answer could widen the item or add one.
 
 ## Outside systems and lasting things
-- Outside: a source for the text of the Qur'an (not yet found).
-- Outside: a list of the similar verses (not yet found).
-- Lasting: the pairs the learner gets wrong.
+- A source for the text of the Qur'an: not yet known to exist.
+- A list of the similar verses: not yet known to exist in a usable form.
+- The similar verses a reciter gets wrong.

@@ -1,0 +1,350 @@
+# Questions
+
+<!-- drawn from: 2887433736 -->
+
+Drawn by script from kept.md and the slice's documents. Nothing here is answered.
+
+## From the library
+
+- L.limits-04.invoice-request: invoice-request: What is the most the product is meant to handle at one time, and what does it do with demand beyond that?
+- L.limits-08.invoice-view: invoice-view: How many items may be asked for or shown in one go, and how does a person reach the rest?
+- L.durable-write-01.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What does the product guarantee is stored when a save is cut off partway: all of the old content, all of the new, or something it can detect and repair?
+- L.durable-write-02.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): At what moment does the product say a change is saved, and how much recently confirmed work may be lost if power fails right after?
+- L.durable-write-03.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): On what kinds of storage does the product promise its saved data survives a power loss, and how would it notice damage on storage that does not keep that promise?
+- L.durable-write-04.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What does the person see, and what state is the previously saved data in, when a save fails for lack of space?
+- L.durable-write-05.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What does the product do after storage reports a failed save, given that trying again and being told it worked does not prove the data is there?
+- L.durable-write-07.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): How does the product recognise and treat an incomplete or meaningless final record in a history it adds to over time?
+- L.durable-write-08.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which pieces of saved data must always agree with one another, and what does the product do when it finds them disagreeing after a crash?
+- L.durable-write-08.stored-walks: stored-walks: Which pieces of saved data must always agree with one another, and what does the product do when it finds them disagreeing after a crash?
+- L.durable-write-09.stored-prices: stored-prices: How does the product detect saved data that has silently changed since it was written, and what does it do with it?
+- L.durable-write-10.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): How are copies of the saved data (backups, exports, device transfers) taken so that a copy made during a save is still usable?
+- L.durable-write-11.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which files together make up the saved data, and what happens when only some of them are moved, copied, restored or cleaned up?
+- L.durable-write-12.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What happens to a save that is still in progress when the product is closed, and how does the person learn on return that it did not happen?
+- L.startup-read-01.stored-walks: stored-walks: What does the product do at start when its saved data is damaged: refuse to run, run with what can be read, or start fresh, and what is the person told?
+- L.startup-read-02.stored-walks: stored-walks: What does the product do when the thing in its saved-data location is not recognisably its own, and does it ever overwrite it?
+- L.startup-read-03.stored-walks: stored-walks: How does the product tell a first run with nothing saved apart from saved data that exists but cannot be opened, and what does it do in each case?
+- L.startup-read-04.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What does the product do at start when it finds a save that an earlier run left unfinished: complete it, undo it, or ask?
+- L.startup-read-05.stored-walks: stored-walks: What does the product do when it may read its saved data but not change it, including when that data needs repair first?
+- L.startup-read-06.stored-walks: stored-walks: What does a starting copy of the product do when another copy is already repairing the saved data: wait, for how long, and what does it show meanwhile?
+- L.startup-read-07.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Where can the platform remove the product's saved data on its own, and what does the person find, and can get back, when that has happened?
+- L.startup-read-08.stored-walks: stored-walks: After a rescue of damaged saved data, what is checked before the result is used, and how is the person told what may be missing, changed or back again?
+- L.startup-read-09.stored-prices: stored-prices: How would the product or its owner find out that saved data is readable but wrong, and how far back can a good version be recovered?
+- L.startup-read-10.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which spare copy does the product fall back on when its saved data is unusable, and when was bringing it back last actually tried?
+- L.concurrency-03.stored-walks: stored-walks: Which sets of items must always be read as they stood at a single moment, and how is that ensured while changes are going on?
+- L.concurrency-03.stored-prices: stored-prices: Which sets of items must always be read as they stood at a single moment, and how is that ensured while changes are going on?
+- L.concurrency-04.stored-walks: stored-walks: Where does the product decide something from the set of items matching a condition, and what happens if that set changes before the decision is acted on?
+- L.concurrency-08.stored-walks: stored-walks: What does the product do when the stored data is in use by another operation: wait, try again, or tell the person, and for how long?
+- L.concurrency-12.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What stops two copies of the product from changing the same stored data at once, and in which setups (shared or remote storage, mixed versions) does that protection not hold?
+- L.lifecycle-04.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): How long may a thing stay in progress before the product treats the work as failed, and what then happens to it?
+- L.lifecycle-05.stored-walks: stored-walks: Which records only make sense as a pair or set, and how is one that exists without its partner found and dealt with?
+- L.lifecycle-05.stored-prices: stored-prices: Which records only make sense as a pair or set, and how is one that exists without its partner found and dealt with?
+- L.lifecycle-08.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): How long is something that was started and then abandoned kept, and what removes it afterwards?
+- L.user-input-01.chosen-client: chosen-client: How long may each typed value be, and what does the person see when theirs is longer?
+- L.user-input-02.invoice-request: invoice-request: Which fields are truly required, and what can a person do who has no value for one of them?
+- L.user-input-03.chosen-client: chosen-client: Which characters does each field accept, and on what grounds is any character refused?
+- L.user-input-04.chosen-month: chosen-month: Is each value asked for whole or in parts, and what happens when a person's value has fewer, more or differently ordered parts?
+- L.user-input-05.invoice-request: invoice-request: Where is each rule about a typed value enforced, and what happens to a value that arrives without having passed the on-screen check?
+- L.user-input-06.refusal-message: refusal-message: For each way a value can be refused, what does the message say and where does it appear?
+- L.user-input-06.no-walks-message: no-walks-message: For each way a value can be refused, what does the message say and where does it appear?
+- L.user-input-07.invoice-request: invoice-request: Is an empty or all-spaces value accepted, and are spaces around a value kept, removed or refused?
+- L.user-input-09.chosen-client: chosen-client: Which values must be unique, how is sameness judged, and what is the person told when theirs is taken?
+- L.user-input-10.client-name: client-name: Wherever typed text is later shown, stored or passed on, how is it kept from being acted on as anything but text?
+- L.user-input-11.invoice-request: invoice-request: Which fields depend on one another, and what happens when their values do not agree?
+- L.user-input-12.chosen-month: chosen-month: In which written forms may a number or a date be typed, and how is an ambiguous one settled?
+- L.user-action-01.invoice-request: invoice-request: What does the person see at once after starting an operation, and what happens if they start it a second time before the first has finished?
+- L.user-action-02.invoice-view: invoice-view: What does reloading do on each screen that follows an operation that changed something?
+- L.user-action-03.invoice-view: invoice-view: What does each screen show, and what can be done from it, when it is reached by stepping back after the operation it led to?
+- L.user-action-04.invoice-view: invoice-view: What remains visible on the device after a person signs out, including on screens reached by stepping back?
+- L.user-action-06.invoice-view: invoice-view: What does a person find when they come back to a screen their device has suspended or discarded in the meantime?
+- L.user-action-08.invoice-request: invoice-request: Which actions can be undone, for how long, and what can a person do about one that cannot?
+- L.user-action-12.invoice-view: invoice-view: What does a saved address to each screen lead to when the person is signed out, or when what it pointed at no longer exists?
+- L.time-01.chosen-month: chosen-month: Which behaviours depend on the device's own clock, and what happens to each when that clock is wrong?
+- L.time-04.chosen-month: chosen-month: Is each span the product measures meant in elapsed hours or in calendar days, and what happens on a day the clocks change?
+- L.time-07.walk-date: walk-date: Which values are plain dates or plain times with no zone, and how are they kept from shifting when stored, moved or shown?
+- L.time-08.walk-date: walk-date: Whose time zone governs each date and time the product handles, and what changes when a person's zone does?
+- L.time-09.chosen-month: chosen-month: What date results when counting forward from the last days of a month or from a leap day?
+- L.time-10.stored-walks: stored-walks: How is each occurrence of a repeating schedule worked out, so that it stays at the intended local time all year?
+- L.time-11.walk-date: walk-date: What tells two events apart and orders them when their recorded times are equal?
+- L.time-12.walk-date: walk-date: For each recorded time, is it when the thing happened or when it was recorded, and which of the two do later decisions use?
+- L.text-01.client-name: client-name: When are two pieces of text counted as the same, and is that settled before they are stored or each time they are compared?
+- L.text-02.chosen-client: chosen-client: Where does the product ignore the difference between capital and small letters, and by which language's rules?
+- L.text-03.client-name: client-name: What does the product do with unseen characters and unusual spaces in text it stores and compares?
+- L.text-04.chosen-client: chosen-client: Which differences does search ignore (accent marks, letter size, alternative ways of writing the same word) and which must match exactly?
+- L.text-05.client-name: client-name: How does the product measure the length of text, and where may it cut text that is too long?
+- L.text-06.chosen-client: chosen-client: By what rule is each list of text ordered, and has a reader of that language checked it?
+- L.text-09.client-name: client-name: Wherever a stored or typed value is put into a sentence or a row, what keeps text of the opposite direction from disturbing what surrounds it?
+- L.text-10.client-name: client-name: Where must people tell names or labels apart by eye, and what stops one being made to look like another?
+- L.text-12.invoice-view: invoice-view: How much room does each label and message have, and what happens when the wording in another language is longer or taller?
+- L.presentation-01.walk-date: walk-date: In what form is each date shown, and could a reader anywhere take it for another day?
+- L.presentation-02.invoice-view: invoice-view: Whose conventions decide how numbers are written on screen, and are they applied everywhere a number appears?
+- L.presentation-03.price: price: How does each amount shown make its unit unmistakable to every reader?
+- L.presentation-04.refusal-message: refusal-message: How is wording that includes a count chosen for zero, one and each other form the reader's language has?
+- L.presentation-04.invoice-view: invoice-view: How is wording that includes a count chosen for zero, one and each other form the reader's language has?
+- L.presentation-05.price: price: How many decimal places, and what rounding, does each kind of amount get, and what decides it?
+- L.presentation-06.invoice-view: invoice-view: Which digit shapes does the product show, and is that the reader's choice?
+- L.presentation-09.walk-date: walk-date: Which calendar or calendars does the product show dates in, and what does a reader who uses another one see?
+- L.presentation-10.chosen-client: chosen-client: By which part of a name is a list of people ordered, and does that suit the readers the product is for?
+- L.presentation-11.invoice-view: invoice-view: For each column a list can be ordered by, is the order by number, by date or by spelling?
+- L.presentation-12.invoice-view: invoice-view: When a list too long for one screen is put in order, does the order hold across all of it?
+- L.authorization-01.invoice-request: invoice-request: For every operation and every kind of data, who is allowed, and where is that checked?
+- L.authorization-02.chosen-client: chosen-client: How does the product confirm that the particular record asked for belongs to, or is shared with, the person asking?
+- L.authorization-03.invoice-request: invoice-request: Where is each permission enforced, and what happens to a request that bypasses the screen?
+- L.authorization-04.invoice-request: invoice-request: What may a person do when no rule mentions them or the thing they ask for?
+- L.authorization-06.invoice-request: invoice-request: How does the product tell a request the person meant to make from one sent in their name by someone else's page?
+- L.authorization-07.invoice-request: invoice-request: Which operations change something, and can any of them happen just because a link was followed or a page was loaded?
+- L.authorization-08.invoice-request: invoice-request: What does the product do with a request when the check of its permission cannot be completed?
+- L.authorization-10.invoice-request: invoice-request: Which facts about a person's identity and permissions does the product take from the person's device, and how does it know they were not altered?
+- L.authorization-11.invoice-view: invoice-view: How soon after signing out or losing access does everything a person already held stop working?
+- L.authorization-12.invoice-request: invoice-request: How does the product make sure the account a person ends up signed in to is the one they chose?
+- L.logging-01.invoice-request: invoice-request: Which events must always leave a record?
+- L.logging-02.invoice-request: invoice-request: What must every record say so that someone can later tell what happened and to whom?
+- L.logging-03.client-name: client-name: Which values must never appear in a record, and how are they kept out?
+- L.logging-04.client-name: client-name: How is outside-supplied text recorded so that it cannot pass for, or damage, the product's own entries?
+- L.logging-05.invoice-request: invoice-request: What does the product do when it cannot write a record: stop, continue without it, or something else?
+- L.logging-06.invoice-request: invoice-request: How much may the records grow, and what happens when that limit is reached?
+- L.logging-07.refusal-message: refusal-message: When something fails, what does the person see and what goes only into the records?
+- L.logging-08.invoice-request: invoice-request: Where are the records kept, and do they survive the loss of the machine that wrote them?
+- L.logging-09.invoice-request: invoice-request: Who or what reads the records, and which entries make someone get told?
+- L.logging-10.invoice-request: invoice-request: Who can change or remove records, and how would a change or removal be noticed?
+- L.logging-11.invoice-request: invoice-request: Which clock does each record's time come from, and how are records from different places put in order?
+- L.logging-12.invoice-request: invoice-request: How long is each kind of record kept, and what removes it when that time is up?
+- L.accessibility-01.invoice-request: invoice-request: For each thing a person can do on the screen, how is it done using the keyboard alone?
+- L.accessibility-02.invoice-view: invoice-view: From every part of the screen a keyboard user can enter, how do they leave it?
+- L.accessibility-03.invoice-request: invoice-request: How is the item that has keyboard focus shown, on every item that can take it?
+- L.accessibility-05.invoice-request: invoice-request: What name and purpose does each control announce to someone who cannot see it?
+- L.accessibility-06.invoice-view: invoice-view: For everything shown that is not text, what words give the same meaning?
+- L.accessibility-07.refusal-message: refusal-message: How does someone who cannot see the screen learn the result of what they just did?
+- L.accessibility-07.no-walks-message: no-walks-message: How does someone who cannot see the screen learn the result of what they just did?
+- L.accessibility-08.invoice-view: invoice-view: Wherever colour carries meaning, what else on the screen carries the same meaning?
+- L.accessibility-09.invoice-view: invoice-view: What contrast between text and its background does every screen keep, in every state and theme?
+- L.accessibility-10.invoice-view: invoice-view: What happens to each screen when its text is enlarged to twice its size?
+- L.accessibility-11.invoice-request: invoice-request: Which steps have a time limit, and how does a person who needs longer get it?
+- L.sign-in-01.invoice-request: invoice-request: What stops someone guessing or replaying credentials at sign-in, and what does a person locked out by it do?
+- L.sign-in-02.invoice-request: invoice-request: Which accounts exist before anyone signs up, and how is each removed or made unusable?
+- L.sign-in-03.invoice-request: invoice-request: Can anyone tell from signing in, signing up or recovery whether a given person has an account, and does that matter here?
+- L.sign-in-04.invoice-request: invoice-request: How does a person get back in after forgetting or losing what they sign in with, and how is that kept as strong as signing in?
+- L.sign-in-05.invoice-request: invoice-request: How is a person's first credential or activation code made, delivered and ended?
+- L.sign-in-06.invoice-request: invoice-request: What are all the ways to sign in, and is each held to the same strength?
+- L.sign-in-07.invoice-request: invoice-request: What is a person told when their sign-in details change or an unusual sign-in happens, and by which route?
+- L.sign-in-08.invoice-request: invoice-request: How long does a session last unused, and in all, before the person must sign in again, and on what grounds?
+- L.sign-in-09.invoice-request: invoice-request: How many sessions may one account have at once, and what happens when one more starts?
+- L.sign-in-10.invoice-request: invoice-request: What happens to the session a person held before signing in, and is a fresh one made at every sign-in?
+- L.sign-in-12.invoice-request: invoice-request: How does a person, or whoever runs the product, see and end the sessions of an account?
+- L.stored-data-01.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which data the product creates or holds would harm someone if seen or changed, and how strongly must each kind be protected?
+- L.stored-data-02.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Who could read each kind of sensitive data where it is stored and in every copy made of it, and what makes it unreadable to anyone else?
+- L.stored-data-03.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which keys protect what, where does each one live, and what may each be used for?
+- L.stored-data-04.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): What happens to protected data when its key is lost, exposed or replaced?
+- L.stored-data-05.chosen-client: chosen-client: Does any sensitive value travel in an address or its query, and where would that be recorded?
+- L.stored-data-06.invoice-view: invoice-view: Which components in between may keep a copy of a reply, and how is sensitive data kept out of them?
+- L.stored-data-07.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): Which other parties receive any data from the product, and is any of it sensitive?
+- L.stored-data-08.invoice-view: invoice-view: For each reply, which fields are sent, and is any sent that the asker does not need or may not see?
+- L.stored-data-09.invoice: invoice (in each of its states: being-made, not-made, shown, out-of-date, awaiting-approval, with-client, wrong, unpaid, paid, ended): How long is each kind of sensitive data kept, and what removes it when that time is up?
+- L.stored-data-10.invoice-view: invoice-view: What does the product store on the person's device, and is any of it sensitive?
+- L.stored-data-12.invoice-view: invoice-view: Is the reading of sensitive data recorded, without the data itself, and who looks at that record?
+- L.misuse-01.invoice-request: invoice-request: Which steps must happen in order, and what does the product do with a request for a later step when an earlier one was not done?
+- L.misuse-02.invoice-request: invoice-request: What limits does each rule of the product set, and where is each enforced?
+- L.misuse-03.invoice-request: invoice-request: What could a script do by calling the product again and again, and what stops it?
+- L.misuse-04.invoice-request: invoice-request: Is anything done faster than a person could a sign of abuse here, and what is done about it?
+- L.misuse-07.invoice-request: invoice-request: Which fields may each request set, and what happens to a field that is sent and was not meant to be set?
+
+## Each value taken in, each way it can be wrong
+
+- V.chosen-client.empty: `chosen-client` (the owner, asking) is empty: what does the product do, and what is the person told?
+- V.chosen-client.missing: `chosen-client` (the owner, asking) is missing, or null: what does the product do, and what is the person told?
+- V.chosen-client.malformed: `chosen-client` (the owner, asking) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.chosen-client.dangling: `chosen-client` (the owner, asking) names something that does not exist, or no longer does: what does the product do, and what is the person told?
+- V.chosen-month.empty: `chosen-month` (the owner, asking) is empty: what does the product do, and what is the person told?
+- V.chosen-month.missing: `chosen-month` (the owner, asking) is missing, or null: what does the product do, and what is the person told?
+- V.chosen-month.malformed: `chosen-month` (the owner, asking) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.chosen-month.edge: `chosen-month` (the owner, asking) is at the very edge of what is allowed: what does the product do, and what is the person told?
+- V.chosen-month.outside: `chosen-month` (the owner, asking) is outside what is allowed: what does the product do, and what is the person told?
+- V.client-name.empty: `client-name` (stored client information) is empty: what does the product do, and what is the person told?
+- V.client-name.missing: `client-name` (stored client information) is missing, or null: what does the product do, and what is the person told?
+- V.client-name.long: `client-name` (stored client information) is far longer or larger than expected: what does the product do, and what is the person told?
+- V.client-name.twice: `client-name` (stored client information) is the same as one already there: what does the product do, and what is the person told?
+- V.walk-date.empty: `walk-date` (stored walks) is empty: what does the product do, and what is the person told?
+- V.walk-date.missing: `walk-date` (stored walks) is missing, or null: what does the product do, and what is the person told?
+- V.walk-date.malformed: `walk-date` (stored walks) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.walk-date.edge: `walk-date` (stored walks) is at the very edge of what is allowed: what does the product do, and what is the person told?
+- V.walk-date.outside: `walk-date` (stored walks) is outside what is allowed: what does the product do, and what is the person told?
+- V.walk-length.missing: `walk-length` (stored walks) is missing, or null: what does the product do, and what is the person told?
+- V.walk-length.outside: `walk-length` (stored walks) is outside what is allowed: what does the product do, and what is the person told?
+- V.walk-type.missing: `walk-type` (stored walks: regular or one-off) is missing, or null: what does the product do, and what is the person told?
+- V.walk-type.outside: `walk-type` (stored walks: regular or one-off) is outside what is allowed: what does the product do, and what is the person told?
+- V.price.empty: `price` (stored prices) is empty: what does the product do, and what is the person told?
+- V.price.missing: `price` (stored prices) is missing, or null: what does the product do, and what is the person told?
+- V.price.malformed: `price` (stored prices) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.price.edge: `price` (stored prices) is at the very edge of what is allowed: what does the product do, and what is the person told?
+- V.price.outside: `price` (stored prices) is outside what is allowed: what does the product do, and what is the person told?
+- V.every-setting.missing: any setting the build reads is missing, or null: what does the product do at start, and who is told?
+- V.every-setting.empty: any setting the build reads is empty: what does the product do at start, and who is told?
+- V.every-setting.malformed: any setting the build reads is of the wrong type or malformed: what does the product do at start, and who is told?
+- V.every-setting.outside: any setting the build reads is outside what is allowed: what does the product do at start, and who is told?
+Not drawn, 2 already asked of the same thing by a library question above.
+
+## Each class of sensitive values, each place it can leak to
+
+- X.client-details.logs: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach what the product logs, on the path that works and on each that fails?
+- X.client-details.errors-inside: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach an error's own message and trace, on the path that works and on each that fails?
+- X.client-details.errors-shown: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach an error shown or returned to whoever asked, on the path that works and on each that fails?
+- X.client-details.telemetry: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach what is sent to monitoring or measurement, on the path that works and on each that fails?
+- X.client-details.samples: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach test data and examples kept with the code, on the path that works and on each that fails?
+- X.client-details.replies: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach a reply that succeeded, to whoever asked, on the path that works and on each that fails?
+- X.client-details.stored: can any of `chosen-client`, `client-name`, `walk-date`, `walk-length`, `walk-type`, `price` reach where it is stored, and every copy made of that, on the path that works and on each that fails?
+
+## Each state, each event
+
+- S.invoice.being-made.monthly-client-invoice-1: Invoice is `being-made` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.monthly-client-invoice-2: Invoice is `being-made` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.monthly-client-invoice-3: Invoice is `being-made` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.monthly-client-invoice-4: Invoice is `being-made` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.monthly-client-invoice-5: Invoice is `being-made` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.monthly-client-invoice-6: Invoice is `being-made` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.being-made.again: Invoice is `being-made` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.being-made.reopened: Invoice is `being-made` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-1: Invoice is `not-made` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-2: Invoice is `not-made` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-3: Invoice is `not-made` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-4: Invoice is `not-made` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-5: Invoice is `not-made` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.monthly-client-invoice-6: Invoice is `not-made` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.not-made.again: Invoice is `not-made` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.not-made.reopened: Invoice is `not-made` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-1: Invoice is `shown` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-2: Invoice is `shown` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-3: Invoice is `shown` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-4: Invoice is `shown` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-5: Invoice is `shown` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.monthly-client-invoice-6: Invoice is `shown` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.shown.again: Invoice is `shown` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.shown.reopened: Invoice is `shown` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-1: Invoice is `out-of-date` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-2: Invoice is `out-of-date` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-3: Invoice is `out-of-date` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-4: Invoice is `out-of-date` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-5: Invoice is `out-of-date` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.monthly-client-invoice-6: Invoice is `out-of-date` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.again: Invoice is `out-of-date` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.out-of-date.reopened: Invoice is `out-of-date` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-1: Invoice is `awaiting-approval` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-2: Invoice is `awaiting-approval` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-3: Invoice is `awaiting-approval` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-4: Invoice is `awaiting-approval` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-5: Invoice is `awaiting-approval` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.monthly-client-invoice-6: Invoice is `awaiting-approval` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.again: Invoice is `awaiting-approval` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.awaiting-approval.reopened: Invoice is `awaiting-approval` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-1: Invoice is `with-client` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-2: Invoice is `with-client` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-3: Invoice is `with-client` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-4: Invoice is `with-client` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-5: Invoice is `with-client` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.monthly-client-invoice-6: Invoice is `with-client` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.with-client.again: Invoice is `with-client` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.with-client.reopened: Invoice is `with-client` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-1: Invoice is `wrong` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-2: Invoice is `wrong` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-3: Invoice is `wrong` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-4: Invoice is `wrong` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-5: Invoice is `wrong` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.monthly-client-invoice-6: Invoice is `wrong` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.wrong.again: Invoice is `wrong` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.wrong.reopened: Invoice is `wrong` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-1: Invoice is `unpaid` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-2: Invoice is `unpaid` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-3: Invoice is `unpaid` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-4: Invoice is `unpaid` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-5: Invoice is `unpaid` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.monthly-client-invoice-6: Invoice is `unpaid` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.unpaid.again: Invoice is `unpaid` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.unpaid.reopened: Invoice is `unpaid` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-1: Invoice is `paid` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-2: Invoice is `paid` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-3: Invoice is `paid` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-4: Invoice is `paid` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-5: Invoice is `paid` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.monthly-client-invoice-6: Invoice is `paid` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.paid.again: Invoice is `paid` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.paid.reopened: Invoice is `paid` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-1: Invoice is `ended` and what monthly-client-invoice / 1 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-2: Invoice is `ended` and what monthly-client-invoice / 2 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-3: Invoice is `ended` and what monthly-client-invoice / 3 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-4: Invoice is `ended` and what monthly-client-invoice / 4 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-5: Invoice is `ended` and what monthly-client-invoice / 5 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.monthly-client-invoice-6: Invoice is `ended` and what monthly-client-invoice / 6 describes is done: what happens to it, and what is the person shown?
+- S.invoice.ended.again: Invoice is `ended` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.invoice.ended.reopened: Invoice is `ended` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+Not drawn, 30 already asked of the same thing by a library question above.
+
+## By what the slice is
+
+- F.browser.context: What stops a reply meant as data, or a file someone submitted, from being shown and run as a page when its address is opened directly?
+- F.browser.page-policy: From where may the page load and run code, and what does the browser do with anything else?
+- F.browser.framing: May another site show this product inside a page of its own, and what prevents it?
+- F.browser.type-guessing: How is the browser kept from treating a reply as a different type from the one it was sent as?
+- F.browser.came-from: What does the browser tell other sites about the address a person came from, and is anything sensitive in that address?
+- F.browser.other-sites: Which other sites' pages may call this product and read its replies, and how are all the rest refused?
+- F.browser.messages: Does the page take messages from other windows, and how does it know which to trust?
+- F.browser.others-code: Which code or styles on the page come from another party, and what stops a changed copy from running with everything the page can reach?
+- F.browser.sent-on: Can the product send a person on to an address that someone else supplied?
+- F.browser.kept-by-browser: What does the browser keep of a page that showed sensitive data, and for how long?
+- F.browser.known-by: What does the product keep in the browser to know a person by, and what else can read it or cause it to be sent?
+- F.network.answers-to: At which addresses and under which host names does the product answer, and what does it do with a request that names another?
+- F.network.transport: Is every connection to it encrypted, and what happens to one that is not?
+- F.network.in-between: Which facts about a request does it take from something in between (the sender's address, the host first asked for), and can the sender set them?
+- F.network.kinds-of-request: Which kinds of request does each address accept, and what happens to the others?
+- F.network.left-on: What can be reached that nobody meant to offer: a diagnostic mode, a listing of files, the history of the source, pages of documentation or measurement, test code?
+- F.network.gives-away: What does a reply reveal about what the product is built from, a refusal included?
+- F.dependency.known-flaw: When a component the product uses is found to have a known flaw, how is that learned, and how soon is the component replaced?
+- F.dependency.inventory: Is there a list of every component used, those they bring with them included, and of where each comes from?
+- F.dependency.look-alike: What makes sure each component is fetched from the place intended, and is the one intended?
+- F.dependency.trusted-most: Which components are trusted with the most (they see credentials, read outside data, run when installed), and what limits them?
+- F.several-people.fields: Within a record a person may see or change, are there fields they may not?
+- F.several-people.groups: Can one group's use ever show or change what belongs to another group?
+- F.unguessable.made: Which values are meant to be impossible to guess (a link, a code, a session, an identifier), and how is each one made?
+
+## What someone who means harm would want
+
+- T.client-details.invoice-request: someone after `client-details` comes through `invoice-request`: Someone who is not allowed asks for client after client and learns who uses the business, when their dogs were walked and what they were charged. What stops it, and how would anyone know it was tried?
+- T.client-details.invoice-view: someone after `client-details` comes through `invoice-view`: Someone who gets at a shown or leftover invoice learns when a client's home is likely to have had a walker call. What stops it, and how would anyone know it was tried?
+- T.client-details.stored-walks: someone after `client-details` comes through `stored-walks`: Someone who reads the stored walks learns the visiting pattern of many households and could pick times to target a home. What stops it, and how would anyone know it was tried?
+- T.client-details.stored-prices: someone after `client-details` comes through `stored-prices`: Someone who reads the stored prices learns what particular clients are charged. What stops it, and how would anyone know it was tried?
+- T.client-details.refusal-message: someone after `client-details` comes through `refusal-message`: Someone who is not allowed learns from a missing-price message that a client had a walk of a certain length that month. What stops it, and how would anyone know it was tried?
+- T.client-details.no-walks-message: someone after `client-details` comes through `no-walks-message`: Someone who is not allowed learns that a client had no walks in a month, which may suggest when that household changed its routine. What stops it, and how would anyone know it was tried?
+- T.invoice.stored-walks: someone after `invoice` comes through `stored-walks`: Someone adds, removes or alters walks, so a client is overcharged or the business loses money without noticing. What stops it, and how would anyone know it was tried?
+- T.invoice.stored-prices: someone after `invoice` comes through `stored-prices`: Someone alters a price, so clients are shown wrong totals and the owner relies on them. What stops it, and how would anyone know it was tried?
+- T.invoice.invoice-request: someone after `invoice` comes through `invoice-request`: Someone sends a request carrying their own walks, prices or total, so the owner is left with a false invoice. What stops it, and how would anyone know it was tried?
+- T.invoice.invoice-view: someone after `invoice` comes through `invoice-view`: Someone changes what is shown on its way to the owner, so the owner bills the wrong amount by hand. What stops it, and how would anyone know it was tried?
+
+## Asked of every slice
+
+- W.unavailable: What happens, and to whom, if what this slice adds cannot be used for an hour?
+- W.target: How often may it fail, and how slow is too slow, before someone would say it does not work?
+- W.noticed: Who notices when it breaks, and how?
+- W.sensitive: What does this slice touch that would harm someone if another person saw or changed it?
+- W.who-sees: Who uses it, and may any of them see or change what belongs to another?
+- W.obligations: Does a law, a contract or an outside system's terms bind how this is handled?
+- W.prize: What would someone who means harm want from what this slice adds?
+
+## Carried from research
+
+- C.states.invoice.being-made: Invoice, `being-made`: not said in the documents (the owner asking for a client's invoice for a month | not said in the documents | not said in the documents | not said in the documents)
+- C.states.invoice.not-made: Invoice, `not-made`: not said in the documents (asking when a needed price is missing, or when the client has no walks that month; the same again each time while that is so | see that the price is missing, or that there are no walks to invoice; no invoice is shown | not said in the documents | slice-001/004_slice.md lines 13 and 14)
+- C.states.invoice.shown: Invoice, `shown`: not said in the documents (the owner asking for a client's invoice for a month | see the month's walks, each priced by its length, and the total | not said in the documents | slice-001/004_slice.md line 4)
+- C.states.invoice.out-of-date: Invoice, `out-of-date`: not said in the documents (not said in the documents (walks or prices changing after the invoice was shown) | not said in the documents | not said in the documents | not said in the documents)
+- C.states.invoice.awaiting-approval: Invoice, `awaiting-approval`: not said in the documents (not said in the documents | not said in the documents | not said in the documents | not said in the documents; open as question 4, 002_requirements.md line 18)
+- C.states.invoice.with-client: Invoice, `with-client`: not said in the documents (the client getting the invoice with a payment link (slice 4) | not said in the documents | not said in the documents | 002_requirements.md line 3)
+- C.states.invoice.wrong: Invoice, `wrong`: not said in the documents (an invoice turning out to be wrong, before or after the client has it | not said in the documents | not said in the documents | 000_problem.md line 7; 002_requirements.md line 19)
+- C.states.invoice.unpaid: Invoice, `unpaid`: not said in the documents (not said in the documents | seeing who has not paid, and chasing late payers, are a later activity | not said in the documents | 001_scope-map.md line 7)
+- C.states.invoice.paid: Invoice, `paid`: not said in the documents (not said in the documents | not said in the documents | not said in the documents | not said in the documents)
+- C.states.invoice.ended: Invoice, `ended`: not said in the documents (not said in the documents (cancelled, replaced or no longer needed, and what is kept) | not said in the documents | not said in the documents | not said in the documents)
+- C.states.dead-end.1: for the owner's list: `being-made`: no way out. The documents do not say what the owner has while waiting.
+- C.states.dead-end.2: for the owner's list: `not-made`: no way out. The owner has the reason and no invoice.
+- C.states.dead-end.3: for the owner's list: `shown`: no way out. The owner has the walks, prices and total; the documents do not say whether they are kept.
+- C.states.dead-end.4: for the owner's list: `out-of-date`: no way out. The documents do not say what the owner is left with.
+- C.states.dead-end.5: for the owner's list: `awaiting-approval`: no way out. The documents do not say that this state exists.
+- C.states.dead-end.6: for the owner's list: `with-client`: no way out. The client has the invoice and payment link.
+- C.states.dead-end.7: for the owner's list: `wrong`: no way out. The owner has said "I don't know" to what is needed.
+- C.states.dead-end.8: for the owner's list: `unpaid`: no way out. Following it up is a later activity.
+- C.states.dead-end.9: for the owner's list: `paid`: no way out. The documents do not say what is left.
+- C.states.dead-end.10: for the owner's list: `ended`: no way out. The documents do not say what is left.

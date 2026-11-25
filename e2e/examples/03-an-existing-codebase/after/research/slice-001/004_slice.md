@@ -1,20 +1,24 @@
-# Slice 1: A section leader records that a singer who phoned will miss a rehearsal
+# Slice 1: Record a phoned absence for the coming rehearsal
 
 ## Thin path
-A section leader, at the hall's computer, records that a singer who phoned them will miss a given rehearsal, and is shown that the singer is down as away for that rehearsal.
+A section leader whom a singer phones records that the singer will miss the whole of the coming Thursday's rehearsal, and is shown that this has been recorded.
 
 ## Criteria
-- **record-phoned-absence / 1**: Given a singer called Fern Walsh in the register and a rehearsal on 2026-12-03 that has not happened yet, when a section leader records an absence for Fern Walsh for 2026-12-03, then they are shown that Fern Walsh is down as away for 2026-12-03.
-- **record-phoned-absence / 2**: Given no singer called Gwen Pryce in the register, when a section leader records an absence for Gwen Pryce for 2026-12-03, then they are shown that there is no such singer, and no absence is down for that name.
-- **record-phoned-absence / 3**: Given a singer called Fern Walsh in the register and a rehearsal date that has already passed, when a section leader records an absence for Fern Walsh for that date, then they are shown that the date has passed, and no absence is down for it.
+The names and dates below are invented.
+
+- **record-phoned-absence / 1**: Given the register on the hall's computer holds the alto Robin Example, and the coming rehearsal is on Thursday 3 December 2026, when a section leader records that Robin Example will miss it, then the section leader is shown that Robin Example is recorded as going to be absent on 3 December 2026.
+- **record-phoned-absence / 2**: Given the register on the hall's computer holds no singer called Sam Sample, when a section leader tries to record an absence for Sam Sample, then the section leader is shown that there is no such singer and that no absence was recorded.
 
 ## Needs from outside
 none
 
 ## Left for later
-- Singers telling us themselves, with no password: slice 2. Usable without it: section leaders record an absence for a singer who phones them.
-- Seeing who will be away, by voice part, before the night: scope map row 2, not yet in the set of slices. Usable without it: the section leader is shown each absence as it is recorded.
-- Who else may tell us for a singer, how far ahead and until when, several rehearsals at once, taking an absence back, late or early, and a reason: each waits on a question under "Not yet confirmed" in the requirements, and no slice takes them yet. Usable without them: a section leader records one absence for one singer for one rehearsal.
+- Seeing who will miss the rehearsal and how short each voice part will be: slice 2. Usable without it: the section leader can pass on what the singer said to whoever arranges the programme.
+- A singer giving notice themself: slice 3. Usable without it: a singer can phone a section leader.
+- Absences from later rehearsals, or several at once: slice 4. Usable without it: an absence from the coming Thursday's rehearsal can be recorded.
+- Who else may record an absence, and limits on who may: slice 5. Usable without it: section leaders can record absences at the hall's computer. The register has no accounts, so this slice does not stop anyone else at that computer.
+- Arriving late or leaving early: slice 6. Usable without it: the section leader can pass this on to whoever arranges the programme.
+- What happens to notice given after Tuesday evening: slice 7. Usable without it: absences can be recorded, with no different handling for late notice.
 
 ## Size
-Criteria: 3.
+Criteria: 2.

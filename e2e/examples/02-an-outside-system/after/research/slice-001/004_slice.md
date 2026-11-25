@@ -1,27 +1,32 @@
-# Slice 1: A walker records a walk for one of their clients
+# Slice 1: See a client's invoice for the month's regular and one-off walks, priced by length
 
 ## Thin path
-A walker, on their phone, picks one of their clients and records a walk done today: 30 or 60 minutes, one dog. They are shown the walk kept, with the client, the day, the length and the dog, and they find it again among the walks they have recorded.
+The owner asks for one client's invoice for a month and is shown that month's regular and one-off walks, each priced by its length, with the total.
 
 ## Criteria
-- **record-walk / 1**: Given a walker on their phone with a client in the product, when they record a 30-minute walk for that client with one dog, then they are shown the walk with that client, today's day, 30 minutes and that dog.
-- **record-walk / 2**: Given the same walker and client, when they record a 60-minute walk with one dog, then they are shown the walk with 60 minutes, and it is a second walk beside the first, not a change to it.
-- **record-walk / 3**: Given a walker recording a walk, when they give a length that is neither 30 nor 60 minutes (for example 45), then the walk is not kept and they are told the length must be 30 or 60 minutes.
-- **record-walk / 4**: Given a walker who has recorded a walk, when they close the product and open it again later, then the walk is still among the walks they have recorded.
+All clients, dates and prices here are invented.
+
+- **monthly-client-invoice / 1**: Given a client with two 30-minute regular walks in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks at 10.00 each and a total of 20.00.
+- **monthly-client-invoice / 2**: Given a client with one 30-minute walk and one 60-minute walk in March, priced at 10.00 and 18.00, when the owner asks for that client's March invoice, then it shows each walk at the price for its length and a total of 28.00.
+- **monthly-client-invoice / 3**: Given a client with one regular and one one-off 30-minute walk in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks and a total of 20.00.
+- **monthly-client-invoice / 4**: Given a client with one 30-minute walk on 31 March and one on 1 April, and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows only the 31 March walk and a total of 10.00.
+- **monthly-client-invoice / 5**: Given a client with a 60-minute walk in March and no price for 60 minutes, when the owner asks for that client's March invoice, then the owner is told that price is missing and is shown no invoice.
+- **monthly-client-invoice / 6**: Given a client with no walks in March, when the owner asks for that client's March invoice, then the owner is told there are no walks to invoice and is shown no invoice.
 
 ## Needs from outside
 none
 
 ## Left for later
-- A second dog from the same home on a walk: slice 2. Usable without it: the walker records walks with one dog.
-- The owner seeing a client's walks: slice 3. Usable without it: each walker sees the walks they recorded themselves.
-- Correcting or removing a walk recorded wrongly: slice 4. Usable without it: the walker can record walks; a wrong one stays until then.
-- A regular client's walks without typing each again, and one-off extras recorded differently: slice 5. Usable without it: every walk, regular or extra, is recorded one by one.
-- One outing covering dogs from different homes: slice 6. Usable without it: each home's walk is recorded on its own.
-- Recording a walk for a day other than today: slice 7. Usable without it: a walk is recorded on the day it is done.
-- The owner, or a holiday-cover walker, recording a walk: slice 8. Usable without it: the four walkers record their own walks.
-- Where the list of about sixty clients comes from, and which walker may record for which client: no slice yet, it waits for question 1 of the requirements. Usable without it: a walker records walks for the clients that are in the product.
-- Anything else a walk holds beyond the day, length and dog: no slice yet, it waits for question 3 of the requirements. Usable without it: the walk holds those three things.
+- Second dog from the same home at half price: slice 2. Usable without it: the owner can see invoices for one-dog walks, and works out second-dog invoices by hand as today.
+- Late and early cancellations: slice 3. Usable without it: the owner can see invoices for months with no cancellations, and works out the others by hand as today.
+- Payment link: slice 4. Usable without it: the owner sends the link through Tallypay as today.
+- How walks get in each month: slice 1. Blocker: it is not known what the owner puts in or changes.
+- Client prices and the kinds of walk: slice 1. Blocker: it is not known which price applies to a client's walk.
+- Other charges, and whether extras are only extra walks: slice 1. Blocker: it is not known whether the total is complete.
+- Changing or adding prices: slice 1. Blocker: it is not known whether the owner must be able to do this.
+- What "Since" in the price list means: slice 1. Blocker: it is not known whether a month can need an old and a new price.
+- Invoices per client: slice 1. Blocker: it is not known whether a client can have several invoices or share one.
+- What must come across from today: slice 1. Blocker: it is not known what has to be there before the first invoice.
 
 ## Size
-Criteria: 4.
+Criteria: 6.

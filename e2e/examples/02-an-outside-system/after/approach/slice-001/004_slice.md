@@ -1,26 +1,32 @@
-# Slice 1: Get one client's invoice for the month from their regular weekly walks, each walk charged by its length
+# Slice 1: See a client's invoice for the month's regular and one-off walks, priced by length
 
 ## Thin path
-The business owner states a client's regular weekly walks, asks for that client's invoice for a month, and is shown the invoice: each walk the month holds, charged by its length, and the total.
+The owner asks for one client's invoice for a month and is shown that month's regular and one-off walks, each priced by its length, with the total.
 
 ## Criteria
-- **regular-walks / 1**: Given a client with no regular walks stated, when the owner states one 30-minute walk every Tuesday, then the client's regular walks show "Tuesday, 30 minutes".
-- **regular-walks / 2**: Given a client with no regular walks stated, when the owner states a 45-minute walk, then it is refused with a message that walks are 30 or 60 minutes, and the client's regular walks stay empty.
-- **walk-pricing / 1**: Given a client whose only regular walk is 60 minutes every Thursday, priced at 18.00, and a month with five Thursdays, when the owner asks for the client's invoice for that month, then it shows 5 walks of 60 minutes at 18.00 each, total 90.00.
-- **walk-pricing / 2**: Given a client with a regular 30-minute walk for which the price list holds no price for that client, when the owner asks for the invoice, then no invoice is made and the owner is told which walk has no price.
-- **monthly-invoices / 1**: Given a client with a 30-minute walk every Monday priced at 10.00 and a 60-minute walk every Thursday priced at 18.00, and a month with four Mondays and four Thursdays, when the owner asks for the client's invoice for that month, then it shows 4 walks of 30 minutes at 10.00 and 4 walks of 60 minutes at 18.00, total 112.00.
-- **monthly-invoices / 2**: Given a client with no regular walks stated, when the owner asks for the client's invoice for a month, then no invoice is made and the owner is told there are no walks to invoice.
+All clients, dates and prices here are invented.
+
+- **monthly-client-invoice / 1**: Given a client with two 30-minute regular walks in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks at 10.00 each and a total of 20.00.
+- **monthly-client-invoice / 2**: Given a client with one 30-minute walk and one 60-minute walk in March, priced at 10.00 and 18.00, when the owner asks for that client's March invoice, then it shows each walk at the price for its length and a total of 28.00.
+- **monthly-client-invoice / 3**: Given a client with one regular and one one-off 30-minute walk in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks and a total of 20.00.
+- **monthly-client-invoice / 4**: Given a client with one 30-minute walk on 31 March and one on 1 April, and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows only the 31 March walk and a total of 10.00.
+- **monthly-client-invoice / 5**: Given a client with a 60-minute walk in March and no price for 60 minutes, when the owner asks for that client's March invoice, then the owner is told that price is missing and is shown no invoice.
+- **monthly-client-invoice / 6**: Given a client with no walks in March, when the owner asks for that client's March invoice, then the owner is told there are no walks to invoice and is shown no invoice.
 
 ## Needs from outside
-The owner's price list, which holds the prices for each client's walks.
+none
 
 ## Left for later
-- A second dog from the same home at half price: slice 2. Usable without it: invoices for clients with one dog.
-- One-off extra walks: slice 3. Usable without it: invoices from regular walks only.
-- Changing or stopping a client's regular walks: slice 4. Usable without it: a client's regular walks can be stated, and the invoice follows them as stated.
-- Sending the client a Tallypay payment link: slice 5. Usable without it: the owner has the invoice to send some other way for now.
-- Invoices for every client at once: slice 6. Usable without it: one client's invoice at a time.
-- Clients the price list does not cover, and a price that changes part-way through a month: slice 8. Usable without it: invoices for clients the price list holds, at one price for the whole month.
+- Second dog from the same home at half price: slice 2. Usable without it: the owner can see invoices for one-dog walks, and works out second-dog invoices by hand as today.
+- Late and early cancellations: slice 3. Usable without it: the owner can see invoices for months with no cancellations, and works out the others by hand as today.
+- Payment link: slice 4. Usable without it: the owner sends the link through Tallypay as today.
+- How walks get in each month: slice 1. Blocker: it is not known what the owner puts in or changes.
+- Client prices and the kinds of walk: slice 1. Blocker: it is not known which price applies to a client's walk.
+- Other charges, and whether extras are only extra walks: slice 1. Blocker: it is not known whether the total is complete.
+- Changing or adding prices: slice 1. Blocker: it is not known whether the owner must be able to do this.
+- What "Since" in the price list means: slice 1. Blocker: it is not known whether a month can need an old and a new price.
+- Invoices per client: slice 1. Blocker: it is not known whether a client can have several invoices or share one.
+- What must come across from today: slice 1. Blocker: it is not known what has to be there before the first invoice.
 
 ## Size
 Criteria: 6.
