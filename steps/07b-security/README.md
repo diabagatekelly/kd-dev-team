@@ -92,7 +92,7 @@ A session writes one small file, `security.md`, beside `kept.md`:
 
 `questions/questions.py draw` then draws the questions again:
 
-- 28 fixed questions, only for the facts that hold (`F.`), each
+- 30 fixed questions, only for the facts that hold (`F.`), each
   resting on a requirement of OWASP's verification standard 5.0.0,
   one on kad's own documents;
 - a question a row asked (`T.`);

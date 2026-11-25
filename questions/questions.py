@@ -112,6 +112,8 @@ FACTS = {
         ("supplied", "Can a person give the product an address to fetch or call, and what could they reach through it?", "V13.1.1"),
         ("follows", "Does the product follow a redirect an outside system gives it, and to where?", "V15.3.2"),
         ("proves", "How does the product know that the system which answered is the one it meant to call?", "V12.3.2"),
+        ("their-sign-in", "Does what a person types to sign in to the other system (a password, a code) ever pass through this product, and is any of it kept or recorded?", "kad"),
+        ("first-given", "By which route does each credential for the other system first reach the product, and where else does that route leave a copy (a command line, a history, a file)?", "kad"),
     )),
     "dependency": ("it adds a component someone else wrote", (
         ("known-flaw", "When a component the product uses is found to have a known flaw, how is that learned, and how soon is the component replaced?", "V15.1.1"),

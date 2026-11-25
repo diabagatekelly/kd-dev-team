@@ -58,9 +58,9 @@ by the names `kept.md` uses:
   nobody works it out again. A value that is public by design is not
   a secret: it has a row of its own, dismissed with that reason.
 - Every class and every other thing is in at least one row. A thing
-  the slice plainly has that `kept.md` does not list is added to
-  `kept.md`'s own list, with its source, and nothing else is changed
-  there.
+  or a sensitive value the slice plainly has that `kept.md` does not
+  list is added to `kept.md`'s own list or table, with its source,
+  and nothing else is changed there.
 - A thing that gives nothing worth having wants `nothing`, and is
   dismissed with the reason.
 - A slice with little to attack has few rows marked `yes`. Say so;

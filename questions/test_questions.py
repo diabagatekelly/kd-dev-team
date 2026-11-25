@@ -575,7 +575,7 @@ class Security(unittest.TestCase):
         self.assertIn("- F.calls-out.where: ", text)
         self.assertNotIn("- F.dependency.", text)
         self.assertNotIn("- F.several-people.", text)
-        self.assertIn("21 by what the slice is, 1 of what someone would want", said)
+        self.assertIn("23 by what the slice is, 1 of what someone would want", said)
 
     def test_what_is_wanted_is_asked_once_a_row_and_a_dismissed_row_is_not(self):
         _code, _said, text = self.drawn()
