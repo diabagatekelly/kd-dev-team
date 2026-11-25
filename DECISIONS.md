@@ -477,7 +477,7 @@ asking is listed apart, so it can be overturned.
 
 48. **The questions stage holds, on Sonnet 5.5** (the owner: "Stage 7
     holds, especially since the security skill is coming right after
-    to close the last gaps"), with the text of 163 lines in
+    to close the last gaps"), with the text of 161 lines in
     `steps/07-questions/eval/questions-skill.md` and the script
     `questions/questions.py`: $118.39 of the $135 agreed. Its text is
     adopted and its ten cases join the regression build. Known and
