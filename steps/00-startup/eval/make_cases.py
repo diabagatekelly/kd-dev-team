@@ -53,24 +53,23 @@ THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.
 THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.md"]
 # The first stage with no text of its own, and the documents that make it next: scenario 21. It
 # moves on each time a stage is adopted (the slice on 2026-11-23, decision 39; the approach on
-# 2026-11-24, decision 41; research on 2026-11-24, decision 44). KD_TRIAL names a stage whose text is loaded on trial, before the owner
+# 2026-11-24, decision 41; research on 2026-11-24, decision 44; the questions on 2026-11-25, decision 48). KD_TRIAL names a stage whose text is loaded on trial, before the owner
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
 THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
 THROUGH_RESEARCH = [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"]
-NOT_BUILT = (r"\bquestions", THROUGH_RESEARCH)
-if "questions" in os.environ.get("KD_TRIAL", "").split(","):
-    # The questions as the stage would leave them: skipped at the user's word is the shortest folder
-    # the stage script counts as drawn, with the mark of the documents above.
-    _spec = importlib.util.spec_from_file_location("questions", HERE.parents[2] / "questions/questions.py")
-    _questions = importlib.util.module_from_spec(_spec)
-    _spec.loader.exec_module(_questions)
-    _skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
-    _mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
-                                                                 "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()
-                             + _skipped.encode())
-    DOCUMENTS["slice-001/007_questions/skipped.md"] = _skipped
-    DOCUMENTS["slice-001/007_questions/questions.md"] = f"# Questions\n\n<!-- drawn from: {_mark} -->\n"
-    NOT_BUILT = (r"\banswers", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])
+# With the questions adopted (2026-11-25, decision 48) the first stage not built is the answers.
+# The questions as the stage would leave them: skipped at the user's word is the shortest folder
+# the stage script counts as drawn, with the mark of the documents above.
+_spec = importlib.util.spec_from_file_location("questions", HERE.parents[2] / "questions/questions.py")
+_questions = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_questions)
+_skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
+_mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
+                                                             "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()
+                         + _skipped.encode())
+DOCUMENTS["slice-001/007_questions/skipped.md"] = _skipped
+DOCUMENTS["slice-001/007_questions/questions.md"] = f"# Questions\n\n<!-- drawn from: {_mark} -->\n"
+NOT_BUILT = (r"\banswers", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])
 
 
 def pull(number, title, branch, unresolved=0):

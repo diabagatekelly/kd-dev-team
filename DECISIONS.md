@@ -475,6 +475,30 @@ asking is listed apart, so it can be overturned.
     notes" and "model what any provider of the kind does" are not
     carried.
 
+48. **The questions stage holds, on Sonnet 5.5** (the owner: "Stage 7
+    holds, especially since the security skill is coming right after
+    to close the last gaps"), with the text of 163 lines in
+    `steps/07-questions/eval/questions-skill.md` and the script
+    `questions/questions.py`: $118.39 of the $135 agreed. Its text is
+    adopted and its ten cases join the regression build. Known and
+    accepted with it: against kad's documents for the two real
+    slices, 28 of 38 and 49 of 70 concerns are asked in all three
+    drawings, the rest mostly security, which the security pass is
+    to close and is to be counted again there; Haiku leaves a value
+    out in three runs of five; a real drawing is 541 to 794 lines and
+    whether the state lines earn their place is stage 8's to show.
+    Of the security pass the owner asks: nothing kad's security
+    skills did is to be lost, and it is to be made more efficient,
+    by script or tool rather than agent wherever that holds.
+  - Chosen without asking: an end-to-end run through a merge still
+    makes the merge up once research is written, not once the
+    questions are drawn: seven of the driver's tests assume it, and
+    it is changed with the answers stage, when a build has something
+    to wait for.
+  - Owed: the three examples' documents kept after the questions
+    (`--keep` replaces folders; the owner has not been asked to
+    allow it).
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,
