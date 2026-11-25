@@ -67,6 +67,15 @@ Each of the seven failures was read (decision 29):
 No run answered a question, asked the user a preference, or wrote
 `questions.md` itself.
 
+## Every earlier stage with this one on trial (2026-11-25, $8.97; $58.39 in all)
+
+`e2e/regress.py security=steps/07b-security/eval/security-skill.md`,
+each stage's cases once on Sonnet: startup 21 of 21 (its case 21
+now ends at "answers"), problem 8 of 8, scope map 6 of 6,
+requirements 12 of 12, slice 17 of 17, approach 13 of 13, research
+12 of 12. Stage 7's ten cases ran five times with this text beside
+them (its README). 89 of 89; nothing moved.
+
 ## What it is
 
 A session writes one small file, `security.md`, beside `kept.md`:
