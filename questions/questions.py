@@ -335,9 +335,11 @@ def read_security(text):
     return {"facts": facts, "harm": harm, "skipped": bool(re.search(r"(?im)^skipped at the user's word", text))}
 
 
-def insecure(security, kept):
+def insecure(security, kept, names=()):
     """Why security.md cannot be drawn from: every fact once, yes or no, with its source; every class of sensitive
-    values wanted by someone or said not to be; every other thing come through or said not to be; every name a known one."""
+    values wanted by someone or said not to be; every other thing come through or said not to be; every name a known one.
+    What is wanted need not be a value: a thing the slice keeps or commits to (money given back, a place taken) is wanted too,
+    and `nothing` is what a thing gives that is not worth having, dismissed with the reason."""
     if security.get("skipped"):
         return []
     found, seen = [], set()
@@ -360,8 +362,12 @@ def insecure(security, kept):
         prize, way = slug(row["wanted"]), slug(row["through"])
         if prize in wanted or prize in members:
             covered.add(members.get(prize, prize))
-        else:
-            found.append(f"{row['wanted']}: wanted, and no class of sensitive values or value of kept.md has that name")
+        elif prize == "nothing":
+            if not re.match(r"(?i)no\s*:", row["asked"]):
+                found.append(f"nothing through {row['through']}: a row that wants nothing is dismissed, `no: ` and why")
+        elif prize not in names and prize not in through and prize not in {slug(value["name"]) for value in kept["values"]}:
+            found.append(f"{row['wanted']}: wanted, and no class of sensitive values, value, other thing of kept.md or thing the "
+                         "documents name has that name (`nothing`, dismissed, where a thing gives nothing worth having)")
         if way in through or way in {slug(value["name"]) for value in kept["values"]}:
             come.add(way)
         elif way not in ("", "nothing"):
@@ -617,7 +623,7 @@ def main(arguments, out=sys.stdout):
         return 1
     found = [] if kept.get("skipped") else problems(kept, known(read), entries, criteria(read["slice"]) + list(read["research"]))[0]
     if kept.get("security") is not None and not found:
-        found = insecure(kept["security"], kept)
+        found = insecure(kept["security"], kept, known(read))
         if found:   # the questions stage may meet these, after a change: they are the security stage's to put right
             found = ["security.md, beside kept.md, no longer fits it (the security stage's text says how each is put right):"] + found
     if found:

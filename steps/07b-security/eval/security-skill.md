@@ -35,7 +35,9 @@ good.
 
 **What someone who means harm would want.** Go through `kept.md`.
 For each class of sensitive values: what would someone want it for,
-here? For each other thing the slice has (a request, a screen, an
+here? What is wanted need not be a value: a thing the slice keeps
+or commits to is wanted too (money given back, a place taken), by
+the name the documents give it. For each other thing the slice has (a request, a screen, an
 address that receives, a stored file): who else could send it, read
 it, change it or send it again, and following it through the slice,
 what is the worst they reach? One row for each pair worth asking,
@@ -50,6 +52,8 @@ by the names `kept.md` uses:
   the slice plainly has that `kept.md` does not list is added to
   `kept.md`'s own list, with its source, and nothing else is changed
   there.
+- A thing that gives nothing worth having wants `nothing`, and is
+  dismissed with the reason.
 - A slice with little to attack has few rows marked `yes`. Say so;
   do not pad.
 
@@ -76,9 +80,11 @@ through and a name `kept.md` does not have: put right what it names
 and draw again. Where it says the drawing could not be written, say
 so and leave it.
 
-**It cannot be made safe as it is cut.** Where the slice cannot be
-made safe without something nobody scoped (a way of signing in, a
-place to keep a secret), write nothing. Say what is missing and what
+**It cannot be made safe as it is cut.** Only where the documents
+say that something the slice cannot be safe without is not there or
+is out (nobody signs in; nothing of the kind is planned). Where they
+simply do not say, that is a question, asked already or a row of
+yours: go on. Otherwise write nothing. Say what is missing and what
 that forces, with one recommendation and not a list of ways: it is
 the slice's to decide, with the user.
 

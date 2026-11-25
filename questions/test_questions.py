@@ -610,6 +610,24 @@ class Security(unittest.TestCase):
         # A value of the class stands for the class.
         self.assertEqual(self.drawn(SECURITY.replace("| sensitive-values | payment-status | nothing | no: a status names nobody |\n", ""))[0], 0)
 
+    def test_what_is_wanted_may_be_a_thing_the_documents_name_or_nothing_dismissed(self):
+        # Met in the pilot: a slice with no sensitive value at all could write no row the script took.
+        row = "| `card-holder-name` | `payment-request` | a payment is taken in her name. | yes |"
+        self.assertEqual(self.drawn(SECURITY.replace(row, "| A renewal payment | `payment-request` | a payment is taken that nobody asked for | yes |"))[0], 0)
+        self.assertEqual(self.drawn(SECURITY + "| nothing | `payment-request` | a made-up request is sent | no: it gives nothing worth having |\n")[0], 0)
+        self.assertIn("nothing through payment-request: a row that wants nothing is dismissed",
+                      self.refused("| sensitive-values | payment-status | nothing | no: a status names nobody |",
+                                   "| nothing | payment-request | a made-up request is sent | yes |"))
+
+    def test_a_slice_with_no_sensitive_value_is_drawn_with_rows_that_want_nothing(self):
+        kept = KEPT.replace("| `card-holder-name` | text | the subscriber | yes |", "| `card-holder-name` | text | the subscriber | no |")
+        folder, library = project(kept=kept)
+        (folder / "007_questions" / "security.md").write_text(
+            SECURITY[:SECURITY.index("| `card-holder-name`")] + "| nothing | `payment-request` | a made-up request is sent | no: nothing is kept or shown |\n", encoding="utf-8")
+        code, said = run("draw", folder, library)
+        self.assertEqual(code, 0, said)
+        self.assertIn("0 of what someone would want", said)
+
     def test_a_name_kept_md_does_not_have_is_refused(self):
         self.assertIn("the-till: wanted, and no class", self.refused("| `card-holder-name` | `payment-request`", "| the-till | `payment-request`"))
         self.assertIn("the-door: come through, and no other thing", self.refused("| `card-holder-name` | `payment-request`", "| `card-holder-name` | the-door"))

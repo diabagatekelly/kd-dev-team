@@ -6,6 +6,32 @@ questions, that adds to the same list so that everything is answered
 together; nothing kad's security skill did is to be lost; and it is
 to be done by script wherever a script holds.
 
+## The pilot (2026-11-25, $3.14 of about $105)
+
+Each case once. With the text: Sonnet 5 of 8, Haiku 4 of 8. Bare:
+Sonnet 1 of 8, Haiku 3 of 8. kad's skill on the first case writes
+its own document and none of this stage's, as expected: 0 of 1.
+
+What it met, and what each became (decision 29):
+
+- **The script took no row from a slice with nothing sensitive**
+  (case 02, both models): what is wanted had to be a class of
+  sensitive values, and that slice has none. What is wanted may now
+  be a thing the documents name, or `nothing`, dismissed with the
+  reason: two unit tests, and the text says so.
+- **The stop was taken where the documents only did not say**
+  (case 05, Sonnet): asked how people sign in, the session found no
+  document saying who the office is, wrote nothing and put two
+  questions to the user. The text now keeps the stop for what the
+  documents say is not there or is out; where they do not say, it
+  is a question and the stage goes on.
+- **Two checks:** a pattern with a flag the tool does not read (the
+  skip recorded in their words, case 04b, both models: the file was
+  right); the public key written with a space, in a row of its
+  class (case 03, Haiku: rightly dismissed).
+- Haiku did not stop on case 06 where the documents say nobody
+  signs in: left to the three runs.
+
 ## What it is
 
 A session writes one small file, `security.md`, beside `kept.md`:
