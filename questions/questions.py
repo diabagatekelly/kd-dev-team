@@ -77,6 +77,55 @@ EXITS = {
     "errors-shown": "an error shown or returned to whoever asked",
     "telemetry": "what is sent to monitoring or measurement",
     "samples": "test data and examples kept with the code",
+    # Added with the security pass: kad's documents named both, and the five above reach neither.
+    "replies": "a reply that succeeded, to whoever asked",
+    "stored": "where it is stored, and every copy made of that",
+}
+# The security pass (security.md, beside kept.md). Facts about the slice, each yes or no with its
+# source: a fact that holds draws its questions, always the same ones. Each names the requirement of
+# OWASP's verification standard 5.0.0 it rests on, or kad's security documents where the standard
+# has none.
+FACTS = {
+    "browser": ("a person uses it in a web browser", (
+        ("context", "What stops a reply meant as data, or a file someone submitted, from being shown and run as a page when its address is opened directly?", "V3.2.1"),
+        ("page-policy", "From where may the page load and run code, and what does the browser do with anything else?", "V3.4.3"),
+        ("framing", "May another site show this product inside a page of its own, and what prevents it?", "V3.4.6"),
+        ("type-guessing", "How is the browser kept from treating a reply as a different type from the one it was sent as?", "V3.4.4"),
+        ("came-from", "What does the browser tell other sites about the address a person came from, and is anything sensitive in that address?", "V3.4.5"),
+        ("other-sites", "Which other sites' pages may call this product and read its replies, and how are all the rest refused?", "V3.4.2, V3.5.1"),
+        ("messages", "Does the page take messages from other windows, and how does it know which to trust?", "V3.5.5"),
+        ("others-code", "Which code or styles on the page come from another party, and what stops a changed copy from running with everything the page can reach?", "V3.6.1"),
+        ("sent-on", "Can the product send a person on to an address that someone else supplied?", "V3.7.2"),
+        ("kept-by-browser", "What does the browser keep of a page that showed sensitive data, and for how long?", "V14.3.2"),
+        ("known-by", "What does the product keep in the browser to know a person by, and what else can read it or cause it to be sent?", "V3.3.2, V3.3.4"),
+    )),
+    "network": ("it answers requests at a network address, on one machine or many", (
+        ("answers-to", "At which addresses and under which host names does the product answer, and what does it do with a request that names another?", "kad"),
+        ("transport", "Is every connection to it encrypted, and what happens to one that is not?", "V12.2.1"),
+        ("in-between", "Which facts about a request does it take from something in between (the sender's address, the host first asked for), and can the sender set them?", "V4.1.3, V15.3.4"),
+        ("kinds-of-request", "Which kinds of request does each address accept, and what happens to the others?", "V4.1.4"),
+        ("left-on", "What can be reached that nobody meant to offer: a diagnostic mode, a listing of files, the history of the source, pages of documentation or measurement, test code?", "V13.4.1 to V13.4.5, V15.2.3"),
+        ("gives-away", "What does a reply reveal about what the product is built from, a refusal included?", "V13.4.6"),
+    )),
+    "calls-out": ("it calls another system", (
+        ("where", "Which outside addresses may the product call, and what stops it calling any other?", "V13.2.4"),
+        ("supplied", "Can a person give the product an address to fetch or call, and what could they reach through it?", "V13.1.1"),
+        ("follows", "Does the product follow a redirect an outside system gives it, and to where?", "V15.3.2"),
+        ("proves", "How does the product know that the system which answered is the one it meant to call?", "V12.3.2"),
+    )),
+    "dependency": ("it adds a component someone else wrote", (
+        ("known-flaw", "When a component the product uses is found to have a known flaw, how is that learned, and how soon is the component replaced?", "V15.1.1"),
+        ("inventory", "Is there a list of every component used, those they bring with them included, and of where each comes from?", "V15.1.2"),
+        ("look-alike", "What makes sure each component is fetched from the place intended, and is the one intended?", "V15.2.4"),
+        ("trusted-most", "Which components are trusted with the most (they see credentials, read outside data, run when installed), and what limits them?", "V15.1.4, V15.2.5"),
+    )),
+    "several-people": ("more than one person uses it, or one person acts for several", (
+        ("fields", "Within a record a person may see or change, are there fields they may not?", "V8.2.3"),
+        ("groups", "Can one group's use ever show or change what belongs to another group?", "V8.4.1"),
+    )),
+    "unguessable": ("it makes a value meant to be impossible to guess", (
+        ("made", "Which values are meant to be impossible to guess (a link, a code, a session, an identifier), and how is each one made?", "V11.5.1"),
+    )),
 }
 # Asked of every slice: the answers set how much of the rest is worth doing. Answered from the
 # documents where they say, and only otherwise the owner's.
@@ -273,6 +322,59 @@ def read_kept(text):
     return {"values": values, "others": others, "library": library, "lasting": lasting}
 
 
+def read_security(text):
+    """security.md as written by a session: the facts about the slice, and what someone who means harm would want."""
+    parts = {heading.lower(): lines for heading, lines in sections(text).items()}
+
+    def part(word):
+        return next((lines for heading, lines in parts.items() if word in heading), [])
+
+    facts = [{"fact": slug(row[0].strip("` ")), "holds": row[1].strip("` *").lower(), "source": row[2]} for row in rows(part("facts")) if len(row) >= 3]
+    harm = [{"wanted": row[0].strip("` "), "through": row[1].strip("` "), "worst": row[2].strip(), "asked": row[3].strip()}
+            for row in rows(part("harm")) if len(row) >= 4]
+    return {"facts": facts, "harm": harm, "skipped": bool(re.search(r"(?im)^skipped at the user's word", text))}
+
+
+def insecure(security, kept):
+    """Why security.md cannot be drawn from: every fact once, yes or no, with its source; every class of sensitive
+    values wanted by someone or said not to be; every other thing come through or said not to be; every name a known one."""
+    if security.get("skipped"):
+        return []
+    found, seen = [], set()
+    for row in security["facts"]:
+        if row["fact"] not in FACTS:
+            found.append(f"{row['fact']}: not one of the facts ({', '.join(FACTS)})")
+            continue
+        if row["fact"] in seen:
+            found.append(f"{row['fact']}: said twice")
+        seen.add(row["fact"])
+        if row["holds"] not in ("yes", "no"):
+            found.append(f"{row['fact']}: holds is `yes` or `no`; where the documents do not say, it is `yes`")
+        if not row["source"].strip():
+            found.append(f"{row['fact']}: no source: the criterion or the document's line that says so")
+    found += [f"{fact}: not said (a row of the facts: {FACTS[fact][0]})" for fact in FACTS if fact not in seen]
+    wanted, through = classes(kept["values"]), set(kept["others"])
+    members = {slug(member): name for name, names in wanted.items() for member in names}
+    covered, come = set(), set()
+    for row in security["harm"]:
+        prize, way = slug(row["wanted"]), slug(row["through"])
+        if prize in wanted or prize in members:
+            covered.add(members.get(prize, prize))
+        else:
+            found.append(f"{row['wanted']}: wanted, and no class of sensitive values or value of kept.md has that name")
+        if way in through or way in {slug(value["name"]) for value in kept["values"]}:
+            come.add(way)
+        elif way not in ("", "nothing"):
+            found.append(f"{row['through']}: come through, and no other thing or value of kept.md has that name")
+        if not row["worst"]:
+            found.append(f"{row['wanted']} through {row['through']}: the worst from there is not said")
+        if not re.match(r"(?i)(yes\b|no\s*:\s*\S)", row["asked"]):
+            found.append(f"{row['wanted']} through {row['through']}: asked is `yes`, or `no: ` and why it is dismissed")
+    found += [f"{name}: a class of sensitive values nobody is said to want: a row of its own, dismissed with the reason if so" for name in wanted if name not in covered]
+    found += [f"{name}: another thing of the slice nothing is said to come through: a row of its own, dismissed with the reason if so" for name in sorted(through - come)]
+    return found
+
+
 def expand(cell, entries):
     """The library entries a row's first cell names: one, several, or `kind: all`."""
     match = re.fullmatch(r"`?([a-z-]+)`?:\s*all", cell.strip(), re.I)
@@ -295,7 +397,7 @@ def problems(kept, names, entries, sources=()):
             found.append(f"{name}: created or kept ({source}), and states.md has no table for it: "
                          "add its table by the research text's rules, then draw again")
     # A criterion nothing in the file names was not gone through: one added since, most often.
-    flat = re.sub(r"[^a-z0-9]+", "-", bytes(kept.get("text") or b"").decode("utf-8", "replace").lower())
+    flat = re.sub(r"[^a-z0-9]+", "-", bytes(kept.get("own") or kept.get("text") or b"").decode("utf-8", "replace").lower())
     for name, what in names.items():
         if what.startswith("criterion ") and kept.get("text") and not re.search(rf"(?<![a-z0-9]){re.escape(name)}(?!\d)", flat):
             found.append(f"{what[10:]}: no thing kept, value, other thing or question of kept.md names this criterion: "
@@ -399,6 +501,17 @@ def draw(read, kept, entries):
                 drawn.append(f"- S.{slug(thing)}.{state}.{name}: {thing} is `{state}` and {words}: what happens to it, and what is the person shown?")
     lines += section("Each state, each event", drawn, spared, None if things else "No lasting thing has states written for this slice.")
 
+    security = kept.get("security")
+    if security is not None:
+        holds = {row["fact"] for row in security["facts"] if row["holds"] != "no"} if not security.get("skipped") else set(FACTS)
+        drawn = [f"- F.{fact}.{key}: {words}" for fact, (_what, asks) in FACTS.items() if fact in holds for key, words, _rests in asks]
+        lines += section("By what the slice is", drawn, 0, "None of the facts holds for this slice.")
+        drawn = [f"- T.{slug(row['wanted'])}.{slug(row['through'])}: someone after `{row['wanted']}` comes through `{row['through']}`: {row['worst'].rstrip('.')}. "
+                 "What stops it, and how would anyone know it was tried?"
+                 for row in security["harm"] if row["asked"].lower().startswith("yes")]
+        lines += section("What someone who means harm would want", drawn, 0,
+                         "Skipped at the user's word: a risk for the owner's list." if security.get("skipped") else "Nothing was found worth asking.")
+
     lines += section("Asked of every slice", [f"- W.{key}: {words}" for key, words in WHOLE.items()], 0)
     lines += section("Carried from research", [f"- {name}: {words}" for name, words in carried(read["research"], {slug(name) for name in committed(read["approach"])})],
                      0, "Nothing was left open.")
@@ -426,6 +539,14 @@ def stamp(read, kept_bytes):
     return str(cksum(b"".join(read["documents"]) + kept_bytes))
 
 
+def with_security(read, kept):
+    """kept, with security.md beside it when there is one: its bytes join the mark, after kept.md's."""
+    path = read["questions"] / "security.md" if read["questions"] else None
+    if kept is None or not (path and path.is_file()):
+        return kept
+    return {**kept, "security": read_security(path.read_text(encoding="utf-8")), "text": kept["text"] + path.read_bytes(), "own": kept["text"]}
+
+
 def load(folder, library=LIBRARY):
     read = read_slice(folder)
     entries = json.loads(pathlib.Path(library).read_text(encoding="utf-8"))
@@ -436,7 +557,7 @@ def load(folder, library=LIBRARY):
         kept = {**read_kept(path.read_text(encoding="utf-8")), "text": path.read_bytes()}
     elif skipped and skipped.is_file():
         kept = {"values": [], "others": {}, "library": [], "text": skipped.read_bytes(), "skipped": True}
-    return read, entries, kept
+    return read, entries, with_security(read, kept)
 
 
 def state(folder, library=LIBRARY):
@@ -495,16 +616,20 @@ def main(arguments, out=sys.stdout):
         print("no kept.md in the slice's questions folder: nothing to draw from", file=out)
         return 1
     found = [] if kept.get("skipped") else problems(kept, known(read), entries, criteria(read["slice"]) + list(read["research"]))[0]
+    if kept.get("security") is not None and not found:
+        found = insecure(kept["security"], kept)
     if found:
         print("\n".join(found), file=out)
         return 1
     text = draw(read, kept, entries)
     target = read["questions"] / "questions.md"
     if command == "draw":
-        count = {mark: sum(line.startswith(f"- {mark}.") for line in text.splitlines()) for mark in "LVXSWC"}
+        count = {mark: sum(line.startswith(f"- {mark}.") for line in text.splitlines()) for mark in "LVXSFTWC"}
         spared = sum(int(number) for number in re.findall(r"^Not drawn, (\d+) ", text, re.M))
         said = (f"{sum(count.values())} questions: {count['L']} from the library, {count['V']} of values, {count['X']} of leaks, "
-                f"{count['S']} of states, {count['W']} of every slice, {count['C']} carried from research; "
+                f"{count['S']} of states, "
+                + (f"{count['F']} by what the slice is, {count['T']} of what someone would want, " if kept.get("security") is not None else "")
+                + f"{count['W']} of every slice, {count['C']} carried from research; "
                 f"{spared} not drawn, already asked by the library")
         try:
             target.write_text(text, encoding="utf-8", newline="\n")

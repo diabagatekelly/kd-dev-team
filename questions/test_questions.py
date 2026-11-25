@@ -484,7 +484,7 @@ class TheCommand(unittest.TestCase):
     def test_the_drawing_says_how_many_questions_of_each_part_and_how_many_it_spared(self):
         code, said = run("draw", self.folder, self.library)
         self.assertEqual(code, 0)
-        self.assertRegex(said, r"^drawn: .*questions\.md: \d+ questions: 3 from the library, 11 of values, 5 of leaks, 28 of states, 7 of every slice, 6 carried from research; 2 not drawn")
+        self.assertRegex(said, r"^drawn: .*questions\.md: \d+ questions: 3 from the library, 11 of values, 7 of leaks, 28 of states, 7 of every slice, 6 carried from research; 2 not drawn")
 
     def test_a_folder_that_cannot_be_written_is_said_and_nothing_is_to_be_written_by_hand(self):
         target = self.folder / "007_questions" / "questions.md"
@@ -525,6 +525,128 @@ class TheCommand(unittest.TestCase):
         self.assertEqual(questions.main(["things", str(self.folder)], out), 0)
         self.assertIn("call-external (12)", out.getvalue())
         self.assertIn("startup-read (10)", out.getvalue())
+
+
+SECURITY = """# Security: slice 1
+
+## Facts about the slice
+| Fact | Holds | Source |
+|---|---|---|
+| browser | yes | renew-and-pay / 1: she is shown |
+| network | yes | 000_problem.md: the playhouse's site |
+| calls-out | yes | 005_approach.md: PayRight |
+| dependency | no | 005_approach.md: nothing is added |
+| several-people | no | 000_problem.md: one office |
+| unguessable | no | no criterion makes one |
+
+## What someone who means harm would want
+| Wanted | Through | Worst from there | Asked |
+|---|---|---|---|
+| `card-holder-name` | `payment-request` | a payment is taken in her name. | yes |
+| sensitive-values | payment-status | nothing | no: a status names nobody |
+"""
+
+
+class Security(unittest.TestCase):
+    """The security pass: security.md beside kept.md, checked and drawn into the same list."""
+
+    def setUp(self):
+        self.folder, self.library = project()
+        self.path = self.folder / "007_questions" / "security.md"
+
+    def drawn(self, text=SECURITY):
+        self.path.write_text(text, encoding="utf-8")
+        code, said = run("draw", self.folder, self.library)
+        return code, said, (self.folder / "007_questions" / "questions.md").read_text(encoding="utf-8") if code == 0 else ""
+
+    def test_with_no_security_file_nothing_of_it_is_drawn_or_said(self):
+        code, said = run("draw", self.folder, self.library)
+        text = (self.folder / "007_questions" / "questions.md").read_text(encoding="utf-8")
+        self.assertEqual(code, 0)
+        self.assertNotIn("- F.", text)
+        self.assertNotIn("- T.", text)
+        self.assertNotIn("by what the slice is", said)
+
+    def test_a_fact_that_holds_draws_its_questions_and_one_that_does_not_draws_none(self):
+        code, said, text = self.drawn()
+        self.assertEqual(code, 0, said)
+        self.assertIn("- F.browser.framing: May another site show this product inside a page of its own", text)
+        self.assertIn("- F.network.answers-to: ", text)
+        self.assertIn("- F.calls-out.where: ", text)
+        self.assertNotIn("- F.dependency.", text)
+        self.assertNotIn("- F.several-people.", text)
+        self.assertIn("21 by what the slice is, 1 of what someone would want", said)
+
+    def test_what_is_wanted_is_asked_once_a_row_and_a_dismissed_row_is_not(self):
+        _code, _said, text = self.drawn()
+        self.assertIn("- T.card-holder-name.payment-request: someone after `card-holder-name` comes through `payment-request`: "
+                      "a payment is taken in her name. What stops it, and how would anyone know it was tried?", text)
+        self.assertEqual(text.count("- T."), 1)
+
+    def test_the_two_exits_kad_named_are_asked_of_every_class(self):
+        _code, _said, text = self.drawn()
+        self.assertIn("- X.sensitive-values.replies: ", text)
+        self.assertIn("- X.sensitive-values.stored: ", text)
+
+    def refused(self, old, new):
+        code, said, _text = self.drawn(SECURITY.replace(old, new))
+        self.assertEqual(code, 1, said)
+        return said
+
+    def test_a_fact_left_out_said_twice_unknown_or_with_no_source_is_refused(self):
+        self.assertIn("unguessable: not said", self.refused("| unguessable | no | no criterion makes one |\n", ""))
+        self.assertIn("browser: said twice", self.refused("| network | yes", "| browser | yes | again |\n| network | yes"))
+        self.assertIn("weather: not one of the facts", self.refused("| network | yes", "| weather | yes | x |\n| network | yes"))
+        self.assertIn("dependency: no source", self.refused("| dependency | no | 005_approach.md: nothing is added |", "| dependency | no | |"))
+
+    def test_a_fact_that_is_neither_yes_nor_no_is_refused_with_what_to_write(self):
+        self.assertIn("network: holds is `yes` or `no`; where the documents do not say, it is `yes`", self.refused("| network | yes", "| network | perhaps"))
+
+    def test_a_class_nobody_is_said_to_want_and_a_thing_nothing_comes_through_are_refused(self):
+        said = self.refused("| `card-holder-name` | `payment-request` | a payment is taken in her name. | yes |\n", "")
+        self.assertIn("payment-request: another thing of the slice nothing is said to come through", said)
+        both = SECURITY[SECURITY.index("| `card-holder-name`"):]
+        self.assertIn("sensitive-values: a class of sensitive values nobody is said to want", self.refused(both, ""))
+        # A value of the class stands for the class.
+        self.assertEqual(self.drawn(SECURITY.replace("| sensitive-values | payment-status | nothing | no: a status names nobody |\n", ""))[0], 0)
+
+    def test_a_name_kept_md_does_not_have_is_refused(self):
+        self.assertIn("the-till: wanted, and no class", self.refused("| `card-holder-name` | `payment-request`", "| the-till | `payment-request`"))
+        self.assertIn("the-door: come through, and no other thing", self.refused("| `card-holder-name` | `payment-request`", "| `card-holder-name` | the-door"))
+
+    def test_a_row_with_no_worst_or_dismissed_without_a_reason_is_refused(self):
+        self.assertIn("the worst from there is not said", self.refused("| a payment is taken in her name. |", "| |"))
+        self.assertIn("asked is `yes`, or `no: ` and why", self.refused("| no: a status names nobody |", "| no |"))
+
+    def test_skipped_at_the_users_word_every_fact_is_drawn_and_nothing_is_checked(self):
+        code, said, text = self.drawn("Skipped at the user's word, 2026-11-25: \"skip the security pass\"\n")
+        self.assertEqual(code, 0, said)
+        self.assertEqual(text.count("- F."), sum(len(asks) for _what, asks in questions.FACTS.values()))
+        self.assertIn("Skipped at the user's word: a risk for the owner's list.", text)
+
+    def test_the_mark_changes_with_the_security_file_so_the_drawing_goes_stale(self):
+        self.assertEqual(run("draw", self.folder, self.library)[0], 0)
+        self.assertEqual(run("state", self.folder, self.library)[1].strip(), "drawn")
+        self.path.write_text(SECURITY, encoding="utf-8")
+        self.assertTrue(run("state", self.folder, self.library)[1].startswith("stale"))
+        self.assertEqual(run("draw", self.folder, self.library)[0], 0)
+        self.assertEqual(run("state", self.folder, self.library)[1].strip(), "drawn")
+
+    def test_a_criterion_named_only_in_the_security_file_is_still_named_nowhere_in_kept(self):
+        kept = KEPT.replace("renew-and-pay / 2", "renew-and-pay / 1")
+        folder, library = project(kept=kept)
+        (folder / "007_questions" / "security.md").write_text(SECURITY + "\nrenew-and-pay / 2\n", encoding="utf-8")
+        code, said = run("draw", folder, library)
+        self.assertEqual(code, 1)
+        self.assertIn("renew-and-pay / 2: no thing kept", said)
+
+    def test_every_fixed_question_has_a_name_of_its_own_is_a_question_and_says_what_it_rests_on(self):
+        for fact, (what, asks) in questions.FACTS.items():
+            self.assertTrue(what)
+            self.assertEqual(len({key for key, _words, _rests in asks}), len(asks), fact)
+            for key, words, rests in asks:
+                self.assertTrue(words.endswith("?"), key)
+                self.assertRegex(rests, r"^(kad|V\d+\.\d+\.\d+)", key)
 
 
 if __name__ == "__main__":
