@@ -1,17 +1,30 @@
-# Slices: Practise telling apart from memory the ones we get wrong
+# Slices: practise telling similar verses apart from memory
 
 | # | Slice | Items | Builds on | State |
 |---|---|---|---|---|
-| 1 | Practise telling apart from memory the similar verses we get wrong | practise-wrong-ones | nothing | chosen |
+| 1 | Tell apart from memory one pair of similar verses the learner gets wrong | practise-own-slips, tell-apart-from-memory | nothing | chosen |
+| 2 | Practise the rest of the similar verses the learner gets wrong | practise-own-slips, tell-apart-from-memory | 1 | open |
 
 ## Where to start
-Slice 1 is chosen, but its build cannot start yet. It is the only slice, and it waits for these questions under "Not yet confirmed" in the requirements. No thinner part can be cut without assuming an answer to them.
 
-- **Which ones we get wrong** (1): without this, there is nothing to say what practice starts from.
-- **What practising is** (2): without this, there is nothing to say what the reciter is given or does.
-- **Knowing the result** (3): without this, there is nothing to say how a turn of practice ends.
-- **What counts as one we get wrong** (4), the part about whether it takes in the verses a slip is confused with: without this, there is nothing to say which verses are practised.
+Slice 1 is the recommended start and the one chosen: it is the closest to practising the ones we get wrong, it is the smallest cut that shows the practice itself, and slice 2 builds on it.
 
-The other questions also bear on the item and stay open in the requirements. The rest of question 4, and questions 5, 6, 7 and 10, could widen what is practised or add to the list; the ordinary path can be described without them. Whether there is a list of the similar verses (8) and a source for the text (9) has not been looked into. Neither has to be known to say what the reciter does, but the exact-text limit still has to be met.
+**Neither slice can be built yet.** Both lean on questions in the requirements that are not answered. Choosing slice 1 settles none of them.
 
-The criteria of slice 1 are written once the four above are answered.
+Slice 1 waits on these decisions of ours:
+
+- **Which ones are wrong:** how it is settled that the learner gets a verse wrong.
+- **What practising is:** what the learner is given, what they do and what they are shown afterwards.
+- **Right or wrong:** who or what decides whether the learner told them apart.
+- **A teacher or anyone else:** whether anyone besides the learner needs to see or do anything.
+- **What comes across:** whether the pair may or must come from the marks in our copy or from our notebook.
+- **Which text:** the reading (riwayah) and the script or printing to match.
+- **What it may cost, and who would look after it.**
+
+Slice 1 also waits on two things not yet looked into: whether there is a source for the exact text that an app could use, and whether a list of the similar verses exists in a form an app could use.
+
+Slice 2 waits on the same, and also on:
+
+- **What is covered:** whether similar verses are only pairs or also larger groups, and whether practice also covers every similar verse there is.
+- **Putting right:** whether a verse wrongly counted as one the learner gets wrong must be correctable.
+- **No longer wrong:** whether, and when, a verse stops counting as one the learner gets wrong.

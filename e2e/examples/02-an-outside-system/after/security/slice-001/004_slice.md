@@ -1,32 +1,22 @@
-# Slice 1: See a client's invoice for the month's regular and one-off walks, priced by length
+# Slice 1: Enter a walk as a walker
 
 ## Thin path
-The owner asks for one client's invoice for a month and is shown that month's regular and one-off walks, each priced by its length, with the total.
+A walker enters one of their walks on their phone, giving the client, the day and the length, and is shown it among their walks.
 
 ## Criteria
-All clients, dates and prices here are invented.
-
-- **monthly-client-invoice / 1**: Given a client with two 30-minute regular walks in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks at 10.00 each and a total of 20.00.
-- **monthly-client-invoice / 2**: Given a client with one 30-minute walk and one 60-minute walk in March, priced at 10.00 and 18.00, when the owner asks for that client's March invoice, then it shows each walk at the price for its length and a total of 28.00.
-- **monthly-client-invoice / 3**: Given a client with one regular and one one-off 30-minute walk in March and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows both walks and a total of 20.00.
-- **monthly-client-invoice / 4**: Given a client with one 30-minute walk on 31 March and one on 1 April, and a 30-minute price of 10.00, when the owner asks for that client's March invoice, then it shows only the 31 March walk and a total of 10.00.
-- **monthly-client-invoice / 5**: Given a client with a 60-minute walk in March and no price for 60 minutes, when the owner asks for that client's March invoice, then the owner is told that price is missing and is shown no invoice.
-- **monthly-client-invoice / 6**: Given a client with no walks in March, when the owner asks for that client's March invoice, then the owner is told there are no walks to invoice and is shown no invoice.
+- **walker-walk-entry / 1**: Given a walker on their phone with no walks entered, and a client called Example Client A, when they enter a walk for that client on 3 November 2026 lasting 45 minutes, then their walks show one walk with that client, day and length.
+- **walker-walk-entry / 2**: Given a walker on their phone with no walks entered, when they try to enter a walk with a day and a length but no client, then they are told a client is needed and their walks show none.
 
 ## Needs from outside
 none
 
 ## Left for later
-- Second dog from the same home at half price: slice 2. Usable without it: the owner can see invoices for one-dog walks, and works out second-dog invoices by hand as today.
-- Late and early cancellations: slice 3. Usable without it: the owner can see invoices for months with no cancellations, and works out the others by hand as today.
-- Payment link: slice 4. Usable without it: the owner sends the link through Tallypay as today.
-- How walks get in each month: slice 1. Blocker: it is not known what the owner puts in or changes.
-- Client prices and the kinds of walk: slice 1. Blocker: it is not known which price applies to a client's walk.
-- Other charges, and whether extras are only extra walks: slice 1. Blocker: it is not known whether the total is complete.
-- Changing or adding prices: slice 1. Blocker: it is not known whether the owner must be able to do this.
-- What "Since" in the price list means: slice 1. Blocker: it is not known whether a month can need an old and a new price.
-- Invoices per client: slice 1. Blocker: it is not known whether a client can have several invoices or share one.
-- What must come across from today: slice 1. Blocker: it is not known what has to be there before the first invoice.
+- Correction of an entry by the business owner: slice 2. Usable without it: walkers can record walks, and the business owner can allow for a mistake when typing invoices by hand.
+- A walker putting right their own entry, and any cut-off for entering walks: no slice yet, waiting on question 3. Usable without it: walkers can still record walks.
+- Starting a month from the usual weekly walks: slice 6. Usable without it: walkers can enter walks one at a time.
+- Pricing walks and making invoices, including a length that is not on the price list: slice 3. Usable without it: the business owner can invoice by hand from the walks entered.
+- Payment links: slice 4. Usable without it: the business owner can send Tallypay links as they do today.
+- Getting invoices to clients: slice 5. Usable without it: the business owner can send them as they do today.
 
 ## Size
-Criteria: 6.
+Criteria: 2.

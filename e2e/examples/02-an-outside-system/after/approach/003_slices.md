@@ -1,18 +1,17 @@
-# Slices: invoice the clients
+# Slices: Invoice clients for the month
 
 | # | Slice | Items | Builds on | State |
 |---|---|---|---|---|
-| 1 | See a client's invoice for the month's regular and one-off walks, priced by length | monthly-client-invoice | nothing | chosen |
-| 2 | Charge a second dog from the same home at half price | monthly-client-invoice | 1 | open |
-| 3 | Charge a cancelled walk only when notice was late | monthly-client-invoice | 1 | open |
-| 4 | Get a client their invoice with a Tallypay payment link | monthly-client-invoice | 1 | open |
+| 1 | Enter a walk as a walker | walker-walk-entry | nothing | chosen |
+| 2 | Correct a walker's entry | owner-walk-correction | 1 | open |
+| 3 | Make a client's invoice from a month's walks | monthly-client-invoice | 1 | open |
+| 4 | Get a Tallypay payment link for an invoice | invoice-payment-link | 3 | open |
+| 5 | Get invoices and their payment links to clients | monthly-client-invoice, invoice-payment-link | 3, 4 | open |
+| 6 | Start a month from the usual weekly walks | month-from-usual-walks | 1 | open |
 
 ## Where to start
-Slice 1 is chosen. Its build waits for answers, and no other slice can be started yet. The numbers below are those of the questions under "Not yet confirmed" in the requirements.
-
-- Slice 1 waits for: how walks get in (1), client prices and the kinds of walk (2), other charges and what extras are (3), changing prices (6), what "Since" means (7), invoices per client (8) and what must come across (9). Its late-cancellation part of question 1 belongs to slice 3.
-- Slice 2 waits for slice 1, and for client prices (2).
-- Slice 3 waits for slice 1, and for how late cancellations are known (1).
-- Slice 4 waits for slice 1, and for approval and who may see invoices (4) and wrong invoices (5).
-
-Chosen first, as recommended: slice 1. It shows the owner a priced invoice, which they now type by hand, and the other slices build on it.
+- Recommended first: slice 1. It shows a walker's walk recorded from their phone, it needs no other slice, and every other slice builds on it, directly or through another.
+- Slice 1 can be started now. Slices 2 and 3 can be started once 1 is built, and slice 4 once 3 is. Their ordinary path does not depend on an unanswered question; the answers may still add to them or to the requirements.
+- Slice 3 covers only walks at the list price for their length, as one invoice for one client. Anything else on an invoice, changing prices in the product and other invoicing arrangements wait on questions 2 and 6.
+- Slice 5 cannot be started: whether the business owner must check or change invoices before clients get them is not decided (question 4). Questions 5, 7 and 8 also bear on it.
+- Slice 6 cannot be started: where the usual weekly walks come from, who changes them and who starts a month from them are unanswered (question 1).

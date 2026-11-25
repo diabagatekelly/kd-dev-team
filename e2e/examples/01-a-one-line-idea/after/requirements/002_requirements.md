@@ -1,23 +1,23 @@
-# Requirements: find out where they are on the waiting list
+# Requirements: See where they stand on the waiting list
 
-- [ ] **see-own-place**: A person on the waiting list can see their own place on it, and only their own.
-- [ ] **carry-over-list**: The person who keeps the list can have everyone in the paper notebook carried over to the waiting list, in the same order as in the notebook.
+- [ ] **see-where-they-stand**: A person on the waiting list can see where they stand on it, and only their own place, without people's names being shown to everyone.
+- [ ] **committee-sees-list**: The committee can see the waiting list.
+- [ ] **notebook-order-kept**: The list keeper can have the list carried across from the paper notebook in the order written there.
 
 ## Out for now
-- Offering a free plot.
+- Offering a free plot to whoever is first.
 - Showing the council that plots are given out fairly.
-- Showing people's names to everyone.
 
 ## Limits that apply
-- £10 a month at most: whatever this activity costs to run has to fit within it.
-- The committee are five volunteers, none of them technical: anything a committee member has to do for people to see where they stand must be something a non-technical volunteer can do.
-- Many members are elderly, and several have no smartphone: a person on the waiting list must be able to see where they stand without having a smartphone. The person who keeps the list could look it up for them, but would rather not be doing that every week.
+- We can spend 10 pounds a month at most: whatever it takes for people to see where they stand has to fit within this, which is the limit for the whole product.
+- The committee is five volunteers, none of us technical: anything the committee has to do so that people can see where they stand has to be manageable for them.
+- Many members are elderly, and several have no smartphone: needing a smartphone cannot be the only way to see where you stand. This takes it that the limit matters for people waiting too.
 
 ## Not yet confirmed
-1. The person who keeps the notebook now keeps the list. Is putting people on it and taking them off part of this activity, and does anyone else do either? Bears on **see-own-place**: it could add items for keeping the list up to date, and settle who can do them.
-2. If a place on the list is wrong, or someone disputes it, does it need to be possible to correct it, and who may do that? Bears on **see-own-place** and **carry-over-list**: it could add an item for correcting the list.
-3. For anyone joining or already waiting, what decides their place: only when they joined, or can anything else move them up or down? Bears on **see-own-place**: it could change what a place means, or add an item for moving someone.
-4. The person who keeps the list could look up someone's place for them, but would rather not be doing that every week. Does it need to be possible for the list keeper to do this, may anyone else see a person's place, such as someone else acting for them or the committee, and who, if anyone, may see the whole list? Names are not to be shown to everyone. Bears on **see-own-place**: it could change who can see what, or add an item for looking up a place for someone.
+1. One of us, the list keeper here, keeps the list. What has to be done to keep it up to date, such as adding someone or taking them off? Bears on **see-where-they-stand**: the answer could add items for keeping the list.
+2. What does "where they stand" take in: only their place in the order, or anything else about their own place? Bears on **see-where-they-stand**: the answer could change what the person is shown, or add items.
+3. The list keeper could look a person's place up for them, but would rather not be doing that every week. May anyone else, such as a relative, find it out for them? Bears on **see-where-they-stand**: the answer could change who can see it, or add an item.
+4. If a person thinks their place is wrong, what should they be able to do, and who can correct a mistake? Bears on **see-where-they-stand**: the answer could add items for questioning or correcting a place.
 
 ## Outside systems and lasting things
 - Outside systems: none.

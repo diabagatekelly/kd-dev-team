@@ -115,6 +115,8 @@ PUSHED_BACK = ("I can skip it, and it is yours to say. What it costs: the questi
 SAYS_NOTHING_NEEDED = says("says-nothing-is-needed-now", r"nothing (is )?(needed|from you|to ask)|no(thing)? (questions?|input) (for|from) you|do(?: not|n't) need|not needed|"
                                                          r"ask(?:s|ed)? (you )?nothing|nothing is (asked|needed)|nothing now|(?:does not|doesn't) ask you|none (for|from) you|later|once|one (short )?list")
 
+# On the provider's slice the answers written before are stock lines, and a session's offer to look at them again is a
+# closing offer, not a preference asked: those cases keep only the check that nothing is asked of the product.
 # name, what it shows, which slice ("quote" or "paid"), the answers already there (None, or a function of the drawing), whether they
 # are drawn, a security file laid over after (or None), the user's words, checks, what may be asked ("" or "ask"), earlier turns
 SCENARIOS = [
@@ -135,12 +137,14 @@ SCENARIOS = [
       block("a-dead-end-is-the-owners", "owner", r"C\.states\.dead-end\.1", r"\nOptions:[^\n]*\|", r"\nIf left:"),
       block("the-key-out-of-the-records-is-chosen", "(?:chosen|fact)", r"L\.secrets-03\.secret-key"),
       in_file(ANS, "a-criterion-of-absence", r"(?:^|\n)Criterion:[^\n]*\b(nothing of|no part of|does not appear|never appears|is not (written|recorded|shown)|not in|absent|without the)\b"),
-      *LEFT_ALONE], "", None),
+      *LEFT_ALONE, q.ASKS_NOTHING[1]], "ask", None),
     ("03-asked-what-is-needed",
      "The user offers to answer and asks what is needed: nothing now, their decisions come once as one list; the stage is done all the same.",
      "paid", lambda drawn: before(drawn, LEFT), False, None,
      "Go on to the next stage. What do you need from me? I can tell you our refund rules and how fast it has to be.",
-     [*DRAWN, SAYS_NOTHING_NEEDED, block("still-leaves-the-dead-end-for-the-list", "owner", r"C\.states\.dead-end\.1"), *LEFT_ALONE], "", None),
+     [*DRAWN, SAYS_NOTHING_NEEDED, block("still-leaves-the-dead-end-for-the-list", "owner", r"C\.states\.dead-end\.1"), *LEFT_ALONE,
+      q.ASKS_NOTHING[1], never_says("does-not-invite-their-answers", r"(tell|give|send) me (your|the) (refund|rules|speed|target)|once you (answer|tell)|what are your (refund|rules)")],
+     "ask", None),
     ("04a-skip-the-stage", "The user says to skip the answers: said once what it costs and that it asks nothing of them, offered again, nothing written.",
      "quote", None, False, None, SKIP,
      [says("says-what-skipping-costs", r"criteri|open|whoever builds|builder|in the build|unsettled|unanswered"),

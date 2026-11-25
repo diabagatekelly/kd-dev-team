@@ -1,13 +1,12 @@
-# Problem: Practising the mutashabihat in the Qur'an
+# Problem: practising the mutashabihat from memory
 
 ## The problem
 
-- We find out about a slip when a teacher or a listener stops us.
-- We mark the place in our own copy and keep some pairs in a notebook.
-- We own a printed book that lists these verses. It is something to look things up in, not something to practise with.
-- Reading the two side by side helps for a few days.
-- What never gets practised is telling them apart from memory, at the moment we reach one.
-- We have been tested on them: a teacher reads the start of a verse and we carry on, or asks which surah a wording belongs to. That showed us where we slip, but it didn't give us a way to study them on our own between tests.
+- We find out about a slip when a teacher or a listener stops us. We then mark the place in our own copy and keep some pairs in a notebook.
+- We own one of the printed books that list these verses. It is something to look things up in, not something to practise with.
+- Reading two similar verses side by side helps, but only for a few days.
+- We have been tested: a teacher reads the start of a verse and we carry on, or asks which surah a wording belongs to. That showed us where we slip, but it gave us no way to study these verses on our own between tests.
+- What never gets practised is telling the verses apart from memory, at the moment we reach one.
 
 ## Why now
 
@@ -20,6 +19,6 @@
 ## Open questions
 
 - Does a list of the similar verses exist in a form an app could use? We have never looked.
-- Is there a source for the text itself? We have never looked.
+- Is there a source for the text of the Qur'an itself that an app could use? We have never looked.
 - What may it cost?
 - Who would look after it?

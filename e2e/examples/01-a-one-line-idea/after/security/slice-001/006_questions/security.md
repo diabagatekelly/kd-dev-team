@@ -3,18 +3,19 @@
 ## Facts about the slice
 | Fact | Holds | Source |
 |---|---|---|
-| browser | yes | carry-over-list / 1 has a person carry over and be shown the list; the documents do not say it is without a web browser |
-| network | yes | carry-over-list / 1; the documents do not say that the product answers no requests at a network address |
-| calls-out | no | slice-001/004_slice.md, line 12: under "Needs from outside", "none" |
-| dependency | yes | carry-over-list / 1; the documents do not say that no component written by someone else is added |
-| several-people | yes | 000_problem.md, line 13: "The committee are five volunteers"; 002_requirements.md, line 20, leaves open who else may see places or the list |
-| unguessable | yes | 002_requirements.md, line 9, keeps names from being shown to everyone; the documents do not say that no code, link or session is made |
+| browser | yes | The documents do not say how the list keeper uses it (slice-001/004_slice.md, Thin path) |
+| network | yes | The documents do not say whether it answers requests at a network address (slice-001/004_slice.md, Thin path) |
+| calls-out | no | "Outside systems: none." (002_requirements.md); the slice's "Needs from outside" is "none" |
+| dependency | yes | The documents do not say what it is made from (slice-001/004_slice.md) |
+| several-people | yes | "The committee can see the waiting list." and "A person on the waiting list can see where they stand on it" (002_requirements.md) |
+| unguessable | yes | The documents do not say whether it makes any such value (slice-001/004_slice.md) |
 
 ## What someone who means harm would want
 | Wanted | Through | Worst from there | Asked |
 |---|---|---|---|
-| `waiting-person-details` | `shown-list` | Someone who should not see the list reads the names of the people waiting and where each one stands. | yes |
-| `waiting-person-details` | `carry-over` | Someone other than the person carrying the notebook over gets the names and their order while they are being carried over. | yes |
-| `waiting-list` | `carry-over` | Someone who should not be able to carry over adds, replaces or reorders people, so that someone moves ahead of those who have waited longer. | yes |
-| `waiting-list` | `carry-over` | A person allowed to carry over puts a friend higher than the notebook does, nobody can tell, and those waiting lose their turn. | yes |
-| `waiting-list` | `shown-list` | The person checking is shown an order that differs from the one kept, accepts it as matching the notebook, and a wrong order stands. | yes |
+| `waiting-details` | `list-view` | Someone not entitled to the list reads the names and places of the people waiting. | yes |
+| `waiting-details` | `carry-across` | Someone who can watch the list being carried across learns who is waiting and in what order. | yes |
+| `waiting-details` | `stored-list` | Someone who reaches the kept list or a copy of it takes everyone's names and places. | yes |
+| `waiting-list` | `carry-across` | Someone moves a friend higher or leaves a person out as the list is carried across, so that person loses their turn for a plot. | yes |
+| `waiting-list` | `carry-across` | Someone sends a different list, or an old one again, and it replaces the true order for everyone waiting. | yes |
+| `waiting-list` | `list-view` | Someone makes the list keeper be shown an order other than the one kept, so a wrong order is taken to be right. | yes |
