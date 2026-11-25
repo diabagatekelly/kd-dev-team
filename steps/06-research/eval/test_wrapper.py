@@ -49,5 +49,14 @@ class Wrapper(unittest.TestCase):
         self.assertEqual(self.run_in(self.project), "")
 
 
+    def test_a_tool_the_scenario_leaves_real_is_the_real_tool_and_the_others_stay_made_up(self):
+        # Met on 2026-11-25: the fourth example's candidates were "not allowed" by the made-up web, whatever the VM allowed.
+        (self.project / ".cache" / "machine" / "real").mkdir()
+        (self.project / ".cache" / "machine" / "real" / "curl").write_text("")
+        self.assertEqual(self.run_in(self.project / "planning"), "real")
+        (self.project / ".cache" / "machine" / "real" / "curl").unlink()
+        self.assertEqual(self.run_in(self.project / "planning"), f"made-up {self.project}/.cache/machine")
+
+
 if __name__ == "__main__":
     unittest.main()
