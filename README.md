@@ -31,7 +31,7 @@ design are recorded under `next-plugin/validation/`.
 | `steps/05-approach/eval/approach-skill.md` | stage 5's text, 153 lines, adopted on Sonnet 5.5 (decision 41): each thing the chosen slice needs from outside compared on the user's limits from the candidates' own pages, one way recommended, the commitment asked and recorded |
 | `steps/06-research/eval/research-skill.md` | stage 6's text, 149 lines, adopted on Sonnet 5.5 (decision 44): what the documentation says about each thing the approach committed to, every fact with its page and a quote, the plan's statements checked against it, what is not said left open with a test; and the states of each lasting thing the slice touches |
 | `steps/07-questions/eval/questions-skill.md` | stage 7's text, 161 lines, adopted on Sonnet 5.5 (decision 48): what the slice creates and keeps, what it takes in and which of the library's 250 questions matter, written in `kept.md`; every question then drawn by `questions/questions.py` (the library's, each value against the ways it can be wrong, each sensitive class against its exits, each state against each event, what research left open). Nothing is answered and the user is asked nothing |
-| `questions/`, `library/` | stage 7's script and the 250-entry library it reads; unit tests |
+| `questions/`, `library/` | stage 7's script and the 290-entry library it reads (250, and 40 from OWASP's verification standard in four kinds: sign-in, stored data, files taken in, misuse); unit tests |
 | `research/` | for stages 5 and 6: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
@@ -215,7 +215,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 
 | Folder | Holds |
 |---|---|
-| `library/` | 250 ways software commonly fails, by kind of action, from public pages, with its checker |
+| `library/` | 290 ways software commonly fails, by kind of action, from public pages, with its checker |
 | `briefs/` | the three briefs tried for the research, questions and answers stages (triage, dossier, answers), with the scripts that check and count their output |
 | `judge/` | the prompt that matches a method's output against known defects (its hash beside it), the script that counts agreement, and the check that no frozen text names one field of business |
 | `vm/` | the trial script that sets up a locked-down VM for a session (macOS only so far) and the plain-words safety page |

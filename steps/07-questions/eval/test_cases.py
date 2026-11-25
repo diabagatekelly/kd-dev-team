@@ -84,7 +84,7 @@ class Fixtures(unittest.TestCase):
         kept = {**cases.questions.read_kept(cases.kept_file()), "text": b""}
         found, judged = cases.questions.problems(kept, cases.questions.known(read), entries, cases.questions.criteria(read["slice"]) + list(read["research"]))
         self.assertEqual(found, [])
-        self.assertEqual(len(judged), 250)
+        self.assertEqual(len(judged), 290)
 
     def test_the_case_of_a_thing_with_no_states_has_none_for_it_and_the_first_case_has(self):
         self.assertNotIn("## A season ticket", (self.case("04") / "project/planning/slice-001/006_research/states.md").read_text())

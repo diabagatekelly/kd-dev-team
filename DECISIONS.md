@@ -499,6 +499,34 @@ asking is listed apart, so it can be overturned.
     (`--keep` replaces folders; the owner has not been asked to
     allow it).
 
+49. **OWASP's verification standard feeds the library and the
+    security pass, on the split put to the owner** (the owner:
+    "Yes", twice: to reading it first, then to the split). Of its 345
+    requirements (version 5.0.0): about 30 to 35 become library
+    questions in four new kinds, triaged per slice like any other
+    (sign-in and sessions, stored data, files taken in, misuse of the
+    product's own rules); about 30 become fixed questions the script
+    draws only when a fact about the slice is true (shown in a
+    browser, answers at a network address, calls out, adds a
+    dependency, more than one person, makes values meant to be
+    unguessable); about 150 are answers or controls, left to stage 8
+    and the build's reviews. It is therefore not used as a measure:
+    the mark stays kad's two documents and the real defects. Each
+    entry cites the requirement by number, asks in our own words and
+    quotes a short phrase; the standard is CC BY-SA 4.0 and the
+    library's README says so. Stage 7's cases are run again five
+    times with the grown library, once, with the security pass's
+    test.
+  - Built 2026-11-25, free: the four kinds, 40 entries (12, 12, 8,
+    8), every quote checked by script against the standard's own
+    table; the library is 290. 204 of the 345 requirements were read
+    line by line; the rest (encoding, password rules, multi-factor
+    mechanics, tokens, OAuth, algorithms, GraphQL, WebRTC) were
+    placed by their section titles.
+  - A `kept.md` written before the library grew is refused by `draw`
+    until the new entries are in a row: right, and met at once by the
+    cases' own fixture, which now accounts for all 290.
+
 ## Put off to the stage that needs them
 
 - **How an outcome on the benchmark is tested** (research, questions,

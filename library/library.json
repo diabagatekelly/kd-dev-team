@@ -2748,5 +2748,445 @@
    "url": "https://www.w3.org/TR/WCAG22/#animation-from-interactions",
    "evidence": "Motion animation triggered by interaction can be disabled, unless the animation is essential"
   }
+ },
+ {
+  "id": "sign-in-01",
+  "action": "sign-in",
+  "failure": "Someone tries password after password, or a list of passwords taken elsewhere, and nothing slows or stops them.",
+  "question": "What stops someone guessing or replaying credentials at sign-in, and what does a person locked out by it do?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.3.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "controls to prevent attacks such as credential stuffing and password brute force are implemented"
+  }
+ },
+ {
+  "id": "sign-in-02",
+  "action": "sign-in",
+  "failure": "An account that came with the product or one of its components still exists with its well-known name and password.",
+  "question": "Which accounts exist before anyone signs up, and how is each removed or made unusable?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.3.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "default user accounts (e.g., \"root\", \"admin\", or \"sa\") are not present in the application or are disabled"
+  }
+ },
+ {
+  "id": "sign-in-03",
+  "action": "sign-in",
+  "failure": "The product answers differently for an account that exists and one that does not, so a stranger can list who has an account.",
+  "question": "Can anyone tell from signing in, signing up or recovery whether a given person has an account, and does that matter here?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.3.8",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "valid users cannot be deduced from failed authentication challenges"
+  }
+ },
+ {
+  "id": "sign-in-04",
+  "action": "sign-in",
+  "failure": "The way back in for someone who forgot a credential is weaker than the front door.",
+  "question": "How does a person get back in after forgetting or losing what they sign in with, and how is that kept as strong as signing in?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.4.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "a secure process for resetting a forgotten password is implemented"
+  }
+ },
+ {
+  "id": "sign-in-05",
+  "action": "sign-in",
+  "failure": "A first password or activation code can be guessed, used twice or never expires.",
+  "question": "How is a person's first credential or activation code made, delivered and ended?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.4.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "system generated initial passwords or activation codes are securely randomly generated"
+  }
+ },
+ {
+  "id": "sign-in-06",
+  "action": "sign-in",
+  "failure": "A second way to sign in is weaker than the first, and that is the one an intruder uses.",
+  "question": "What are all the ways to sign in, and is each held to the same strength?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.3.4",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "there are no undocumented pathways and that security controls and authentication strength are enforced consistently"
+  }
+ },
+ {
+  "id": "sign-in-07",
+  "action": "sign-in",
+  "failure": "A sign-in detail is changed by someone else and the person never hears of it.",
+  "question": "What is a person told when their sign-in details change or an unusual sign-in happens, and by which route?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V6.3.7",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md",
+   "evidence": "users are notified after updates to authentication details"
+  }
+ },
+ {
+  "id": "sign-in-08",
+  "action": "sign-in",
+  "failure": "A session left open stays good for ever.",
+  "question": "How long does a session last unused, and in all, before the person must sign in again, and on what grounds?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V7.3.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x16-V7-Session-Management.md",
+   "evidence": "there is an absolute maximum session lifetime such that re-authentication is enforced"
+  }
+ },
+ {
+  "id": "sign-in-09",
+  "action": "sign-in",
+  "failure": "One account is used from many places at once and nothing notices or limits it.",
+  "question": "How many sessions may one account have at once, and what happens when one more starts?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V7.1.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x16-V7-Session-Management.md",
+   "evidence": "how many concurrent (parallel) sessions are allowed for one account"
+  }
+ },
+ {
+  "id": "sign-in-10",
+  "action": "sign-in",
+  "failure": "The session a person held before signing in is still good afterwards, so whoever planted it is signed in too.",
+  "question": "What happens to the session a person held before signing in, and is a fresh one made at every sign-in?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V7.2.4",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x16-V7-Session-Management.md",
+   "evidence": "the application generates a new session token on user authentication"
+  }
+ },
+ {
+  "id": "sign-in-11",
+  "action": "sign-in",
+  "failure": "Someone at an unlocked device changes the address or the way of signing in without proving who they are.",
+  "question": "Which changes and operations make a person prove again who they are, even while signed in?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V7.5.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x16-V7-Session-Management.md",
+   "evidence": "the application requires full re-authentication before allowing modifications to sensitive account attributes"
+  }
+ },
+ {
+  "id": "sign-in-12",
+  "action": "sign-in",
+  "failure": "A person who suspects someone else is in their account can neither see nor end the other sessions.",
+  "question": "How does a person, or whoever runs the product, see and end the sessions of an account?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V7.5.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x16-V7-Session-Management.md",
+   "evidence": "terminate any or all currently active sessions"
+  }
+ },
+ {
+  "id": "stored-data-01",
+  "action": "stored-data",
+  "failure": "Nobody listed which data would harm someone if seen, so some of it is handled like any other.",
+  "question": "Which data the product creates or holds would harm someone if seen or changed, and how strongly must each kind be protected?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.1.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "all sensitive data created and processed by the application has been identified and classified into protection levels"
+  }
+ },
+ {
+  "id": "stored-data-02",
+  "action": "stored-data",
+  "failure": "Sensitive data can be read by anyone who gets hold of the storage, a spare copy or an export.",
+  "question": "Who could read each kind of sensitive data where it is stored and in every copy made of it, and what makes it unreadable to anyone else?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.1.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "requirements related to general encryption, integrity verification, retention"
+  }
+ },
+ {
+  "id": "stored-data-03",
+  "action": "stored-data",
+  "failure": "A key that protects data is kept beside the data, or nobody knows which keys exist.",
+  "question": "Which keys protect what, where does each one live, and what may each be used for?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V11.1.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x20-V11-Cryptography.md",
+   "evidence": "includes all cryptographic keys, algorithms, and certificates used by the application"
+  }
+ },
+ {
+  "id": "stored-data-04",
+  "action": "stored-data",
+  "failure": "A key is lost, exposed or must be replaced, and the data it protects can no longer be read or protected again.",
+  "question": "What happens to protected data when its key is lost, exposed or replaced?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V11.1.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x20-V11-Cryptography.md",
+   "evidence": "a documented policy for management of cryptographic keys and a cryptographic key lifecycle"
+  }
+ },
+ {
+  "id": "stored-data-05",
+  "action": "stored-data",
+  "failure": "A sensitive value is carried in an address, and is kept in histories and records all along the way.",
+  "question": "Does any sensitive value travel in an address or its query, and where would that be recorded?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.2.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "the URL and query string do not contain sensitive information"
+  }
+ },
+ {
+  "id": "stored-data-06",
+  "action": "stored-data",
+  "failure": "A component between the product and the person keeps a copy of a reply that held someone's data.",
+  "question": "Which components in between may keep a copy of a reply, and how is sensitive data kept out of them?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.2.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "the application prevents sensitive data from being cached in server components"
+  }
+ },
+ {
+  "id": "stored-data-07",
+  "action": "stored-data",
+  "failure": "Sensitive data goes to another party's service that the person never agreed to.",
+  "question": "Which other parties receive any data from the product, and is any of it sensitive?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.2.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "defined sensitive data is not sent to untrusted parties"
+  }
+ },
+ {
+  "id": "stored-data-08",
+  "action": "stored-data",
+  "failure": "A reply carries a whole record when what was asked for needed one field of it.",
+  "question": "For each reply, which fields are sent, and is any sent that the asker does not need or may not see?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V15.3.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x24-V15-Secure-Coding-and-Architecture.md",
+   "evidence": "the application only returns the required subset of fields from a data object"
+  }
+ },
+ {
+  "id": "stored-data-09",
+  "action": "stored-data",
+  "failure": "Sensitive data is kept long after anyone needs it.",
+  "question": "How long is each kind of sensitive data kept, and what removes it when that time is up?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.2.7",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "outdated or unnecessary data is deleted automatically, on a defined schedule, or as the situation requires"
+  }
+ },
+ {
+  "id": "stored-data-10",
+  "action": "stored-data",
+  "failure": "Sensitive data is put in the device's own storage, where other code on the same page can read it.",
+  "question": "What does the product store on the person's device, and is any of it sensitive?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.3.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "does not contain sensitive data, with the exception of session tokens"
+  }
+ },
+ {
+  "id": "stored-data-11",
+  "action": "stored-data",
+  "failure": "A file a person submits carries hidden details (a place, a name, a device) that are stored and shown to others.",
+  "question": "What hidden details do submitted files carry, and are they removed before a file is stored or shown?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V14.2.8",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x23-V14-Data-Protection.md",
+   "evidence": "sensitive information is removed from the metadata of user-submitted files"
+  }
+ },
+ {
+  "id": "stored-data-12",
+  "action": "stored-data",
+  "failure": "Someone reads a person's sensitive data and no record shows that it was read.",
+  "question": "Is the reading of sensitive data recorded, without the data itself, and who looks at that record?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V16.3.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x25-V16-Security-Logging-and-Error-Handling.md",
+   "evidence": "logging when sensitive data is accessed (without logging the sensitive data itself)"
+  }
+ },
+ {
+  "id": "file-intake-01",
+  "action": "file-intake",
+  "failure": "One person fills the storage with many files or very large ones.",
+  "question": "How much may each person store in files, and what happens when they reach it?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.2.4",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "a single user cannot fill up the storage with too many files, or excessively large files"
+  }
+ },
+ {
+  "id": "file-intake-02",
+  "action": "file-intake",
+  "failure": "A file's name says one type and its contents are another.",
+  "question": "Which types of file are accepted, and how is a file checked to be what its name says?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.2.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "checks if the file extension matches an expected file extension"
+  }
+ },
+ {
+  "id": "file-intake-03",
+  "action": "file-intake",
+  "failure": "A small packed file unpacks into something enormous, or into thousands of files.",
+  "question": "What limits are applied to a packed file before it is unpacked?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.2.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "against maximum allowed uncompressed size and against maximum number of files before uncompressing the file"
+  }
+ },
+ {
+  "id": "file-intake-04",
+  "action": "file-intake",
+  "failure": "A name that came with a file is used to build a path, and the file lands or is read somewhere it should not.",
+  "question": "Where do the names used in file paths come from, and what stops a submitted name from pointing elsewhere?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.3.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "instead of user-submitted filenames, it uses internally generated or trusted data"
+  }
+ },
+ {
+  "id": "file-intake-05",
+  "action": "file-intake",
+  "failure": "A submitted file is later run as part of the product when it is fetched.",
+  "question": "Can anything a person submits end up being run, by the product or in another person's browser, when it is fetched?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.3.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "are not executed as server-side program code when accessed directly with an HTTP request"
+  }
+ },
+ {
+  "id": "file-intake-06",
+  "action": "file-intake",
+  "failure": "A harmful file one person submits is served to another.",
+  "question": "Are files from outside checked for known harmful content before anyone else receives them?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.4.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "files obtained from untrusted sources are scanned by antivirus scanners"
+  }
+ },
+ {
+  "id": "file-intake-07",
+  "action": "file-intake",
+  "failure": "A file's name, shown or sent on, breaks the structure of whatever carries it.",
+  "question": "How is a file's name made safe wherever it is shown, sent or put into a message?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.4.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "file names served (e.g., in HTTP response header fields or email attachments) are encoded or sanitized"
+  }
+ },
+ {
+  "id": "file-intake-08",
+  "action": "file-intake",
+  "failure": "A picture of ordinary file size has enormous dimensions and exhausts the product when it is opened.",
+  "question": "What are the largest dimensions of a picture the product will open?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V5.2.6",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x14-V5-File-Handling.md",
+   "evidence": "rejects uploaded images with a pixel size larger than the maximum allowed"
+  }
+ },
+ {
+  "id": "misuse-01",
+  "action": "misuse",
+  "failure": "A person skips a step, repeats one or takes them out of order, and the product carries on.",
+  "question": "Which steps must happen in order, and what does the product do with a request for a later step when an earlier one was not done?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.3.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "in the expected sequential step order and without skipping steps"
+  }
+ },
+ {
+  "id": "misuse-02",
+  "action": "misuse",
+  "failure": "A rule's limit (how many, how much, how often) is stated and enforced nowhere.",
+  "question": "What limits does each rule of the product set, and where is each enforced?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.3.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "business logic limits are implemented per the application's documentation"
+  }
+ },
+ {
+  "id": "misuse-03",
+  "action": "misuse",
+  "failure": "A script calls the product over and over: it copies everything out, fills it with rubbish or uses up an allowance.",
+  "question": "What could a script do by calling the product again and again, and what stops it?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.4.1",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "anti-automation controls are in place to protect against excessive calls to application functions"
+  }
+ },
+ {
+  "id": "misuse-04",
+  "action": "misuse",
+  "failure": "Something is done far faster than any person could do it, and the product treats it as ordinary use.",
+  "question": "Is anything done faster than a person could a sign of abuse here, and what is done about it?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.4.2",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "business logic flows require realistic human timing"
+  }
+ },
+ {
+  "id": "misuse-05",
+  "action": "misuse",
+  "failure": "One person alone, by mistake or on purpose, carries out an action grave enough to have needed a second.",
+  "question": "Which actions are grave enough to need a second person's agreement?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.3.5",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "high-value business logic flows require multi-user approval to prevent unauthorized or accidental actions"
+  }
+ },
+ {
+  "id": "misuse-06",
+  "action": "misuse",
+  "failure": "One person's use of a costly operation leaves the product unusable for everyone else.",
+  "question": "Which operations are costly to run, and what stops one person's use of them from denying the others?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V15.1.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x24-V15-Secure-Coding-and-Architecture.md",
+   "evidence": "identifies functionality which is time-consuming or resource-demanding"
+  }
+ },
+ {
+  "id": "misuse-07",
+  "action": "misuse",
+  "failure": "A request sets a field it was never meant to set, because the product takes whatever fields it is sent.",
+  "question": "Which fields may each request set, and what happens to a field that is sent and was not meant to be set?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V15.3.3",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x24-V15-Secure-Coding-and-Architecture.md",
+   "evidence": "protect against mass assignment attacks by limiting allowed fields per controller and action"
+  }
+ },
+ {
+  "id": "misuse-08",
+  "action": "misuse",
+  "failure": "A person takes more than their share of something in limited supply by shaping their requests.",
+  "question": "What is in limited supply, and can a person take more than their share by how they ask?",
+  "source": {
+   "title": "OWASP Application Security Verification Standard 5.0.0: V2.3.4",
+   "url": "https://github.com/OWASP/ASVS/blob/master/5.0/en/0x11-V2-Validation-and-Business-Logic.md",
+   "evidence": "cannot be double-booked by manipulating the application's logic"
+  }
  }
 ]

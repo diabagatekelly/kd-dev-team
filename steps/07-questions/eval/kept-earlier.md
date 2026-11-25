@@ -229,3 +229,19 @@
 | accessibility-10 | `renewal-screen` | text at twice the size |
 | accessibility-11 | `card-token` | 15 minutes to pay (F7) |
 | accessibility-12 | `renewal-screen` | the "being taken" indication may move |
+| sign-in: all | dropped | the slice adds no way of signing in: who the subscriber and the office are is settled before it |
+| stored-data-01 | A renewal payment; The season ticket | which of what is kept about a subscriber would harm her if seen |
+| stored-data-02 | A renewal payment | the renewal and its payment are kept, and copies of them made |
+| stored-data-05 | `season-ticket-id`; `renewal-to-refund` | a request names a subscriber's ticket or renewal |
+| stored-data-07 | `payment-request` | PayRight is another party and is sent the payment (payright.md F1) |
+| stored-data-08 | `payment-reply` | the reply holds id, status and created_at (payright.md F2) |
+| stored-data-09 | A renewal payment | how long a payment is kept is not said |
+| stored-data-12 | A renewal payment | the office reads a subscriber's payment to refund it |
+| stored-data-03, stored-data-04 | dropped | the slice protects nothing with a key of its own |
+| stored-data-06, stored-data-10, stored-data-11 | dropped | no component in between is named, nothing is stored on her device and no file is submitted |
+| file-intake: all | dropped | the slice takes in no file |
+| misuse-01 | `renewal-request`; `refund-request` | paying follows renewing, and a refund follows a payment |
+| misuse-03 | `renewal-request` | a script could ask to renew again and again (payright.md F9) |
+| misuse-05 | `refund-request` | a refund gives money back |
+| misuse-08 | `refund-amount` | a refund is in full or in part (payright.md F10) |
+| misuse-02, misuse-04, misuse-06, misuse-07 | dropped | no rule of the slice sets a count, nothing is timed, no operation is costly and a request sets no field of a record |

@@ -24,6 +24,9 @@ ACTIONS = (
     "user-input", "user-action", "long-operation", "time", "text",
     "presentation", "corpus",
     "secrets", "authorization", "configuration", "logging", "accessibility",
+    # From OWASP's verification standard (2026-11-25): what the comparison with kad's security
+    # documents found the library had no question for.
+    "sign-in", "stored-data", "file-intake", "misuse",
 )
 FIELDS = {"id", "action", "failure", "question", "source"}
 SOURCE_FIELDS = {"title", "url", "evidence"}
