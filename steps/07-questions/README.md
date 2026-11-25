@@ -338,6 +338,36 @@ stage's cases once on Sonnet with all of it and this text loaded
   The case stands as it is and catches it; research's text is not
   changed for one run in five.
 
+## The four examples from the first message (2026-11-25, $39.77; $118.39 in all)
+
+Said beforehand at about $24; it cost $39.77, and $20.07 of that was
+one run that should have stopped.
+
+| Example | Ended | Questions drawn | Cost |
+|---|---|---|---|
+| 1 a one-line idea | the questions were drawn | 349 (155 library, 125 states, 38 values, 5 leaks, 7, 19 carried) | $9.85 |
+| 2 an outside system | the questions were drawn | 313 (170, 83, 29, 5, 7, 19) | $4.14 |
+| 3 an existing codebase | the questions were drawn | 328 (123, 140, 37, 5, 7, 16) | $5.71 |
+| 4 similar verses | the turns ran out at the approach | none | $20.07 |
+
+- In all three that reached it the stage asked the user nothing,
+  answered nothing, changed no code, and said what it dropped whole
+  and why. Two met the script's refusal of a criterion named
+  nowhere, put it right and drew again.
+- Example 1 keeps a thing the requirements' list does not name (who
+  is on the committee): the session listed it, added its table to
+  `states.md` with "not said" where the documents are silent, and
+  said so. That is research's first open point, seen end to end.
+- Example 4's user leaves the approach's needs for another day, so
+  nothing after the approach can start: right, and the driver had no
+  stop for it through the questions (it has one through research).
+  It went on for twelve turns of "Go on" and "Not today". Fixed,
+  with a unit test. **No session has run this stage on example 4,**
+  and none can while its brief leaves the needs waiting.
+- The three runs' documents are not yet kept in the examples
+  (`--keep`): keeping replaces a folder, the session's safety check
+  declined it, and it is left for the owner to say.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists

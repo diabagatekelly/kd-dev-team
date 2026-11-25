@@ -500,6 +500,13 @@ class Run(unittest.TestCase):
                                   brief=self.SPOKEN, through="research")
         self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
 
+    def test_a_need_that_goes_on_waiting_ends_a_run_through_the_questions_too(self):
+        # Met on 2026-11-25: the fourth example's user leaves its needs waiting, and a run through the
+        # questions went on to its last turn ($20) because only a run through research or a merge stopped.
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 7:", "if n == 97:").replace("if n == 8:", "if n == 98:"),
+                                  brief=self.SPOKEN, through="questions")
+        self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
+
     def test_with_nothing_committed_to_and_no_lasting_thing_listed_it_ends_a_turn_later_with_no_research(self):
         fake = (self.APPROACH.replace("A way to tell the member.", "none").replace("if n == 6:", "if n == 96:").replace("if n == 7:", "if n == 97:")
                 .replace('write_text("- [ ] **a**: b")', self.NONE_LISTED))

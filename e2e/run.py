@@ -492,7 +492,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through in ("merge", "research") and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research", "questions") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
