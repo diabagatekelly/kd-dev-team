@@ -145,7 +145,7 @@ SCENARIOS = [
     ("04a-skip-the-stage", "The user says to skip the answers: said once what it costs and that it asks nothing of them, offered again, nothing written.",
      "quote", None, False, None, SKIP,
      [says("says-what-skipping-costs", r"criteri|open|whoever builds|builder|in the build|unsettled|unanswered"),
-      says("says-it-asks-nothing-of-them", s.SCENARIOS[3][7][1]["pattern"]), says("offers-the-stage-again", q.OFFERS), NOT_WRITTEN, *LEFT_ALONE], "ask", None),
+      says("says-it-asks-nothing-of-them", s.SCENARIOS[3][7][1]["pattern"] + r"|nothing (else )?is asked of you"), says("offers-the-stage-again", q.OFFERS), NOT_WRITTEN, *LEFT_ALONE], "ask", None),
     ("04b-the-user-insists", "The next turn: the user insists: recorded as skipped at their word, drawn by the command, the next stage not started.",
      "quote", None, False, None, "No. Skip it.",
      [WRITTEN, in_file(ANS, "in-their-words-with-the-date", r"[Ss]kipped at the user's word[\s\S]*20\d\d-\d\d-\d\d|20\d\d-\d\d-\d\d[\s\S]*[Ss]kip"),
@@ -158,14 +158,14 @@ SCENARIOS = [
      [block("records-the-decision-in-their-words", "owner", r"C\.payright\.S2", r"\nDecided:[^\n]*no refund[^\n]*\(the user, 20\d\d-\d\d-\d\d: \"[^\"\n]+\"\)"),
       block("writes-the-criterion-that-follows", "owner", r"C\.payright\.S2", r"\nCriterion:\s*Given\b[^\n]*\b(90|ninety)\b[^\n]*\bthen\b"),
       not_in_file(ANS, "does-not-keep-its-own-recommendation", r"\nDecided:[^\n]*another way"),
-      *DRAWN[:2], NOT_WHOLE, *LEFT_ALONE], "", None),
+      *DRAWN[:2], NOT_WHOLE, *LEFT_ALONE, q.ASKS_NOTHING[1]], "ask", None),
     ("06-the-questions-changed-after",
      "Everything was settled and drawn, then the security file gained a row and the questions were drawn again: only the new question is answered, the answers before are left, drawn again.",
      "paid", lambda drawn: before(drawn), True,
      lambda security: security.rstrip("\n") + "\n| `her-details` | `refund-request` | someone who is not the office refunds a renewal by naming its payment. | yes |\n",
      q.GO_ON,
      [block("settles-the-new-question", "(?:fact|chosen|owner|test)", r"T\.her-details\.refund-request"), *DRAWN[:2], NOT_WHOLE,
-      in_file(ANS, "leaves-the-answers-before", r"## A1: [^\n]*\nKind: chosen\nSays: Settled in an earlier session"), *LEFT_ALONE], "", None),
+      in_file(ANS, "leaves-the-answers-before", r"## A1: [^\n]*\nKind: chosen\nSays: Settled in an earlier session"), *LEFT_ALONE, q.ASKS_NOTHING[1]], "ask", None),
 ]
 BARE_TABLE = q.BARE_TABLE.replace("The questions stage", "The answers stage")
 

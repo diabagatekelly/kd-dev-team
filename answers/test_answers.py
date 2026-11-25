@@ -155,6 +155,15 @@ class Refused(Folder):
     def test_a_fact_that_rests_on_no_document(self):
         self.assertIn("a fact rests on a document of the slice", self.refused(FACT.replace("payright F3", "what providers usually do")))
 
+    def test_a_research_fact_named_with_no_document_of_the_slice(self):
+        said = self.refused(FACT.replace("payright F3", "provider F3, and 004_slice.md"))
+        self.assertIn("'provider' is no research document of the slice (payright)", said)
+
+    def test_a_research_fact_may_be_named_in_several_ways(self):
+        for source in ("payright.md F3", "payright F3 and F4", "PayRight, F3", "payright fact F3"):
+            self.write(FACT.replace("payright F3", source) + REST)
+            self.assertEqual(self.run_it("draw")[0], 0, source)
+
     def test_a_fact_may_rest_on_a_criterion_or_a_planning_document(self):
         for source in ("renew-and-pay / 1", "002_requirements.md, Limits", "requirements.md"):
             self.write(FACT.replace("payright F3", source) + REST)

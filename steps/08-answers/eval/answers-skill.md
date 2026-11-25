@@ -41,7 +41,8 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
 
 1. `fact`: a document of the slice says it. Rest it on that
    document by name: a criterion (`item / n`), a research fact
-   (`provider F12`), a line of the requirements. Never on what such
+   (the research document's own name and the fact: `payright F12`
+   where the document is `payright.md`), a line of the requirements. Never on what such
    systems usually do.
 2. `not here`: the question does not arise in this slice. Say why
    in one line. A question wrongly dismissed is lost for good: where

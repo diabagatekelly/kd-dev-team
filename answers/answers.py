@@ -145,8 +145,13 @@ def problems(answers, ids, slice_read):
             if each in taken and taken[each] != name:
                 say(f"{each} is already settled by {taken[each]}: one answer a question")
             taken.setdefault(each, name)
-        if kind == "fact" and one(answer, "Rests on") and not any(source in one(answer, "Rests on") for source in known):
+        if kind == "fact" and one(answer, "Rests on") and not any(source.lower() in one(answer, "Rests on").lower() for source in known):
             say("a fact rests on a document of the slice, by its name: a criterion (`item / n`), a research document, a planning document")
+        # A research fact is named with its document: "provider F6" names none (met in the three runs).
+        stems = {name[:-3].lower() for name in slice_read["research"]}
+        for word in re.findall(r"([A-Za-z][\w.-]*),? (?:fact )?[FOS]\d+\b", one(answer, "Rests on")) if kind == "fact" and stems else []:
+            if re.sub(r"\.md$", "", word).lower() not in stems | {"and", "or", "to", "through", "with", "also", "see", "fact", "facts"}:
+                say(f"'{word}' is no research document of the slice ({', '.join(sorted(stems))}): a research fact is named with its document")
         if kind in ("owner", "test") and one(answer, "Harm") and one(answer, "Harm").lower().split()[0].strip(".,:;") not in HARMS:
             say(f"Harm is one of {', '.join(HARMS)}")
         if kind == "owner" and one(answer, "Options") and len([each for each in one(answer, "Options").split("|") if each.strip()]) < 2:
