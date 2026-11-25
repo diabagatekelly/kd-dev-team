@@ -921,5 +921,10 @@ asking is listed apart, so it can be overturned.
   - The earlier `kept.md` the changed-documents cases start from is
     one a session wrote, not one made up: a thin one was rewritten
     whole, and rightly.
+  - A changed `kept.md` is edited in place, never written again
+    whole: one Sonnet run of five reworded rows nothing had changed.
+  - Haiku's misses on this stage (a value left out in three runs of
+    five, the skip misrouted in one) are not chased with text: they
+    are what the model choice is for.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

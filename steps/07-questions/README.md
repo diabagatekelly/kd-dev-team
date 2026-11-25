@@ -191,6 +191,57 @@ Sonnet. Counted by script against keys written before any run.
   lines: the ties are counted on the library's part only. Left as
   agreed; the answers stage will show what they cost to answer.
 
+## Five runs of every case with the final text (2026-11-25, $21.83; $56.79 in all)
+
+Ten cases, five runs each, on Sonnet 5.5 and on Haiku 5.5 (decision
+38). The first pass was $17.33; the two changed-documents cases ran
+five times again after one sentence of the text changed ($4.50).
+
+| Case | Sonnet | Haiku |
+|---|---|---|
+| 01 a thing committed to and researched | 5 of 5 | 2 of 5 |
+| 02 nothing committed to | 5 of 5 | 5 of 5 |
+| 03 no lasting thing | 5 of 5 | 5 of 5 |
+| 04 a thing kept with no states | 5 of 5 | 5 of 5 |
+| 05 an earlier question answered | 5 of 5 | 5 of 5 |
+| 06 asked what is needed | 4 of 5 | 5 of 5 |
+| 07a told to skip | 5 of 5 | 4 of 5 |
+| 07b the user insists | 5 of 5 | 5 of 5 |
+| 08a a criterion added after | 4 of 5, then 5 of 5 | 5 of 5, then 5 of 5 |
+| 08b the approach changed after | 4 of 5, then 5 of 5 | 4 of 5, then 4 of 5 |
+
+Each failure, read in its trace, and what it became (decision 29):
+
+- Sonnet, 06: the reply said "I asked you nothing"; the check knew
+  "asks" only. The check is widened. Not run again: the text is the
+  same and the reply conveys it.
+- Sonnet, 08a: the added criterion records a typed reason, the run
+  listed the reason as kept and gave it a table in `states.md`, as
+  the text says for a recorded thing. The check forbade any write
+  under research; it now forbids the research document only.
+- Sonnet, 08b: one run wrote the whole kept file again and reworded
+  rows nothing had changed. The text now says to edit the rows in
+  place and never write the file again whole. Five of five after.
+- Haiku, 01, three runs: the refund's amount is not among the values
+  taken in, so none of its malformed-value questions is drawn.
+  Sonnet lists it in five of five. Not put right by text: it is the
+  difference between the models on this stage's judgement.
+- Haiku, 07a, one run: told to skip, it loaded the approach instead
+  of this stage, the routing table's new line notwithstanding.
+- Haiku, 08b, first pass: a reason said the old document "no longer
+  stands"; the check failed any mention of it. It now fails only a
+  kept row, a value or another thing that still rests on it.
+- Haiku, 08b, second pass: the run kept the credential as a value,
+  the new research says nothing of how the provider is signed in to,
+  `draw` refused a value with no source, and the run stopped and said
+  so rather than invent one. An honest stop; the fixture's research
+  is thin there. Left.
+
+No line and no id is drawn twice in the six real drawings; on the
+thing read side by side, the library's lines repeat none of its
+state lines (the script does not draw a library question a grid's
+column already asks).
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
