@@ -24,7 +24,9 @@ four or five kinds at a time, every question of each.
 **What the slice creates and keeps.** Go through the slice's
 criteria one by one and list what each creates or keeps over time
 (a record, a booking, a payment, a membership), whether or not
-`things` printed it: one line a thing, with its criterion. A thing
+`things` printed it: one line a thing, with its criterion. What a
+criterion says someone holds, or is recorded, renewed, cancelled or
+shown as being in some state, is kept: the product must remember it. A thing
 that `states.md` has a table for goes by that table's name. One it
 has no table for is listed all the same: see "A lasting thing with
 no states" below. A slice that keeps nothing says `- nothing`.
@@ -144,7 +146,10 @@ same. Say that the skipping goes to the owner's list as a risk
 accepted. Do not start the next stage.
 
 **Drawn before, and the documents changed.** The report says the
-questions are to be drawn again. Read what changed. In `kept.md`,
+questions are to be drawn again. Read what changed: a criterion
+`kept.md` names nowhere is new, and `draw` refuses until something
+names it; an approach or research document newer than `kept.md`. In
+`kept.md`,
 change only what the change brings or removes: a kind dropped
 before that the slice now does; a value or thing now taken in; rows
 that applied to a thing no longer there. Leave the rest as it is,

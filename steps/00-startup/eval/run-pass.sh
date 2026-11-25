@@ -1,6 +1,7 @@
 #!/bin/sh
 # Run inside the evaluation VM, from the repository's root: one pass of every scenario.
-#   [ARM_PLUGIN=plugin-table] [ALLOW_TOOLS="Bash Write Edit WebSearch"] [CASES='startup-0[1-5]*'] sh steps/00-startup/eval/run-pass.sh MODEL RUNS NAME CEILING_USD
+#   [ARM_PLUGIN=plugin-table] [ALLOW_TOOLS="Bash Write Edit WebSearch"] [CASES='*-08a-*'] sh steps/00-startup/eval/run-pass.sh MODEL RUNS NAME CEILING_USD
+# CASES is the tool's filter by name: only `*` is a wildcard there, a class like [1-5] matches nothing.
 # Leaves NAME.json and one transcript per run under /tmp/results.
 set -eu
 model=$1; runs=$2; name=$3; ceiling=$4

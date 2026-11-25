@@ -294,6 +294,12 @@ def problems(kept, names, entries, sources=()):
         if not names.get(slug(name), "").startswith("lasting thing"):
             found.append(f"{name}: created or kept ({source}), and states.md has no table for it: "
                          "add its table by the research text's rules, then draw again")
+    # A criterion nothing in the file names was not gone through: one added since, most often.
+    flat = re.sub(r"[^a-z0-9]+", "-", bytes(kept.get("text") or b"").decode("utf-8", "replace").lower())
+    for name, what in names.items():
+        if what.startswith("criterion ") and kept.get("text") and not re.search(rf"(?<![a-z0-9]){re.escape(name)}(?!\d)", flat):
+            found.append(f"{what[10:]}: no thing kept, value, other thing or question of kept.md names this criterion: "
+                         "go through it, and change only what it brings")
     for value in kept["values"]:
         if value["kind"] not in KINDS:
             found.append(f"{value['name']}: kind {value['kind']!r} is not one of {', '.join(KINDS)}")

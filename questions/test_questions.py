@@ -77,7 +77,7 @@ KEPT = """# Kept
 - `season-ticket`: renew-and-pay / 1
 
 ## Other things the slice has
-- `payment-request`: the request that takes the payment (renew-and-pay / 1)
+- `payment-request`: the request that takes the payment (renew-and-pay / 1, renew-and-pay / 2)
 
 ## Library
 | Entry | Applies to | Why |
@@ -192,6 +192,18 @@ class Checking(unittest.TestCase):
 
     def test_the_things_kept_are_read_with_or_without_marks_and_articles(self):
         self.assertEqual(self.kept["lasting"], [("A renewal payment", "renew-and-pay / 1"), ("season-ticket", "renew-and-pay / 1")])
+
+    def test_a_criterion_the_file_names_nowhere_is_named_as_not_gone_through(self):
+        # Found by the three-run pass: a criterion added after the drawing was read and not noticed, on both models.
+        text = self.kept["text"].replace(b"renew-and-pay / 1", b"renew-and-pay / 2")
+        self.assertEqual(self.found(text=text), ["renew-and-pay / 1: no thing kept, value, other thing or question of kept.md names this criterion: "
+                                                 "go through it, and change only what it brings"])
+
+    def test_a_criterion_is_named_by_its_name_or_its_short_name_and_not_by_a_longer_number(self):
+        short = self.kept["text"].replace(b"renew-and-pay / 1", b"`renew-and-pay-1`")
+        self.assertEqual(self.found(text=short), [])
+        longer = self.kept["text"].replace(b"renew-and-pay / 1", b"renew-and-pay / 12")
+        self.assertIn("renew-and-pay / 1: no thing kept", " ".join(self.found(text=longer)))
 
     def test_an_entry_left_out_is_named(self):
         self.assertEqual(self.found(library=self.kept["library"][:2]), ["migration-01: neither kept nor dropped", "migration-02: neither kept nor dropped"])

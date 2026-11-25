@@ -441,7 +441,7 @@ class Stage(unittest.TestCase):
         script = the_questions_script()
         rows = "".join(f"| {kind}: all | dropped | the slice does nothing of the kind |\n" for kind in
                        sorted({entry["action"] for entry in __import__("json").loads(script.LIBRARY.read_text(encoding="utf-8"))}))
-        for basis, text in (("kept.md", "# Kept\n\n## What the slice creates and keeps\n- nothing\n\n## Library\n| Entry | Applies to | Why |\n|---|---|---|\n" + rows), ("skipped.md", "Skipped.\n")):
+        for basis, text in (("kept.md", "# Kept\n\n## What the slice creates and keeps\n- nothing\n\n## Other things the slice has\n- `loan-form`: where a loan is typed in (record-a-loan / 1)\n\n## Library\n| Entry | Applies to | Why |\n|---|---|---|\n" + rows), ("skipped.md", "Skipped.\n")):
             with self.subTest(basis):
                 self.setUp()
                 self.asked(kept=text, basis=basis, draw=False)
