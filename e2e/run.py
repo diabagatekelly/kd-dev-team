@@ -27,7 +27,8 @@ document is written with no need left waiting, four turns after it was written i
 waits, or after one more turn when the slice needs nothing from outside. With `--through research`
 it goes on from there and ends once a research document is written, or after one more turn when
 there is nothing to research. With `--through questions` it goes on and ends once the questions
-are drawn (`questions.md` in the slice's questions folder). With `--through
+are drawn (`questions.md` in the slice's questions folder). With `--through security` it goes on and
+ends once `security.md` is written beside them and the questions drawn again after it. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -70,7 +71,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security")
 MERGED = 7   # the number of the made-up pull request
 
 
@@ -244,6 +245,13 @@ def drawn(planning):
     return sorted(planning.glob("slice-*/*_questions/questions.md")) if planning.is_dir() else []
 
 
+def secured(planning):
+    """The security files whose questions were drawn after them: written, and no newer than the drawing beside them."""
+    return [path for path in sorted(planning.glob("slice-*/*_questions/security.md"))
+            if (path.parent / "questions.md").is_file() and (path.parent / "questions.md").stat().st_mtime_ns >= path.stat().st_mtime_ns] \
+        if planning.is_dir() else []
+
+
 def in_a_folder_of_its_stage(planning):
     """The documents that carry their folder's number and none of their own: research's and the questions'."""
     return set(planning.glob("slice-*/*_research/*.md")) | set(planning.glob("slice-*/*_questions/*.md")) if planning.is_dir() else set()
@@ -375,9 +383,9 @@ def keep(out, example, stage, plugin):
         if name in wanted or path.name == "sources.md":
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    if stage in ("approach", "research", "questions"):   # the pages its quotes are from: research reads them and does not fetch them again
+    if stage in ("approach", "research", "questions", "security"):   # the pages its quotes are from: research reads them and does not fetch them again
         for path in [*sorted(planning.glob("slice-*/pages/*.txt")), *(research(planning) if stage != "approach" else []),
-                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage == "questions" else [])]:
+                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security") else [])]:
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
@@ -470,6 +478,10 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "questions" and drawn(planning):
             ended = "the questions were drawn"
             break
+        # The security pass (decision 46): its file beside kept.md, and the questions drawn after it.
+        if through == "security" and secured(planning):
+            ended = "the security file was written and the questions drawn again"
+            break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -492,7 +504,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through in ("merge", "research", "questions") and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research", "questions", "security") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
@@ -547,7 +559,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "questions", "research", "approach", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()

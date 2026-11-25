@@ -618,6 +618,8 @@ def main(arguments, out=sys.stdout):
     found = [] if kept.get("skipped") else problems(kept, known(read), entries, criteria(read["slice"]) + list(read["research"]))[0]
     if kept.get("security") is not None and not found:
         found = insecure(kept["security"], kept)
+        if found:   # the questions stage may meet these, after a change: they are the security stage's to put right
+            found = ["security.md, beside kept.md, no longer fits it (the security stage's text says how each is put right):"] + found
     if found:
         print("\n".join(found), file=out)
         return 1

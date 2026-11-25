@@ -466,6 +466,22 @@ class Run(unittest.TestCase):
                                  '        pathlib.Path("plans/slice-002/007_questions/questions.md").write_text("# Questions\\n")\n'
                                  '    if n == 99:\n')
 
+    SECURITY = QUESTIONS.replace('    if n == 99:\n', '    if n == 11:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/security.md").write_text("# Security\\n")\n'
+                                 '    if n == 12:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/questions.md").write_text("# Questions\\n\\nagain\\n")\n'
+                                 '    if n == 99:\n')
+
+    def test_carried_through_security_it_ends_once_the_questions_are_drawn_again_after_its_file(self):
+        summary, _ = self.through(fake=self.SECURITY, brief=self.SPOKEN, through="security")
+        # Not at turn 10 (the questions drawn) nor at 11 (the security file written, the drawing older than it).
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the security file was written and the questions drawn again", 12))
+
+    def test_the_security_file_is_kept_with_the_questions_folder(self):
+        self.through(fake=self.SECURITY, brief=self.SPOKEN, through="security")
+        kept = run.keep(self.folder / "out", self.example, "security", self.folder / "plugin")
+        self.assertTrue((kept / "slice-002" / "007_questions" / "security.md").is_file())
+
     def test_carried_through_the_questions_it_ends_once_they_are_drawn_and_not_when_only_kept(self):
         summary, _ = self.through(fake=self.QUESTIONS, brief=self.SPOKEN, through="questions")
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the questions were drawn", 10))
