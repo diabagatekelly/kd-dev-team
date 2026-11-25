@@ -908,5 +908,18 @@ asking is listed apart, so it can be overturned.
   - Opus was tried at the owner's suggestion, once on each real
     plan beside Sonnet: it kept more and cost twice as much.
     Sonnet stays the model proposed.
+  - After three runs of every case: `kept.md` lists what the slice
+    creates and keeps, and the script refuses a thing listed with
+    no table in `states.md`, and a criterion the file names
+    nowhere. Both were left to the text and missed about half the
+    time. This settles research's first open point as far as a
+    script can: a thing kept that no list names is walked once a
+    session lists it; whether it lists it stays judgement.
+  - The routing table gained one rule: told to skip the next stage,
+    that stage's text is loaded and takes it. Startup's cases are
+    run again with it before the stage is put to the owner.
+  - The earlier `kept.md` the changed-documents cases start from is
+    one a session wrote, not one made up: a thin one was rewritten
+    whole, and rightly.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

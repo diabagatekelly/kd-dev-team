@@ -95,6 +95,65 @@ states (a transaction), and walked it before drawing. Sonnet stays
 the model proposed; Opus is not run further unless Sonnet does not
 hold.
 
+## Three runs of every case with the changed text (2026-11-24, $22.04; $31.27 in all)
+
+The whole pass first ($12.39), then only the cases a change touched,
+three times each, after each change ($5.34, $2.31, $2.00).
+
+| Case | Sonnet, first pass | Sonnet, after the changes | Haiku, after the changes |
+|---|---|---|---|
+| 01 a thing committed to and researched | 1 of 3 | 3 of 3 | 2 of 3 |
+| 02 nothing committed to | 2 of 3 | 3 of 3 | 3 of 3 (first pass) |
+| 03 no lasting thing | 3 of 3 | not run again | 3 of 3 (first pass) |
+| 04 a thing kept with no states | 1 of 3 | 3 of 3 | 3 of 3 |
+| 05 an earlier question answered | 3 of 3 | not run again | 3 of 3 (first pass) |
+| 06 asked what is needed | 3 of 3 | not run again | 3 of 3 (first pass) |
+| 07a told to skip | 3 of 3 | 3 of 3 | 3 of 3 |
+| 07b the user insists | 3 of 3 | 3 of 3 | 1 of 3 |
+| 08a a criterion added after | 0 of 3 | 3 of 3 | 3 of 3 |
+| 08b the approach changed after | 2 of 2 | 2 of 3 | 3 of 3 |
+
+The other arms, first pass: bare Haiku 9 of 30, kad's two skills 0 of
+6 (they write requirements and ask the user; they have no library
+and no script).
+
+What each failure was, read run by run, and what it became:
+
+- **Checks too strict (4 runs).** A refusal question kept for the
+  error code that comes back; two outside-system questions kept for
+  the spreadsheet the office keeps; "asks you nothing" not heard.
+  Each check loosened, each with a unit test.
+- **The earlier `kept.md` of the two changed-documents cases was not
+  believable.** It dropped nearly everything, so Sonnet judged it
+  wrong and wrote it all again, against "change only what the change
+  brings". It is now a file a session of this stage wrote
+  (`eval/kept-earlier.md`), and the added criterion brings typed
+  text, which that file drops for want of any.
+- **A criterion added after the drawing was read and not noticed**,
+  six runs of six on both models once the earlier file was a good
+  one. Now the script's: `draw` refuses a `kept.md` that names a
+  criterion nowhere. Six of six after.
+- **A thing kept with no states was not noticed** (Haiku none of six,
+  Sonnet half). Two changes. `kept.md` now lists what the slice
+  creates and keeps, and `draw` refuses a thing listed with no table
+  in `states.md`. And the case's criterion ("her renewal is
+  recorded") was read, fairly, as the payment's own record: the case
+  now has a criterion nobody can fold into another thing. Six of six
+  after. What stays judgement: whether a session lists the thing at
+  all.
+- **Three sessions wrote `kept.md` through the shell**, which a case
+  forbids and which eats the marks around names anywhere. The text
+  now says to write it with the file tool. None in 33 runs since.
+- **Haiku, told "No. Skip it", went on to the approach without
+  loading this stage's text** (2 of 3, twice). The routing table now
+  says a skip is the stage's to take; Haiku still passed 1 of 3.
+  Sonnet 9 of 9. Not fixed on Haiku.
+- **Sonnet, 08b, one run of three:** wrote the file again whole and
+  reworded a dropped row. The check now holds one row only.
+
+Sonnet costs about $0.45 a run of a full case, not the $0.15 the
+proposal assumed: a pass of every case five times is about $20.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
