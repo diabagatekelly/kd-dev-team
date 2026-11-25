@@ -3,6 +3,31 @@
 **Being tested (decision 53: about $125, the pilot first).** The
 owner agreed its three points on 2026-11-25.
 
+## The pilot (2026-11-25, $2.97 of about $125)
+
+Each case once. With the text: Sonnet 5 of 7, Haiku 5 of 7. Bare:
+Sonnet 1 of 7, Haiku 0 of 7. One real run on the first plan, Sonnet:
+600 questions settled by 116 answers in 40 turns and five and a
+half minutes, $1.23: 6 facts, 82 chosen, 13 for the owner, 12 to
+test, 3 not here; 58 criteria; drawn at the first asking.
+
+What it met, and what each became (decision 29):
+
+- **The insisting user's case ran nothing** (04b, every arm): its
+  earlier turns were given without who said them. Put right, with
+  a unit test.
+- **A check asked for one answer where another is as good** (01,
+  Sonnet): it chose "a price within 2 seconds" itself, said so, and
+  left the owner the seat bands and their prices, which no document
+  gives. The check now asks for something left to the owner with
+  options, not for the target.
+- **A decision stated while another stage was next went nowhere**
+  (05, Haiku): it asked the user what to do with it. The routing
+  table gained one rule: something the user decides that waits on
+  the owner's list is the answers stage's to record.
+- 13 for the owner on the real run, against the 12 agreed: left to
+  the three runs on both plans.
+
 ## What it is
 
 The questions are drawn (stage 7) and the security pass has added

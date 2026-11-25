@@ -91,6 +91,12 @@ class Cases(unittest.TestCase):
         self.assertIn("1 are left", out.getvalue())
         self.assertIn("T.her-details.refund-request", out.getvalue())
 
+    def test_the_insisting_users_earlier_turns_are_a_user_then_the_session(self):
+        # Met in the pilot: the turns were given without who said them, and the case ran nothing.
+        import json
+        lines = [json.loads(line) for line in (self.evals / "04b-the-user-insists/history.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+        self.assertEqual([line["type"] for line in lines], ["user", "assistant"])
+
     def test_the_plugin_carries_the_script_and_this_stages_text(self):
         self.assertTrue((HERE / "plugin-text/answers/answers.py").is_file())
         self.assertTrue((HERE / "plugin-text/skills/answers/SKILL.md").is_file())
