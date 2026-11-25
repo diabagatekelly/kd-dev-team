@@ -128,7 +128,7 @@ catches what the triage let go. No entry is judged twice and no
 line has the same name as another.
 
 `questions/questions.py` (`things`, `library`, `draw`, `check`,
-`state`), 67 unit tests, no model.
+`state`), 62 unit tests, no model.
 
 **Sized for nothing on what is kept.** Without the library's part
 and the values, which need a session, and so before any line is

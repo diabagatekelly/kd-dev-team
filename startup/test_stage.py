@@ -84,7 +84,8 @@ class Stage(unittest.TestCase):
         folder = self.machine.project / "planning"
         for name in cases.NOT_BUILT[1]:
             (folder / name).parent.mkdir(parents=True, exist_ok=True)
-            (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8")
+            # As written, on every system: the questions' mark is of the documents' bytes.
+            (folder / name).write_text(cases.DOCUMENTS[name], encoding="utf-8", newline="\n")
         self.machine.run("stage.sh", "remember", "planning")
         return cases.NOT_BUILT[0]
 
