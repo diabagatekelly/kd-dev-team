@@ -265,7 +265,12 @@ def read_kept(text):
         if match:
             others[slug(match.group(1))] = match.group(2).strip()
     library = [{"entry": row[0], "applies": row[1], "why": row[2]} for row in rows(part("library")) if len(row) >= 3]
-    return {"values": values, "others": others, "library": library}
+    # What a criterion creates and keeps: None when the file has no such list, [] when it says nothing is kept.
+    lasting = None
+    if any("creates" in heading for heading in parts):
+        lasting = [(match.group(1).strip(), match.group(2).strip())
+                   for match in (re.match(r"\s*[-*]\s+`?([^`:]+)`?:\s*(.+)", line) for line in part("creates")) if match]
+    return {"values": values, "others": others, "library": library, "lasting": lasting}
 
 
 def expand(cell, entries):
@@ -277,11 +282,18 @@ def expand(cell, entries):
 
 
 def problems(kept, names, entries, sources=()):
-    """Why kept.md cannot be drawn from: every entry once, every thing a known one, every value sourced."""
+    """Why kept.md cannot be drawn from: every thing kept has its states, every entry once, every thing a known one,
+    every value sourced."""
     found, seen = [], {}
     ids = {entry["id"] for entry in entries}
     values = {slug(value["name"]) for value in kept["values"]}
     things = set(names) | values | set(kept["others"]) | set(classes(kept["values"]))
+    if kept.get("lasting") is None:
+        found.append("no list of what the slice creates and keeps: one line a thing with its criterion, or `- nothing`")
+    for name, source in kept.get("lasting") or []:
+        if not names.get(slug(name), "").startswith("lasting thing"):
+            found.append(f"{name}: created or kept ({source}), and states.md has no table for it: "
+                         "add its table by the research text's rules, then draw again")
     for value in kept["values"]:
         if value["kind"] not in KINDS:
             found.append(f"{value['name']}: kind {value['kind']!r} is not one of {', '.join(KINDS)}")

@@ -129,8 +129,6 @@ none
 ## Size
 Two criteria.
 """
-CLOSES = ("- **renew-and-pay / 3**: Given renewals close at midnight on 31 March, when she renews at 23:59 that day, then her renewal is "
-          "recorded, and one minute later she is told that renewals have closed.\n")
 BY_CHOICE = research.approach(research.need(
     "Taking a card payment for a renewal, and giving it back", "no limit of the user's bears on it", f"PayRight ({SITE}/)",
     f'"To take a payment, send POST /v1/payments" ({SITE}/payments)', 'committed: PayRight (the user, 2026-11-20: "PayRight is fine.")',
@@ -150,40 +148,13 @@ CARDWAY_RESEARCHED = {
     "slice-001/006_research/states.md": research.CARDWAY_STATES + "\n" + TICKET_TABLE}
 
 # kept.md as an earlier run of the stage left it, for the two cases where the documents then change.
-KEEP = {
-    "call-external-01": ("`payment-request`; A renewal payment", "the payment is taken by one request to PayRight"),
-    "call-external-02": ("`payment-request`", "a subscriber may press pay twice"),
-    "call-external-03": ("PayRight", "she waits on the same screen for PayRight"),
-    "call-external-06": ("`payment-request`", "a card can be refused, and a refusal by the bank is final"),
-    "receive-external-data-07": ("`payment-status`", "the status comes from PayRight and may be one the slice does not know"),
-    "secrets-03": ("`payright-key`", "every request carries the account's secret key"),
-    "user-action-01": ("renew-and-pay / 1", "she starts a payment and may start it again"),
-    "durable-write-02": ("A season ticket", "the renewal is shown as recorded"),
-}
-VALUES = [("payment-status", "choice", "PayRight", "no", "payright.md F2"),
-          ("card-token", "identifier", "PayRight's card form in her browser", "credentials", "payright.md F7"),
-          ("payright-key", "other", "the playhouse's own settings", "credentials", "payright.md F11"),
-          ("refund-amount", "number", "the office", "no", "refund-a-renewal / 1")]
-NO_CLOCK = "nothing in the slice depends on a date or on the clock"
+NOTE = ("- **refund-a-renewal / 2**: Given the office refunds a renewal, when they type a reason for it of up to 200 characters, then the "
+        "reason is kept with the refund and shown to the office beside it.\n")
 
 
-def kept_file(keep=KEEP, values=VALUES):
-    """A kept.md that accounts for every entry of the real library: what is kept, and each kind's rest dropped."""
-    lines = ["# Kept: slice 1", "", "## What the slice takes in", "| Value | Kind | From | Sensitive | Source |", "|---|---|---|---|---|"]
-    lines += [f"| `{name}` | {kind} | {origin} | {sensitive} | {source} |" for name, kind, origin, sensitive, source in values]
-    lines += ["", "## Other things the slice has", "- `payment-request`: the request that takes the payment for a renewal (renew-and-pay / 1)",
-              "", "## Library", "| Entry | Applies to | Why |", "|---|---|---|"]
-    kinds = []
-    for entry in ENTRIES:
-        if entry["action"] not in kinds:
-            kinds.append(entry["action"])
-    for kind in kinds:
-        rest = [entry["id"] for entry in ENTRIES if entry["action"] == kind and entry["id"] not in keep]
-        lines += [f"| {name} | {applies} | {why} |" for name, (applies, why) in keep.items() if name.startswith(kind + "-")]
-        if rest:
-            why = NO_CLOCK if kind == "time" else "the slice does nothing more of this kind"
-            lines.append(f"| {kind + ': all' if len(rest) == sum(entry['action'] == kind for entry in ENTRIES) else ', '.join(rest)} | dropped | {why} |")
-    return "\n".join(lines) + "\n"
+def kept_file():
+    """kept.md as a session of this stage wrote it for the first case (Sonnet, the three-run pass): every entry judged."""
+    return (HERE / "kept-earlier.md").read_text(encoding="utf-8")
 
 
 def playhouse(**kwargs):
@@ -205,6 +176,12 @@ def keeps(entry, thing=None):
     kind = entry.rsplit("-", 1)[0]
     return in_file("@KEPT@", f"keeps-{entry}" + ("-for-the-right-thing" if thing else ""),
                    row_of(entry, kind) + r"(?!\s*`?dropped)" + (rf"[^|\n]*(?:{thing})" if thing else ""))
+
+
+def keeps_thing(thing):
+    """The list of what the slice creates and keeps names that thing (or says nothing is kept)."""
+    name = "says-nothing-is-kept" if thing == "nothing" else "lists-what-is-kept-" + re.sub(r"[^a-z]+", "-", thing.split("|")[0]).strip("-")
+    return in_file("@KEPT@", name, rf"creates and keeps[^\n]*\n(?:(?!\n## )[\s\S])*?(?:{thing})")
 
 
 def drops(kind):
@@ -245,8 +222,8 @@ SCENARIOS = [
     ("01-a-thing-committed-to-and-researched",
      "One thing committed to and researched, a thing held there and one the product keeps, a credential among what is taken in: every entry accounted for, the values listed, drawn by the command, nothing answered or asked.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), more=RESEARCHED), None, GO_ON,
-     [KEPT_WRITTEN, *DRAWN, *FORM,
-      keeps("call-external-01", r"payment|request|payright"), keeps("call-external-06", r"payment|request|card|payright"),
+     [KEPT_WRITTEN, *DRAWN, *FORM, keeps_thing("payment"), keeps_thing("ticket"),
+      keeps("call-external-01", r"payment|request|payright"), keeps("call-external-06", r"payment|request|card|payright|error|refus|declin|code"),
       keeps("receive-external-data-07", r"status"), keeps("secrets-03", r"key|secret|credential|token"), keeps("user-action-01"),
       drops("corpus"),
       takes_in("lists-the-status-received", r"status", origin="PayRight"),
@@ -259,7 +236,8 @@ SCENARIOS = [
      "Nothing is committed to and the product keeps one thing, some of its rows not said: the kinds on outside systems dropped, every state drawn, no provider named.",
      playhouse(the_slice=research.SEE_SLICE, the_approach=research.WITHOUT, inventory=(THE_TICKET,), the_set=research.SEE_SET,
                more={"slice-001/006_research/states.md": ONLY_THE_TICKET}), None, GO_ON,
-     [KEPT_WRITTEN, *DRAWN, *FORM, drops("call-external"),
+     [KEPT_WRITTEN, *DRAWN, *FORM, keeps_thing("ticket"),
+      not_in_file("@KEPT@", "applies-no-question-to-a-thing-not-committed-to", r"(?:^|\n)\|[^|\n]*call-external[^|\n]*\|[^|\n]*payright"),
       trace("draws-the-states", r"drawn[^\n]{0,600}?, [1-9]\d* of states", never=False),
       trace("carries-what-research-left-unsaid", r"drawn[^\n]{0,600}?, [1-9]\d* carried from research", never=False),
       REAL, *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, True),
@@ -267,14 +245,14 @@ SCENARIOS = [
      "The slice keeps nothing and needs nothing from outside: the values and the library are still done, and no state is drawn.",
      {name: text for name, text in {**playhouse(the_slice=QUOTE_SLICE, the_set=QUOTE_SET, fixed=False), "002_requirements.md": QUOTE_LIST}.items()
       if "approach" not in name}, None, GO_ON,
-     [KEPT_WRITTEN, *DRAWN, *FORM, drops("call-external"),
+     [KEPT_WRITTEN, *DRAWN, *FORM, drops("call-external"), keeps_thing("nothing"),
       takes_in("lists-the-number-of-seats", r"seats?|number"), takes_in("lists-the-seat-band", r"band"),
       trace("draws-no-state", r"drawn[^\n]{0,600}?, 0 of states", never=False),
       *NOTHING_ANSWERED, LIST_LEFT], "", None, False),
     ("04-a-thing-kept-with-no-states",
      "A criterion records a renewal of a season ticket and the states have no table for it: named first, walked by research's rules, then drawn.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT), more={**RESEARCHED, "slice-001/006_research/states.md": ONLY_THE_PAYMENT}), None, GO_ON,
-     [KEPT_WRITTEN, *DRAWN,
+     [KEPT_WRITTEN, *DRAWN, keeps_thing("ticket|renewal(?! payment)"),
       says("names-the-thing-with-no-states", near(r"season ticket|renewal(?! payment)", r"states|table|states\.md|walk", 300)),
       in_file("planning/slice-001/006_research/states.md", "its-table-is-added", r"(?:^|\n)##[^\n]*(?:season ticket|renewal(?! payment))"),
       in_file("planning/slice-001/006_research/states.md", "its-rows-are-sourced-or-said-not-to-be",
@@ -301,7 +279,7 @@ SCENARIOS = [
     ("07a-skip-the-stage", "The user says to skip the stage: said once what it costs, the stage offered again; nothing written yet.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), more=RESEARCHED), None, SKIP,
      [says("says-what-it-costs", r"build|found late|late|miss|nobody list|not listed|unasked|nothing to (be )?check|risk|cost|defect|gap"),
-      says("says-it-asks-nothing-of-them", r"asks? (nothing|no)|nothing (of|from) you|no questions? (for|to) you|without (asking|you)|do(?: not|n't) need (anything|you)"),
+      says("says-it-asks-nothing-of-them", r"asks? (you |of you )?(nothing|no)|nothing (of|from) you|no questions? (for|to) you|without (asking|you)|do(?: not|n't) need (anything|you)"),
       says("offers-the-stage-again", OFFERS),
       trace("writes-nothing-yet", WROTE + r"_questions/"), LIST_LEFT, RESEARCH_LEFT], "ask", None, False),
     ("07b-the-user-insists", "The next turn: the user insists: recorded as skipped at their word, what needs no judgement drawn, no design started.",
@@ -312,14 +290,15 @@ SCENARIOS = [
       says("says-it-goes-to-the-owners-list", r"owner'?s list|risk"),
       LIST_LEFT, RESEARCH_LEFT], "", [("user", SKIP), ("assistant", PUSHED_BACK)], False),
     ("08a-a-criterion-added-after",
-     "A criterion was added to the slice after the questions were drawn, and it depends on the clock: the kind dropped before is kept, the earlier rows left, drawn again.",
+     "A criterion was added to the slice after the questions were drawn, and it takes typed text: the questions dropped before for want of any are kept, the value taken in, the earlier rows left, drawn again.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), more={**RESEARCHED, "slice-001/007_questions/kept.md": kept_file()}),
-     {"slice-001/004_slice.md": PAY_SLICE.replace("- **refund-a-renewal / 1**", CLOSES + "- **refund-a-renewal / 1**").replace("Three criteria", "Four criteria")},
+     {"slice-001/004_slice.md": PAY_SLICE.replace("\n## Needs from outside", NOTE + "\n## Needs from outside").replace("Three criteria", "Four criteria")},
      GO_ON,
      [*DRAWN,
-      not_in_file("@KEPT@", "the-kind-is-no-longer-dropped-whole", r"\|\s*time:\s*all\s*\|\s*`?dropped"),
-      in_file("@KEPT@", "a-question-of-the-clock-is-kept", r"(?:^|\n)\|[^|\n]*time-\d\d[^|\n]*\|(?!\s*`?dropped)"),
-      in_file("@KEPT@", "the-earlier-rows-are-left", r"the payment is taken by one request to PayRight[\s\S]*a card can be refused, and a refusal by the bank is final"),
+      in_file("@KEPT@", "a-question-of-typed-text-is-kept", r"(?:^|\n)\|[^|\n]*user-input-(?:01|03|04|07|10)[^|\n]*\|(?!\s*`?dropped)"),
+      takes_in("takes-in-the-reason", r"reason|note"),
+      in_file("@KEPT@", "the-earlier-rows-are-left",
+              r"a payment request can get no reply \(payright\.md O1\)[\s\S]*the slice ships no body of content[\s\S]*only the office should refund"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
     ("08b-the-approach-changed-after",
      "The approach changed and research was written again for another thing after the questions were drawn: nothing left that applies to the old thing, drawn again.",
@@ -327,9 +306,9 @@ SCENARIOS = [
                   more={**RESEARCHED, "slice-001/007_questions/kept.md": kept_file()})},
      CARDWAY_RESEARCHED, GO_ON,
      [*DRAWN,
-      not_in_file("@KEPT@", "nothing-applies-to-the-old-thing", r"payright"),
+      not_in_file("@KEPT@", "nothing-applies-to-the-old-thing", r"payright\.md|\|[^|\n]*payright[^|\n]*\|[^|\n]*\|[ \t]*(?:\n|$)"),
       in_file("@KEPT@", "the-new-thing-is-applied-to", r"cardway|charge"),
-      in_file("@KEPT@", "the-earlier-rows-are-left", r"user-action-01[^|\n]*\|[^|\n]*renew-and-pay"),
+      in_file("@KEPT@", "the-earlier-rows-are-left", r"no criterion signs anyone in or out[\s\S]*the slice ships no body of content"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
 ]
 BARE_TABLE = ("- The questions stage has no text of its own here: do it from this report and the documents. A later stage "

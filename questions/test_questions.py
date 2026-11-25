@@ -63,6 +63,7 @@ LIBRARY = [
     {"id": "migration-01", "action": "migration", "failure": "f", "question": "What of what is already stored?", "source": {}},
     {"id": "migration-02", "action": "migration", "failure": "f", "question": "What if it stops halfway?", "source": {}},
 ]
+KEEPS = "- A renewal payment: renew-and-pay / 1\n- `season-ticket`: renew-and-pay / 1\n"
 KEPT = """# Kept
 
 ## What the slice takes in
@@ -70,6 +71,10 @@ KEPT = """# Kept
 |---|---|---|---|---|
 | `payment-status` | choice | PayRight | no | payright.md F1 |
 | `card-holder-name` | text | the subscriber | yes | renew-and-pay / 1 |
+
+## What the slice creates and keeps
+- A renewal payment: renew-and-pay / 1
+- `season-ticket`: renew-and-pay / 1
 
 ## Other things the slice has
 - `payment-request`: the request that takes the payment (renew-and-pay / 1)
@@ -168,6 +173,25 @@ class Checking(unittest.TestCase):
 
     def test_a_kept_file_that_accounts_for_everything_has_no_problem(self):
         self.assertEqual(self.found(), [])
+
+    def test_a_file_with_no_list_of_what_the_slice_creates_and_keeps_is_refused(self):
+        self.assertEqual(self.found(lasting=None), ["no list of what the slice creates and keeps: one line a thing with its criterion, or `- nothing`"])
+
+    def test_a_slice_that_keeps_nothing_says_so_and_is_drawn(self):
+        kept = questions.read_kept(KEPT.replace(KEEPS, "- nothing\n"))
+        self.assertEqual(kept["lasting"], [])
+        self.assertEqual(self.found(lasting=[]), [])
+
+    def test_a_thing_kept_that_states_has_no_table_for_is_named_with_what_to_do(self):
+        self.assertEqual(self.found(lasting=self.kept["lasting"] + [("the waiting list", "join-the-list / 1")]),
+                         ["the waiting list: created or kept (join-the-list / 1), and states.md has no table for it: "
+                          "add its table by the research text's rules, then draw again"])
+
+    def test_a_thing_committed_to_is_not_a_thing_with_states(self):
+        self.assertIn("states.md has no table for it", " ".join(self.found(lasting=[("PayRight", "renew-and-pay / 1")])))
+
+    def test_the_things_kept_are_read_with_or_without_marks_and_articles(self):
+        self.assertEqual(self.kept["lasting"], [("A renewal payment", "renew-and-pay / 1"), ("season-ticket", "renew-and-pay / 1")])
 
     def test_an_entry_left_out_is_named(self):
         self.assertEqual(self.found(library=self.kept["library"][:2]), ["migration-01: neither kept nor dropped", "migration-02: neither kept nor dropped"])
@@ -277,7 +301,7 @@ class Drawing(unittest.TestCase):
         self.assertEqual(text.count("- S."), 3 * (2 + len(questions.EVENTS)))
 
     def test_no_lasting_thing_is_said_in_a_line(self):
-        kept = KEPT.replace("; A renewal payment", "")
+        kept = KEPT.replace("; A renewal payment", "").replace(KEEPS, "- nothing\n")
         folder, library = project(kept=kept, states="# States\n\nThe slice touches no lasting thing.\n")
         code, said = run("draw", folder, library)
         self.assertEqual(code, 0, said)
@@ -285,9 +309,16 @@ class Drawing(unittest.TestCase):
         self.assertIn("No lasting thing has states written for this slice.", text)
         self.assertNotIn("- S.", text)
 
+    def test_a_thing_kept_with_no_table_is_refused_by_the_command_and_nothing_is_drawn(self):
+        folder, library = project(states="# States\n\n## A renewal payment\n| State | Source |\n|---|---|\n| pending | payright.md F2 |\n")
+        code, said = run("draw", folder, library)
+        self.assertEqual(code, 1)
+        self.assertIn("season-ticket: created or kept (renew-and-pay / 1), and states.md has no table for it", said)
+        self.assertFalse((folder / "007_questions" / "questions.md").exists())
+
     def test_what_research_left_open_is_carried_and_nothing_is_said_where_there_is_none(self):
         self.assertIn("- C.payright.O1: O1: whether a payment sent twice", self.drawn())
-        kept = KEPT.replace("; A renewal payment", "").replace("call-external-02 | PayRight", "call-external-02 | payment-request").replace("payright.md F1", "renew-and-pay / 2")
+        kept = KEPT.replace("; A renewal payment", "").replace(KEEPS, "- nothing\n").replace("call-external-02 | PayRight", "call-external-02 | payment-request").replace("payright.md F1", "renew-and-pay / 2")
         folder, library = project(kept=kept, research=False)
         code, said = run("draw", folder, library)
         self.assertEqual(code, 0, said)

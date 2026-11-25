@@ -9,10 +9,11 @@ This stage finds every question the slice must answer before it is
 built. It answers none of them, decides nothing and asks the user
 nothing: the next stage answers, from the documents first.
 
-Your judgement is two things, written in `kept.md` in the folder the
-report names: which of the library's questions matter here, and what
-the slice takes in. Everything else is drawn by the report's `draw`
-command into `questions.md`, which you never write or edit.
+Your judgement is three things, written in `kept.md` in the folder
+the report names: what the slice creates and keeps, what it takes
+in, and which of the library's questions matter here. Everything
+else is drawn by the report's `draw` command into `questions.md`,
+which you never write or edit.
 
 **Read first.** The chosen slice, the requirements' limits, the
 approach, every research document and `states.md`. Then the
@@ -20,10 +21,13 @@ report's `things` command: it prints what a question may apply to,
 and the library's kinds. Read every kind with the `library` command,
 four or five kinds at a time, every question of each.
 
-Before anything else, go through the slice's criteria one by one
-and name what each creates or keeps over time (a record, a booking,
-a payment). Each of those needs its table in `states.md`: where one
-has none, see "A lasting thing with no states" below.
+**What the slice creates and keeps.** Go through the slice's
+criteria one by one and list what each creates or keeps over time
+(a record, a booking, a payment, a membership), whether or not
+`things` printed it: one line a thing, with its criterion. A thing
+that `states.md` has a table for goes by that table's name. One it
+has no table for is listed all the same: see "A lasting thing with
+no states" below. A slice that keeps nothing says `- nothing`.
 
 **The library.** For every question: can what it describes arise
 from something this slice adds or changes, so that what the product
@@ -77,6 +81,9 @@ criterion's name or a research document and fact.
 ```markdown
 # Kept: slice <n>
 
+## What the slice creates and keeps
+- <a thing, by its table's name in states.md>: <item / n>
+
 ## What the slice takes in
 | Value | Kind | From | Sensitive | Source |
 |---|---|---|---|---|
@@ -95,10 +102,12 @@ criterion's name or a research document and fact.
 | migration: all | dropped | <why the slice does nothing of the kind> |
 ```
 
-Every question of the library is in exactly one row. Then run the
-`draw` command. It refuses a file that leaves a question out, names
-a thing nothing lists, or gives a value no source: put right what
-it names and draw again. Where it says the drawing could not be
+Every question of the library is in exactly one row. Write
+`kept.md` with your file tool, not through the shell, which eats the
+marks around names. Then run the `draw` command. It refuses a file
+that leaves a question out, names a thing nothing lists, gives a
+value no source, or keeps a thing with no states: put right what it
+names and draw again. Where it says the drawing could not be
 written, say so and leave it: never write `questions.md` yourself.
 
 **Answer nothing.** No answer, no decision, no recommendation, no
@@ -111,12 +120,12 @@ here. Asked what you need from them, or offered answers: nothing is
 needed now; the documents and tests answer first, and what is
 theirs to decide comes to them once, as one short list.
 
-**A lasting thing with no states.** If a criterion creates or keeps
-a thing that `states.md` has no table for, say which thing and
-which criterion first. Then load the research text and add its
-table by that text's rules, each row with its source or `not said
-in the documents`, nothing from what such things usually do. Then
-go on.
+**A lasting thing with no states.** A thing you listed as created
+or kept that `states.md` has no table for: say which thing and
+which criterion. Load the research text and add its table to
+`states.md` by that text's rules, each row with its source or `not
+said in the documents`, nothing from what such things usually do.
+Then go on; `draw` refuses until the table is there.
 
 **An answer to an earlier stage's question.** When the user's
 message answers a question another stage left open (the

@@ -109,7 +109,7 @@ class Fixtures(unittest.TestCase):
         self.assertTrue(passes(check, "| call-external-01, call-external-02 | `payment-request` | pressed twice |\n"))
 
     def test_a_kind_kept_in_any_row_is_not_a_kind_dropped(self):
-        check = checks(self.case("02"))["drops-the-kind-call-external"]
+        check = checks(self.case("03"))["drops-the-kind-call-external"]
         self.assertTrue(passes(check, "| call-external: all | dropped | nothing is committed to |\n| user-input-01 | `x` | w |\n"))
         self.assertTrue(passes(check, "| call-external-01, call-external-02 | dropped | no |\n"))
         self.assertFalse(passes(check, "| call-external-07 | the spreadsheet | it may be missing |\n"))
@@ -145,11 +145,53 @@ class Fixtures(unittest.TestCase):
         self.assertFalse(passes(check, "drawn: x: 1060 questions: 918 from the library, 43 of values"))
         self.assertFalse(passes(check, "drawn: x: 600 questions: 500 from the library, 43 of values"))
 
-    def test_a_row_left_as_it_was_may_gain_a_thing(self):
-        # Found by the pilot: a row kept for the same criterion, with the refund added, failed a check on its exact words.
+    def test_the_rows_the_change_does_not_touch_are_left_as_they_were(self):
+        # Found by the three-run pass: the first fixture was too thin to be believed, and Sonnet wrote it all again.
         check = checks(self.case("08b"))["the-earlier-rows-are-left"]
-        self.assertTrue(passes(check, "| user-action-01 | renew-and-pay-1; refund-a-renewal-1 | either may start it again |"))
-        self.assertFalse(passes(check, "| user-action: all | dropped | nothing is started |"))
+        self.assertTrue(passes(check, cases.kept_file()))
+        self.assertFalse(passes(check, cases.kept_file().replace("no criterion signs anyone in or out", "nobody signs in")))
+        self.assertTrue(passes(checks(self.case("08a"))["the-earlier-rows-are-left"], cases.kept_file()))
+
+    def test_the_criterion_added_brings_what_the_earlier_file_dropped(self):
+        was = cases.kept_file()
+        typed, taken = checks(self.case("08a"))["a-question-of-typed-text-is-kept"], checks(self.case("08a"))["takes-in-the-reason"]
+        self.assertFalse(passes(typed, was))
+        self.assertFalse(passes(taken, was))
+        self.assertTrue(passes(typed, was + "| user-input-04 | `refund-reason` | the office types it |\n"))
+        self.assertTrue(passes(taken, "| `refund-reason` | text | the office | no | refund-a-renewal / 2 |\n"))
+        self.assertIn("refund-a-renewal / 2", (self.case("08a") / "project/planning/slice-001/004_slice.md").read_text())
+
+    def test_nothing_of_the_old_thing_may_be_applied_to_or_cited_and_its_name_may_be_said(self):
+        check = checks(self.case("08b"))["nothing-applies-to-the-old-thing"]
+        self.assertFalse(passes(check, cases.kept_file()))
+        self.assertFalse(passes(check, "| call-external-03 | payright | every renewal waits on it |\n"))
+        self.assertFalse(passes(check, "| `card-token` | identifier | the form | credentials | payright.md F7 |\n"))
+        self.assertTrue(passes(check, "| call-external-03 | cardway | PayRight is no longer committed to; every renewal waits on CardWay |\n"))
+
+    def test_the_list_of_what_is_kept_is_read_in_its_own_part_only(self):
+        # Found by the three-run pass: Haiku never noticed the thing with no states; the list is now required and checked.
+        check = checks(self.case("04"))["lists-what-is-kept-ticket"]
+        self.assertTrue(passes(check, "## What the slice creates and keeps\n- A renewal payment: renew-and-pay / 1\n- The season ticket: renew-and-pay / 1\n\n## What the slice takes in\n"))
+        self.assertFalse(passes(check, "## What the slice creates and keeps\n- A renewal payment: renew-and-pay / 1\n\n## What the slice takes in\n| `season-ticket-id` |\n"))
+        self.assertTrue(passes(checks(self.case("03"))["says-nothing-is-kept"], "## What the slice creates and keeps\n- nothing\n\n## What"))
+
+    def test_a_question_on_outside_systems_may_be_kept_for_the_offices_own_sheet_and_not_for_a_provider(self):
+        # Found by the three-run pass: Sonnet kept two such questions for the spreadsheet the slice reads, which is fair.
+        check = checks(self.case("02"))["applies-no-question-to-a-thing-not-committed-to"]
+        self.assertTrue(passes(check, "| call-external-11 | `subscriber-list` | the criterion cannot be met without the spreadsheet |\n"))
+        self.assertTrue(passes(check, "| call-external-01, call-external-02 | dropped | PayRight is slice 2 |\n"))
+        self.assertFalse(passes(check, "| call-external-01 | PayRight | the reply may never come |\n"))
+
+    def test_a_refusal_question_may_be_kept_for_the_error_that_comes_back(self):
+        check = checks(self.case("01"))["keeps-call-external-06-for-the-right-thing"]
+        self.assertTrue(passes(check, "| call-external-06 | `error-code` | refusals differ |\n"))
+        self.assertFalse(passes(check, "| call-external-06 | dropped | none |\n"))
+
+    def test_saying_the_stage_asks_them_nothing_is_heard_in_either_order_of_words(self):
+        check = checks(self.case("07a"))["says-it-asks-nothing-of-them"]
+        self.assertTrue(passes(check, "This stage asks you nothing in return."))
+        self.assertTrue(passes(check, "The stage asks nothing of you."))
+        self.assertFalse(passes(check, "Fine, skipping."))
 
     def test_no_made_up_document_names_a_real_provider(self):
         for case in sorted((HERE / "plugin-text" / "evals").iterdir()):
