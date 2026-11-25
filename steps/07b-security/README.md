@@ -122,6 +122,47 @@ Each read counted the concerns afresh, so the totals differ.
 (16 of 19 and 26 of 32 before the two questions were added; not
 counted again after).
 
+## Haiku on the real plans (2026-11-25, $0.12)
+
+The pass on Haiku over the same six stage 7 outputs: the six facts
+as Sonnet's in every run; 7 to 12 rows asked where Sonnet asked 11
+to 24, and 3 to 7 dismissed where Sonnet dismissed 1 to 5. Read:
+what it asks is sound, and it dismisses what Sonnet asks (text from
+outside run on a screen, an answer given in the provider's place, a
+stored file changed by another program); one run dismissed a list
+shown in the browser as needing "physical access". Two cents a run
+against forty. Sonnet is proposed.
+
+## The four examples from the first message (2026-11-25, $29.50; $98.59 in all)
+
+`e2e/run.py --through security`, Sonnet, one session each from the
+first message:
+
+| Example | Ended | Facts that hold | Rows asked | Drawn | Cost |
+|---|---|---|---|---|---|
+| A one-line idea | security written, drawn again | 5 of 6 (calls nothing) | 5 | 276 | $7.22 |
+| An outside system | security written, drawn again | 5 of 6 (slice 1 calls nothing) | 10, 2 dismissed | 319 | $5.42 |
+| An existing codebase | security written, drawn again | 4 of 6 | 8 | 278 | $6.66 |
+| Similar verses | stopped at the approach, one need waiting (as before) | not reached | | | $10.19 |
+
+Read: each fact has its line or "not said"; each row's worst is of
+that product (a friend moved up a waiting list; when a client's
+home has a walker call; a singer recorded absent by a caller); no
+control, no answer, nothing asked of the user. Where the documents
+do not say how the product is used, the facts are `yes` and the
+fixed questions are drawn: 23 or 24 for a slice of two criteria.
+
+## What no session has run
+
+- The count beside kad's documents after the two fixed questions
+  were added (it stood at 16 of 19 and 26 of 32).
+- Stage 7's cases on Haiku after its one changed sentence.
+- Every earlier stage's cases after this text's last two sentences
+  (they ran with the text of the five runs).
+- A skip, or documents changed after, on a real plan: cases only.
+- A slice with sign-in or files of its own.
+- Any of it on the owner's Mac.
+
 ## What it is
 
 A session writes one small file, `security.md`, beside `kept.md`:

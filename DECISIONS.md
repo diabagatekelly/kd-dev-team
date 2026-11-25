@@ -552,6 +552,23 @@ asking is listed apart, so it can be overturned.
     re-run.
   - Its folder is `steps/07b-security`: the stages after it keep
     their numbers.
+  - In testing ($98.59 of about $105): what is wanted may be a
+    thing the documents name, or `nothing`, dismissed with its
+    reason; the stop is looked for first and kept for what the
+    documents say is out; a public value has a row of its own; the
+    pass adds a sensitive value `kept.md` lacks; two fixed
+    questions more where the slice calls another system (a person's
+    sign-in for it; how a credential first reaches the product),
+    30 in all, after the read beside kad's documents.
+  - Stage 7's adopted text gained "with your file tool, not through
+    the shell" where rows are edited: one Sonnet run of five edited
+    them by script and stopped.
+  - Left: two reliability questions kad's documents ask and the
+    library lacks (expected and unexpected outcomes told apart in
+    the records; one reference from the screen to the record).
+    Haiku was run on the real plans beside Sonnet (12 cents): the
+    same facts, about half the rows asked, and a readable list
+    dismissed as needing "physical access". Sonnet is proposed.
 
 ## Put off to the stage that needs them
 
