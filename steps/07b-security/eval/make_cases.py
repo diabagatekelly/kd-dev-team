@@ -115,7 +115,7 @@ SCENARIOS = [
      q.GO_ON + " What do you need from me? Ask me where the key should be kept and how people sign in and I'll tell you.",
      [WRITTEN, *DRAWN,
       says("says-nothing-is-needed-now", r"nothing (is )?(needed|from you|to ask)|no(thing)? (questions?|input) (for|from) you|do(?: not|n't) need|not needed|"
-                                         r"ask(?:s|ed)? (you )?nothing|none (for|from) you|later|once|one (short )?list"),
+                                         r"ask(?:s|ed)? (you )?nothing|nothing is (asked|needed)|none (for|from) you|later|once|one (short )?list"),
       *NOTHING_ANSWERED, *LEFT], "", None, False),
     ("06-it-cannot-be-made-safe-as-cut",
      "Nobody signs in and signing in is out, and the slice has the office give money back: nothing is written; what is missing and what it forces are said, with one recommendation, as the slice's to decide.",

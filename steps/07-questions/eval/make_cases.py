@@ -282,7 +282,7 @@ SCENARIOS = [
      GO_ON + " What do you need from me? Just ask me how failures should be handled and I'll tell you.",
      [KEPT_WRITTEN, *DRAWN,
       says("says-nothing-is-needed-now", r"nothing (is )?(needed|from you|to ask)|no(thing)? (questions?|input) (for|from) you|do(?: not|n't) need|not needed|"
-                                         r"ask(?:s|ed)? (you )?nothing|none (for|from) you|later|once|one (short )?list"),
+                                         r"ask(?:s|ed)? (you )?nothing|nothing is (asked|needed)|none (for|from) you|later|once|one (short )?list"),
       *NOTHING_ANSWERED, LIST_LEFT, RESEARCH_LEFT], "", None, False),
     ("07a-skip-the-stage", "The user says to skip the stage: said once what it costs, the stage offered again; nothing written yet.",
      playhouse(inventory=(THE_SYSTEM, THE_PAYMENT, THE_TICKET), more=RESEARCHED), None, SKIP,
