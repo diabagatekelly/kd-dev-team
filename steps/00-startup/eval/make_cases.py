@@ -76,6 +76,14 @@ NOT_BUILT = (r"\bsecurity", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped
 if _on_trial:
     DOCUMENTS["slice-001/007_questions/security.md"] = _security
     NOT_BUILT = (r"\banswers", [*NOT_BUILT[1], "slice-001/007_questions/security.md"])
+# With the answers on trial (`KD_TRIAL=answers`) it is the tests of open facts: the answers skipped at
+# the user's word, and drawn, are the shortest the stage script counts as done.
+if "answers" in os.environ.get("KD_TRIAL", "").split(","):
+    _answers = "Skipped at the user's word, 2026-11-25: \"Skip the answers.\"\n"
+    DOCUMENTS["slice-001/008_answers.md"] = _answers
+    DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(
+        DOCUMENTS["slice-001/007_questions/questions.md"].encode() + _answers.encode())
+    NOT_BUILT = (r"\btests? of (the )?open facts|\bopen facts", [*NOT_BUILT[1], "slice-001/008_answers.md", "slice-001/008_answered.md"])
 
 
 def pull(number, title, branch, unresolved=0):

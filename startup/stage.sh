@@ -315,7 +315,7 @@ report() {
     slice=${slice:-slice-001}
   fi
   found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
-  rfolder=""; stale=""; qfolder=""; qstate=""
+  rfolder=""; stale=""; qfolder=""; qstate=""; adone=""
   own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
   [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
@@ -440,6 +440,7 @@ report() {
           answered="$under${is%_answers.md}_answered.md"
           if [ -f "$dir/$answered" ] && grep -q "drawn from: $( (cat "$dir/$qfolder/questions.md" "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }') " "$dir/$answered"; then
             found="${found:+$found, }answers ($under$is)"
+            adone="$under$is"
             continue
           fi
           [ -f "$dir/$answered" ] && owes="to draw again: the questions or the answers changed after $answered was drawn; only what the change brings is answered" \
@@ -541,6 +542,9 @@ STAGES
       say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"
       say "  the questions of a kind, every kind read, four or five at a time: $QUESTIONS library KIND KIND ..."
       say "  the questions are drawn from kept.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
+    *)
+      # The answers stay the place a decision of the owner's is recorded, whatever stage is next.
+      [ -z "$adone" ] || say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice" ;;
   esac
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; it is built when merged work names its criteria.

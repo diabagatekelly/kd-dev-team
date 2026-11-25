@@ -29,6 +29,7 @@ it goes on from there and ends once a research document is written, or after one
 there is nothing to research. With `--through questions` it goes on and ends once the questions
 are drawn (`questions.md` in the slice's questions folder). With `--through security` it goes on and
 ends once `security.md` is written beside them and the questions drawn again after it. With `--through
+answers` it goes on and ends once the answers are drawn by the script. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -41,7 +42,7 @@ texts has changed since, and the example is then run from its first message and 
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
-                          [--through merge|questions|research|approach|slice|requirements] [--from STAGE]
+                          [--through merge|answers|security|questions|research|approach|slice|requirements] [--from STAGE]
     python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
@@ -71,7 +72,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers")
 MERGED = 7   # the number of the made-up pull request
 
 
@@ -237,6 +238,10 @@ def present(planning):
         found.add("research")
     if drawn(planning):
         found.add("questions")
+    if secured(planning):
+        found.add("security")
+    if planning.is_dir() and any(planning.glob("slice-*/*_answers.md")):
+        found.add("answers")
     return found
 
 
@@ -250,6 +255,13 @@ def secured(planning):
     return [path for path in sorted(planning.glob("slice-*/*_questions/security.md"))
             if (path.parent / "questions.md").is_file() and (path.parent / "questions.md").stat().st_mtime_ns >= path.stat().st_mtime_ns] \
         if planning.is_dir() else []
+
+
+def answered(planning):
+    """The answers the script has drawn: `answered.md` beside them, no older than they are."""
+    return [path for path in sorted(planning.glob("slice-*/*_answers.md"))
+            if (drawing := path.with_name(path.name.replace("_answers.md", "_answered.md"))).is_file()
+            and drawing.stat().st_mtime_ns >= path.stat().st_mtime_ns] if planning.is_dir() else []
 
 
 def in_a_folder_of_its_stage(planning):
@@ -383,12 +395,12 @@ def keep(out, example, stage, plugin):
     kept.mkdir(parents=True)
     for path in sorted(planning.rglob("*.md")):
         name = re.sub(r"^\d+_|(-v\d+)?\.md$", "", path.name)
-        if name in wanted or path.name == "sources.md":
+        if name in wanted or path.name == "sources.md" or (name == "answered" and "answers" in wanted):
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    if stage in ("approach", "research", "questions", "security"):   # the pages its quotes are from: research reads them and does not fetch them again
+    if stage in ("approach", "research", "questions", "security", "answers"):   # the pages its quotes are from: research reads them and does not fetch them again
         for path in [*sorted(planning.glob("slice-*/pages/*.txt")), *(research(planning) if stage != "approach" else []),
-                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security") else [])]:
+                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security", "answers") else [])]:
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
@@ -485,6 +497,10 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "security" and secured(planning):
             ended = "the security file was written and the questions drawn again"
             break
+        # The answers (stage 8): every question settled and the drawing made by the script.
+        if through == "answers" and answered(planning):
+            ended = "the answers were drawn"
+            break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -507,7 +523,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through in ("merge", "research", "questions", "security") and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research", "questions", "security", "answers") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
@@ -562,7 +578,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "answers", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()

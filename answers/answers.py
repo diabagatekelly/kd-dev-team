@@ -15,12 +15,16 @@ settles as many of the drawn questions as it truly answers.
     Recommended: <one of them, and why>               (owner)
     If left: <what happens while it is not decided>   (owner)
     Harm: high | medium | low                         (owner, test)
+    Decided: <the choice> (the user, DATE: "their words")   (owner, once they have said)
     Test: <what would be run, against what>           (test)
 
 Usage:
     python3 -I answers.py next SLICE [HOW-MANY]   the questions no answer settles yet, in the drawing's order
     python3 -I answers.py draw SLICE              refuse what does not hold; else write NNN_answered.md beside it
     python3 -I answers.py state SLICE             none | written N of M | drawn | stale
+
+A user who says to skip the stage: the file is one line, `Skipped at the user's word, DATE: "their
+words"`, and the drawing says that nothing is answered.
 
 No model, no cost.
 """
@@ -37,7 +41,8 @@ KINDS = ("fact", "chosen", "owner", "test", "not here")
 HARMS = ("high", "medium", "low")
 NEEDS = {"fact": ("Says", "Rests on"), "chosen": ("Says", "Rests on"), "owner": ("Says", "Options", "Recommended", "If left", "Harm"),
          "test": ("Says", "Test", "Harm"), "not here": ("Says",)}
-FIELDS = ("Kind", "Says", "Rests on", "Settles", "Under", "Criterion", "Options", "Recommended", "If left", "Harm", "Test")
+FIELDS = ("Kind", "Says", "Rests on", "Settles", "Under", "Criterion", "Options", "Recommended", "If left", "Harm", "Test", "Decided")
+SKIPPED = re.compile(r"^skipped at the user's word", re.I | re.M)
 STAMP = "<!-- drawn from: %s -->"
 # A wait, a retry or a giving up with no number is a criterion nobody can check (kad's `numbers-on-waits`).
 WAITS = re.compile(r"\b(retr(y|ies|ied)|waits?|waiting|times? out|timeout|polls?|gives? up|tries again|again after|too long|eventually|soon|promptly|quickly)\b", re.I)
@@ -147,8 +152,12 @@ def problems(answers, ids, slice_read):
         if kind == "owner" and one(answer, "Options") and len([each for each in one(answer, "Options").split("|") if each.strip()]) < 2:
             say("a decision for the owner has at least two options, separated by `|`: with one, it is chosen and recorded")
         written = answer["fields"].get("Criterion", [])
-        if written and kind not in ("fact", "chosen"):
-            say(f"a criterion is written from a fact or a choice; from a {kind} answer it waits")
+        if written and kind not in ("fact", "chosen") and not (kind == "owner" and one(answer, "Decided")):
+            say(f"a criterion is written from a fact, a choice or a decision the owner has taken (`Decided:`); from a {kind} answer it waits")
+        if one(answer, "Decided") and kind != "owner":
+            say("only a decision for the owner is `Decided:`, and by them")
+        if one(answer, "Decided") and not re.search(r"\(the user, \d{4}-\d\d-\d\d: \".+\"\)", one(answer, "Decided")):
+            say('Decided ends with who said it, when and in which words: (the user, YYYY-MM-DD: "their words")')
         if written and not one(answer, "Under"):
             say("a criterion says which item of the slice it is under (`Under:`), or `new: a-name`")
         under = one(answer, "Under")
@@ -177,12 +186,18 @@ def drawing(answers, ids, taken, mark):
             lines.append(f"- **{one(answer, 'Under')} / {answer['name']}.{number}**: {criterion}")
     lines += [""] if number else ["None.", ""]
     lines += ["## For the owner, by harm", ""]
-    for answer in sorted(by_kind["owner"], key=rank):
+    waiting = [answer for answer in by_kind["owner"] if not one(answer, "Decided")]
+    for answer in sorted(waiting, key=rank):
         lines += [f"### {answer['name']}: {answer['title']} ({one(answer, 'Harm')})", one(answer, "Says"), "",
                   *[f"- {each.strip()}" for each in one(answer, "Options").split("|") if each.strip()], "",
                   f"Recommended: {one(answer, 'Recommended')}", f"If left: {one(answer, 'If left')}",
                   f"Questions waiting on it: {count(answer)}", ""]
-    lines += [] if by_kind["owner"] else ["Nothing.", ""]
+    lines += [] if waiting else ["Nothing.", ""]
+    lines += ["## Decided by the owner", ""]
+    for answer in by_kind["owner"]:
+        if one(answer, "Decided"):
+            lines.append(f"- {answer['name']}: {answer['title']}: {one(answer, 'Decided')}")
+    lines += [""] if len(waiting) < len(by_kind["owner"]) else ["Nothing.", ""]
     lines += ["## To test, by harm", ""]
     for answer in sorted(by_kind["test"], key=rank):
         lines.append(f"- {answer['name']} ({one(answer, 'Harm')}): {one(answer, 'Says')} Test: {one(answer, 'Test')}")
@@ -192,8 +207,19 @@ def drawing(answers, ids, taken, mark):
         lines.append(f"- {answer['name']}: {one(answer, 'Says')} Because: {one(answer, 'Rests on')}")
     lines += [""] if by_kind["chosen"] else ["Nothing.", ""]
     said = (f"{len(answers)} answers settle {len(ids)} questions: {len(by_kind['fact'])} facts, {len(by_kind['chosen'])} chosen, "
-            f"{len(by_kind['owner'])} for the owner, {len(by_kind['test'])} to test, {len(by_kind['not here'])} not here; {number} criteria")
+            f"{len(waiting)} for the owner, {len(by_kind['owner']) - len(waiting)} decided by the owner, {len(by_kind['test'])} to test, {len(by_kind['not here'])} not here; {number} criteria")
     return "\n".join(lines), said
+
+
+def keep(answered, text, said, out):
+    try:
+        answered.write_text(text, encoding="utf-8", newline="\n")
+    except OSError as error:
+        # A shell that may not write the project: the drawing is right, and is said not to be kept.
+        print(f"drawn, and not written ({answered}: {error.strerror}): {said}. Say so; do not write it by hand.", file=out)
+        return 0
+    print(f"drawn: {answered}: {said}", file=out)
+    return 0
 
 
 def load(folder):
@@ -245,20 +271,19 @@ def main(arguments, out=sys.stdout):
     if written is None:
         print("no answers yet: write NNN_answers.md in the slice's folder, NNN the next number there", file=out)
         return 1
+    skipped = SKIPPED.search(written.read_text(encoding="utf-8"))
+    if skipped and not answers:
+        text = "\n".join(["# Answered", "", STAMP % mark, "", written.read_text(encoding="utf-8").strip(), "",
+                          f"None of the {len(ids)} questions is answered, and the slice has no criteria from them: a risk accepted, for the owner's list.", ""])
+        said = f"skipped at the user's word: none of the {len(ids)} questions is answered"
+        return keep(answered, text, said, out)
     if left:
         found.append(f"{len(left)} questions are settled by no answer (the first: {', '.join(left[:5])}): `next` lists them")
     if found:
         print("\n".join(found), file=out)
         return 1
     text, said = drawing(answers, ids, taken, mark)
-    try:
-        answered.write_text(text, encoding="utf-8", newline="\n")
-    except OSError as error:
-        # A shell that may not write the project: the drawing is right, and is said not to be kept.
-        print(f"drawn, and not written ({answered}: {error.strerror}): {said}. Say so; do not write it by hand.", file=out)
-        return 0
-    print(f"drawn: {answered}: {said}", file=out)
-    return 0
+    return keep(answered, text, said, out)
 
 
 if __name__ == "__main__":

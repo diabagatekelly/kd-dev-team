@@ -100,6 +100,12 @@ class Stage(unittest.TestCase):
         self.assertRegex("answers", named)
         self.assertNotRegex("security", named)
 
+    def test_with_the_answers_on_trial_that_scenario_moves_on_to_the_tests_of_open_facts(self):
+        named = self.not_built("answers")
+        self.assertIn("- next stage by the documents: tests of open facts", self.report())
+        self.assertRegex("tests of open facts", named)
+        self.assertNotRegex("answers", named)
+
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()
         self.assertIn("- planning folder: not chosen yet for this project", out)
@@ -442,7 +448,10 @@ class Stage(unittest.TestCase):
         out = self.report()
         self.assertIn("answers (slice-001/008_answers.md)", out)
         self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md)", out)
-        self.assertNotIn("answers.py", out)
+        # Met building the cases: a decision taken later had no command to draw it with.
+        self.assertRegex(out, r"- a decision the owner takes on their list is recorded in planning/slice-001/008_answers\.md, and the answers drawn "
+                              r"again: python3 \".*answers\.py\" draw planning/slice-001")
+        self.assertNotIn("answers.py\" next", out)
 
     def test_answers_or_questions_changed_after_the_drawing_are_to_be_drawn_again(self):
         folder = self.answered()

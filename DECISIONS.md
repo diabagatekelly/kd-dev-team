@@ -601,6 +601,30 @@ asking is listed apart, so it can be overturned.
     same facts, about half the rows asked, and a readable list
     dismissed as needing "physical access". Sonnet is proposed.
 
+- Stage 8, the answers, as built (2026-11-25), chosen without
+  asking; its test, its cost and three points of the owner's are in
+  `steps/08-answers/README.md`, and nothing paid has run:
+  - An answer settles many questions, and a script keeps the count:
+    a slice draws 280 to 700 questions, and a session is given them
+    sixty at a time until none is left.
+  - Five kinds: fact, not here, test, owner, chosen. The script
+    refuses a fact resting on no document, a decision for the owner
+    without options, a recommendation and what happens if left, a
+    criterion on a guess or on a decision not yet taken, and a wait
+    with no number.
+  - One drawing beside the answers holds the criteria, the owner's
+    list by harm, the tests by harm and the choices: the tests stage
+    and the owner's list read it.
+  - A criterion names the slice's item it is under, or a new one:
+    this settles how an answer attaches to the checkable list.
+  - A decision the owner takes is recorded on its answer in their
+    words, and the report keeps the command that draws it whatever
+    stage is next.
+  - The stop for a criterion the facts make impossible is left to
+    research, which already has it.
+  - kad's three skills are not an arm of the cases: they are set
+    beside ours on the two real plans.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the
@@ -615,10 +639,6 @@ asking is listed apart, so it can be overturned.
   often): with the answers stage.
 - **A measure for each of the problem, scope, requirements, slice,
   design and screens stages:** agreed when each is reached.
-- **How an answer of the answers stage attaches to the checkable
-  list** (a criterion under the named item it belongs to, or an item
-  of its own): with the answers stage. Stage 3 owes it only names
-  that do not change.
 - **Where the user finds `source.sh` on their own machine,** and when
   the scan is run (before the planning pull request is merged?):
   with the plugin's real install, which waits for the run on the

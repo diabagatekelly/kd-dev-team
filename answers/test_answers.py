@@ -170,6 +170,30 @@ class Refused(Folder):
         said = self.refused(FACT + REST.replace("Harm: high\n", "Harm: high\nUnder: refund-a-renewal\nCriterion: Given a refund, when anyone asks, then it is made.\n"))
         self.assertIn("from a owner answer it waits", said)
 
+    def test_a_decision_the_owner_has_taken_carries_its_criterion_and_leaves_their_list(self):
+        decided = REST.replace("Harm: high\n", "Harm: high\nDecided: one named person (the user, 2026-11-25: \"Only Ana refunds.\")\n"
+                               "Under: refund-a-renewal\nCriterion: Given a refund, when anyone but the named person asks, then it is refused.\n")
+        self.write(FACT + decided)
+        code, said = self.run_it("draw")
+        self.assertEqual(code, 0, said)
+        self.assertIn("0 for the owner, 1 decided by the owner", said)
+        text = (self.slice / "008_answered.md").read_text()
+        self.assertIn('- A3: Who may refund: one named person (the user, 2026-11-25: "Only Ana refunds.")', text)
+        self.assertNotIn("### A3", text)
+        self.assertIn("- **refund-a-renewal / A3.2**", text)
+
+    def test_decided_without_their_words_or_on_another_kind_is_refused(self):
+        self.assertIn("Decided ends with who said it", self.refused(FACT + REST.replace("Harm: high\n", "Harm: high\nDecided: one named person\n")))
+        self.assertIn("only a decision for the owner is `Decided:`", self.refused(FACT.replace("Kind: fact", 'Kind: fact\nDecided: yes (the user, 2026-11-25: "ok")')))
+
+    def test_skipped_at_the_users_word_draws_that_nothing_is_answered(self):
+        (self.slice / "008_answers.md").write_text('Skipped at the user\'s word, 2026-11-25: "Skip the answers."\n')
+        code, said = self.run_it("draw")
+        self.assertEqual(code, 0, said)
+        self.assertIn("skipped at the user's word: none of the 6 questions is answered", said)
+        self.assertIn("a risk accepted, for the owner's list", (self.slice / "008_answered.md").read_text())
+        self.assertEqual(self.run_it("state")[1].strip(), "drawn")
+
     def test_a_criterion_under_no_item_or_an_item_the_slice_does_not_have(self):
         self.assertIn("says which item of the slice it is under", self.refused(FACT.replace("Under: renew-and-pay\n", "")))
         self.assertIn("Under names an item of the slice (refund-a-renewal, renew-and-pay)", self.refused(FACT.replace("Under: renew-and-pay", "Under: pay-later")))
@@ -201,7 +225,7 @@ class Drawn(Folder):
     def test_the_drawing_is_written_beside_the_answers_and_counted(self):
         code, said = self.run_it("draw")
         self.assertEqual(code, 0, said)
-        self.assertIn("008_answered.md: 5 answers settle 6 questions: 1 facts, 1 chosen, 1 for the owner, 1 to test, 1 not here; 1 criteria", said)
+        self.assertIn("008_answered.md: 5 answers settle 6 questions: 1 facts, 1 chosen, 1 for the owner, 0 decided by the owner, 1 to test, 1 not here; 1 criteria", said)
         text = (self.slice / "008_answered.md").read_text()
         self.assertIn("- **renew-and-pay / A1.1**: Given PayRight does not reply", text)
         self.assertIn("### A3: Who may refund (high)", text)

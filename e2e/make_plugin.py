@@ -56,6 +56,8 @@ def main(folder, trial=None):
     # The script that draws a slice's questions, and the library it reads.
     write(folder / "questions" / "questions.py", (ROOT / "questions" / "questions.py").read_text(encoding="utf-8"))
     write(folder / "library" / "library.json", (ROOT / "library" / "library.json").read_text(encoding="utf-8"))
+    # The script that says which questions no answer settles, and draws the answers.
+    write(folder / "answers" / "answers.py", (ROOT / "answers" / "answers.py").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

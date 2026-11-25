@@ -477,6 +477,26 @@ class Run(unittest.TestCase):
         # Not at turn 10 (the questions drawn) nor at 11 (the security file written, the drawing older than it).
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the security file was written and the questions drawn again", 12))
 
+    # The session that drew the questions again begins the answers in the same turn, and the script draws them in the next.
+    ANSWERS = SECURITY.replace('    if n == 99:\n', '        pathlib.Path("plans/slice-002/008_answers.md").write_text("# Answers\\n")\n'
+                               '    if n == 13:\n'
+                               '        pathlib.Path("plans/slice-002/008_answered.md").write_text("# Answered\\n")\n'
+                               '    if n == 99:\n')
+
+    def test_carried_through_the_answers_it_ends_once_the_script_has_drawn_them(self):
+        summary, _ = self.through(fake=self.ANSWERS, brief=self.SPOKEN, through="answers")
+        # Not at turn 12: security is done and the answers begun, and nothing is drawn from them.
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers were drawn", 13))
+
+    def test_the_answers_are_kept_with_their_drawing(self):
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002"
+        (folder / "008_answers.md").write_text("written")
+        (folder / "008_answered.md").write_text("drawn")
+        kept = run.keep(self.folder / "done", self.example, "answers", self.folder / "plugin")
+        self.assertTrue((kept / "slice-002" / "008_answers.md").is_file() and (kept / "slice-002" / "008_answered.md").is_file())
+        self.assertFalse((run.keep(self.folder / "done", self.example, "security", self.folder / "plugin") / "slice-002" / "008_answers.md").exists())
+
     def test_the_security_file_is_kept_with_the_questions_folder(self):
         self.through(fake=self.SECURITY, brief=self.SPOKEN, through="security")
         kept = run.keep(self.folder / "out", self.example, "security", self.folder / "plugin")
