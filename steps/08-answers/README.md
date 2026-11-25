@@ -123,6 +123,30 @@ final text and script, each from its kept security documents
 ($4.54): all four drawn, with 7, 18, 9 and 15 for the owner, 3, 2,
 6 and 8 to test, and 64, 96, 49 and 40 criteria.
 
+## Opus beside Sonnet (2026-11-25, $5.77; $132.85 in all)
+
+At the owner's question, whether Opus would state less of the
+provider on nothing: one run on each real plan, from the same
+security runs, read the same way.
+
+| One run a plan | Opus 5.5 | Sonnet 5.5, three runs a plan |
+|---|---|---|
+| Cost | $3.33 and $2.43 | $1.20 to $1.58 |
+| Time | 12 and 8.5 minutes | 5.5 to 7.5 |
+| Answers | 92 and 61 | 106 to 148 |
+| For the owner | 5 and 5 | 7 to 18 |
+| To test | 14 and 14 | 12 to 19 |
+| Provider's behaviour on a fact that does not say it, of 30 | 11 and 11 | 5 and 8 |
+
+It does not. The samples were not drawn alike (the most
+provider-heavy answers on one plan, the first thirty on the other),
+so 11 is not worse than 8 by this; it is not better. Its list for
+the owner is shorter because it asks less: the history kept for
+good, the absence of sign-in and pending transactions were chosen
+without asking in one run or the other. Sonnet stays proposed, and
+what the research does not say is a reader's to catch, not a
+stronger writer's.
+
 ## What no session has run
 
 - The cases' last check change (an offer about stock earlier
