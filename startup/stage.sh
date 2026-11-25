@@ -56,6 +56,7 @@ slice|SLICE/slice.md
 approach|SLICE/approach.md
 research|SLICE/research/
 questions|SLICE/questions/
+security|SLICE/security.md
 answers|SLICE/answers.md
 tests of open facts|SLICE/open-facts.md
 design|SLICE/design.md
@@ -380,15 +381,22 @@ report() {
         # questions.md is drawn from it by script. They are done only while the drawing carries the
         # mark of the documents as they stand: the slice, the approach, research, and kept.md.
         [ -z "${is%/}" ] || qfolder="$under${is%/}"
-        qstate=none; basis=kept.md
+        qstate=none; sstate=none; basis=kept.md
         [ -z "$qfolder" ] || [ -f "$dir/$qfolder/kept.md" ] || basis=skipped.md
         if [ -n "$qfolder" ] && [ -f "$dir/$qfolder/$basis" ]; then
           qstate=kept
           if [ -f "$dir/$qfolder/questions.md" ]; then
-            mark=$( (cd "$dir" && { cat "$slice/$own"; [ -z "$approach" ] || cat "$approach"
+            # The security pass writes security.md beside it, and the questions are drawn again with
+            # it: the mark is then of that file too, after the others.
+            marked() { (cd "$dir" && { cat "$slice/$own"; [ -z "$approach" ] || cat "$approach"
                       [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do cat "$rfolder/$file"; done
-                      cat "$qfolder/$basis"; }) 2>/dev/null | cksum | awk '{ print $1 }')
-            grep -q "drawn from: $mark " "$dir/$qfolder/questions.md" && qstate=drawn || qstate=stale
+                      cat "$qfolder/$basis"; [ -z "$1" ] || cat "$qfolder/security.md"; }) 2>/dev/null | cksum | awk '{ print $1 }'; }
+            qstate=stale
+            if grep -q "drawn from: $(marked "") " "$dir/$qfolder/questions.md"; then
+              qstate=drawn; [ ! -f "$dir/$qfolder/security.md" ] || sstate=written
+            elif [ -f "$dir/$qfolder/security.md" ] && grep -q "drawn from: $(marked with) " "$dir/$qfolder/questions.md"; then
+              qstate=drawn; sstate=drawn
+            fi
           fi
         fi
         if [ "$qstate" = drawn ]; then
@@ -406,6 +414,22 @@ report() {
           [ -n "$next" ] || next="questions (its document: $at, $owes)"
           continue
         fi ;;
+      security)
+        # The security pass, counted: security.md beside kept.md, and the questions drawn again
+        # with it. Nothing is said of it before the questions are drawn.
+        if [ "${qstate:-none}" = drawn ] && [ "$sstate" = drawn ]; then
+          found="${found:+$found, }security ($qfolder/security.md)"
+          ! grep -qi "^skipped at the user's word" "$dir/$qfolder/security.md" || skipped="${skipped:+$skipped
+}- security: skipped at the user's word ($qfolder/security.md); every fixed question is drawn, and the skipping is for the owner's list"
+        else
+          missing="${missing:+$missing, }$name"
+          if [ "${qstate:-none}" = drawn ] && [ -z "$next" ]; then
+            [ "$sstate" = written ] && owes="security.md is written there; the questions are still to be drawn again with it" \
+              || owes="to write there: security.md; the questions are then drawn again with it"
+            next="security (its document: $folder/$qfolder/security.md, $owes)"
+          fi
+        fi
+        continue ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -489,6 +513,9 @@ STAGES
       [ "$kept" = 0 ] || say "- $kept pages are already kept in $folder/$slice/pages, read from their copies: $PAGE kept $folder/$slice/pages" ;;
   esac
   case "$next" in
+    security*)
+      say "- what kept.md lists and the documents name: $QUESTIONS things $folder/$slice"
+      say "  the questions are drawn again with security.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
     questions*)
       say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"
       say "  the questions of a kind, every kind read, four or five at a time: $QUESTIONS library KIND KIND ..."

@@ -21,4 +21,6 @@ Documents
 - a changed set is corrected in place (planning/003_slices.md): no slice is built from it yet
 - questions: skipped at the user's word (slice-001/007_questions/skipped.md); what needs no judgement is drawn, and the skipping is for the owner's list
 - a changed approach is a new document, the earlier one left as it is: planning/slice-001/008_approach.md
-- next stage by the documents: answers (its document: planning/slice-001/008_answers.md)
+- what kept.md lists and the documents name: python3 "@STARTUP@/../questions/questions.py" things planning/slice-001
+  the questions are drawn again with security.md by script, never written by hand: python3 "@STARTUP@/../questions/questions.py" draw planning/slice-001
+- next stage by the documents: security (its document: planning/slice-001/007_questions/security.md, to write there: security.md; the questions are then drawn again with it)

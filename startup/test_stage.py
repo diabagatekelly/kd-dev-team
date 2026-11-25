@@ -93,11 +93,17 @@ class Stage(unittest.TestCase):
         # Found by the regression pass with the approach on trial: the scenario still named the
         # approach as not built, and the session, rightly, did the approach. With research adopted
         # (decision 44) the first stage not built is the questions.
-        # With the questions adopted (decision 48) it is the answers.
+        # With the questions adopted (decision 48) it is the security pass (decision 46).
         named = self.not_built()
+        self.assertIn("- next stage by the documents: security", self.report())
+        self.assertRegex("security", named)
+        self.assertNotRegex("questions", named)
+
+    def test_with_security_on_trial_that_scenario_moves_on_to_the_answers(self):
+        named = self.not_built("security")
         self.assertIn("- next stage by the documents: answers", self.report())
         self.assertRegex("answers", named)
-        self.assertNotRegex("questions", named)
+        self.assertNotRegex("security", named)
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()
@@ -376,18 +382,59 @@ class Stage(unittest.TestCase):
             self.draw(at, basis)
         return self.report()
 
-    def draw(self, at, basis="kept.md"):
+    def draw(self, at, basis="kept.md", security=False):
         slice_folder = at.parent
         together = b"".join((slice_folder / name).read_bytes() for name in
-                            ("004_slice.md", "005_approach.md", "006_research/postbox.md", "006_research/states.md", f"{at.name}/{basis}"))
+                            ("004_slice.md", "005_approach.md", "006_research/postbox.md", "006_research/states.md", f"{at.name}/{basis}",
+                             *([f"{at.name}/security.md"] if security else [])))
         (at / "questions.md").write_text(f"# Questions\n\n<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
 
     def test_the_questions_are_done_when_drawn_from_the_documents_as_they_stand(self):
         out = self.asked()
         self.assertIn("questions (slice-001/007_questions/)", out)
+        self.assertNotIn("out of order", out)
+        self.assertNotIn("library KIND", out)
+        # The security pass is next (decision 46): its file beside kept.md, and the questions drawn again with it.
+        self.assertIn("- next stage by the documents: security (its document: planning/slice-001/007_questions/security.md, "
+                      "to write there: security.md; the questions are then drawn again with it)", out)
+        self.assertRegex(out, r'questions\.py" things planning/slice-001\n')
+        self.assertRegex(out, r'questions\.py" draw planning/slice-001\n')
+
+    def secured(self, text="# Security\n", again=True, **asked):
+        self.asked(**asked)
+        at = self.machine.project / "planning/slice-001/007_questions"
+        (at / "security.md").write_text(text, encoding="utf-8")
+        if again:
+            self.draw(at, asked.get("basis", "kept.md"), security=True)
+        return self.report()
+
+    def test_the_security_file_written_and_the_questions_not_yet_drawn_again_keeps_security_next(self):
+        out = self.secured(again=False)
+        self.assertIn("- next stage by the documents: security (its document: planning/slice-001/007_questions/security.md, "
+                      "security.md is written there; the questions are still to be drawn again with it)", out)
+
+    def test_security_is_done_once_the_questions_carry_its_mark_too(self):
+        out = self.secured()
+        self.assertIn("questions (slice-001/007_questions/), security (slice-001/007_questions/security.md)", out)
         self.assertIn("- next stage by the documents: answers (its document: planning/slice-001/008_answers.md)", out)
         self.assertNotIn("questions.py", out)
         self.assertNotIn("out of order", out)
+
+    def test_a_security_file_changed_after_the_drawing_has_the_questions_drawn_again(self):
+        self.secured()
+        (self.machine.project / "planning/slice-001/007_questions/security.md").write_text("# Security\n\nChanged.\n", encoding="utf-8")
+        self.assertIn("- next stage by the documents: questions (its document: planning/slice-001/007_questions/, to draw again", self.report())
+
+    def test_security_skipped_at_the_users_word_is_done_once_drawn_and_is_said(self):
+        out = self.secured(text="Skipped at the user's word, 2026-11-25: \"no\"\n")
+        self.assertIn("- security: skipped at the user's word (slice-001/007_questions/security.md); every fixed question is drawn, "
+                      "and the skipping is for the owner's list\n", out)
+        self.assertIn("- next stage by the documents: answers", out)
+
+    def test_nothing_is_said_of_security_before_the_questions_are_drawn(self):
+        out = self.asked(draw=False)
+        self.assertIn("- next stage by the documents: questions", out)
+        self.assertNotIn("security.md", out)
 
     def test_while_the_questions_are_next_the_commands_that_read_the_library_and_draw_are_given(self):
         out = self.researched("postbox.md", "states.md", inventory="- a loan")
@@ -426,7 +473,7 @@ class Stage(unittest.TestCase):
         out = self.asked(kept="Skipped at the user's word.\n", basis="skipped.md")
         self.assertIn("- questions: skipped at the user's word (slice-001/007_questions/skipped.md); what needs no judgement is drawn, "
                       "and the skipping is for the owner's list\n", out)
-        self.assertIn("- next stage by the documents: answers", out)
+        self.assertIn("- next stage by the documents: security", out)   # a skip of the questions is not a skip of security
 
     def test_skipped_and_not_yet_drawn_keeps_the_questions_next(self):
         out = self.asked(kept="Skipped at the user's word.\n", basis="skipped.md", draw=False)
@@ -441,6 +488,12 @@ class Stage(unittest.TestCase):
                 self.setUp()
                 self.asked(kept=text, basis=basis, draw=False)
                 said = io.StringIO()
+                self.assertEqual(script.main(["draw", str(self.machine.project / "planning/slice-001")], said), 0, said.getvalue())
+                self.assertIn("- next stage by the documents: security", self.report())
+                # ... and with the security file, drawn again by the script itself, the mark is still the one counted.
+                (self.machine.project / "planning/slice-001/007_questions/security.md").write_text(
+                    "Skipped at the user's word, 2026-11-25: \"no\"\n", encoding="utf-8")
+                self.assertIn("still to be drawn again with it", self.report())
                 self.assertEqual(script.main(["draw", str(self.machine.project / "planning/slice-001")], said), 0, said.getvalue())
                 self.assertIn("- next stage by the documents: answers", self.report())
 
@@ -512,8 +565,9 @@ class Stage(unittest.TestCase):
         at = self.machine.project / "planning/slice-001/007_questions"
         at.mkdir()
         (at / "kept.md").write_text("Kept.\n", encoding="utf-8")
+        (at / "security.md").write_text("# Security\n", encoding="utf-8")
         together = b"".join(path.read_bytes() for path in [at.parent / "004_slice.md", at.parent / "005_approach.md",
-                                                           *sorted((at.parent / "006_research").glob("*.md")), at / "kept.md"])
+                                                           *sorted((at.parent / "006_research").glob("*.md")), at / "kept.md", at / "security.md"])
         (at / "questions.md").write_text(f"<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
         out = self.report()
         self.assertIn("- every planning document of slice 1 exists", out)

@@ -57,19 +57,25 @@ THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
 THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
 THROUGH_RESEARCH = [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"]
-# With the questions adopted (2026-11-25, decision 48) the first stage not built is the answers.
+# With the questions adopted (2026-11-25, decision 48) the first stage not built is the security
+# pass that follows them (decision 46), and with that on trial the answers.
 # The questions as the stage would leave them: skipped at the user's word is the shortest folder
 # the stage script counts as drawn, with the mark of the documents above.
 _spec = importlib.util.spec_from_file_location("questions", HERE.parents[2] / "questions/questions.py")
 _questions = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_questions)
 _skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
+_on_trial = "security" in os.environ.get("KD_TRIAL", "").split(",")
+_security = "Skipped at the user's word, 2026-11-25: \"Skip the security pass.\"\n" if _on_trial else ""
 _mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
                                                              "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()
-                         + _skipped.encode())
+                         + _skipped.encode() + _security.encode())
 DOCUMENTS["slice-001/007_questions/skipped.md"] = _skipped
 DOCUMENTS["slice-001/007_questions/questions.md"] = f"# Questions\n\n<!-- drawn from: {_mark} -->\n"
-NOT_BUILT = (r"\banswers", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])
+NOT_BUILT = (r"\bsecurity", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])
+if _on_trial:
+    DOCUMENTS["slice-001/007_questions/security.md"] = _security
+    NOT_BUILT = (r"\banswers", [*NOT_BUILT[1], "slice-001/007_questions/security.md"])
 
 
 def pull(number, title, branch, unresolved=0):
