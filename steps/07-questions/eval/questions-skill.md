@@ -33,8 +33,17 @@ then does would matter to whoever uses or maintains it?
   judging whether it is answered, only whether it must be asked.
 - It is dropped only when the slice does nothing of that kind, or
   the condition cannot arise for anything it does. Say which.
+- It is dropped too when the harm it asks about needs something
+  the documents say this product does not have: many users, people
+  who do not trust each other, several people running it, more than
+  one installation, a public address. Give the document's own line
+  as the reason. Where the documents do not say, it is kept.
 - When unsure, keep it. A question wrongly dropped is lost for
   good; one wrongly kept costs a line.
+- Judge each question by itself, not its kind: twelve questions of
+  one kind are twelve decisions. A kept question has a row of its
+  own and its own reason, in this slice's words: what here makes it
+  arise. Only dropped questions may share a row.
 - A kind the slice does nothing of at all is dropped whole, in one
   row (`migration: all`). Never drop a whole kind to save reading:
   one question of it that can arise keeps that question.
@@ -81,6 +90,7 @@ criterion's name or a research document and fact.
 | Entry | Applies to | Why |
 |---|---|---|
 | call-external-01 | `short-name`; <another thing> | <what in the slice makes it arise> |
+| call-external-04 | `short-name` | <its own reason> |
 | user-input-04, user-input-11 | dropped | <why neither can arise here> |
 | migration: all | dropped | <why the slice does nothing of the kind> |
 ```
