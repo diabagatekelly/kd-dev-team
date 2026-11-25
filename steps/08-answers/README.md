@@ -1,7 +1,7 @@
 # Stage 8: the answers
 
-**Built free and not yet run by any session.** Proposed here with
-its test and cost; nothing paid runs before the owner's yes.
+**Being tested (decision 53: about $125, the pilot first).** The
+owner agreed its three points on 2026-11-25.
 
 ## What it is
 

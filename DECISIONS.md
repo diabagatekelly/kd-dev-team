@@ -563,6 +563,14 @@ asking is listed apart, so it can be overturned.
     - The texts keep their one message asking for sites refused: it
       is what happens in a VM the user has locked.
 
+53. **Stage 8, the answers, is tested as proposed in
+    `steps/08-answers/README.md`** (the owner: "I agree go ahead"),
+    at about $125, with a pilot of about $9 first. With it: **the
+    owner's list is brought to them once, after the tests of open
+    facts (stage 9) and before the design**, not at stage 14; and
+    **a slice brings them at most 12 decisions** on the two real
+    plans, each read for whether it is truly theirs.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
