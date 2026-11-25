@@ -28,6 +28,113 @@ What it met, and what each became (decision 29):
 - 13 for the owner on the real run, against the 12 agreed: left to
   the three runs on both plans.
 
+## Three runs, five runs, and every earlier stage (2026-11-25; $27.90 in all)
+
+Three runs ($5.65): with the text Sonnet 19 of 21, Haiku 18 of 21;
+bare 4 and 0 of 21. Five runs ($5.67): Sonnet 32 of 35, Haiku 31 of
+35. Every earlier stage once on Sonnet with this one on trial
+($13.61): 105 of 107; the two slice cases that failed passed 6 of 6
+when run again ($0.57, counted below).
+
+Read, failure by failure: two checks asked for one answer where
+another was as good (a small slice need leave the owner nothing; a
+choice resting on the provider's page need not be called a fact);
+the text's example `provider F12` was copied as written, and the
+script now refuses a research fact named with no document of the
+slice; a user who offers answers was asked for them once in five:
+the text now says they are declined and not invited.
+
+## The two real plans, read three times (2026-11-25; $127.08 in all)
+
+Six runs each time, three on each plan, from the security pass's
+runs, Sonnet, $1.17 to $1.60 a run, five to seven minutes; every
+run settled every question (592 to 803) and was drawn. Read by two
+read-only sessions each time (their tables are in the audit
+repository, `08-answers/README.md`); no model judged a run.
+
+| | First read | After four sentences | After the script's refusals |
+|---|---|---|---|
+| Provider's behaviour stated on nothing the research says, of 30 sampled a plan | 6 and 4 | 4 and 8 | 5 and 8, nearly all now naming a fact that does not say it |
+| The owner's list, six runs | 9, 8, 8, 7, 5, 8 | 8, 9, 8, 8, 7, 8 | 10, 13, 8, 18, 7, 10 |
+| Items on it that are technical or already decided | 4 in six runs | 3, borderline | 3, 6, 0, 5, 1, 1 |
+| How fast it must be: put to the owner | in 1 run of 6 | in 0 | in 6 |
+| kad's security concerns with a criterion, a test or the owner (first plan, of 23) | 20, 17, 17 | 21, 19, 18 | 19, 20, 19 |
+| the same, second plan | 17, 19, 18 of 27 | 20, 20, 19 of 27 | 13, 14, 17 of 20, counted afresh |
+| kad's reliability concerns that nothing addresses | 1 to 2 a run | 1 to 7 | 1 to 2 |
+
+What changed between the reads (decision 29):
+
+- **Four sentences** after the first: an open point is a test; a
+  choice rests on what the research says; what cannot be taken back
+  is the owner's and how to protect is chosen; what is said and can
+  be checked has its criterion. The tests rose from 11 to 15 a run
+  to 13 to 18; the rest moved within what one run differs from
+  another.
+- **Three refusals in the script** after the second: an answer that
+  speaks of a thing committed to and names no fact of its research
+  document; one that rests on an open point; a target or an
+  obligation chosen for the owner. Tried on two earlier runs they
+  refused 29 of 135 answers and 15 of 93.
+
+**Where the bar is not met.**
+
+- *No fact resting on belief:* about one answer in five that speaks
+  of the provider still says what its research does not. The script
+  made each name a fact; it cannot read whether the fact says it.
+- *At most 12 decisions:* 13 and 18 in two runs of six. Read, the
+  18 hold four technical choices and one decision already taken and
+  merge to 12; the text does not make a session merge them.
+- *Every concern of kad's with a criterion, a test or the owner:*
+  three to eight a run are said in an answer with no criterion, and
+  two reliability concerns are in no run (expected and unexpected
+  outcomes told apart in the records; what a close in progress does
+  with a retry or a login that arrives).
+- *The lock and claim concerns of the second plan* are still in no
+  run: each chooses "a lock at start" with one criterion.
+
+**Research's condition (decision 44).** Of the first plan's 13 key
+facts, 8 are in every run's research; the login typed into the
+provider's component and the first pull's time are tests in every
+run; the account id changing on linking again is decided around
+with no basis; a new account through update mode is in no answer of
+two runs. Of the second plan's 11, 8 are in every run's research;
+a bank outage as an error is under no answer in one run, and would
+never be retried there.
+
+## The cases with the final text and script (2026-11-25)
+
+| | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|
+| Five runs, after the four sentences | 34 of 35 | 30 of 35 |
+| Five runs, after the script's refusals | 35 of 35 | 26 of 35 |
+
+Haiku's nine: it does nothing when the user insists on the skip, or
+loses the decision a user takes, puts a technical choice to the
+owner, and invites the answers offered. Sonnet is proposed.
+
+## The four examples (2026-11-25)
+
+From the first message, one session each, with the text before its
+last changes ($44.12): three reached the drawn answers (253, 309
+and 244 questions; 5, 8 and 9 for the owner); the second stopped at
+the slice, waiting for two answers its brief did not hold, and was
+run again from the first message with them ($8.28): drawn. With the
+final text and script, each from its kept security documents
+($4.54): all four drawn, with 7, 18, 9 and 15 for the owner, 3, 2,
+6 and 8 to test, and 64, 96, 49 and 40 criteria.
+
+## What no session has run
+
+- The cases' last check change (an offer about stock earlier
+  answers) on Haiku; bare with the final script.
+- Every earlier stage's cases with the script's three refusals
+  (they ran with the text of the five runs).
+- A decision taken by the owner, or a skip, on a real plan: cases.
+- The four examples from the first message with the final script:
+  three from kept documents instead, one from the first message
+  before the refusals.
+- Any of it on the owner's Mac.
+
 ## What it is
 
 The questions are drawn (stage 7) and the security pass has added
