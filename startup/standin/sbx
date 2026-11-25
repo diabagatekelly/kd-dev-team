@@ -54,8 +54,21 @@ case "${1:-} ${2:-}" in
       printf 'allow      %-21s network            -        -      tcp         -      active\n' "$host"
     done < "$S/hosts"
     exit 0 ;;
+  "policy check")
+    if garbled check; then echo "Error: the daemon did not answer" >&2; exit 1; fi
+    if [ -f "$S/web_open" ]; then
+      echo "  Allowed:     GET https://kd-web-reading.invalid:443/"; echo "  Context:     sandbox:$5"
+      [ -s "$S/web_open" ] && echo "  Rule:        $(cat "$S/web_open")"; exit 0
+    fi
+    echo "  Denied:      GET https://kd-web-reading.invalid:443/"; echo "  Reason:      no matching allow rule (default deny)"; exit 1 ;;
+  "policy rm")
+    if garbled rm; then exit 0; fi
+    # The real tool asks before it removes, and a script has no terminal to answer at (met 2026-11-25).
+    case " $* " in *" --force "*) ;; *) echo "error: stdin is not a terminal; pass --force to skip the confirmation"; exit 0 ;; esac
+    rm -f "$S/web_open" 2>/dev/null || : ;;
   "policy allow")
     [ -w "$S" ] || exit 0
+    if [ "$4" = "--sandbox" ]; then echo "ba76f132-made-up-rule" > "$S/web_open"; echo "Added rule ba76f132-made-up-rule to policy local (scope: sandbox:$5): GET,HEAD **/**"; exit 0; fi
     printf '%s\n' "$4" | tr ',' '\n' >> "$S/hosts"; sort -u "$S/hosts" -o "$S/hosts" ;;
   "login "*) echo "Opening a browser to sign in to Docker..."; rm -f "$S/signed_out" 2>/dev/null || : ;;
   "ls "*)

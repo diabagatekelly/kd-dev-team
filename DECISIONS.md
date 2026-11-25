@@ -544,6 +544,25 @@ asking is listed apart, so it can be overturned.
     a real slice draws about 700 questions; what no session has run
     is listed in the stage's README.
 
+52. **While a project is planned, its VM may read any website; it is
+    locked to its list again before anything is built** (the owner:
+    "I like the option to allow all web reading during planning and
+    then lock it down again for the build"). Planning stays inside
+    the VM. Met with the fourth example, whose every candidate was
+    "not read" behind the VM's list.
+    - Chosen without asking: it is one rule of that project's VM
+      alone, for the web's reading methods only (GET and HEAD, any
+      host); sending, and anything that is not the web, stay
+      refused (tried on the evaluation VM: a page read, a POST
+      refused, a connection to another port given nothing). A VM is
+      made with the rule; `startup/machine.sh web open|lock` adds
+      and removes it, and the report says which holds. An address
+      read can still carry a few words out: what is in the VM while
+      planning is the planning documents, never a file of the
+      user's.
+    - The texts keep their one message asking for sites refused: it
+      is what happens in a VM the user has locked.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
@@ -584,6 +603,11 @@ asking is listed apart, so it can be overturned.
 
 ## Put off to the stage that needs them
 
+- **Locking the web again before the build** (decision 52): the
+  first build stage must not start while the VM can read any
+  website. The command exists (`machine.sh web lock`, the user's to
+  run outside the VM); what refuses the build stage until it is run,
+  and how a session inside the VM knows, is owed to that stage.
 - **How an outcome on the benchmark is tested** (research, questions,
   answers): put to the owner with the research stage's test and cost.
 - **The numbers for the question measure** (how many questions a slice
