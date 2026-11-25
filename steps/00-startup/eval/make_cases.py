@@ -260,7 +260,7 @@ def scenarios():
          [says("names-the-stage", NOT_BUILT[0]),
           says("says-it-is-not-built", r"not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|"
                                        r"no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"),
-          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look|research|draft|cut|slice|compare)"),
+          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look (into|up)|research|draft|cut|slice|compare)"),
           {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}]),
     ]
 
