@@ -1,6 +1,6 @@
 # The security pass (after stage 7)
 
-**Built free and not yet run by any session.** The owner decided it
+**Being tested (decision 50); not yet put to the owner.** The owner decided it
 (decisions 46, 48, 49): a security pass of its own, right after the
 questions, that adds to the same list so that everything is answered
 together; nothing kad's security skill did is to be lost; and it is
@@ -32,6 +32,41 @@ What it met, and what each became (decision 29):
 - Haiku did not stop on case 06 where the documents say nobody
   signs in: left to the three runs.
 
+## Three runs, then five with the final text (2026-11-25; $49.42 in all)
+
+Three runs ($8.87, and $2.65 for four cases again): with the text
+Sonnet 18 of 24 and Haiku 22 of 24; bare 11 of 24 and 10 of 24. The
+stop was moved first and kept for what the documents say is out; a
+reply to "what do you need from me" now says that nothing is needed.
+
+Five runs of the eight cases with that text ($6.94), then five more
+of the cases a change touched ($2.64):
+
+| | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|
+| Five runs | 36 of 40 | 37 of 40 |
+| The cases changed, five runs again | 15 of 15 | 15 of 15 |
+| A case | $0.16 | $0.015 |
+
+Each of the seven failures was read (decision 29):
+
+- **Four were a check's wording** ("The pass doesn't ask anything of
+  you", "What I need from you: nothing now", "This stage doesn't ask
+  you for it"; an offer made as "reply skip"): the checks were
+  widened, and the cases pass 5 of 5 on both models.
+- **A public key with no row of its own** (case 03, Sonnet, 1 of 5):
+  it was never asked about as a secret, and nothing recorded that it
+  had been looked at. The text now gives a public value a row of its
+  own, dismissed with the reason: 5 of 5 on both models after.
+- **Haiku did not stop** where nobody signs in (case 06, 1 of 5): it
+  read "settled before the slice" as a claim and went on, with the
+  point in its reply. 5 of 5 on the run after; nothing changed for it.
+- **Haiku did not say there was little to attack** (case 02, 1 of
+  5): one row asked, four dismissed, the counts said. Left.
+
+No run answered a question, asked the user a preference, or wrote
+`questions.md` itself.
+
 ## What it is
 
 A session writes one small file, `security.md`, beside `kept.md`:
@@ -59,7 +94,7 @@ The script refuses a fact left out or without a source, a class
 nobody is said to want, a thing nothing comes through and a name
 `kept.md` does not have. The stage script names `security` as next
 once the questions are drawn, and counts it done when the drawing
-carries the mark of `security.md` too. The text is 107 lines
+carries the mark of `security.md` too. The text is 116 lines
 (kad's skill: 344).
 
 ## Set beside kad's skill, part by part (decision 26)

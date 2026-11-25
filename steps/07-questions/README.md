@@ -368,6 +368,35 @@ one run that should have stopped.
   (`--keep`): keeping replaces a folder, the session's safety check
   declined it, and it is left for the owner to say.
 
+## Five runs again with the library of 290 (2026-11-25, $25.18, on the security pass's account)
+
+The library grew by 40 entries in four kinds (decision 49), so the
+ten cases ran five times again on both models, with the security
+text beside this one:
+
+| | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|
+| Five runs | 47 of 50 | 41 of 50 |
+| Three cases again on Sonnet after one change | 15 of 15 | not run |
+| A case | $0.36 | $0.03 |
+
+Sonnet's three, each read:
+
+- two were a check's wording ("What this stage asks of you:
+  nothing"; a reply that said the user answers none of them): the
+  checks were widened;
+- **rows edited through the shell** (case 08b, 1 of 5): the session
+  changed `kept.md` with a script of its own, which a case's shell
+  cannot write, and stopped. The text now says the rows are edited
+  with the file tool: 5 of 5 after.
+
+Haiku's nine are its own: it skipped the stage at the first word
+and went to the approach (four runs of 07a and 07b), stopped at a
+changed approach to ask for research first (two of 08b), and three
+others (a value missed, an entry kept for the wrong thing, a
+question put to the product). Sonnet is the model (decision 48);
+Haiku did not run again after the change.
+
 ## What it is
 
 The pivot from kad. There, the failure cases were short lists
