@@ -609,6 +609,20 @@ asking is listed apart, so it can be overturned.
     of the owner's list, is for stage 9. What no session has run is
     listed in the stage's README.
 
+56. **Stage 9, the tests of open facts, is tested as proposed in
+    `steps/09-open-facts/README.md`** (the owner: "Yes to all 3",
+    2026-11-26), at about $170, with a pilot of about $12 first
+    whose real cost is reported before the rest is run. With it:
+    **a second reader of each claim against its quotation is built
+    and measured**, a model reading a model inside the product,
+    which grades nothing and decides nothing and can only send an
+    answer back to be looked up; and **the stage sends to a
+    provider's test environment, the one address the user allows,
+    with a key the user types** (decision 52's "sends to none"
+    holds for everything else). For the two real plans the owner
+    allows the provider's sandbox address for the evaluation VM and
+    types its test keys there.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
