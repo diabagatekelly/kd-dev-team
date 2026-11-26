@@ -1,29 +1,30 @@
-# Slice 1: Record a phoned absence and see who'll be missing
+# Slice 1: Record a phoned absence and see which voice parts will be missing people
 
 ## Thin path
-A section leader records that a singer who phoned will miss a coming Thursday rehearsal. Before rehearsal night, whoever arranges the programme sees which singers are recorded as missing it.
+A section leader records that a singer in their own voice part, who has phoned them, will miss a coming Thursday rehearsal. The person who plans the programme looks at that rehearsal and is shown, by voice part, who is known to be going to miss it.
 
 ## Criteria
-The names and dates below are invented.
+The names and numbers below are invented.
 
-- **record-for-singer / 1**: Given Robin Vale is a tenor in the register and has phoned to say they'll miss the rehearsal on Thursday 14 January 2027, which is still ahead, when a section leader records that absence, then the section leader is shown that Robin Vale is recorded as missing the rehearsal on 14 January 2027.
-- **record-for-singer / 2**: Given the register has no singer called Sam Reed, when a section leader tries to record an absence for Sam Reed on 14 January 2027, then they are told there is no such singer, and no absence is shown for that name.
-- **record-for-singer / 3**: Given Robin Vale is in the register, when a section leader tries to record an absence for Robin Vale on 31 February 2027, then they are told there is no such date, and no absence is recorded.
-- **see-who-missing / 1**: Given Robin Vale is recorded as missing the rehearsal on 14 January 2027, and Jo Marsh, also in the register, is recorded as missing only the one on 21 January 2027, when whoever arranges the programme looks at the 14 January rehearsal before that night, then Robin Vale is shown as missing it and Jo Marsh is not.
-- **see-who-missing / 2**: Given no absence is recorded for the rehearsal on 28 January 2027, when whoever arranges the programme looks at it before that night, then they are told that no absence is recorded for it.
+- **record-for-singer / 1**: Given Perpetua Quill is an alto in the register and has no absence recorded for the coming Thursday rehearsal, when the section leader records that Perpetua Quill will miss it, then Perpetua Quill is shown as going to miss that rehearsal.
+- **record-for-singer / 2**: Given the register has no singer called Barnaby Thistlewood, when a section leader tries to record an absence under that name, then they are told there is no such singer and no absence is recorded.
+- **record-for-singer / 3**: Given a Thursday rehearsal whose date has passed, when a section leader tries to record that a singer will miss it, then they are told that the rehearsal has passed and no absence is recorded.
+- **see-who-will-miss / 1**: Given the register has 7 altos and 5 basses, and absences for the coming Thursday rehearsal are recorded for 2 of the altos and none of the basses, when the person who plans the programme looks at that rehearsal, then they see under alto those 2 singers' names and that 2 of 7 are known to be going to miss it, and under bass no names and 0 of 5.
+- **see-who-will-miss / 2**: Given a singer's only recorded absence is for the Thursday after the coming one, when the person who plans the programme looks at the coming rehearsal, then that singer is not shown or counted as going to miss it.
 
 ## Needs from outside
 none
 
 ## Left for later
-- A singer saying it themself, and that being shown: slice 3. Usable without it: a singer can phone a section leader, who records the absence.
-- How short each voice part will be: slice 2. Usable without it: whoever arranges the programme can see the names of those recorded as missing.
-- Others seeing who'll be missing: slice 5. Usable without it: whoever arranges the programme can see it.
-- Word that comes after Tuesday evening: slice 6. Usable without it: absences recorded ahead of that can be seen.
-- Several rehearsals at once: slice 7. Usable without it: the path covers one rehearsal at a time.
-- Extra rehearsals and Thursdays without one: slice 8. Usable without it: the path covers ordinary Thursday rehearsals.
-- Arriving late or leaving early: slice 9. Usable without it: full absences can be recorded and seen.
-- Taking back or correcting an absence: no slice yet, because the requirements have no item for it (question 3). Usable without it: absences can be recorded and seen, but a mistaken one can't be put right.
+- A singer sending their own word: slice 2. Usable without it: a singer can phone a section leader, who records the absence.
+- A section leader recording for a singer in another voice part: slice 3. Usable without it: the section leader of that singer's part can record it.
+- Several rehearsals in one go: slice 4. Usable without it: each rehearsal can be recorded separately.
+- Arriving late or leaving early: slice 5. Usable without it: absences for a whole rehearsal are still recorded and shown.
+- Breaks, extra rehearsals and changed days: slice 6. Usable without it: ordinary Thursday rehearsals are covered.
+- Seeing the absences by Tuesday evening, and word that comes after it: slice 7. Usable without it: the person who plans the programme can look on Tuesday evening and see what has been recorded by then.
+- Saying that a voice part has too few singers left: no slice yet, because the documents give no number that makes each part short. Usable without it: the person who plans the programme can judge from the names and numbers shown.
+- Taking back or correcting a recorded absence: no slice yet (question 2 is open). Usable without it: a section leader can tell the person who plans the programme that an absence shown is wrong.
+- Anyone else seeing the absences: no slice yet (question 3 is open). Usable without it: the person who plans the programme can still see them.
 
 ## Size
 Criteria: 5.

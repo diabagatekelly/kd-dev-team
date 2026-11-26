@@ -1,29 +1,28 @@
-# Slices: know before rehearsal night who'll be missing, in time to rearrange the programme
+# Slices: find out before a rehearsal who will miss it
 
 | # | Slice | Items | Builds on | State |
 |---|---|---|---|---|
-| 1 | Record a phoned absence and see who'll be missing | record-for-singer, see-who-missing | nothing | chosen |
-| 2 | See how short each voice part will be | see-parts-short | 1 | open |
-| 3 | Say in advance that you'll miss a rehearsal | say-will-miss | 1 | open |
-| 5 | Show others who'll be missing | see-who-missing, see-parts-short | 1, 2 | open |
-| 6 | Handle word that comes late | say-will-miss, record-for-singer, see-parts-short | 1, 2, 3 | open |
-| 7 | Give word for several rehearsals ahead | say-will-miss, record-for-singer | 1, 3 | open |
-| 8 | Handle extra rehearsals and Thursdays without one | say-will-miss, record-for-singer | 1, 3 | open |
-| 9 | Say you'll arrive late or leave early | say-will-miss, record-for-singer, see-who-missing, see-parts-short | 1, 2, 3 | open |
+| 1 | Record a phoned absence and see which voice parts will be missing people | record-for-singer, see-who-will-miss | nothing | chosen |
+| 2 | Send word that you will miss a rehearsal | tell-of-absence, see-who-will-miss | 1 | open |
+| 3 | Record a phoned absence for a singer in another voice part | record-for-singer | 1, 2 | open |
+| 4 | Give word of several missed rehearsals in one go | tell-of-absence, record-for-singer | 1, 2 | open |
+| 5 | Say that a singer will arrive late or leave early | tell-of-absence, record-for-singer, see-who-will-miss | 1, 2 | open |
+| 6 | Handle breaks, extra rehearsals and changed days | tell-of-absence, record-for-singer, see-who-will-miss | 1, 2 | open |
+| 7 | Know of absences in time to rearrange the programme | tell-of-absence, record-for-singer, see-who-will-miss | 1, 2 | open |
 
 ## Where to start
-Slices 1 to 3 cover only the plain case: not coming at all, to one Thursday rehearsal at a time, said or recorded ahead of it. A section leader records after a singer phones, and whoever arranges the programme is the one who sees. The numbers below are those of the questions under "Not yet confirmed" in the requirements.
 
-- **Slice 1** can be started now. It is the recommended start: it takes an absence from a phone call to being seen before the night, and the other slices build on it.
-- **Slice 2** can be started once 1 is built. It includes seeing this by Tuesday evening before a Thursday rehearsal. What happens to word that comes after that waits in slice 6.
-- **Slice 3** cannot be started until question 8 is answered, and also needs 1.
-- **Slice 5** cannot be started until question 2 is answered. It is needed only if others must see too.
-- **Slice 6** cannot be started until the rest of question 4, about word after Tuesday evening, is answered.
-- **Slice 7** cannot be started until question 5 is answered. It is needed only if word must be given for several rehearsals ahead.
-- **Slice 8** cannot be started until question 6 is answered. It is needed only if there are such dates.
-- **Slice 9** cannot be started until question 7 is answered. It is needed only if "miss" covers arriving late or leaving early.
+- Slice 1 can be started now. It covers only what holds whatever the open questions' answers are: a section leader records, for a singer in their own voice part who phones them, that the singer will be away for the whole of one ordinary Thursday rehearsal, and the person who plans the programme sees it before that rehearsal.
+- Slice 2 waits for slice 1. It covers a singer sending their own word, on the same terms: away for the whole of one ordinary Thursday rehearsal.
+- Slice 3 cannot be started until the rest of question 1 under "Not yet confirmed" in the requirements is answered: whether a section leader can record for any singer or only for those in their own voice part. It may turn out to hold nothing.
+- Slice 4 cannot be started until question 4 is answered. It may turn out not to be wanted.
+- Slice 5 cannot be started until question 5 is answered. It may turn out not to be wanted.
+- Slice 6 cannot be started until question 7 is answered. It may turn out not to be needed.
+- Slice 7 cannot be started until the rest of question 8 is answered: the absences need to be seen by Tuesday evening, and what happens to word that comes after that is open. Until then, slices 1 and 2 show an absence once it is recorded or sent, without doing anything about Tuesday evening.
+- Questions 2, 3 and 6 hold up no slice as cut, but an answer could add an item to the requirements, or change who sees the absences.
 
-Question 3, on taking back or correcting an absence, could add an item. No slice covers it unless the requirements gain one.
+Recommended start: slice 1. It shows which voice parts will be missing people without first needing a way for singers to send word without a password, and slice 2 builds on what it shows.
 
 ## What changed
-- Slice 4, "Record an absence heard of another way, or by someone else", is dropped and its number is not reused. The reason, in our words: "The singer. And the section leaders should be able to record one for a singer who phones them."
+
+- Slice 3 was renamed from "Pass on an absence for other singers or in other ways" and now holds record-for-singer only, because word comes only from the singer or from a section leader the singer phones, so what is left is the question of other voice parts. Agreed: "I take what you recommend".
