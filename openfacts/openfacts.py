@@ -189,6 +189,18 @@ def verdicts(read):
             re.findall(r"^- (A\d+) \[(\d+)\]: (\w+):?(.*)$", path.read_text(encoding="utf-8"), re.M)}
 
 
+def reader_command():
+    return (os.environ.get("KD_READER") or "claude").split()
+
+
+def no_reader(read):
+    """Whether no second reader can be had: the tool is not on this machine, or it was asked and could not be run.
+    The claims are then said to be read by nobody but their writer, and the stage is not held (the pilot: inside
+    the evaluation the tool is not there, the file that said so could not be kept, and nothing could be drawn)."""
+    path = read_file(read)
+    return __import__("shutil").which(reader_command()[0]) is None or (path is not None and path.is_file() and "\nNot read: " in path.read_text(encoding="utf-8"))
+
+
 def unread(read):
     """(the claims no reader has read as they stand, the ones read as going past their words)."""
     seen = verdicts(read) or {}
@@ -212,7 +224,7 @@ def second_read(folder, out=sys.stdout, command=None, model=None):
     kept = {name: each for name, each in (verdicts(read) or {}).items()}
     current = {each["name"]: each["mark"] for each in claims(read)}
     kept = {name: each for name, each in kept.items() if current.get(name) == each[0]}
-    command = command or (os.environ.get("KD_READER") or "claude").split()
+    command = command or reader_command()
     model = model or os.environ.get("KD_READER_MODEL") or "claude-sonnet-5-5"
     cost, failed = 0.0, ""
     for start in range(0, len(new), BATCH):
@@ -349,8 +361,7 @@ def problems(read):
                 if each not in answers.plain(output or ""):
                     found.append(f"{document} {fact.group(1)}: \"{each[:50]}\" is not in what {block['name']} showed")
     # Each claim about a thing committed to, read by a second reader against its words (decision 56).
-    path = read_file(read)
-    could_not = path is not None and path.is_file() and "\nNot read: " in path.read_text(encoding="utf-8")
+    could_not = no_reader(read)
     new, flagged = unread(read)
     if new and not could_not:
         found.append(f"{len(new)} answers speak of a thing committed to and no second reader has read them as they stand "
@@ -410,8 +421,7 @@ def drawing(read):
         lines.append(f"- taken off: {name} ({kind}{': ' + read['listed'][name][1] if read['listed'][name][1] else ''})")
     lines += [""] if off else []
     spoken = claims(read)
-    path = read_file(read)
-    could_not = path is not None and path.is_file() and "\nNot read: " in path.read_text(encoding="utf-8") and unread(read)[0]
+    could_not = no_reader(read) and unread(read)[0]
     lines += ["## Claims about what the slice is committed to", "",
               (f"{len(spoken)} answers speak of it. A second reader could not be run: {len(unread(read)[0])} of them were read by nobody but their writer." if could_not
                else f"{len(spoken)} answers speak of it, and a second reader found that each rests on the words it quotes."), ""]

@@ -110,6 +110,10 @@ AGAINST = 'Against: https://sandbox.payright.example "Requests to sandbox.payrig
 
 class Folder(unittest.TestCase):
     def setUp(self):
+        from unittest import mock
+        patch = mock.patch.dict(os.environ, {"KD_READER": sys.executable})   # a reader this machine has; each test hands its own stand-in to `read`
+        patch.start()
+        self.addCleanup(patch.stop)
         self.top = pathlib.Path(tempfile.mkdtemp()).resolve()
         self.slice = self.top / "planning" / "slice-001"
         (self.slice / "006_research").mkdir(parents=True)
@@ -464,6 +468,16 @@ class Draw(Folder):
         self.assertEqual(code, 0, said)
         self.assertIn("1 claims read, a second reader could not be run", said)
         self.assertIn("A second reader could not be run: 1 of them were read by nobody but their writer.", (self.slice / "009_tested.md").read_text(encoding="utf-8"))
+
+    def test_on_a_machine_with_no_reader_the_claims_are_said_unread_and_the_stage_is_not_held(self):
+        # Met in the pilot's second pass: no tool in the evaluation, and the file that said so could not be kept there.
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        from unittest import mock
+        with mock.patch.dict(os.environ, {"KD_READER": "no-such-reader-anywhere"}):
+            code, said = self.go("draw")
+        self.assertEqual(code, 0, said)
+        self.assertIn("1 claims read, a second reader could not be run", said)
 
     def test_a_verdict_with_nothing_more_said_does_not_take_the_next_claims_line(self):
         # Met in the pilot: after "A3: silent" the line of A4 was read as what A3 said more, and A4 went unread: 16 of 51.

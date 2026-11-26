@@ -157,6 +157,10 @@ class Cases(unittest.TestCase):
         fact = ('## A902: The form and zone of created_at\nKind: fact\nSays: PayRight gives created_at as a time in UTC, ending in Z.\n'
                 'Rests on: payright F16: "2026-03-02T18:30:00Z"\nSettles: V.created-at.*\n')
         (folder / "008_answers.md").write_text(text[:start] + fact, encoding="utf-8")
+        from unittest import mock
+        patch = mock.patch.dict(os.environ, {"KD_READER": sys.executable})   # a machine that has a reader, whichever this one is
+        patch.start()
+        self.addCleanup(patch.stop)
         out = io.StringIO()
         self.assertEqual(openfacts.main(["draw", str(folder)], out), 1)
         self.assertIn("no second reader has read them as they stand (A902)", out.getvalue())
