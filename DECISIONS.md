@@ -731,6 +731,40 @@ asking is listed apart, so it can be overturned.
     things: every earlier stage is run once, and the answers'
     look-up case five times, in stage 9's test.
 
+- Stage 9 as run (decision 56), 2026-11-26, chosen without asking;
+  $165.93 of about $170, put to the owner and not adopted:
+  - The second reader is a session of the tool's own, started by
+    the script with nothing but the claims and their words, twenty
+    at a time, on Sonnet (Haiku left a fifth unread in one run and
+    flagged nine in ten at first). The script keeps its verdicts
+    with a mark of each claim, so a changed answer is read again;
+    the drawing refuses a claim flagged or unread. On a machine
+    with no reader the drawing says the claims were read by nobody
+    but their writer, and the stage is not held.
+  - A claim is an answer that names the thing committed to, or
+    rests on a fact of its research document without naming it.
+  - What the reader still names after a second reading is taken
+    out of the answer; the choice and its criteria stay.
+  - A test no page settled is sorted again and keeps the pages
+    read; the script refuses it left as a page.
+  - Before a decision is read as the owner's, the documents are
+    looked in: what one already says is decided, scope or not.
+  - A run refused for a key it names is told the names of the keys
+    the machine has, never a value.
+  - A decision the owner leaves is recorded as left, by the
+    report's own line: the answers' adopted text is not changed.
+  - The owner's sandbox keys were piped from their keychain into
+    the evaluation VM at their word, shown nowhere.
+  - The examples' documents are kept again after every stage (the
+    owner's yes), the fourth's privately. A run that leaves no new
+    document for eight turns is stuck.
+  - Of an earlier stage: only a table headed "State" gives states.
+  - Known and left, for the owner's word on whether the stage
+    holds: a test's script may print a sentence of its own, and
+    that sentence is then quoted as the result; the same test is
+    sorted differently from run to run; an item taken off the
+    owner's list by changing its answer alone leaves no line.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the

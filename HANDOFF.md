@@ -14,18 +14,18 @@ it is the record; this page only says where things stand.
   together, for what the answers need of a thing committed to.
 - **While a project is planned its VM reads any website and sends
   to none** (decision 52): `startup/machine.sh web open|lock`.
-- **Stage 9, the tests of open facts, is built free and not
-  tested** (2026-11-25): `openfacts/openfacts.py`, the stage
-  script's part, the text and fifteen cases in
-  `steps/09-open-facts/`, the driver's `--through open-facts`. Its
-  test (about $170, pilot $12, the examples' owed pass inside it)
-  and three points of the owner's are in its README: the second
-  reader (not built), sending to a provider's test environment
-  with a key the user gives, and the cost. Nothing paid has run and
-  no session has run any of it: check `DECISIONS.md` for the
-  owner's yes before any paid run. On trial it is loaded with
-  `open-facts=steps/09-open-facts/eval/open-facts-skill.md`
-  (`KD_TRIAL=open-facts` moves startup's case to the design).
+- **Stage 9, the tests of open facts, is tested and put to the
+  owner (decision 56): $165.93 of about $170. Not adopted until
+  they say.** Its README (`steps/09-open-facts/README.md`) has every
+  result, where the bar is not met and what no session has run. In
+  short: Sonnet 69 of 75 on the cases; on the two real plans 26 of
+  94 tests were run in the provider's test environment and 20
+  settled, none overturning a choice; the owner's list 7 to 11 in
+  six runs; the second reader built and working, flagging about a
+  third of the claims at first. On trial it is loaded with
+  `open-facts=steps/09-open-facts/eval/open-facts-skill.md`.
+  If the owner says it holds: add it to `make_plugin.SKILLS` and
+  `regress.STAGES`, move startup's case 21 to the design for good.
 
 ## What stage 9 has to take on
 
@@ -64,14 +64,10 @@ run; expected and unexpected outcomes are told apart in no record.
 
 ## What is owed
 
-- **The four examples are not caught up.** Their kept documents
-  (`e2e/examples/*/after/`) were made before research's text gained
-  its second pass, so `--from` refuses them. They must be run from
-  the first message through the answers and kept again: about $45
-  for the four ($8 to $10 each, the fourth $18). The owner has not
-  agreed that cost. The fourth example reads the real web and its
-  later documents hold real sites' pages: they are kept in the
-  audit repository (`e2e/kept/04-similar-verses/`), never here.
+- **The four examples are caught up** (2026-11-26): kept after
+  every stage through the open facts, the fourth's in the audit
+  repository (`e2e/kept/04-similar-verses/`). No example's slice
+  commits to a provider, so none takes one through stage 9.
 - **Changed in adopted things while building stage 9, and run by
   no session since:** the questions' mark (what research adds under
   its two later headings no longer stales them), one phrase of

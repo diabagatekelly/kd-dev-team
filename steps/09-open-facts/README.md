@@ -1,9 +1,87 @@
 # Stage 9: the tests of open facts
 
 **On trial (decision 56, 2026-11-26): tested as proposed below, at
-about $170. Not adopted.** Spent so far: $146.21. Still to run: the two
-real plans three times each, which wait for the provider's sandbox
-address to be allowed for sending (the keys are in the VM).
+about $170: $165.93 spent. Put to the owner; not adopted until
+they say.**
+
+## The two real plans, three runs each, with the provider's test keys (2026-11-26; $19.72)
+
+Six runs from stage 8's last runs, Sonnet, the owner's sandbox keys
+typed into the VM and its test address allowed: $2.59 to $3.86 a
+run with the reader's own calls (49 cents to $1.06 of it) and the
+two turns it takes a kept run to draw its questions and answers
+again. Four were drawn within five turns; two wanted a sixth and
+draw cleanly when drawn. The secret is in no file a run left.
+Read by two read-only sessions (their tables are in the audit
+repository); no model judged a run.
+
+| | First plan | Second plan |
+|---|---|---|
+| Tests sorted | 15, 13, 18 | 17, 17, 14 |
+| Run against the test environment | 5, 4, 3 | 5, 4, 5 |
+| Settled by a run / by a page | 2, 2, 2 / 0, 0, 2 | 3, 3, 4 / 1, 1, 0 |
+| Tests the answers hold, before and after | 11 to 13, 12 to 11, 18 to 14 | 17 to 13, 16 to 13, 14 to 10 |
+| The owner's list, before and after | 8 to 7, 9 to 7, 14 to 11 | 17 to 10, 8 to 8, 8 to 7 |
+| Of it, read as truly theirs | 6, 6, 7 | 9, 7, 7 |
+| Criteria, before and after | 110 to 112, 82 to 86, 122 to 131 | 121 to 139, 150 to 153, 79 to 87 |
+| Claims the reader flagged at its first reading | 19 of 54, 11 of 31, 39 of 105 | 23 of 87, 27 of 108, 9 of 35 |
+
+**The design's measure.** Of 94 tests, 26 were run at all (28%) and
+20 settled: 16 by a run, 4 by a page. No run failed on a key or an
+error. **No settled test overturned a choice:** every one confirmed
+what the answers had chosen to hold either way, or turned an
+unknown into a fact (eight answers gained a criterion). The one
+real overturn in six runs came from a page looked up, not a test.
+Every settled answer says what its result does not show (the test
+environment only, what was not compared).
+
+**Where the bar is not met.**
+
+- *A result in the words printed:* in about half the settled runs
+  the words quoted are a sentence the test's own script composed
+  ("same: yes"), not the provider's reply. The script cannot tell
+  them apart, and such a sentence then stands in the research as a
+  fact. Two runs settled one question opposite ways, one of them on
+  a "no" that an empty value would also print.
+- *Sorting holds from run to run:* it does not. One question was a
+  person's in one run and run in the next; one field the test
+  environment gives was sorted as a person's in all three runs of a
+  plan; tests that need the provider's own screens in a browser all
+  went to a person. A run that settles half a question leaves the
+  other half sorted as run.
+- *No test left open that a page answers:* two were, where the
+  page was already kept.
+- *At most one item a run that is not the owner's:* five runs of
+  six; one has four (three that the slice's own document already
+  puts later, one that waits on a test).
+- *Nothing theirs taken off:* of fifteen items taken off, eleven
+  were right and added criteria; two were a risk traded for the
+  owner without asking (a spare copy made, or not made), and one
+  run took two items of high harm off with no line saying so.
+  Whether a lapsed sign-in is repaired in this slice was chosen in
+  two runs and asked in one.
+- *The reader does no harm:* no criterion was lost, and of 48
+  reworked answers read, 27 are better, 9 the same and 12 worse:
+  the worse ones lost where the owner should look next, or had a
+  criterion narrowed to the product's own code. A claim cut back
+  from "it does this" to "the product treats it as this" is no
+  longer made, and no test is opened for what the design still
+  leans on.
+
+**Research's condition (decision 44), counted a last time.** First
+plan, 13 facts: 9 are in the research in every run; the login
+typed into the provider's own screens is an open test with what
+holds either way in every run; the first pull's time is in the
+research in two and an open test in one; what a lost reply leaves
+is in the research and an open test. **One is nowhere in any run:
+an identifier that changes when a connection is made again.** Its
+sentence is on a page each run kept, and two runs decide on its
+neighbour. It is the kind decision 44 expected to remain, and its
+fix is a question for the library. Second plan, 11 facts: 7 are in
+the research in every run; three were also settled by a test; one
+run lacks two (that access does not expire; an outage as a named
+error), one decides around the trial limit as an error, one around
+how a lapsed sign-in is repaired.
 
 ## The pilot (2026-11-26, $10.16 of about $12)
 
@@ -373,12 +451,18 @@ It is over $15 and is said again before it is run.
 
 ## What no session has run
 
-All of it. The script, the stage script, the driver and the cases
-are held by unit tests only.
-
-Also not run by anything: the hidden prompt in a real terminal of a
-real VM; a real provider's test environment; the VM's rule for
-sending to one allowed address.
+- The cases with the last two changes of script (the names of the
+  keys a machine has; only a table headed "State" gives states),
+  and the questions' cases with the second.
+- The second reader inside a case: the evaluation has no reader.
+  It ran in the eight real runs only.
+- A provider through this stage in an example: no example's slice
+  commits to one.
+- A result that overturns a choice, a pasted key, a skip, or a
+  decision taken or left by the owner, on a real plan: cases only.
+- The hidden prompt in a real terminal: the owner's keys were piped
+  in by the session at their word.
+- Any of it on the owner's Mac.
 
 ## What a pass will not show
 
