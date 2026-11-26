@@ -1,9 +1,9 @@
 # Stage 9: the tests of open facts
 
 **On trial (decision 56, 2026-11-26): tested as proposed below, at
-about $170. Not adopted.** Spent so far: $78.03. Still to run: the two
-real plans three times each (they wait for the provider's sandbox
-keys) and the four examples.
+about $170. Not adopted.** Spent so far: $146.21. Still to run: the two
+real plans three times each, which wait for the provider's sandbox
+address to be allowed for sending (the keys are in the VM).
 
 ## The pilot (2026-11-26, $10.16 of about $12)
 
@@ -121,6 +121,32 @@ wording of "little to attack" in the security pass; neither touches
 what changed. The answers' look-up case five times ($1.49): 4 of 5,
 as when it was adopted.
 
+## The four examples (2026-11-26; $68.18)
+
+From the first message through this stage, one session each
+($53.56): three reached the drawing with no decision left waiting
+(19, 19 and 18 turns; $12.11, $12.31, $13.91), their lists brought
+and 7, 12 and 10 decisions recorded as the scripted user took them.
+None of those first slices commits to anything outside: no claim
+for the reader, no test to run. The fourth stopped at the slice
+($15.23): its user does not know what a round of practice should
+be, and this time the session held the slice for it; the run went
+on 29 turns, the user saying three things in turn. Run again from
+its kept slice ($14.62, 10 turns): drawn, no decision waiting; its
+user chose a way that commits to nothing outside, so it too had no
+claim and no test. **No example takes a provider through this
+stage:** that path is in the cases and the real plans only.
+
+Met (decision 29): a run that leaves no new document for eight
+turns is stuck, whatever the user says (the driver; a unit test).
+And of an earlier stage: research wrote a second table, of
+undecided points, in `states.md`, and the questions' script drew
+its heading and rows as 46 states of the thing; the session said so
+at every stage after and changed nothing, rightly. The script now
+reads only a table whose first column is headed "State" (a unit
+test in `questions/`). No session has run the questions' cases
+since; their drawings are unchanged, by their own unit tests.
+
 ## What it is
 
 The answers (stage 8) leave tests: things that turn on how something
@@ -175,7 +201,7 @@ start while one waits.
 | A decision that waits and is not read; one read as not theirs whose answer is unchanged | script, refused |
 | The answers drawn again with the open facts, in one command | script |
 | Whether the stage is done; that decisions still wait; a slice with nothing to test and nothing to decide needs no such stage | stage script |
-| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (184 lines) |
+| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (182 lines) |
 
 38 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
 the stage script, 5 for the driver, 21 for the cases.

@@ -227,7 +227,16 @@ def states(states_text):
         if "owner" in heading.lower():
             dead = [line.strip()[2:].strip() for line in lines if line.strip().startswith(("- ", "* "))]
             continue
-        table = rows(lines)
+        # Only a table of states: one whose first column is headed "State". A second table under the same heading (met with
+        # the fourth example: undecided points, written as a table) had its heading and every row drawn as states of the thing.
+        table, block = [], []
+        for line in [*lines, ""]:
+            if line.strip().startswith("|"):
+                block.append(line)
+                continue
+            if block and re.sub(r"[`*\s]", "", block[0].strip().strip("|").split("|")[0]).lower() == "state":
+                table += rows(block)
+            block = []
         if table:
             things[heading] = [(row[0].strip("` "), row[-1], row) for row in table if row and row[0].strip("` ")]
     return things, dead

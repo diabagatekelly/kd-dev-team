@@ -131,6 +131,13 @@ class Reading(unittest.TestCase):
         self.assertEqual([state for state, _source, _row in things["A renewal payment"]], ["pending", "lost"])
         self.assertEqual(len(dead), 1)
 
+    def test_only_a_table_headed_state_gives_states(self):
+        text = ("# States\n\n## A loan\n\n| State | Entered by | What the person can do | Way out | Source |\n|---|---|---|---|---|\n"
+                "| `out` | lent | wait | returned -> `back` | 002_requirements.md |\n\nUndecided:\n\n| Point | Why it matters |\n|---|---|\n| late fees | nobody said |\n"
+                "\n| State | Entered by | What the person can do | Way out | Source |\n|---|---|---|---|---|\n| `back` | returned | lend again | none needed | not said in the documents |\n")
+        things, _dead = questions.states(text)
+        self.assertEqual([state for state, _source, _row in things["A loan"]], ["out", "back"])
+
     def test_states_said_in_one_line_give_no_thing(self):
         self.assertEqual(questions.states("# States\n\nThe slice touches no lasting thing.\n"), ({}, []))
 
