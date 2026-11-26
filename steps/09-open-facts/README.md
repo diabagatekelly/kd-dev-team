@@ -1,8 +1,71 @@
 # Stage 9: the tests of open facts
 
 **On trial (decision 56, 2026-11-26): tested as proposed below, at
-about $170: $165.93 spent. Put to the owner; not adopted until
-they say.**
+about $170, and one round more (decision 57): $212.77 spent. Put to
+the owner; not adopted until they say.**
+
+## The round (decision 57; 2026-11-26; $46.84, of which $24.31 on the wrong code)
+
+Three changes, each a refusal of the script as well as a sentence
+of the text: a result quoted from the test's own script is refused
+(a script prints what the thing answered); a test that was run and
+is still open is sorted again, its script staying named; a decision
+that waited when the stage began and no longer does must have its
+line.
+
+**The first launch ran on the commit before the round** ($24.31):
+keeping the examples had left changed files in the VM, which then
+refused the new commit, and the launch went on regardless. What it
+gave is a second count of the earlier text (Sonnet 65 of 75, where
+the first count was 69; Haiku 49) and two more real runs on the
+earlier code, which the round's script, drawing them afterwards for
+nothing, refused for the right reasons: one result quoted from its
+own script, four tests run and left open. A launch now begins with
+a check that the VM, the built plugin and its texts are those of
+the commit, by checksum, and runs nothing otherwise
+(decision 29: the private launcher; the runbook).
+
+Those two runs met one thing more: sessions add what they look up
+among a document's first facts, with no heading, and both were sent
+back to the questions after this stage (two of the six earlier runs
+too). The questions' mark now covers, of a thing's research
+document, only what the questions are drawn from: its open points
+and what it says of the planning documents. Unit tests in
+`questions/` and `startup/`, and on Windows.
+
+**On the right commit** ($22.53; checked before, and after):
+
+| | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|
+| The cases, five runs | 65 of 75 (66 but for form) | 53 of 75 |
+
+Sonnet's ten are in eight cases, none more than twice: the fact a
+test showed numbered as the text's own example has it and not on
+from the last (three times); what happens if left not said for
+every decision (twice); a block before rewritten, or the file
+written whole (twice); and three singles.
+
+One real run a plan, with the keys: both drawn in three turns, none
+sent back to the questions; $2.54 and $2.95.
+
+| | First plan | Second plan |
+|---|---|---|
+| Tests sorted; run against the test environment | 15; 6 | 17; 6 |
+| Settled | 0 | 1, in the provider's own words |
+| Left as run and open | 0 | 0 |
+| The owner's list, before and after; each one taken off with its line | 8 to 7; yes | 17 to 10; yes |
+| Claims flagged at the first reading | 15 of 52 | 18 of 69 |
+
+**What the round changed, and what it cost.** No result quotes a
+sentence of the script's own, no test is left half-settled as a
+run, and everything taken off the owner's list says so. But almost
+nothing is now called settled: twelve tests were run and one
+settled, where the six runs before settled 16 of 26. A session now
+writes what a run showed into the answer and sorts the test again
+as a person's, since the test environment shows only part of what
+was asked of the real thing. That is truer, and it leaves the owner
+a longer list of open facts (15 and 16 a slice) than a reader might
+expect from tests that ran. Not read by a second session.
 
 ## The two real plans, three runs each, with the provider's test keys (2026-11-26; $19.72)
 
@@ -451,17 +514,17 @@ It is over $15 and is said again before it is run.
 
 ## What no session has run
 
-- The cases with the last two changes of script (the names of the
-  keys a machine has; only a table headed "State" gives states),
-  and the questions' cases with the second.
 - The second reader inside a case: the evaluation has no reader.
-  It ran in the eight real runs only.
+  It ran in the twelve real runs only.
 - A provider through this stage in an example: no example's slice
-  commits to one.
+  commits to one. The examples and every earlier stage's cases were
+  run before the round, and before the questions' mark changed for
+  the last time.
 - A result that overturns a choice, a pasted key, a skip, or a
   decision taken or left by the owner, on a real plan: cases only.
 - The hidden prompt in a real terminal: the owner's keys were piped
   in by the session at their word.
+- The round's two real runs were not read by a second session.
 - Any of it on the owner's Mac.
 
 ## What a pass will not show

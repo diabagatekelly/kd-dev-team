@@ -773,6 +773,25 @@ asking is listed apart, so it can be overturned.
     sorted differently from run to run; an item taken off the
     owner's list by changing its answer alone leaves no line.
 
+- The round (decision 57) as run, 2026-11-26; $212.77 in all, put
+  to the owner and not adopted:
+  - Each of the three changes is a refusal of the script as well as
+    a sentence of the text. The list as it stood when the stage
+    began is kept the first time the stage is asked, or read from
+    the answers' own drawing.
+  - Its first launch ran on the commit before it ($24.31, said to
+    the owner at once). A paid launch now begins with a check, by
+    checksum, that the VM, the built plugin and its texts are those
+    of the commit, and runs nothing otherwise.
+  - Of a research document the questions' mark covers only what
+    they are drawn from (its open points and what it says of the
+    planning documents), taken without Windows line ends.
+  - Known and left: after the round a session calls almost nothing
+    settled by a run in a test environment (1 of 12 run), writing
+    what was shown into the answer and leaving the test a person's;
+    the text's own example of a fact's number (`F31`) is copied in
+    one run of five.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the

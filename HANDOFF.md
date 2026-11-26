@@ -15,10 +15,11 @@ it is the record; this page only says where things stand.
 - **While a project is planned its VM reads any website and sends
   to none** (decision 52): `startup/machine.sh web open|lock`.
 - **Stage 9, the tests of open facts, is tested and put to the
-  owner (decision 56): $165.93 of about $170. Not adopted until
-  they say.** Its README (`steps/09-open-facts/README.md`) has every
+  owner (decisions 56 and 57): $212.77. Not adopted until they
+  say.** Its README (`steps/09-open-facts/README.md`) has every
   result, where the bar is not met and what no session has run. In
-  short: Sonnet 69 of 75 on the cases; on the two real plans 26 of
+  short: Sonnet 65 of 75 on the cases after the round (65 to 69
+  before it); on the two real plans 26 of
   94 tests were run in the provider's test environment and 20
   settled, none overturning a choice; the owner's list 7 to 11 in
   six runs; the second reader built and working, flagging about a
