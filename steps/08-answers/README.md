@@ -1,7 +1,7 @@
 # Stage 8: the answers
 
-**Being tested (decision 53: about $125, the pilot first).** The
-owner agreed its three points on 2026-11-25.
+**Tested (decisions 53 and 54), $160.45 against the $125 first agreed and
+about $163 said since; put to the owner.**
 
 ## The pilot (2026-11-25, $2.97 of about $125)
 
@@ -147,16 +147,64 @@ without asking in one run or the other. Sonnet stays proposed, and
 what the research does not say is a reader's to catch, not a
 stronger writer's.
 
+## Research's second pass (decision 54; 2026-11-25, $27.60; $160.45 in all)
+
+The owner's point: research done once, up front, cannot know what
+the questions will need of the provider, and that is where the
+answers were made up. Built and tested: an answer that turns on a
+thing committed to and finds nothing in its research is `look up`;
+research reads for all of them together (the pages kept, then the
+thing's own) and adds each finding as a new fact with its quote; an
+answer that speaks of the thing gives the fact and the document's
+own words, which the script looks for.
+
+Six real runs, Sonnet, $1.63 to $2.22 and six and a half to nine
+minutes each: every run read 7 to 23 pages more, added 4 to 29
+facts, and was drawn. Read the same way, 30 answers in two runs a
+plan:
+
+| Of 30 answers that speak of the provider | Before | With the second pass |
+|---|---|---|
+| Nothing read says it, first plan | 5 to 6 | 1 and 2 |
+| Nothing read says it, second plan | 4 to 8 | 2 and 3 |
+| Its own quotation is silent and another fact or page says it | not counted | 5 to 9 |
+
+The details that were made up before (a date's form, the currency,
+where a secret is replaced, a cursor's length) now rest on facts
+the second pass added. What is left: a sentence that goes a step
+past its quotation (a retry that waits "longer if the reply names
+a wait"; credentials "one set per environment"), and quotations
+picked from the wrong line of a fact that does say it.
+
+Not even: one run of six looked up only one subject and left 18
+tests, 8 of them a page's to answer; the others left 11 to 17, with
+2 to 5 such. The owner's list is 8, 9, 14 and 17, 8, 8: the 14 and
+the 17 hold technical choices and things already decided, and come
+to 8 and 12 without them.
+
+The cases, eight with one for the second pass, five runs: Sonnet
+34 of 40, Haiku 30 of 40; research's own twelve once, 12 of 12.
+Three things met and changed (decision 29): an open point of the
+research was taken as looked up already (the new case, 1 of 5 on
+Sonnet): it is looked up once more before it is a test, 4 of 5
+after; look-ups were left when no page would open: they become
+tests; the script, run from inside the slice's folder, did not know
+its planning folder: a unit test. After them, the two cases again:
+Sonnet 4 of 5 and 4 of 5; Haiku 5 of 5 and 0 of 5: it does not look
+anything up. One real run a plan after them: drawn, 17 and 15 facts
+added, 12 and 10 tests, 10 and 9 for the owner; not read.
+
 ## What no session has run
 
-- The cases' last check change (an offer about stock earlier
-  answers) on Haiku; bare with the final script.
-- Every earlier stage's cases with the script's three refusals
-  (they ran with the text of the five runs).
+- The eight cases five times with the last three changes: the two
+  changed cases only. Bare with the final script.
+- Every earlier stage's cases with the script's refusals and the
+  second pass, but research's.
+- The read beside kad's documents after the second pass.
+- An example with the second pass: the first slice of three needs
+  nothing from outside, and the fourth was not run again. Their
+  kept answers were made before it.
 - A decision taken by the owner, or a skip, on a real plan: cases.
-- The four examples from the first message with the final script:
-  three from kept documents instead, one from the first message
-  before the refusals.
 - Any of it on the owner's Mac.
 
 ## What it is
