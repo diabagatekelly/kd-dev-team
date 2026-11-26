@@ -1,0 +1,339 @@
+# Questions
+
+<!-- drawn from: 3648332127 -->
+
+Drawn by script from kept.md and the slice's documents. Nothing here is answered.
+
+## From the library
+
+- L.sync-10.missing-view: missing-view: What does a person see when the thing they are working on changes underneath them?
+- L.limits-08.missing-view: missing-view: How many items may be asked for or shown in one go, and how does a person reach the rest?
+- L.durable-write-01.saved-register: saved-register: What does the product guarantee is stored when a save is cut off partway: all of the old content, all of the new, or something it can detect and repair?
+- L.durable-write-02.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): At what moment does the product say a change is saved, and how much recently confirmed work may be lost if power fails right after?
+- L.durable-write-03.saved-register: saved-register: On what kinds of storage does the product promise its saved data survives a power loss, and how would it notice damage on storage that does not keep that promise?
+- L.durable-write-04.record-request: record-request: What does the person see, and what state is the previously saved data in, when a save fails for lack of space?
+- L.durable-write-05.record-request: record-request: What does the product do after storage reports a failed save, given that trying again and being told it worked does not prove the data is there?
+- L.durable-write-06.saved-register: saved-register: When saved data is replaced wholesale, what is guaranteed to be found after a crash at any point during the replacement?
+- L.durable-write-07.saved-register: saved-register: How does the product recognise and treat an incomplete or meaningless final record in a history it adds to over time?
+- L.durable-write-08.saved-register: saved-register: Which pieces of saved data must always agree with one another, and what does the product do when it finds them disagreeing after a crash?
+- L.durable-write-09.saved-register: saved-register: How does the product detect saved data that has silently changed since it was written, and what does it do with it?
+- L.durable-write-10.saved-register: saved-register: How are copies of the saved data (backups, exports, device transfers) taken so that a copy made during a save is still usable?
+- L.durable-write-11.saved-register: saved-register: Which files together make up the saved data, and what happens when only some of them are moved, copied, restored or cleaned up?
+- L.durable-write-12.record-request: record-request: What happens to a save that is still in progress when the product is closed, and how does the person learn on return that it did not happen?
+- L.startup-read-01.saved-register: saved-register: What does the product do at start when its saved data is damaged: refuse to run, run with what can be read, or start fresh, and what is the person told?
+- L.startup-read-02.saved-register: saved-register: What does the product do when the thing in its saved-data location is not recognisably its own, and does it ever overwrite it?
+- L.startup-read-03.saved-register: saved-register: How does the product tell a first run with nothing saved apart from saved data that exists but cannot be opened, and what does it do in each case?
+- L.startup-read-03.see-who-missing-2: see-who-missing-2: How does the product tell a first run with nothing saved apart from saved data that exists but cannot be opened, and what does it do in each case?
+- L.startup-read-04.saved-register: saved-register: What does the product do at start when it finds a save that an earlier run left unfinished: complete it, undo it, or ask?
+- L.startup-read-05.saved-register: saved-register: What does the product do when it may read its saved data but not change it, including when that data needs repair first?
+- L.startup-read-06.saved-register: saved-register: What does a starting copy of the product do when another copy is already repairing the saved data: wait, for how long, and what does it show meanwhile?
+- L.startup-read-07.saved-register: saved-register: Where can the platform remove the product's saved data on its own, and what does the person find, and can get back, when that has happened?
+- L.startup-read-08.saved-register: saved-register: After a rescue of damaged saved data, what is checked before the result is used, and how is the person told what may be missing, changed or back again?
+- L.startup-read-09.saved-register: saved-register: How would the product or its owner find out that saved data is readable but wrong, and how far back can a good version be recovered?
+- L.startup-read-10.saved-register: saved-register: Which spare copy does the product fall back on when its saved data is unusable, and when was bringing it back last actually tried?
+- L.migration-01.saved-register: saved-register: What does a version of the product do when it meets saved data written by a later version: refuse, open it read-only, or use what it understands?
+- L.migration-02.saved-register: saved-register: From how far back must saved data be carried forward, and what happens to data older than that: is it ever erased, and who agrees to that?
+- L.migration-03.saved-register: saved-register: After a new version has saved anything, can the previous version still be put back, and what does it do with what the new one wrote?
+- L.migration-05.saved-register: saved-register: What do the updating copy and the still-open older copy each do and show when the older one stands in the way of bringing saved data up to date?
+- L.migration-07.saved-register: saved-register: For each value the new version expects, what do records saved before it existed get: a stated default, a marked blank, or a question to the person?
+- L.migration-10.saved-register: saved-register: What state is the saved data in when bringing it up to date fails partway, and what does the product do the next time it starts?
+- L.migration-11.saved-register: saved-register: Can spare copies taken under earlier versions still be brought back by the current version, and how long is that promised?
+- L.concurrency-01.saved-register: saved-register: When two changes to the same item are made from what each saw earlier, which survives, and is the person whose change was replaced told?
+- L.concurrency-02.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): Which rules span more than one item, and how are they kept true when two operations each change a different item at the same moment?
+- L.concurrency-02.singer-in-the-register: singer-in-the-register (in each of its states: not-in-register, in-register, asked-if-still-coming, left-choir): Which rules span more than one item, and how are they kept true when two operations each change a different item at the same moment?
+- L.concurrency-03.missing-view: missing-view: Which sets of items must always be read as they stood at a single moment, and how is that ensured while changes are going on?
+- L.concurrency-04.record-request: record-request: Where does the product decide something from the set of items matching a condition, and what happens if that set changes before the decision is acted on?
+- L.concurrency-06.missing-view: missing-view: After a change is confirmed, how soon must every window, copy and device show it, and what does a person see in the meantime?
+- L.concurrency-08.saved-register: saved-register: What does the product do when the stored data is in use by another operation: wait, try again, or tell the person, and for how long?
+- L.concurrency-09.record-request: record-request: When an operation is cancelled because it clashed with another, is it repeated automatically from the start, and what if it cannot simply be repeated?
+- L.concurrency-12.saved-register: saved-register: What stops two copies of the product from changing the same stored data at once, and in which setups (shared or remote storage, mixed versions) does that protection not hold?
+- L.lifecycle-03.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): Which steps cannot be taken back once done, and is everything that could still fail checked before them?
+- L.lifecycle-05.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): Which records only make sense as a pair or set, and how is one that exists without its partner found and dealt with?
+- L.user-input-01.singer-name: singer-name: How long may each typed value be, and what does the person see when theirs is longer?
+- L.user-input-02.record-request: record-request: Which fields are truly required, and what can a person do who has no value for one of them?
+- L.user-input-03.singer-name: singer-name: Which characters does each field accept, and on what grounds is any character refused?
+- L.user-input-04.singer-name: singer-name: Is each value asked for whole or in parts, and what happens when a person's value has fewer, more or differently ordered parts?
+- L.user-input-05.record-request: record-request: Where is each rule about a typed value enforced, and what happens to a value that arrives without having passed the on-screen check?
+- L.user-input-06.refusal-message: refusal-message: For each way a value can be refused, what does the message say and where does it appear?
+- L.user-input-06.record-for-singer-3: record-for-singer-3: For each way a value can be refused, what does the message say and where does it appear?
+- L.user-input-07.singer-name: singer-name: Is an empty or all-spaces value accepted, and are spaces around a value kept, removed or refused?
+- L.user-input-09.singer-name: singer-name: Which values must be unique, how is sameness judged, and what is the person told when theirs is taken?
+- L.user-input-10.singer-name: singer-name: Wherever typed text is later shown, stored or passed on, how is it kept from being acted on as anything but text?
+- L.user-input-11.record-request: record-request: Which fields depend on one another, and what happens when their values do not agree?
+- L.user-input-12.rehearsal-date: rehearsal-date: In which written forms may a number or a date be typed, and how is an ambiguous one settled?
+- L.user-action-01.record-request: record-request: What does the person see at once after starting an operation, and what happens if they start it a second time before the first has finished?
+- L.user-action-02.record-request: record-request: What does reloading do on each screen that follows an operation that changed something?
+- L.user-action-03.record-request: record-request: What does each screen show, and what can be done from it, when it is reached by stepping back after the operation it led to?
+- L.user-action-05.record-request: record-request: When are a person's changes saved, and what becomes of unsaved ones when they leave without warning the product?
+- L.user-action-06.missing-view: missing-view: What does a person find when they come back to a screen their device has suspended or discarded in the meantime?
+- L.user-action-07.missing-view: missing-view: When the same person has several windows open, how does each learn of a change made in another, and which one wins if both act?
+- L.user-action-08.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): Which actions can be undone, for how long, and what can a person do about one that cannot?
+- L.user-action-09.record-request: record-request: Which actions ask for confirmation, and why will a person still read the question on the one that matters?
+- L.user-action-10.record-request: record-request: At each step of a longer operation, how does a person back out, and what is left behind if they do or simply leave?
+- L.user-action-12.missing-view: missing-view: What does a saved address to each screen lead to when the person is signed out, or when what it pointed at no longer exists?
+- L.time-01.rehearsal: rehearsal (in each of its states: coming-up, took-place, no-rehearsal): Which behaviours depend on the device's own clock, and what happens to each when that clock is wrong?
+- L.time-03.rehearsal: rehearsal (in each of its states: coming-up, took-place, no-rehearsal): What do waits, expiries and the order of events do when the clock is set back or leaps ahead?
+- L.time-07.rehearsal-date: rehearsal-date: Which values are plain dates or plain times with no zone, and how are they kept from shifting when stored, moved or shown?
+- L.time-08.rehearsal-date: rehearsal-date: Whose time zone governs each date and time the product handles, and what changes when a person's zone does?
+- L.time-10.rehearsal: rehearsal (in each of its states: coming-up, took-place, no-rehearsal): How is each occurrence of a repeating schedule worked out, so that it stays at the intended local time all year?
+- L.time-12.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): For each recorded time, is it when the thing happened or when it was recorded, and which of the two do later decisions use?
+- L.text-01.singer-name: singer-name: When are two pieces of text counted as the same, and is that settled before they are stored or each time they are compared?
+- L.text-02.singer-name: singer-name: Where does the product ignore the difference between capital and small letters, and by which language's rules?
+- L.text-03.singer-name: singer-name: What does the product do with unseen characters and unusual spaces in text it stores and compares?
+- L.text-05.singer-name: singer-name: How does the product measure the length of text, and where may it cut text that is too long?
+- L.text-06.missing-view: missing-view: By what rule is each list of text ordered, and has a reader of that language checked it?
+- L.text-07.missing-view: missing-view: Whose language decides the order of a list: the reader's, the content's, or one fixed for all?
+- L.text-09.singer-name: singer-name: Wherever a stored or typed value is put into a sentence or a row, what keeps text of the opposite direction from disturbing what surrounds it?
+- L.text-10.singer-name: singer-name: Where must people tell names or labels apart by eye, and what stops one being made to look like another?
+- L.text-12.missing-view: missing-view: How much room does each label and message have, and what happens when the wording in another language is longer or taller?
+- L.presentation-01.rehearsal-date: rehearsal-date: In what form is each date shown, and could a reader anywhere take it for another day?
+- L.presentation-06.rehearsal-date: rehearsal-date: Which digit shapes does the product show, and is that the reader's choice?
+- L.presentation-09.rehearsal-date: rehearsal-date: Which calendar or calendars does the product show dates in, and what does a reader who uses another one see?
+- L.presentation-10.missing-view: missing-view: By which part of a name is a list of people ordered, and does that suit the readers the product is for?
+- L.presentation-12.missing-view: missing-view: When a list too long for one screen is put in order, does the order hold across all of it?
+- L.authorization-01.record-request: record-request: For every operation and every kind of data, who is allowed, and where is that checked?
+- L.authorization-01.missing-view: missing-view: For every operation and every kind of data, who is allowed, and where is that checked?
+- L.authorization-02.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): How does the product confirm that the particular record asked for belongs to, or is shared with, the person asking?
+- L.authorization-03.record-request: record-request: Where is each permission enforced, and what happens to a request that bypasses the screen?
+- L.authorization-04.saved-register: saved-register: What may a person do when no rule mentions them or the thing they ask for?
+- L.authorization-05.record-request: record-request: When and how are a person's permissions reduced or removed as their role changes?
+- L.authorization-06.record-request: record-request: How does the product tell a request the person meant to make from one sent in their name by someone else's page?
+- L.authorization-07.record-request: record-request: Which operations change something, and can any of them happen just because a link was followed or a page was loaded?
+- L.authorization-08.record-request: record-request: What does the product do with a request when the check of its permission cannot be completed?
+- L.authorization-09.saved-register: saved-register: Who may fetch each stored file directly, and is that checked the same way as the screen that shows it?
+- L.authorization-10.record-request: record-request: Which facts about a person's identity and permissions does the product take from the person's device, and how does it know they were not altered?
+- L.logging-01.record-request: record-request: Which events must always leave a record?
+- L.logging-02.record-request: record-request: What must every record say so that someone can later tell what happened and to whom?
+- L.logging-03.singer-name: singer-name: Which values must never appear in a record, and how are they kept out?
+- L.logging-04.singer-name: singer-name: How is outside-supplied text recorded so that it cannot pass for, or damage, the product's own entries?
+- L.logging-05.record-request: record-request: What does the product do when it cannot write a record: stop, continue without it, or something else?
+- L.logging-06.record-request: record-request: How much may the records grow, and what happens when that limit is reached?
+- L.logging-07.record-request: record-request: When something fails, what does the person see and what goes only into the records?
+- L.logging-08.saved-register: saved-register: Where are the records kept, and do they survive the loss of the machine that wrote them?
+- L.logging-09.record-request: record-request: Who or what reads the records, and which entries make someone get told?
+- L.logging-10.record-request: record-request: Who can change or remove records, and how would a change or removal be noticed?
+- L.logging-11.record-request: record-request: Which clock does each record's time come from, and how are records from different places put in order?
+- L.logging-12.singer-name: singer-name: How long is each kind of record kept, and what removes it when that time is up?
+- L.accessibility-01.record-request: record-request: For each thing a person can do on the screen, how is it done using the keyboard alone?
+- L.accessibility-01.missing-view: missing-view: For each thing a person can do on the screen, how is it done using the keyboard alone?
+- L.accessibility-02.record-request: record-request: From every part of the screen a keyboard user can enter, how do they leave it?
+- L.accessibility-03.record-request: record-request: How is the item that has keyboard focus shown, on every item that can take it?
+- L.accessibility-04.record-request: record-request: Where does focus go when the item holding it closes or is removed?
+- L.accessibility-05.record-request: record-request: What name and purpose does each control announce to someone who cannot see it?
+- L.accessibility-06.missing-view: missing-view: For everything shown that is not text, what words give the same meaning?
+- L.accessibility-07.record-request: record-request: How does someone who cannot see the screen learn the result of what they just did?
+- L.accessibility-08.missing-view: missing-view: Wherever colour carries meaning, what else on the screen carries the same meaning?
+- L.accessibility-08.refusal-message: refusal-message: Wherever colour carries meaning, what else on the screen carries the same meaning?
+- L.accessibility-09.missing-view: missing-view: What contrast between text and its background does every screen keep, in every state and theme?
+- L.accessibility-10.missing-view: missing-view: What happens to each screen when its text is enlarged to twice its size?
+- L.stored-data-01.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): Which data the product creates or holds would harm someone if seen or changed, and how strongly must each kind be protected?
+- L.stored-data-01.saved-register: saved-register: Which data the product creates or holds would harm someone if seen or changed, and how strongly must each kind be protected?
+- L.stored-data-02.saved-register: saved-register: Who could read each kind of sensitive data where it is stored and in every copy made of it, and what makes it unreadable to anyone else?
+- L.stored-data-03.saved-register: saved-register: Which keys protect what, where does each one live, and what may each be used for?
+- L.stored-data-04.saved-register: saved-register: What happens to protected data when its key is lost, exposed or replaced?
+- L.stored-data-05.singer-name: singer-name: Does any sensitive value travel in an address or its query, and where would that be recorded?
+- L.stored-data-06.missing-view: missing-view: Which components in between may keep a copy of a reply, and how is sensitive data kept out of them?
+- L.stored-data-08.missing-view: missing-view: For each reply, which fields are sent, and is any sent that the asker does not need or may not see?
+- L.stored-data-09.absence: absence (in each of its states: recorded, recorded-after-tuesday, rehearsal-passed): How long is each kind of sensitive data kept, and what removes it when that time is up?
+- L.stored-data-10.saved-register: saved-register: What does the product store on the person's device, and is any of it sensitive?
+- L.stored-data-12.missing-view: missing-view: Is the reading of sensitive data recorded, without the data itself, and who looks at that record?
+- L.misuse-02.record-request: record-request: What limits does each rule of the product set, and where is each enforced?
+- L.misuse-03.record-request: record-request: What could a script do by calling the product again and again, and what stops it?
+- L.misuse-04.record-request: record-request: Is anything done faster than a person could a sign of abuse here, and what is done about it?
+- L.misuse-05.record-request: record-request: Which actions are grave enough to need a second person's agreement?
+- L.misuse-07.record-request: record-request: Which fields may each request set, and what happens to a field that is sent and was not meant to be set?
+
+## Each value taken in, each way it can be wrong
+
+- V.singer-name.missing: `singer-name` (a section leader) is missing, or null: what does the product do, and what is the person told?
+- V.rehearsal-date.empty: `rehearsal-date` (a section leader, or whoever arranges the programme) is empty: what does the product do, and what is the person told?
+- V.rehearsal-date.missing: `rehearsal-date` (a section leader, or whoever arranges the programme) is missing, or null: what does the product do, and what is the person told?
+- V.rehearsal-date.malformed: `rehearsal-date` (a section leader, or whoever arranges the programme) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.rehearsal-date.edge: `rehearsal-date` (a section leader, or whoever arranges the programme) is at the very edge of what is allowed: what does the product do, and what is the person told?
+- V.rehearsal-date.outside: `rehearsal-date` (a section leader, or whoever arranges the programme) is outside what is allowed: what does the product do, and what is the person told?
+- V.saved-singers.empty: `saved-singers` (read back from the saved register) is empty: what does the product do, and what is the person told?
+- V.saved-singers.missing: `saved-singers` (read back from the saved register) is missing, or null: what does the product do, and what is the person told?
+- V.saved-singers.malformed: `saved-singers` (read back from the saved register) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.saved-singers.long: `saved-singers` (read back from the saved register) is far longer or larger than expected: what does the product do, and what is the person told?
+- V.saved-singers.twice: `saved-singers` (read back from the saved register) is the same as one already there: what does the product do, and what is the person told?
+- V.saved-absences.empty: `saved-absences` (read back from what was saved) is empty: what does the product do, and what is the person told?
+- V.saved-absences.missing: `saved-absences` (read back from what was saved) is missing, or null: what does the product do, and what is the person told?
+- V.saved-absences.malformed: `saved-absences` (read back from what was saved) is of the wrong type or malformed: what does the product do, and what is the person told?
+- V.saved-absences.long: `saved-absences` (read back from what was saved) is far longer or larger than expected: what does the product do, and what is the person told?
+- V.saved-absences.twice: `saved-absences` (read back from what was saved) is the same as one already there: what does the product do, and what is the person told?
+- V.every-setting.missing: any setting the build reads is missing, or null: what does the product do at start, and who is told?
+- V.every-setting.empty: any setting the build reads is empty: what does the product do at start, and who is told?
+- V.every-setting.malformed: any setting the build reads is of the wrong type or malformed: what does the product do at start, and who is told?
+- V.every-setting.outside: any setting the build reads is outside what is allowed: what does the product do at start, and who is told?
+Not drawn, 4 already asked of the same thing by a library question above.
+
+## Each class of sensitive values, each place it can leak to
+
+- X.singer-details.logs: can any of `singer-name`, `saved-singers`, `saved-absences` reach what the product logs, on the path that works and on each that fails?
+- X.singer-details.errors-inside: can any of `singer-name`, `saved-singers`, `saved-absences` reach an error's own message and trace, on the path that works and on each that fails?
+- X.singer-details.errors-shown: can any of `singer-name`, `saved-singers`, `saved-absences` reach an error shown or returned to whoever asked, on the path that works and on each that fails?
+- X.singer-details.telemetry: can any of `singer-name`, `saved-singers`, `saved-absences` reach what is sent to monitoring or measurement, on the path that works and on each that fails?
+- X.singer-details.samples: can any of `singer-name`, `saved-singers`, `saved-absences` reach test data and examples kept with the code, on the path that works and on each that fails?
+- X.singer-details.replies: can any of `singer-name`, `saved-singers`, `saved-absences` reach a reply that succeeded, to whoever asked, on the path that works and on each that fails?
+- X.singer-details.stored: can any of `singer-name`, `saved-singers`, `saved-absences` reach where it is stored, and every copy made of that, on the path that works and on each that fails?
+
+## Each state, each event
+
+- S.singer-in-the-register.not-in-register.record-for-singer-1: A singer in the register is `not-in-register` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.record-for-singer-2: A singer in the register is `not-in-register` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.record-for-singer-3: A singer in the register is `not-in-register` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.see-who-missing-1: A singer in the register is `not-in-register` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.see-who-missing-2: A singer in the register is `not-in-register` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.again: A singer in the register is `not-in-register` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.reopened: A singer in the register is `not-in-register` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.restart: A singer in the register is `not-in-register` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.second: A singer in the register is `not-in-register` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.singer-in-the-register.not-in-register.time: A singer in the register is `not-in-register` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.record-for-singer-1: A singer in the register is `in-register` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.record-for-singer-2: A singer in the register is `in-register` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.record-for-singer-3: A singer in the register is `in-register` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.see-who-missing-1: A singer in the register is `in-register` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.see-who-missing-2: A singer in the register is `in-register` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.again: A singer in the register is `in-register` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.reopened: A singer in the register is `in-register` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.restart: A singer in the register is `in-register` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.second: A singer in the register is `in-register` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.singer-in-the-register.in-register.time: A singer in the register is `in-register` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.record-for-singer-1: A singer in the register is `asked-if-still-coming` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.record-for-singer-2: A singer in the register is `asked-if-still-coming` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.record-for-singer-3: A singer in the register is `asked-if-still-coming` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.see-who-missing-1: A singer in the register is `asked-if-still-coming` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.see-who-missing-2: A singer in the register is `asked-if-still-coming` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.again: A singer in the register is `asked-if-still-coming` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.reopened: A singer in the register is `asked-if-still-coming` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.restart: A singer in the register is `asked-if-still-coming` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.second: A singer in the register is `asked-if-still-coming` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.singer-in-the-register.asked-if-still-coming.time: A singer in the register is `asked-if-still-coming` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.record-for-singer-1: A singer in the register is `left-choir` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.record-for-singer-2: A singer in the register is `left-choir` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.record-for-singer-3: A singer in the register is `left-choir` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.see-who-missing-1: A singer in the register is `left-choir` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.see-who-missing-2: A singer in the register is `left-choir` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.again: A singer in the register is `left-choir` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.reopened: A singer in the register is `left-choir` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.restart: A singer in the register is `left-choir` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.second: A singer in the register is `left-choir` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.singer-in-the-register.left-choir.time: A singer in the register is `left-choir` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.record-for-singer-1: A rehearsal is `coming-up` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.record-for-singer-2: A rehearsal is `coming-up` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.record-for-singer-3: A rehearsal is `coming-up` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.see-who-missing-1: A rehearsal is `coming-up` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.see-who-missing-2: A rehearsal is `coming-up` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.again: A rehearsal is `coming-up` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.reopened: A rehearsal is `coming-up` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.restart: A rehearsal is `coming-up` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.second: A rehearsal is `coming-up` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.rehearsal.coming-up.time: A rehearsal is `coming-up` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.record-for-singer-1: A rehearsal is `took-place` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.record-for-singer-2: A rehearsal is `took-place` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.record-for-singer-3: A rehearsal is `took-place` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.see-who-missing-1: A rehearsal is `took-place` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.see-who-missing-2: A rehearsal is `took-place` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.again: A rehearsal is `took-place` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.reopened: A rehearsal is `took-place` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.restart: A rehearsal is `took-place` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.second: A rehearsal is `took-place` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.rehearsal.took-place.time: A rehearsal is `took-place` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.record-for-singer-1: A rehearsal is `no-rehearsal` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.record-for-singer-2: A rehearsal is `no-rehearsal` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.record-for-singer-3: A rehearsal is `no-rehearsal` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.see-who-missing-1: A rehearsal is `no-rehearsal` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.see-who-missing-2: A rehearsal is `no-rehearsal` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.again: A rehearsal is `no-rehearsal` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.reopened: A rehearsal is `no-rehearsal` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.restart: A rehearsal is `no-rehearsal` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.second: A rehearsal is `no-rehearsal` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.rehearsal.no-rehearsal.time: A rehearsal is `no-rehearsal` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.absence.recorded.record-for-singer-1: An absence is `recorded` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded.record-for-singer-2: An absence is `recorded` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded.record-for-singer-3: An absence is `recorded` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded.see-who-missing-1: An absence is `recorded` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded.see-who-missing-2: An absence is `recorded` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded.again: An absence is `recorded` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.absence.recorded.reopened: An absence is `recorded` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.absence.recorded.restart: An absence is `recorded` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.absence.recorded.second: An absence is `recorded` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.absence.recorded.time: An absence is `recorded` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.record-for-singer-1: An absence is `recorded-after-tuesday` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.record-for-singer-2: An absence is `recorded-after-tuesday` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.record-for-singer-3: An absence is `recorded-after-tuesday` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.see-who-missing-1: An absence is `recorded-after-tuesday` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.see-who-missing-2: An absence is `recorded-after-tuesday` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.again: An absence is `recorded-after-tuesday` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.reopened: An absence is `recorded-after-tuesday` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.restart: An absence is `recorded-after-tuesday` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.second: An absence is `recorded-after-tuesday` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.absence.recorded-after-tuesday.time: An absence is `recorded-after-tuesday` and a long time passes with nothing done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.record-for-singer-1: An absence is `rehearsal-passed` and what record-for-singer / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.record-for-singer-2: An absence is `rehearsal-passed` and what record-for-singer / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.record-for-singer-3: An absence is `rehearsal-passed` and what record-for-singer / 3 describes is done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.see-who-missing-1: An absence is `rehearsal-passed` and what see-who-missing / 1 describes is done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.see-who-missing-2: An absence is `rehearsal-passed` and what see-who-missing / 2 describes is done: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.again: An absence is `rehearsal-passed` and the same action is done again at once: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.reopened: An absence is `rehearsal-passed` and the page is reloaded, or the product closed and reopened, partway through: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.restart: An absence is `rehearsal-passed` and the product stops and starts again: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.second: An absence is `rehearsal-passed` and a second copy of the product, a second device or a second person acts on it at the same moment: what happens to it, and what is the person shown?
+- S.absence.rehearsal-passed.time: An absence is `rehearsal-passed` and a long time passes with nothing done: what happens to it, and what is the person shown?
+
+## By what the slice is
+
+- F.browser.context: What stops a reply meant as data, or a file someone submitted, from being shown and run as a page when its address is opened directly?
+- F.browser.page-policy: From where may the page load and run code, and what does the browser do with anything else?
+- F.browser.framing: May another site show this product inside a page of its own, and what prevents it?
+- F.browser.type-guessing: How is the browser kept from treating a reply as a different type from the one it was sent as?
+- F.browser.came-from: What does the browser tell other sites about the address a person came from, and is anything sensitive in that address?
+- F.browser.other-sites: Which other sites' pages may call this product and read its replies, and how are all the rest refused?
+- F.browser.messages: Does the page take messages from other windows, and how does it know which to trust?
+- F.browser.others-code: Which code or styles on the page come from another party, and what stops a changed copy from running with everything the page can reach?
+- F.browser.sent-on: Can the product send a person on to an address that someone else supplied?
+- F.browser.kept-by-browser: What does the browser keep of a page that showed sensitive data, and for how long?
+- F.browser.known-by: What does the product keep in the browser to know a person by, and what else can read it or cause it to be sent?
+- F.network.answers-to: At which addresses and under which host names does the product answer, and what does it do with a request that names another?
+- F.network.transport: Is every connection to it encrypted, and what happens to one that is not?
+- F.network.in-between: Which facts about a request does it take from something in between (the sender's address, the host first asked for), and can the sender set them?
+- F.network.kinds-of-request: Which kinds of request does each address accept, and what happens to the others?
+- F.network.left-on: What can be reached that nobody meant to offer: a diagnostic mode, a listing of files, the history of the source, pages of documentation or measurement, test code?
+- F.network.gives-away: What does a reply reveal about what the product is built from, a refusal included?
+- F.dependency.known-flaw: When a component the product uses is found to have a known flaw, how is that learned, and how soon is the component replaced?
+- F.dependency.inventory: Is there a list of every component used, those they bring with them included, and of where each comes from?
+- F.dependency.look-alike: What makes sure each component is fetched from the place intended, and is the one intended?
+- F.dependency.trusted-most: Which components are trusted with the most (they see credentials, read outside data, run when installed), and what limits them?
+- F.several-people.fields: Within a record a person may see or change, are there fields they may not?
+- F.several-people.groups: Can one group's use ever show or change what belongs to another group?
+- F.unguessable.made: Which values are meant to be impossible to guess (a link, a code, a session, an identifier), and how is each one made?
+
+## What someone who means harm would want
+
+- T.singer-details.missing-view: someone after `singer-details` comes through `missing-view`: Someone not meant to see the list learns which named singers will be away on a given evening. What stops it, and how would anyone know it was tried?
+- T.singer-details.saved-register: someone after `singer-details` comes through `saved-register`: Someone who gets at the computer or a copy of what it keeps reads singers' names together with when they were to be away. What stops it, and how would anyone know it was tried?
+- T.singer-details.record-request: someone after `singer-details` comes through `record-request`: Someone able to watch the request on its way reads which singer will be away and when. What stops it, and how would anyone know it was tried?
+- T.absence.record-request: someone after `absence` comes through `record-request`: Someone records, or makes a section leader's computer send, a false or repeated absence, and the programme is changed for a singer who is coming. What stops it, and how would anyone know it was tried?
+- T.absence.saved-register: someone after `absence` comes through `saved-register`: Someone changes or removes saved absences, and whoever arranges the programme plans for the wrong singers. What stops it, and how would anyone know it was tried?
+- T.saved-register.record-request: someone after `saved-register` comes through `record-request`: Someone sends a request made to change or destroy singers or attendance, and the choir's register is lost or wrong. What stops it, and how would anyone know it was tried?
+
+## Asked of every slice
+
+- W.unavailable: What happens, and to whom, if what this slice adds cannot be used for an hour?
+- W.target: How often may it fail, and how slow is too slow, before someone would say it does not work?
+- W.noticed: Who notices when it breaks, and how?
+- W.sensitive: What does this slice touch that would harm someone if another person saw or changed it?
+- W.who-sees: Who uses it, and may any of them see or change what belongs to another?
+- W.obligations: Does a law, a contract or an outside system's terms bind how this is handled?
+- W.prize: What would someone who means harm want from what this slice adds?
+
+## Carried from research
+
+- C.states.singer-in-the-register.not-in-register: A singer in the register, `not-in-register`: not said in the documents (not said in the documents | A section leader who tries to record an absence for that name is told there is no such singer | adding the singer with their voice part -> `in-register` | slice-001/004_slice.md line 10; 002_requirements.md line 9)
+- C.states.singer-in-the-register.asked-if-still-coming: A singer in the register, `asked-if-still-coming`: not said in the documents (missing three rehearsals in a row without a word, then being asked whether they're still coming | not said in the documents | not said in the documents | 000_problem.md line 7)
+- C.states.singer-in-the-register.left-choir: A singer in the register, `left-choir`: not said in the documents (not said in the documents | not said in the documents | not said in the documents | not said in the documents)
+- C.states.rehearsal.took-place: A rehearsal, `took-place`: not said in the documents (rehearsal night | Who came can be marked and seen. Recording an absence now: not said in the documents | not said in the documents | 002_requirements.md lines 10 and 11)
+- C.states.rehearsal.no-rehearsal: A rehearsal, `no-rehearsal`: not said in the documents (not said in the documents | not said in the documents | not said in the documents | 002_requirements.md line 23)
+- C.states.absence.recorded-after-tuesday: An absence, `recorded-after-tuesday`: not said in the documents (not said in the documents: whether word can be recorded after Tuesday evening | not said in the documents | not said in the documents | 002_requirements.md line 21)
+- C.states.absence.rehearsal-passed: An absence, `rehearsal-passed`: not said in the documents (by itself, when the rehearsal night is over | not said in the documents | not said in the documents | not said in the documents)
+- C.states.dead-end.1: for the owner's list: `recorded`: no way out. A mistaken absence, or one for a singer whose plans have changed, stays shown as missing, so whoever arranges the programme may count a singer short who is coming.
+- C.states.dead-end.2: for the owner's list: `in-register`: no way out. The documents give no way to remove a singer, so one who has left would stay in the register.

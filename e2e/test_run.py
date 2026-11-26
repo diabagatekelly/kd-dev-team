@@ -458,6 +458,63 @@ class Run(unittest.TestCase):
         summary, _ = self.through(fake=self.RESEARCH, brief=BRIEF, through="research")
         self.assertEqual(summary["ended"], "the research was written")
 
+    # Carried on through the questions (stage 7).
+    QUESTIONS = RESEARCH.replace('    if n == 99:\n', '    if n == 9:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions").mkdir(exist_ok=True)\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/kept.md").write_text("# Kept\\n")\n'
+                                 '    if n == 10:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/questions.md").write_text("# Questions\\n")\n'
+                                 '    if n == 99:\n')
+
+    SECURITY = QUESTIONS.replace('    if n == 99:\n', '    if n == 11:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/security.md").write_text("# Security\\n")\n'
+                                 '    if n == 12:\n'
+                                 '        pathlib.Path("plans/slice-002/007_questions/questions.md").write_text("# Questions\\n\\nagain\\n")\n'
+                                 '    if n == 99:\n')
+
+    def test_carried_through_security_it_ends_once_the_questions_are_drawn_again_after_its_file(self):
+        summary, _ = self.through(fake=self.SECURITY, brief=self.SPOKEN, through="security")
+        # Not at turn 10 (the questions drawn) nor at 11 (the security file written, the drawing older than it).
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the security file was written and the questions drawn again", 12))
+
+    # The session that drew the questions again begins the answers in the same turn, and the script draws them in the next.
+    ANSWERS = SECURITY.replace('    if n == 99:\n', '        pathlib.Path("plans/slice-002/008_answers.md").write_text("# Answers\\n")\n'
+                               '    if n == 13:\n'
+                               '        pathlib.Path("plans/slice-002/008_answered.md").write_text("# Answered\\n")\n'
+                               '    if n == 99:\n')
+
+    def test_carried_through_the_answers_it_ends_once_the_script_has_drawn_them(self):
+        summary, _ = self.through(fake=self.ANSWERS, brief=self.SPOKEN, through="answers")
+        # Not at turn 12: security is done and the answers begun, and nothing is drawn from them.
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers were drawn", 13))
+
+    def test_the_answers_are_kept_with_their_drawing(self):
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002"
+        (folder / "008_answers.md").write_text("written")
+        (folder / "008_answered.md").write_text("drawn")
+        kept = run.keep(self.folder / "done", self.example, "answers", self.folder / "plugin")
+        self.assertTrue((kept / "slice-002" / "008_answers.md").is_file() and (kept / "slice-002" / "008_answered.md").is_file())
+        self.assertFalse((run.keep(self.folder / "done", self.example, "security", self.folder / "plugin") / "slice-002" / "008_answers.md").exists())
+
+    def test_the_security_file_is_kept_with_the_questions_folder(self):
+        self.through(fake=self.SECURITY, brief=self.SPOKEN, through="security")
+        kept = run.keep(self.folder / "out", self.example, "security", self.folder / "plugin")
+        self.assertTrue((kept / "slice-002" / "007_questions" / "security.md").is_file())
+
+    def test_carried_through_the_questions_it_ends_once_they_are_drawn_and_not_when_only_kept(self):
+        summary, _ = self.through(fake=self.QUESTIONS, brief=self.SPOKEN, through="questions")
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the questions were drawn", 10))
+        self.assertEqual(summary["questions"], ["plans/slice-002/007_questions/questions.md"])
+        self.assertEqual(summary["merged"], "")
+        # What the session and the script write in the questions folder carries the folder's number, not one of its own.
+        planning = self.folder / "out" / "project" / "plans"
+        self.assertEqual(sorted(path.name for path in run.in_a_folder_of_its_stage(planning)), ["kept.md", "questions.md", "states.md"])
+
+    def test_the_questions_never_drawn_end_the_run_as_stuck(self):
+        summary, _ = self.through(fake=self.QUESTIONS.replace("if n == 10:", "if n == 98:"), brief=self.SPOKEN, through="questions")
+        self.assertEqual((summary["ended"], summary["questions"]), ("stuck: the user had only the same thing to say", []))
+
     def test_research_that_is_never_written_ends_the_run_as_stuck(self):
         summary, _ = self.through(fake=self.RESEARCH.replace("if n == 8:", "if n == 98:"), brief=self.SPOKEN, through="research")
         self.assertEqual((summary["ended"], summary["research"]), ("stuck: the user had only the same thing to say", []))
@@ -477,6 +534,13 @@ class Run(unittest.TestCase):
     def test_a_need_that_goes_on_waiting_ends_a_run_through_research_too(self):
         summary, _ = self.through(fake=self.RESEARCH.replace("if n == 7:", "if n == 97:").replace("if n == 8:", "if n == 98:"),
                                   brief=self.SPOKEN, through="research")
+        self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
+
+    def test_a_need_that_goes_on_waiting_ends_a_run_through_the_questions_too(self):
+        # Met on 2026-11-25: the fourth example's user leaves its needs waiting, and a run through the
+        # questions went on to its last turn ($20) because only a run through research or a merge stopped.
+        summary, _ = self.through(fake=self.RESEARCH.replace("if n == 7:", "if n == 97:").replace("if n == 8:", "if n == 98:"),
+                                  brief=self.SPOKEN, through="questions")
         self.assertEqual(summary["ended"], "the approach was written and four turns later 1 of its needs still waited")
 
     def test_with_nothing_committed_to_and_no_lasting_thing_listed_it_ends_a_turn_later_with_no_research(self):
@@ -510,6 +574,18 @@ class Run(unittest.TestCase):
         kept = run.keep(self.folder / "done", self.example, "research", self.folder / "plugin")
         self.assertEqual((kept / "slice-002" / "006_research" / "states.md").read_text(), "kept")
         self.assertFalse((run.keep(self.folder / "done", self.example, "approach", self.folder / "plugin") / "slice-002" / "006_research").exists())
+
+    def test_the_questions_of_a_run_that_went_on_through_security_are_not_kept_as_the_questions(self):
+        # Met on 2026-11-25, keeping the examples after the security pass: the drawing carried security's mark.
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002" / "007_questions"
+        folder.mkdir(parents=True)
+        (folder / "questions.md").write_text("drawn")
+        (folder / "security.md").write_text("written")
+        with self.assertRaises(SystemExit) as refused:
+            run.keep(self.folder / "done", self.example, "questions", self.folder / "plugin")
+        self.assertIn("keep security", str(refused.exception))
+        self.assertTrue((run.keep(self.folder / "done", self.example, "security", self.folder / "plugin") / "slice-002" / "007_questions" / "security.md").exists())
 
     def test_keeping_a_place_no_run_finished_in_keeps_nothing_and_loses_nothing(self):
         # Found before the stage was put to the owner: --keep given with a run's options ran nothing and emptied what was kept.

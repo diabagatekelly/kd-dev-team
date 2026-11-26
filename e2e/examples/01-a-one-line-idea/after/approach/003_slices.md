@@ -1,13 +1,16 @@
-# Slices: A member on the waiting list finds out where they are on it
+# Slices: See where they stand on the waiting list
 
 | # | Slice | Items | Builds on | State |
 |---|---|---|---|---|
-| 1 | The keeper puts the notebook's waiting list in, in the order it is in now | keep-the-list | nothing | chosen |
-| 2 | A member finds out their own place on the list | see-own-place | 1 | open |
-| 3 | The keeper keeps the list up to date as it changes | keep-the-list | 1 | open |
+| 1 | Carry the notebook list across in its order | notebook-order-kept | nothing | chosen |
+| 2 | See your own place in the order | see-where-they-stand | 1 | open |
+| 3 | Look at the waiting list as the committee | committee-sees-list | 1 | open |
+| 4 | See anything else about your own place | see-where-they-stand | 2 | open |
+| 5 | Have someone else find out your place for you | see-where-they-stand | 2 | open |
 
 ## Where to start
-- Slice 1 can be started now. It is the only one that can: it does not lean on any question still open.
-- Slice 2 waits. It leans on two questions we do not know the answer to yet: how one member is told apart from another so each sees only their own place, and whether "where they are" is just a number or something more.
-- Slice 3 waits. It leans on the question of what keeping the list up to date takes in (people joining, leaving, being given a plot). It is the second half of keep-the-list, which is why that item is in both slice 1 and slice 3.
-- I recommend slice 1. It is the one the others build on, and it needs no answer we are missing.
+- Slice 1 can be started now. Slices 2 and 3 wait for it, because there is no list to see until it has been carried across.
+- Slice 4 cannot be started until we know what "where they stand" takes in beyond a person's place in the order. The answer may be that there is nothing more.
+- Slice 5 cannot be started until we know whether anyone else may find out a person's place for them. The list keeper's own looking up, which they would rather not do every week, is part of that later look.
+- Two other open questions have no slice, because their answers could add requirements: what has to be done to keep the list up to date, and what happens when a place is thought to be wrong. Slices 1 to 3 do not include changing or correcting the list once it is across, so the places seen can go out of date or stay wrong.
+- Recommended first: slice 1. It keeps the notebook's order, and every other slice builds on it. Slice 2, which is what matters most, comes straight after.

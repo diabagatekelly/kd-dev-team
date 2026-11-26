@@ -1,14 +1,13 @@
-# Scope map: Allotment waiting list
+# Scope map: the plot waiting list
 
 | # | What the user does | What it covers | When |
 |---|---|---|---|
-| 1 | Find out where I am on the list | A person waiting for a plot learns their place without phoning | now |
-| 2 | Keep the waiting list | Who is waiting, and in what order, kept somewhere other than the notebook at home | next |
-| 3 | Offer a free plot to whoever is first | When a plot comes free, it goes to the first person on the list | next |
-| 4 | Show the council plots are given out fairly | Evidence for the March lease renewal that plots went in order | later |
+| 1 | See where they stand on the waiting list | A person on the waiting list sees where they stand, which today means phoning to ask | now |
+| 2 | Offer a free plot to whoever is first | When a plot comes free, the committee offers it to the person first on the list | next |
+| 3 | Show the council that plots are given out fairly | What the council has said the lease renewal in March depends on | later |
 
 ## Holds for every activity
-- We can spend at most £10 a month.
+- We can spend 10 pounds a month at most.
 - The committee is five volunteers, none of us technical.
 - Many members are elderly, and several have no smartphone.
 

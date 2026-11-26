@@ -1,24 +1,24 @@
-# Requirements: Find out where I am on the list
+# Requirements: See where they stand on the waiting list
 
-- [ ] **see-own-place**: A person waiting for a plot can find out where they are on the waiting list, without phoning the list keeper.
-- [ ] **others-stay-private**: A person waiting for a plot sees only their own place, never anyone else's name or place.
+- [ ] **see-where-they-stand**: A person on the waiting list can see where they stand on it, and only their own place, without people's names being shown to everyone.
+- [ ] **committee-sees-list**: The committee can see the waiting list.
+- [ ] **notebook-order-kept**: The list keeper can have the list carried across from the paper notebook in the order written there.
 
 ## Out for now
-- Keeping the waiting list: who is on it and in what order (next activity).
-- Offering a free plot to whoever is first (next activity).
-- Showing the council plots are given out fairly (later activity).
-- Collecting plot rent.
+- Offering a free plot to whoever is first.
+- Showing the council that plots are given out fairly.
 
 ## Limits that apply
-- At most £10 a month: finding out their place must stay within this for all ~40 people waiting.
-- Five non-technical volunteers: a person finding out their place must not depend on the committee doing technical work each time.
-- Many elderly members, several with no smartphone: the items hold for a person without a smartphone too; they cannot assume one.
+- We can spend 10 pounds a month at most: whatever it takes for people to see where they stand has to fit within this, which is the limit for the whole product.
+- The committee is five volunteers, none of us technical: anything the committee has to do so that people can see where they stand has to be manageable for them.
+- Many members are elderly, and several have no smartphone: needing a smartphone cannot be the only way to see where you stand. This takes it that the limit matters for people waiting too.
 
 ## Not yet confirmed
-I do not know the answers to these yet.
-- **which** (changes see-own-place): how is one person told apart from another on the list (for example two people with the same name, or two people sharing a household)? The answer decides whether a person can be found by name alone.
-- **covers** (changes see-own-place): is "where they stand" just their place in the order, or something more (such as how many are ahead of them, or how long they might wait)? The answer decides what the person is told.
+1. One of us, the list keeper here, keeps the list. What has to be done to keep it up to date, such as adding someone or taking them off? Bears on **see-where-they-stand**: the answer could add items for keeping the list.
+2. What does "where they stand" take in: only their place in the order, or anything else about their own place? Bears on **see-where-they-stand**: the answer could change what the person is shown, or add items.
+3. The list keeper could look a person's place up for them, but would rather not be doing that every week. May anyone else, such as a relative, find it out for them? Bears on **see-where-they-stand**: the answer could change who can see it, or add an item.
+4. If a person thinks their place is wrong, what should they be able to do, and who can correct a mistake? Bears on **see-where-they-stand**: the answer could add items for questioning or correcting a place.
 
 ## Outside systems and lasting things
-- The waiting list: who is on it and in what order, kept over time. It starts as the notebook's order, just as it is, and I (the list keeper) keep it.
-- No outside systems named.
+- Outside systems: none.
+- Lasting thing: the waiting list.

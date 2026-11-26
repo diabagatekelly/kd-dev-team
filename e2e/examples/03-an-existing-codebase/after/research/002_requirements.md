@@ -1,26 +1,32 @@
-# Requirements: A singer tells us they will miss a rehearsal
+# Requirements: know before rehearsal night who'll be missing, in time to rearrange the programme
 
-- [ ] **tell-absence**: A singer can tell us, ahead of a rehearsal, that they will miss it.
-- [ ] **record-phoned-absence**: A section leader can record an absence, ahead of a rehearsal, for a singer who phones them.
+- [ ] **say-will-miss**: A singer can say in advance that they'll miss a rehearsal.
+- [ ] **record-for-singer**: A section leader can record an absence for a singer who phones them.
+- [ ] **see-who-missing**: Whoever arranges the programme can see before rehearsal night which singers have said they'll miss it or have had an absence recorded for them.
+- [ ] **see-parts-short**: Whoever arranges the programme can see by Tuesday evening before a Thursday rehearsal how short each voice part will be, going by what singers have said and what section leaders have recorded, in time to rearrange the programme.
 
 ## Out for now
-- Seeing who will be away, by voice part, before the night (scope map row 2).
-- Seeing who has missed three in a row without a word (scope map row 3). The register's code can already count how many of the latest rehearsals in a row a singer did not come to, but nothing uses it yet.
-- Already works today and is not listed: section leaders add singers by voice part, tick who came to a rehearsal, and print who came and who didn't, by voice part.
+- Adding a singer with their voice part: the register already does this.
+- Marking who came to a rehearsal: the register already does this.
+- Seeing, for a given date, who came in each voice part and how many: the register already does this. It shows nothing about who has said they'll miss a rehearsal.
+- Asking singers who've missed three rehearsals in a row without a word whether they're still coming: the next activity. The code can count how many of the latest rehearsals in a row a singer didn't come to, but no command uses that count, and it takes no account of whether they sent word.
 
 ## Limits that apply
-- Singers mustn't need a password: a singer must be able to tell us without signing in.
-- The register is on a small computer at the church hall that the section leaders use: what a singer tells us has to end up in that register, which today only whoever is at that computer can use.
+- Singers mustn't need a password, because several are in their eighties: a singer must be able to say they'll miss a rehearsal without one. The register has no accounts today.
+- The register is on a small computer at the church hall that the section leaders use: the singers and their voice parts are held there, so what singers say and what section leaders record have to be matched with that register. Whether singers can reach that computer from home isn't known.
 
 ## Not yet confirmed
-1. **After Tuesday evening**: singers are to tell us by Tuesday evening for the Thursday. What happens to a word that comes later (a text on Wednesday, a phone call on the Thursday): is it refused, or taken and marked late? This changes what the items do with a rehearsal that is close.
-2. **Which rehearsals**: one Thursday at a time, or several at once (a holiday, a run of weeks)? This changes whether the item is one rehearsal or many.
-3. **Put right**: can a singer take back or change what they told us if their plans change? This would add an item.
-4. **Covers**: does "miss a rehearsal" take in arriving late or leaving early, or only not coming at all? This changes what the item covers.
-5. **A reason**: do we want to know why, or only that they won't be there? This changes what the singer is asked.
+2. Who needs to see who'll be missing: only me, or the section leaders or others too? And what is my role called? (**see-who-missing**, **see-parts-short**) The answer changes who these items name.
+3. If a singer's plans change, or notice was given by mistake, does it need to be taken back or corrected, and by whom? (**say-will-miss**, **record-for-singer**) This could add an item.
+4. I need to know by Tuesday evening for the Thursday rehearsal. Can a singer still say they'll miss it, or have it recorded, after that, and should it still be shown? (**say-will-miss**, **record-for-singer**, **see-parts-short**) This could change these items.
+5. Does a singer only need to say it for one rehearsal at a time, or also for several ahead? (**say-will-miss**, **record-for-singer**) This could change the item or add one.
+6. The register only has a date once someone has been marked as coming. Are there Thursdays with no rehearsal, or extra rehearsals, and if so, who decides the dates? (**say-will-miss**, **record-for-singer**) This could add an item for setting rehearsal dates.
+7. Does "miss" only mean not coming at all, or also arriving late or leaving early? (all four items) This could change what a singer can say and what is shown.
+8. Can singers reach the hall's computer from home? I think not, but I'm not sure. (**say-will-miss**) This affects where a singer can say it from, and could change the item.
 
 ## Outside systems and lasting things
-- Singers, each in a voice part (exist today in the register).
-- Rehearsals, every Thursday (exist today in the register, as dates).
-- The register (exists today).
-- No outside systems.
+Outside systems: none.
+
+Lasting things:
+- The register: singers, their voice parts and who came.
+- A rehearsal.

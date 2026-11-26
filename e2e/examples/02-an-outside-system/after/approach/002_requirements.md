@@ -1,28 +1,34 @@
-# Requirements: Invoice each client for the month
+# Requirements: Invoice clients for the month
 
-- [ ] **monthly-invoices**: The business owner can get, for each client, an invoice for the month made from that month's walks, without typing it by hand.
-- [ ] **send-payment-links**: The business owner can have each client receive a Tallypay payment link for their invoice.
-- [ ] **regular-walks**: The business owner can state a client's regular weekly walks once, change them, or stop them, so that each month's invoice includes them without being typed again.
-- [ ] **one-off-extras**: The business owner can add a one-off extra walk to a client's month.
-- [ ] **walk-pricing**: The business owner can have each walk charged by its length (30 or 60 minutes, priced differently), with a second dog from the same home at half price.
+- [ ] **walker-walk-entry**: A walker can enter their own walks.
+- [ ] **owner-walk-correction**: The business owner can correct the walks a walker has entered.
+- [ ] **month-from-usual-walks**: A walker can start a month from the usual weekly walks.
+- [ ] **monthly-client-invoice**: The business owner can get each client an invoice for that client's walks in a month.
+- [ ] **invoice-payment-link**: The business owner can get each client a Tallypay payment link for their invoice.
 
 ## Out for now
-- Keeping a record of each walk, so no walker's sheet is lost or guessed (activity 1 on the scope map, "next").
-- Chasing clients who have not paid (activity 3, "later").
+- Chasing clients who haven't paid on time: the scope map marks it "later".
 
 ## Limits that apply
-- Staying with Tallypay: the payment link each client receives is a Tallypay one.
+- Tallypay stays: the payment link for an invoice is a Tallypay one.
+- The walkers will only use their phones: applies. Whatever a walker does here, including entering walks, must be possible on their phone.
+- Clients' addresses and door codes seen only by the business owner and the walker for that client: applies. Nothing in entering walks or invoicing may show them to anyone else.
 
 ## Not yet confirmed
-1. **Which clients the price list covers** (bears on **walk-pricing**): the price list has one row for each of 12 different clients, against about sixty clients in all. If the other clients are priced some other way, or not yet listed, an item for pricing them is added.
-2. **What a price's "since" date means** (bears on **walk-pricing**): each price has a date it applies from. If a price changes part-way through a month, the walks before and after may be charged differently; if not, a month is always charged at one price.
-3. **Putting a mistake right** (bears on **monthly-invoices** and **send-payment-links**): whether an invoice or link already sent may need to be corrected or cancelled, and by whom. If so, an item is added.
-4. **When and how many at once** (bears on **send-payment-links**): whether all sixty or so go out together on a set day each month, or one at a time as each is ready.
-5. **What else exists today that must come across** (bears on **regular-walks**): whether a client list, with each client's regular walks, exists that the new way must start from. The price list is the one thing named so far (see `sources.md`).
+Each of these waits on your decision or answer. None is settled.
+
+1. Where do the usual weekly walks come from, and who can change them? Also, is it right that the walker is the one who starts a month from them? Bears on **month-from-usual-walks**: the answer could add an item or change who it names.
+2. Everyone pays the list price for the length of the walk, nobody has a price of their own, only the business owner changes prices, and anything not on the list is added to it first. Must the business owner be able to add and change prices in the product, and can anything besides walks go on an invoice? The price list also has a Client column, naming a different client in each of its 12 rows (see `sources.md`): what is it for, if nobody has a price of their own? Bears on **monthly-client-invoice**: the answer could add items or widen this one.
+3. Can a walker put right a walk they entered, and until when can walks for a month be entered or changed? Bears on **walker-walk-entry** and **owner-walk-correction**: the answer could add an item.
+4. Must the business owner be able to check or change invoices before clients get them? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item. **The business owner does not know yet.**
+5. When an invoice turns out wrong after the client has it, what must the business owner be able to do? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item.
+6. Does each client always get exactly one invoice a month, or are there cases such as one payer for several clients, or one client needing more than one invoice? Bears on **monthly-client-invoice**: the answer could change it or add an item.
+7. Does anyone besides the business owner make or send invoices, or need to see them (apart from the client who gets one)? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could change who they name or add an item.
+8. Does anything that exists today have to come across, such as client details or earlier or unpaid invoices? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item.
 
 ## Outside systems and lasting things
-- Tallypay: the card service that makes the payment links.
-- Client: about sixty regular clients, each invoiced monthly.
-- Walk: what a walker did for a client, as written on the paper sheets today; a regular walk repeats weekly until changed or stopped, and an extra is one-off.
-- Invoice: one per client per month.
-- Price list: the owner's list of prices, kept in a file on their own machine (described in `sources.md`).
+- Tallypay
+- Client
+- Walk
+- Usual weekly walk
+- Invoice

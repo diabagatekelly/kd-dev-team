@@ -335,7 +335,7 @@ WRITES = {"type": "file_exists", "name": "writes-the-document", "path": SYSTEM}
 WRITES_STATES = {"type": "file_exists", "name": "writes-the-states", "path": STATES}
 # Nothing of a later stage, and nothing of an earlier one changed: the ways back are said, not taken.
 # An offer is a question or a choice laid out: "Say so and I'll start" asks as surely as a question mark.
-OFFERS = r"\?|\bsay so\b|\bsay the word\b|\byour (?:call|choice|options)\b|\btell me\b|\blet me know\b"
+OFFERS = r"\?|\bsay so\b|\bsay the word\b|\byour (?:call|choice|options)\b|\btell me\b|\blet me know\b|\breply\b"
 # The dead end is a dispute lost: a run may name the state `lost` and say whose the money now is.
 DEAD_END = r"(?:^|\n)#+[^\n]*owner[\s\S]*(?:disput|`lost`|cardholder|chargeback)"
 STOPS_THERE = [trace("writes-no-later-document", WROTE + r"_(questions|answers|open-facts|design|screens|stack|readiness)"),

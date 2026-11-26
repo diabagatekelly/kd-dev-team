@@ -7,7 +7,9 @@ The output is a small plugin, `plugin/`, whose one hook hands a session that rep
 
 Usage: python3 -I make_cases.py [--table]   (rewrites plugin/ beside this file)
 """
+import importlib.util
 import json
+import os
 import pathlib
 import shutil
 import sys
@@ -51,10 +53,37 @@ THROUGH_REQUIREMENTS = ["000_problem.md", "001_scope-map.md", "002_requirements.
 THROUGH_A_SLICE = [*THROUGH_REQUIREMENTS, "003_slices.md", "slice-001/004_slice.md"]
 # The first stage with no text of its own, and the documents that make it next: scenario 21. It
 # moves on each time a stage is adopted (the slice on 2026-11-23, decision 39; the approach on
-# 2026-11-24, decision 41; research on 2026-11-24, decision 44). KD_TRIAL names a stage whose text is loaded on trial, before the owner
+# 2026-11-24, decision 41; research on 2026-11-24, decision 44; the questions on 2026-11-25, decision 48). KD_TRIAL names a stage whose text is loaded on trial, before the owner
 # has said it holds (`e2e/regress.py NAME=TEXT`): the next one to be tried takes its place here.
 THROUGH_AN_APPROACH = [*THROUGH_A_SLICE, "slice-001/005_approach.md"]
-NOT_BUILT = (r"\bquestions", [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"])
+THROUGH_RESEARCH = [*THROUGH_AN_APPROACH, "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md"]
+# With the questions adopted (2026-11-25, decision 48) the first stage not built is the security
+# pass that follows them (decision 46), and with that on trial the answers.
+# The questions as the stage would leave them: skipped at the user's word is the shortest folder
+# the stage script counts as drawn, with the mark of the documents above.
+_spec = importlib.util.spec_from_file_location("questions", HERE.parents[2] / "questions/questions.py")
+_questions = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_questions)
+_skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
+_on_trial = True   # the security pass is adopted (2026-11-25, decision 51): the first stage not built is the answers
+_security = "Skipped at the user's word, 2026-11-25: \"Skip the security pass.\"\n" if _on_trial else ""
+_mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
+                                                             "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()
+                         + _skipped.encode() + _security.encode())
+DOCUMENTS["slice-001/007_questions/skipped.md"] = _skipped
+DOCUMENTS["slice-001/007_questions/questions.md"] = f"# Questions\n\n<!-- drawn from: {_mark} -->\n"
+NOT_BUILT = (r"\bsecurity", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])
+if _on_trial:
+    DOCUMENTS["slice-001/007_questions/security.md"] = _security
+    NOT_BUILT = (r"\banswers", [*NOT_BUILT[1], "slice-001/007_questions/security.md"])
+# With the answers on trial (`KD_TRIAL=answers`) it is the tests of open facts: the answers skipped at
+# the user's word, and drawn, are the shortest the stage script counts as done.
+if True:   # the answers are adopted (2026-11-25, decision 55): the first stage not built is the tests of open facts
+    _answers = "Skipped at the user's word, 2026-11-25: \"Skip the answers.\"\n"
+    DOCUMENTS["slice-001/008_answers.md"] = _answers
+    DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(
+        DOCUMENTS["slice-001/007_questions/questions.md"].encode() + _answers.encode())
+    NOT_BUILT = (r"\btests? of (the )?open facts|\bopen facts", [*NOT_BUILT[1], "slice-001/008_answers.md", "slice-001/008_answered.md"])
 
 
 def pull(number, title, branch, unresolved=0):
@@ -131,7 +160,7 @@ def scenarios():
             for name in documents:
                 path = m.project / "planning" / name
                 path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_text(DOCUMENTS[name], encoding="utf-8")
+                path.write_text(DOCUMENTS[name], encoding="utf-8", newline="\n")
             m.run("stage.sh", "remember", "planning")
 
     def no_tool(m): m.have("brew"); project(m)
@@ -244,7 +273,7 @@ def scenarios():
          [says("names-the-stage", NOT_BUILT[0]),
           says("says-it-is-not-built", r"not (yet )?(built|available|there|part|ready|written)|is ?n[o']t (yet )?(built|available|part)|"
                                        r"no (text|stage|skill|way)|does ?n[o']t (yet )?(exist|have)|ca ?n[no']+t"),
-          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look|research|draft|cut|slice|compare)"),
+          never_says("does-not-offer-another-way", r"informal|on my own|without (it|the stage)|I (can|could) (still )?(do (it|the research|its work|the stage)|look (into|up)|research|draft|cut|slice|compare)"),
           {"type": "tool_used", "name": "searches-nothing", "tool": "WebSearch", "min": 0, "max": 0}]),
     ]
 

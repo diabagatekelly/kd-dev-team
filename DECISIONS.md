@@ -429,8 +429,255 @@ asking is listed apart, so it can be overturned.
     question prompts for (an identifier that changes later) is the
     kind expected to remain, and its fix belongs to the questions
     library.
+## 2026-11-24: how the questions stage is measured
+
+45. **Stage 7, the questions, is tested as proposed in
+    `steps/07-questions/README.md`** (the owner: "Yes and yes, go
+    ahead"), at about $135, with a pilot of about $10 first whose
+    real cost is reported before the rest is run. Before the yes
+    the owner set one rule: "Library first, then grid, obviously no
+    question should be duplicated". And the point put to them with
+    it: a user who says to skip the questions is told once what
+    that costs and that the stage asks them nothing, and offered it
+    again; if they insist, the library is not gone through, the
+    folder records that it was skipped at their word, what the
+    script draws with no judgement is drawn all the same, and the
+    skipping goes to the owner's list as a risk accepted. (The
+    second question was put as one way or the other; the yes is
+    read as a yes to the way proposed.)
+
+## 2026-11-25: a security pass of its own; kad's design skills kept
+
+46. **Security has a dedicated pass, run right after the questions,
+    which adds its own questions to the same list so that everything
+    is answered together** (the owner: "it make sense to run it right
+    after the questions so it can add its own and everything can be
+    answered"). The start is kad's `security-requirements` and its
+    persona, which held up in kad's audits (the built code's security
+    scored 4.5, then 4 in every assessment; reliability 3 in five of
+    six); stage 7's read against kad's documents found the questions
+    weakest on security. If kad's text is kept, whether it can be
+    trimmed is looked at, and tested like any other text. UX design
+    is kept from kad too (`design-system`, `screen-design`,
+    `accessibility-review`), and those, with the design and the
+    stack, are revisited thoroughly when stages 10, 11 and onward
+    are reached. Writing the slice up as a user story and creating
+    the repository both need a place in the pipeline.
+
+47. **The user story is written at stage 14, with the owner's list
+    and the planning pull request; the repository's remote is made at
+    stage 12** (the owner: "I'm ok with everything as described").
+    The story is written once, when the slice has its answers and its
+    security criteria, not early with placeholders as kad did. What
+    kad's planning skills did that stages 1 to 9 do not is accepted
+    as listed to the owner on 2026-11-25: what waits on stages 8, 12
+    and 14 is owed by those stages; the scope map's "sequencing
+    notes" and "model what any provider of the kind does" are not
+    carried.
+
+48. **The questions stage holds, on Sonnet 5.5** (the owner: "Stage 7
+    holds, especially since the security skill is coming right after
+    to close the last gaps"), with the text of 161 lines in
+    `steps/07-questions/eval/questions-skill.md` and the script
+    `questions/questions.py`: $118.39 of the $135 agreed. Its text is
+    adopted and its ten cases join the regression build. Known and
+    accepted with it: against kad's documents for the two real
+    slices, 28 of 38 and 49 of 70 concerns are asked in all three
+    drawings, the rest mostly security, which the security pass is
+    to close and is to be counted again there; Haiku leaves a value
+    out in three runs of five; a real drawing is 541 to 794 lines and
+    whether the state lines earn their place is stage 8's to show.
+    Of the security pass the owner asks: nothing kad's security
+    skills did is to be lost, and it is to be made more efficient,
+    by script or tool rather than agent wherever that holds.
+  - Chosen without asking: an end-to-end run through a merge still
+    makes the merge up once research is written, not once the
+    questions are drawn: seven of the driver's tests assume it, and
+    it is changed with the answers stage, when a build has something
+    to wait for.
+  - Owed: the three examples' documents kept after the questions
+    (`--keep` replaces folders; the owner has not been asked to
+    allow it).
+
+49. **OWASP's verification standard feeds the library and the
+    security pass, on the split put to the owner** (the owner:
+    "Yes", twice: to reading it first, then to the split). Of its 345
+    requirements (version 5.0.0): about 30 to 35 become library
+    questions in four new kinds, triaged per slice like any other
+    (sign-in and sessions, stored data, files taken in, misuse of the
+    product's own rules); about 30 become fixed questions the script
+    draws only when a fact about the slice is true (shown in a
+    browser, answers at a network address, calls out, adds a
+    dependency, more than one person, makes values meant to be
+    unguessable); about 150 are answers or controls, left to stage 8
+    and the build's reviews. It is therefore not used as a measure:
+    the mark stays kad's two documents and the real defects. Each
+    entry cites the requirement by number, asks in our own words and
+    quotes a short phrase; the standard is CC BY-SA 4.0 and the
+    library's README says so. Stage 7's cases are run again five
+    times with the grown library, once, with the security pass's
+    test.
+  - Built 2026-11-25, free: the four kinds, 40 entries (12, 12, 8,
+    8), every quote checked by script against the standard's own
+    table; the library is 290. 204 of the 345 requirements were read
+    line by line; the rest (encoding, password rules, multi-factor
+    mechanics, tokens, OAuth, algorithms, GraphQL, WebRTC) were
+    placed by their section titles.
+  - A `kept.md` written before the library grew is refused by `draw`
+    until the new entries are in a row: right, and met at once by the
+    cases' own fixture, which now accounts for all 290.
+
+50. **The security pass is tested as proposed in
+    `steps/07b-security/README.md`** (the owner: "Go ahead"), at
+    about $105, with a pilot of about $6 first whose real cost is
+    reported before the rest is run.
+
+51. **The security pass holds, on Sonnet 5.5** (the owner: "Yes it's
+    fine"), with the text of 116 lines in
+    `steps/07b-security/eval/security-skill.md` and the script's
+    part of `questions/questions.py`: $98.59 of about $105. Its text
+    is adopted and its eight cases join the regression build. Known
+    and accepted with it: kad's security concerns for the two real
+    slices are asked in all three runs for 16 of 19 and 26 of 32,
+    counted before two fixed questions were added and not after;
+    nine concerns of the second plan wait for a design to be chosen;
+    a real slice draws about 700 questions; what no session has run
+    is listed in the stage's README.
+
+52. **While a project is planned, its VM may read any website; it is
+    locked to its list again before anything is built** (the owner:
+    "I like the option to allow all web reading during planning and
+    then lock it down again for the build"). Planning stays inside
+    the VM. Met with the fourth example, whose every candidate was
+    "not read" behind the VM's list.
+    - Chosen without asking: it is one rule of that project's VM
+      alone, for the web's reading methods only (GET and HEAD, any
+      host); sending, and anything that is not the web, stay
+      refused (tried on the evaluation VM: a page read, a POST
+      refused, a connection to another port given nothing). A VM is
+      made with the rule; `startup/machine.sh web open|lock` adds
+      and removes it, and the report says which holds. An address
+      read can still carry a few words out: what is in the VM while
+      planning is the planning documents, never a file of the
+      user's.
+    - The texts keep their one message asking for sites refused: it
+      is what happens in a VM the user has locked.
+
+53. **Stage 8, the answers, is tested as proposed in
+    `steps/08-answers/README.md`** (the owner: "I agree go ahead"),
+    at about $125, with a pilot of about $9 first. With it: **the
+    owner's list is brought to them once, after the tests of open
+    facts (stage 9) and before the design**, not at stage 14; and
+    **a slice brings them at most 12 decisions** on the two real
+    plans, each read for whether it is truly theirs.
+
+54. **Research is done in two passes: up front as now, and again,
+    together, for what the answers need of a thing committed to**
+    (the owner: "isn't it better to batch the research when we have
+    the questions for that slice that we know need to be answered
+    by the external source"; "Yes" to building and testing it at
+    about $30). It partly reverses decision 42. Met at stage 8:
+    about one answer in five that spoke of the provider said what
+    its research did not, on Sonnet and on Opus alike (Opus was
+    tried at the owner's question, $5.77, and Sonnet kept), and
+    several "tests" were only a page to read.
+    - Chosen without asking: an answer that turns on such a thing
+      and finds nothing in its research is `look up`, and nothing
+      is drawn while one is left; research reads the pages kept,
+      then the thing's own, and adds each finding as a new fact
+      with its quote, or an open point; an answer that speaks of
+      the thing gives the fact and the document's own words in
+      quotes, which the script looks for in the document and the
+      pages kept. One session does both, as the questions stage
+      loads the security text.
+
+55. **Stage 8, the answers, holds on Sonnet 5.5, with research in
+    two passes** (the owner: "Yes it holds"), with the text of 144
+    lines in `steps/08-answers/eval/answers-skill.md`, the script
+    `answers/answers.py` and the second pass in research's text:
+    $160.45 against the $125 first agreed. Its text is adopted and
+    its eight cases join the regression build. Known and accepted
+    with it: about one answer in fifteen that speaks of the
+    provider still says what nothing read says, and others quote
+    the wrong line of a fact that does say it; a slice's list for
+    the owner was 14 and 17 in two real runs of six, 8 and 12 once
+    technical choices and things already decided are taken off;
+    some of kad's concerns are said in an answer with no criterion,
+    and what a lock leaves after a crash or a close in progress
+    does with late work is in no run; Haiku does not look anything
+    up. A second reader of each claim against its quotation, and
+    of the owner's list, is for stage 9. What no session has run is
+    listed in the stage's README.
+
+- The security pass as built (decisions 46, 48, 49), 2026-11-25,
+  chosen without asking:
+  - It writes one file, `security.md`, in the questions' own folder,
+    and the questions are drawn again with it: one list, one mark.
+    The stage script counts it done when the drawing carries that
+    file's mark too.
+  - Six facts, each yes or no with its source, and `yes` where the
+    documents do not say; 28 fixed questions drawn only for the
+    facts that hold.
+  - Two more exits for every class of sensitive values: a reply
+    that succeeded, and where it is stored with every copy.
+  - A skip of the questions is not a skip of security: it is next
+    all the same, and has the same rule of its own (once what it
+    costs; on a second no, recorded and every fixed question drawn).
+  - After a change to the documents the questions stage brings
+    `kept.md` up to date and then loads the security text: one
+    sentence added to stage 7's adopted text, tested with its
+    re-run.
+  - Its folder is `steps/07b-security`: the stages after it keep
+    their numbers.
+  - In testing ($98.59 of about $105): what is wanted may be a
+    thing the documents name, or `nothing`, dismissed with its
+    reason; the stop is looked for first and kept for what the
+    documents say is out; a public value has a row of its own; the
+    pass adds a sensitive value `kept.md` lacks; two fixed
+    questions more where the slice calls another system (a person's
+    sign-in for it; how a credential first reaches the product),
+    30 in all, after the read beside kad's documents.
+  - Stage 7's adopted text gained "with your file tool, not through
+    the shell" where rows are edited: one Sonnet run of five edited
+    them by script and stopped.
+  - Left: two reliability questions kad's documents ask and the
+    library lacks (expected and unexpected outcomes told apart in
+    the records; one reference from the screen to the record).
+    Haiku was run on the real plans beside Sonnet (12 cents): the
+    same facts, about half the rows asked, and a readable list
+    dismissed as needing "physical access". Sonnet is proposed.
+
+- Stage 8, the answers, as built (2026-11-25), chosen without
+  asking; its test, its cost and three points of the owner's are in
+  `steps/08-answers/README.md`, and nothing paid has run:
+  - An answer settles many questions, and a script keeps the count:
+    a slice draws 280 to 700 questions, and a session is given them
+    sixty at a time until none is left.
+  - Five kinds: fact, not here, test, owner, chosen. The script
+    refuses a fact resting on no document, a decision for the owner
+    without options, a recommendation and what happens if left, a
+    criterion on a guess or on a decision not yet taken, and a wait
+    with no number.
+  - One drawing beside the answers holds the criteria, the owner's
+    list by harm, the tests by harm and the choices: the tests stage
+    and the owner's list read it.
+  - A criterion names the slice's item it is under, or a new one:
+    this settles how an answer attaches to the checkable list.
+  - A decision the owner takes is recorded on its answer in their
+    words, and the report keeps the command that draws it whatever
+    stage is next.
+  - The stop for a criterion the facts make impossible is left to
+    research, which already has it.
+  - kad's three skills are not an arm of the cases: they are set
+    beside ours on the two real plans.
+
 ## Put off to the stage that needs them
 
+- **Locking the web again before the build** (decision 52): the
+  first build stage must not start while the VM can read any
+  website. The command exists (`machine.sh web lock`, the user's to
+  run outside the VM); what refuses the build stage until it is run,
+  and how a session inside the VM knows, is owed to that stage.
 - **How an outcome on the benchmark is tested** (research, questions,
   answers): put to the owner with the research stage's test and cost.
 - **The numbers for the question measure** (how many questions a slice
@@ -438,10 +685,6 @@ asking is listed apart, so it can be overturned.
   often): with the answers stage.
 - **A measure for each of the problem, scope, requirements, slice,
   design and screens stages:** agreed when each is reached.
-- **How an answer of the answers stage attaches to the checkable
-  list** (a criterion under the named item it belongs to, or an item
-  of its own): with the answers stage. Stage 3 owes it only names
-  that do not change.
 - **Where the user finds `source.sh` on their own machine,** and when
   the scan is run (before the planning pull request is merged?):
   with the plugin's real install, which waits for the run on the
@@ -813,5 +1056,101 @@ asking is listed apart, so it can be overturned.
   - A check that fails a good answer is corrected with a unit test
     and the kept runs graded again for nothing; the count as first
     graded is given beside the corrected one.
+- The questions stage as proposed (`steps/07-questions/README.md`),
+  2026-11-24; not yet agreed:
+  - The stage leaves a folder, as research does: `kept.md` is the
+    session's, `questions.md` is drawn by script and never written
+    by hand. The stage script's name for it changes from a document
+    to a folder when the stage is agreed.
+  - The script is Python, like the page reader: planning runs in
+    the project's VM, which is Linux.
+  - A kind of action the slice does nothing of may be dropped whole
+    with one reason, and entries may share a row: E3's triage wrote
+    a line for each of the 250, which is most of what a run costs.
+    Whether dropping by kind loses an entry a defect depended on is
+    what the count on the two real plans shows.
+  - A kept question applies only to a thing the documents or
+    `kept.md` name: E3 lost the things a triage did not think of.
+  - What the slice takes in is listed by the session and held to
+    the criteria and research by script; no stage before this one
+    lists fields, and changing research to list them would stale an
+    adopted stage for a list this one can check.
+  - Which ways a value can be wrong are drawn by its kind (a choice
+    is not "too long"), every way for a kind called `other`: E2
+    spent a third of its cells on what could not happen. The table
+    of kinds is a first guess.
+  - Settings get one rule, always drawn: a build reads settings no
+    plan names (E4).
+  - Two parts carried from kad by script and not by the session:
+    each sensitive value against the five places it leaks to, and
+    the seven questions kad's two skills asked the owner first.
+  - An event of the state grid is each criterion of the slice, five
+    that hold for anything (again, a reload, a restart, a second
+    copy, time), and each thing committed to being down, slow or
+    acting with its reply lost. A provider's errors by name are not
+    events: research writes them as facts, and the library's
+    questions on calls are applied to each request.
+  - The library first, and no question twice (the owner, asked
+    whether the stage uses the library: "Library first, then grid,
+    obviously no question should be duplicated"). A grid's line is
+    not drawn when a kept library question applied to the same
+    thing already asks it. Chosen here: the library's line is the
+    one that stands, naming each state of a lasting thing; "the
+    same thing" is the same value or lasting thing, so a question
+    kept for a request does not spare the lines of a thing's
+    states; which entries ask the same as which column is a fixed
+    table in the script, from a reading of the 250.
+  - Whether the questions are stale is a mark of every document
+    they were drawn from, kept in `questions.md`'s first lines.
+  - A lasting thing the slice creates that the requirements' list
+    does not name is walked: one sentence in research's text, and a
+    check here. Research's cases are run again.
+  - The requirements' own open questions are not carried into
+    `questions.md`: they are the requirements stage's, and the
+    slice already says which of its parts wait for them.
+  - Arms: bare, our text, kad's two skills together on two cases,
+    and E3's triage brief on the first real plan only, where it was
+    measured. Opus only where Sonnet with the text does not hold.
+  - The defects the triage is counted against came from wider
+    slices than this plugin cuts: each is marked as within the thin
+    slice or not before any run, and only those within count.
+  - The two library entries the gap count is expected to call for
+    are proposed after the count, not before: the library is not
+    changed while it is being measured.
+- The questions stage after its pilot, 2026-11-24:
+  - Leaks are drawn for each class of sensitive values, not each
+    value: 24 values against five places was 120 lines asking the
+    same thing.
+  - A question is dropped when its harm needs what the documents
+    say the product does not have (many users, several people
+    running it, more than one installation), with the document's
+    line as the reason; where the documents do not say, it is
+    kept. This narrows "when unsure, keep", for the owner's "198
+    seems like a lot"; the count of tied defects kept is what
+    holds it.
+  - A kept question has a row and a reason of its own; only
+    dropped ones share a row. Sharing saved cost and let twelve
+    questions be kept as one.
+  - Opus was tried at the owner's suggestion, once on each real
+    plan beside Sonnet: it kept more and cost twice as much.
+    Sonnet stays the model proposed.
+  - After three runs of every case: `kept.md` lists what the slice
+    creates and keeps, and the script refuses a thing listed with
+    no table in `states.md`, and a criterion the file names
+    nowhere. Both were left to the text and missed about half the
+    time. This settles research's first open point as far as a
+    script can: a thing kept that no list names is walked once a
+    session lists it; whether it lists it stays judgement.
+  - The routing table gained one rule: told to skip the next stage,
+    that stage's text is loaded and takes it. Startup's cases are
+    run again with it before the stage is put to the owner.
+  - The earlier `kept.md` the changed-documents cases start from is
+    one a session wrote, not one made up: a thin one was rewritten
+    whole, and rightly.
+  - A changed `kept.md` is edited in place, never written again
+    whole: one Sonnet run of five reworded rows nothing had changed.
+  - Haiku's misses on this stage (a value left out in three runs of
+    five, the skip misrouted in one) are not chased with text: they
+    are what the model choice is for.
 - Put off: installing the plugin inside a new VM, and what of the
   planning folder's memory survives a VM being destroyed.

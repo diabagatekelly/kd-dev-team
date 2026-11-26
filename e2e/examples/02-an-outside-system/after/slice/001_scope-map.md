@@ -1,16 +1,15 @@
-# Scope map: Monthly client invoicing
+# Scope map: monthly invoicing and chasing payment
 
 | # | What the user does | What it covers | When |
 |---|---|---|---|
-| 1 | Keep a record of each walk | What the four walkers now write on paper sheets, so none is lost or guessed | next |
-| 2 | Invoice each client for the month | Turning the month's walks into an invoice for each of about sixty clients, and sending each a Tallypay payment link, without typing errors | now |
-| 3 | Get late payers to pay | Chasing the clients (about one in ten) who have not paid | later |
+| 1 | Invoice clients for the month | Walkers entering their own walks, which the business owner can correct, a month starting from the usual weekly walks, and each client getting an invoice for their walks with a Tallypay payment link | now |
+| 2 | Chase late payment | Following up with clients who haven't paid on time | later |
 
 ## Holds for every activity
-- We are staying with Tallypay, the card service we already use.
+- Tallypay stays. It is the card service we already use, and we have a contract with it until next year (2027).
+- The walkers will only use their phones.
+- Clients' addresses and door codes must be seen only by me and the walker for that client.
 
 ## Open
-- Whether a WhatsApp bot could do it (the user's idea; not decided).
-- Whether the invoicing (time, mistakes, lost sheets) and the late payments should be two separate problems. The user doesn't know yet.
-
-## Out
+- Whether the walkers should be paid through this too. I haven't decided. **Waits on your decision.**
+- Whether this could be done with a WhatsApp bot or something.

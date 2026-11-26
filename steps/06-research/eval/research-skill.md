@@ -82,7 +82,9 @@ and the approach's table.
 
 **`states.md`:** a table for each lasting thing of the requirements'
 "Outside systems and lasting things" that the slice's criteria
-touch.
+touch, and for each thing a criterion of the slice creates and
+keeps, whether or not that list names it: say in your reply which
+were not on the list.
 
 ```markdown
 # States
@@ -137,6 +139,17 @@ as it is but for a first line, which you add, saying so and naming
 the approach that replaced it; its pages are not read again. In `states.md`, the rows
 that came from it are written again from the pages of what is now
 committed to.
+
+**What the answers ask for.** The answers stage may come back with
+things it must know of a thing committed to: its `lookups` command
+lists them. Look them all up in one go. For each, read first the
+pages already kept (the report's command lists them), then the
+thing's own pages, by the same rules as above. What a page says is
+added to the thing's document as a new fact, numbered on from the
+last, with its quote and address; what no page says is added as an
+open point with the test that would settle it. Change no fact
+already there and no other document, run the report's check on the
+quotes, and say which were found and which were not.
 
 **Ask nothing.** No preference and no decision is asked of the user
 here: a preference waits for the fact it depends on. The one thing

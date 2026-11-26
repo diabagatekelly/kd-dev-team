@@ -294,6 +294,89 @@ class ProjectVM(unittest.TestCase):
         self.assertIn(f"- VM for this project: {self.name()} (just made)", done.stdout)
         self.assertIn(f"sbx run --name {self.name()}", done.stdout)
 
+    # Decision 52: while a project is planned its VM reads any website and sends to none.
+    def web(self, *words):
+        return self.machine.run("machine.sh", "web", *words)
+
+    def test_a_vm_just_made_can_read_any_website_and_is_said_to(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        done = self.machine.run("machine.sh", "create")
+        self.assertIn(f"sbx policy allow network --sandbox {self.name()} ** --method GET,HEAD", self.machine.calls())
+        self.assertIn("- websites from this VM: any can be read and nothing sent, while the project is planned", done.stdout)
+        self.assertRegex(done.stdout, r"before anything is built: sh \".*machine\.sh\" web lock")
+
+    def test_before_a_vm_is_made_the_report_says_what_it_will_be_able_to_read(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        self.assertIn("- a VM just made can read any website and send to none, while the project is planned", self.inspect())
+
+    def test_a_vm_that_reads_only_its_list_is_said_with_the_command_that_opens_it(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        out = self.inspect()
+        self.assertIn("- websites from this VM: only the few on its list", out)
+        self.assertRegex(out, r"sh \".*machine\.sh\" web open")
+
+    def test_web_open_adds_one_rule_for_reading_only_and_only_once(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.assertIn("any can be read and nothing sent", self.web("open").stdout)
+        self.assertIn("any can be read and nothing sent", self.web("open").stdout)
+        self.assertEqual(sum("policy allow network --sandbox" in call for call in self.machine.calls()), 1)
+
+    def test_web_lock_removes_the_rule_and_says_the_vm_reads_only_its_list(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.web("open")
+        done = self.web("lock")
+        self.assertEqual(done.returncode, 0, done.stdout)
+        self.assertIn(f"sbx policy rm network --force --id ba76f132-made-up-rule --sandbox {self.name()}", self.machine.calls())
+        self.assertIn("- websites from this VM: only the few on its list", done.stdout)
+        self.assertIn("only the few on its list", self.web().stdout)
+
+    def test_web_lock_with_nothing_open_removes_nothing(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.assertIn("only the few on its list", self.web("lock").stdout)
+        self.assertFalse(any("policy rm" in call for call in self.machine.calls()))
+
+    def test_a_rule_that_stays_after_being_removed_is_refused_and_not_tried_for_ever(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.web("open")
+        self.machine.set("sbx/garble", "rm")
+        done = self.web("lock")
+        self.assertEqual(done.returncode, 3)
+        self.assertIn("REFUSED: the rule ba76f132-made-up-rule is still there", done.stdout)
+
+    def test_a_vm_open_by_a_rule_the_tool_does_not_name_is_refused(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.machine.set("sbx/web_open", "")
+        done = self.web()
+        self.assertEqual(done.returncode, 3)
+        self.assertIn("REFUSED: this VM can read any website by a rule", done.stdout)
+
+    def test_an_answer_about_the_web_that_cannot_be_read_is_refused(self):
+        self.machine.repository()
+        self.machine.vm_tool(vms=[self.name()])
+        self.machine.set("sbx/garble", "check")
+        done = self.web("open")
+        self.assertEqual(done.returncode, 3)
+        self.assertIn("REFUSED: `sbx policy check` answered", done.stdout)
+        self.assertFalse(any("policy allow network --sandbox" in call for call in self.machine.calls()))
+
+    def test_web_is_refused_with_no_vm_for_the_project_inside_a_vm_and_for_another_word(self):
+        self.machine.repository()
+        self.machine.vm_tool()
+        self.assertIn("REFUSED: this project has no VM yet", self.web("open").stdout)
+        self.machine.vm_tool(vms=[self.name()])
+        self.assertIn("REFUSED: web takes open, lock or nothing", self.web("wide").stdout)
+        self.machine.inside_vm()
+        (self.machine.bin / "sbx").unlink()
+        self.assertIn("REFUSED: this session is inside a VM", self.web("open").stdout)
+
     def test_create_is_run_from_the_repository_root(self):
         self.machine.repository()
         self.machine.vm_tool()

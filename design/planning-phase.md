@@ -81,15 +81,16 @@ finds about half of what four find.
 | 3 | Requirements | who needs what, in and out of scope, and an inventory a script can read: dependencies, lasting things | `requirements-refinement`, kept; the inventory made machine-readable |
 | 4 | Slice | the whole set of thin slices of the "now", what each builds on, a recommended start; criteria for the chosen one only; after each merge, what is done, where each new issue belongs, and whether the list and the set still hold (decision 37) | `vertical-slicing`, `acceptance-criteria`, kept |
 | 5 | Approach | for each thing the slice needs that the app cannot do itself: the ways to meet it, compared on the user's limits from a short read of each candidate's documentation; committing to a dependency is the owner's | new (decision 36); in kad the choice was made inside the design and recorded as an `adr` |
-| 6 | Research | per dependency committed to: a dossier of cited facts, the plan's statements checked against them, open points with the test that would settle each; per lasting thing: its states | `domain-model`, kept and joined by the new dossier step |
+| 6 | Research | per dependency committed to: a dossier of cited facts, the plan's statements checked against them, open points with the test that would settle each; per lasting thing: its states | `domain-model`, kept and joined by the new dossier step; done in two passes (decision 54): up front, and again, together, for what the answers need of a thing committed to |
 | 7 | Questions | the library's questions that matter for the slice, each with the things it applies to; two grids by script (each received field against the ways a value can be wrong; each state against each event) | new |
-| 8 | Answers | every question answered per thing, as a fact, a choice the planner records, or a decision for the owner | replaces the lists inside `reliability-requirements`, `security-requirements`; those two skills become the answering of their areas |
-| 9 | Tests of open facts | the "needs a test" answers with real harm, run against the dependency's test environment in the VM | new |
+| 7b | Security | the slice looked at as someone who means harm would: six facts about it and what would be wanted, through what; its questions join the same list, by script (decisions 46, 51) | `security-requirements`: its threat pass; the answering is stage 8's |
+| 8 | Answers | every question settled by an answer (a fact, not here, to look up, to test, the owner's, chosen), each settling as many questions as it truly answers; the criteria, the owner's list, the tests and the choices drawn by script (decision 55) | replaces the lists inside `reliability-requirements`, `security-requirements` and the writing of `acceptance-criteria` |
+| 9 | Tests of open facts | the "needs a test" answers with real harm, run against the dependency's test environment in the VM | new; a second reader of each claim against its quotation and of the owner's list (decision 55); the owner's list is brought to them once, after this stage and before the design (decision 53) |
 | 10 | Design | structure, boundaries, where each criterion lives | `architecture-design`, kept; its interleavings fed by stage 7 |
 | 11 | Screens | design system, screen, accessibility check on the rendered screen | `design-system`, `screen-design`, `accessibility-review`, kept |
 | 12 | Stack and repository | what the slice forces, nothing more | `technology-bootstrap` (to be freed of one runtime's names), `repo-bootstrap`, `adr` |
 | 13 | Readiness | scripts: every kept question answered, every fact sourced, every quote found on its page, every criterion with a home | the readiness gate, kept and extended |
-| 14 | The owner's list, then the planning pull request | one short list of decisions, ranked by harm; the plan merged before any build | the planning pull request, kept |
+| 14 | The planning pull request | the user story, written once the slice has its answers and its design (decision 47); the plan merged before any build | the planning pull request, kept; `user-story-writeup` |
 
 Not carried over: the orchestrator as a whole (only this route, as a
 small table), the block of text copied into five skills (kept once),
@@ -194,7 +195,7 @@ proposal to begin with research): stage 0, then 1, 2, 3 and on, one
 stage at a time, each with its test read by the owner before the
 next. The order itself changed on 2026-11-23 (decision 36): the slice
 before any dependency is chosen, research after. Stage 4 has its measure and holds
-(`../steps/04-slice/README.md`, decision 39). Stage 5 holds (`../steps/05-approach/README.md`, decision 41), and so does stage 6 (`../steps/06-research/README.md`, decision 44), with the owner's condition that the gaps research leaves are shown closed once stages 7 to 9 are stacked on it. Stages 10 and 11 have no measure yet: each is agreed
+(`../steps/04-slice/README.md`, decision 39). Stage 5 holds (`../steps/05-approach/README.md`, decision 41), and so does stage 6 (`../steps/06-research/README.md`, decision 44), with the owner's condition that the gaps research leaves are shown closed once stages 7 to 9 are stacked on it. Stage 7's test is proposed (`../steps/07-questions/README.md`). Stages 10 and 11 have no measure yet: each is agreed
 with the owner when the stage is reached, before its text is judged.
 
 ## 7. For the owner to decide

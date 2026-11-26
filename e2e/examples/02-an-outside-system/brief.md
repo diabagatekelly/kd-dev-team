@@ -24,6 +24,9 @@ docs/planning
 | cancelled | what happens when a walk is cancelled | Cancelled with a day's notice it isn't charged. Later than that it is. |
 | sheets | how walkers record walks today | Each walker writes every walk on a paper sheet and hands the sheets in at the end of the month. |
 | tallypay | what Tallypay does, how payment links are made, what else it can do | Tallypay takes the card payment and pays out to the business account. I make each payment link by hand on its website. I don't know what else it can do. |
+| who-enters | who will enter walks and cancellations in the new product, whether a month starts from the usual weekly walks | Each walker enters their own, on their phone, and I can correct them. A month starts from the usual weekly walks. |
+| price-rule | how a client's price is worked out, a client or a walk that is not on the price list | Everyone pays the list price for the length of the walk. Nobody has a price of their own. If something isn't on the list I add it to the list first. |
+| start-anyway | whether to choose or start a slice although a question of theirs is still open, or which of several numbered options for going on they want | Start it now, and mark what waits on my decision. |
 | who-invoices | who sends invoices, who else may | Only me. |
 | paying-walkers | whether paying the walkers is part of this | That's not decided yet. |
 | late | who chases late payers, what should happen when a client pays late | Nobody chases them today. I'd want to know who hasn't paid without digging for it. |

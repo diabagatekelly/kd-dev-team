@@ -5,6 +5,8 @@
 #   machine.sh secure           turn every lock on; exit 0 only when all are on
 #   machine.sh install [--yes]  install the VM tool; without --yes, only say what would run
 #   machine.sh create           make this project's VM, a private copy of its repository; locks first
+#   machine.sh web [open|lock]  whether this project's VM can read any website; open that while the
+#                               project is planned, lock it again before anything is built
 #   machine.sh name             the name of this project's VM
 #   machine.sh where            inside or outside a VM
 #
@@ -110,6 +112,52 @@ locks_off() {
   esac
 }
 
+# While a project is planned its VM may read any website and send to none (decision 52): one rule
+# of that VM alone, for the web's reading methods only. An address no list could hold shows
+# whether the rule is there, and the tool's answer names it.
+READ_PROBE="https://kd-web-reading.invalid/"
+web_rule() {
+  answer=$(sbx policy check http --sandbox "$1" "$READ_PROBE" 2>&1)
+  case "$answer" in
+    *"Allowed:"*)
+      rule=$(say "$answer" | awk '$1=="Rule:" {print $2}')
+      [ -n "$rule" ] || refuse "this VM can read any website by a rule \`sbx policy check\` does not name: $answer"
+      say "$rule" ;;
+    *"Denied:"*) ;;
+    *) refuse "\`sbx policy check\` answered '$answer'" ;;
+  esac
+}
+web_line() {
+  rule=$(web_rule "$1") || { say "$rule"; exit 3; }
+  if [ -n "$rule" ]; then
+    say "- websites from this VM: any can be read and nothing sent, while the project is planned; locking it to its list again, before anything is built: sh \"$SELF\" web lock"
+  else
+    say "- websites from this VM: only the few on its list; letting it read any website and send to none, while the project is planned: sh \"$SELF\" web open"
+  fi
+}
+web() {
+  inside && refuse "this session is inside a VM: what a VM can reach is set outside it"
+  have sbx || refuse "the VM tool is not installed: there is no VM to open or lock"
+  vms=$(sbx ls -q 2>&1) || refuse "\`sbx ls\` failed: $vms"
+  mine=$(vm_name)
+  say "$vms" | grep -qx "$mine" || refuse "this project has no VM yet: sh \"$SELF\" create makes it"
+  rule=$(web_rule "$mine") || { say "$rule"; exit 3; }
+  case "${1:-}" in
+    open)
+      [ -n "$rule" ] || done=$(sbx policy allow network --sandbox "$mine" "**" --method GET,HEAD 2>&1) \
+        || refuse "\`sbx policy allow\` failed: $done" ;;
+    lock)
+      while [ -n "$rule" ]; do
+        done=$(sbx policy rm network --force --id "$rule" --sandbox "$mine" 2>&1) || refuse "\`sbx policy rm\` failed: $done"
+        was=$rule; rule=$(web_rule "$mine") || { say "$rule"; exit 3; }
+        [ "$rule" != "$was" ] || refuse "the rule $rule is still there after \`sbx policy rm\`"
+      done ;;
+    "") ;;
+    *) refuse "web takes open, lock or nothing" ;;
+  esac
+  web_line "$mine"
+}
+
 # Prints the lock lines; returns 0 only when every lock is on.
 lock_lines() {
   off=$(locks_off) || { say "$off"; exit 3; }
@@ -127,13 +175,14 @@ project_lines() {
   mine=$(vm_name)
   if say "$vms" | grep -qx "$mine"; then
     say "- VM for this project: $mine"
-    [ "$all_on" != yes ] || continue_line "$mine"
+    [ "$all_on" != yes ] || { web_line "$mine"; continue_line "$mine"; }
   else
     say "- VM for this project: none"
     [ "$all_on" = yes ] || return 0
     if git rev-parse --git-dir >/dev/null 2>&1; then what="a private copy of this repository, inside a new VM"
     else what="this folder becomes a git repository first; then a private copy of it, inside a new VM"; fi
     say "- making it ($what): sh \"$SELF\" create"
+    say "- a VM just made can read any website and send to none, while the project is planned; it is locked to its list again before anything is built"
   fi
 }
 
@@ -191,6 +240,8 @@ create() {
   made=$(cd "$(project_root)" && sbx --no-input create --clone --name "$mine" claude . 2>&1) \
     || refuse "\`sbx create\` failed: $made"
   say "- VM for this project: $mine (just made)"
+  done=$(sbx policy allow network --sandbox "$mine" "**" --method GET,HEAD 2>&1) || refuse "\`sbx policy allow\` failed: $done"
+  web_line "$mine"
   continue_line "$mine"
 }
 
@@ -233,7 +284,8 @@ case "${1:-}" in
   secure) secure ;;
   install) shift; install "$@" ;;
   create) create ;;
+  web) shift; web "$@" ;;
   name) vm_name ;;
   where) if inside; then say inside; else say outside; fi ;;
-  *) sed -n '4,9p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
+  *) sed -n '4,11p' "$0" | sed 's/^# \{0,3\}//'; exit 2 ;;
 esac

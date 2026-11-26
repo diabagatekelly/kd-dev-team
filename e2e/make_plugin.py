@@ -21,7 +21,10 @@ SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
           "requirements": "steps/03-requirements/eval/requirements-skill-kinds.md",
           "slice": "steps/04-slice/eval/slice-skill.md",
           "approach": "steps/05-approach/eval/approach-skill.md",
-          "research": "steps/06-research/eval/research-skill.md"}
+          "research": "steps/06-research/eval/research-skill.md",
+          "questions": "steps/07-questions/eval/questions-skill.md",
+          "security": "steps/07b-security/eval/security-skill.md",
+          "answers": "steps/08-answers/eval/answers-skill.md"}
 HOOK = """#!/bin/sh
 # The startup report of this machine and project, then what to do with it.
 sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"
@@ -51,6 +54,11 @@ def main(folder, trial=None):
         shutil.copy(script, folder / "startup" / script.name)
     # The page reader the stage script names for the approach and research.
     write(folder / "research" / "page.py", (ROOT / "research" / "page.py").read_text(encoding="utf-8"))
+    # The script that draws a slice's questions, and the library it reads.
+    write(folder / "questions" / "questions.py", (ROOT / "questions" / "questions.py").read_text(encoding="utf-8"))
+    write(folder / "library" / "library.json", (ROOT / "library" / "library.json").read_text(encoding="utf-8"))
+    # The script that says which questions no answer settles, and draws the answers.
+    write(folder / "answers" / "answers.py", (ROOT / "answers" / "answers.py").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

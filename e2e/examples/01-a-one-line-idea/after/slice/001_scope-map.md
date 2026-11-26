@@ -2,9 +2,9 @@
 
 | # | What the user does | What it covers | When |
 |---|---|---|---|
-| 1 | A member on the waiting list finds out where they are on it | Knowing their place without phoning me, which now takes about an evening a week | now |
-| 2 | The committee offers a plot that has come free to whoever is first | Each free plot goes to the person first on the list, not to someone's friend | next |
-| 3 | The committee shows the council that plots are given out fairly | Evidence for the lease renewal in March | later |
+| 1 | See where they stand on the waiting list | A person on the waiting list sees where they stand, which today means phoning to ask | now |
+| 2 | Offer a free plot to whoever is first | When a plot comes free, the committee offers it to the person first on the list | next |
+| 3 | Show the council that plots are given out fairly | What the council has said the lease renewal in March depends on | later |
 
 ## Holds for every activity
 - We can spend 10 pounds a month at most.
@@ -12,4 +12,4 @@
 - Many members are elderly, and several have no smartphone.
 
 ## Open
-- None stated yet.
+- Should collecting the plot rent be part of this? The treasurer collects it by cheque once a year and hasn't said.

@@ -30,19 +30,34 @@ design are recorded under `next-plugin/validation/`.
 | `steps/04-slice/eval/slice-skill.md` | stage 4's text, 152 lines, adopted on Sonnet 5.5 (decision 39): the set of slices, a recommended start, criteria for the chosen slice, pushback on a wider cut, the coming-back after a merge |
 | `steps/05-approach/eval/approach-skill.md` | stage 5's text, 153 lines, adopted on Sonnet 5.5 (decision 41): each thing the chosen slice needs from outside compared on the user's limits from the candidates' own pages, one way recommended, the commitment asked and recorded |
 | `steps/06-research/eval/research-skill.md` | stage 6's text, 149 lines, adopted on Sonnet 5.5 (decision 44): what the documentation says about each thing the approach committed to, every fact with its page and a quote, the plan's statements checked against it, what is not said left open with a test; and the states of each lasting thing the slice touches |
+| `steps/07-questions/eval/questions-skill.md` | stage 7's text, 161 lines, adopted on Sonnet 5.5 (decision 48): what the slice creates and keeps, what it takes in and which of the library's 250 questions matter, written in `kept.md`; every question then drawn by `questions/questions.py` (the library's, each value against the ways it can be wrong, each sensitive class against its exits, each state against each event, what research left open). Nothing is answered and the user is asked nothing |
+| `questions/`, `library/` | stage 7's script and the 290-entry library it reads (250, and 40 from OWASP's verification standard in four kinds: sign-in, stored data, files taken in, misuse); unit tests |
+| `steps/07b-security/eval/security-skill.md` | the security pass's text, 116 lines, adopted on Sonnet 5.5 (decision 51): six facts about the slice and what someone who means harm would want, written beside the questions; the script draws 30 fixed questions for the facts that hold and one for each row asked |
+| `steps/08-answers/eval/answers-skill.md` | stage 8's text, 144 lines, adopted on Sonnet 5.5 (decision 55): every drawn question settled by an answer of one of six kinds (fact, not here, look up, test, owner, chosen), and the criteria that follow |
+| `answers/` | stage 8's script: which questions no answer settles yet, what the answers still need looked up, the refusals (a fact on no document, a claim about a thing committed to without its document's own words, a criterion on a guess, a wait with no number, a target chosen for the owner) and the drawing of the criteria, the owner's list, the tests and the choices |
 | `research/` | for stages 5 and 6: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
 | `steps/01-problem/eval/problem-skill.md` | stage 1's text, 51 lines: adopted on the session's model, Sonnet 5.5 (decision 20) |
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
 | `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 94 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
-## Where the work stands (2026-11-23)
+## Where the work stands (2026-11-25)
 
-Stages 0 to 6 hold (startup, the problem, the scope map, the
-requirements, the slice, the approach, research), all on Sonnet 5.5. After the owner said
-each of the first four holds, they were run together, end to end,
-and their texts changed from what those runs found (decisions 28 to
-32). Where each stands:
+Stages 0 to 8 hold, all on Sonnet 5.5: startup, the problem, the
+scope map, the requirements, the slice, the approach, research,
+the questions with the security pass after them, and the answers.
+Research is done in two passes (decision 54): up front, and again,
+together, for what the answers need of a thing committed to. While
+a project is planned its VM reads any website and sends to none
+(decision 52). **Next is stage 9, the tests of open facts**, which
+also takes a second reader of each claim against its quotation and
+of the owner's list (decision 55), and after which the owner's list
+is brought to them once (decision 53). `HANDOFF.md` says where
+everything is and what is owed.
+
+The table below is the state of 2026-11-23, when the first five
+stages were first run together; each later stage's results are in
+its own README under `steps/`.
 
 | Stage | Its text | Scenarios | The pass of 2026-11-23, every adopted text loaded (Sonnet) |
 |---|---|---|---|
@@ -140,6 +155,12 @@ regression build (89 scenarios over seven stages).
    are counted again after those stages, by the same keys, to show
    the gaps are closed.
 
+   **Proposed, nothing paid run** (`steps/07-questions/README.md`):
+   the library triaged by a session, the grids drawn by
+   `questions/questions.py` (built, with its unit tests: the
+   library first, and no grid line the library already asks), ten
+   cases, about $135 with a pilot of about $10 first.
+
 The parked check-in
 proposal (`steps/check-in/README.md`) is replaced by the slice
 stage's coming-back.
@@ -206,7 +227,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
 
 | Folder | Holds |
 |---|---|
-| `library/` | 250 ways software commonly fails, by kind of action, from public pages, with its checker |
+| `library/` | 290 ways software commonly fails, by kind of action, from public pages, with its checker |
 | `briefs/` | the three briefs tried for the research, questions and answers stages (triage, dossier, answers), with the scripts that check and count their output |
 | `judge/` | the prompt that matches a method's output against known defects (its hash beside it), the script that counts agreement, and the check that no frozen text names one field of business |
 | `vm/` | the trial script that sets up a locked-down VM for a session (macOS only so far) and the plain-words safety page |
@@ -217,7 +238,7 @@ None of it is adopted; each is a candidate or a tool for testing one.
   counts and costs. Nothing that quotes a real project is kept here.
 - Every script has unit tests, written first. Run them with
   `python3 -I -m unittest` inside `library/`, `briefs/`, `judge/`,
-  `startup/`, `research/`, `steps/03-requirements/eval/`,
+  `startup/`, `research/`, `questions/`, `steps/03-requirements/eval/`,
   `steps/04-slice/eval/`, `steps/05-approach/eval/`,
   `steps/06-research/eval/` and `e2e/`.
 - No text names a field of business; `judge/wording_check.py` checks a

@@ -1,21 +1,19 @@
-# Slice 1: See my own place on the waiting list
+# Slice 1: Carry the notebook list across in its order
 
 ## Thin path
-The list keeper brings the notebook's order across just as it is. A person waiting for a plot asks where they stand and is shown their own place in the order, and nothing about anyone else.
+The list keeper has the waiting list carried across from the paper notebook, and is shown it in the order written there.
 
 ## Criteria
-- **see-own-place / 1**: Given a waiting list of five people in a known order, each clearly a different person, and the person fourth in order has no smartphone, when that person asks where they stand, then they are shown that they are fourth.
-- **see-own-place / 2**: Given someone who is not on the waiting list, when they ask where they stand, then they are told they are not on the list and are shown no place.
-- **see-own-place / 3**: Given the notebook holds five people in a certain order, when the list keeper brings it across, then each person's place is the same as in the notebook.
-- **others-stay-private / 1**: Given a waiting list of five people, when the person second in order asks where they stand, then what they are shown has no other person's name and no other person's place.
+- **notebook-order-kept / 1**: Given nothing has been carried across and a notebook list reads, in this order, Wren Example, Ash Sample and Moss Placeholder (invented names), when the list keeper has it carried across, then the list keeper is shown those three people, each once, in that order, and nobody else.
 
 ## Needs from outside
 none
 
 ## Left for later
-- Telling apart people who share a name or household: slice 2. Blocker: it waits on the open question of how one person is told apart from another.
-- What "where they stand" covers beyond the place in the order: no slice yet; it waits on the open question. Usable without it: a person sees their place in the order.
-- Keeping the list up to date as people join and leave: the next activity on the scope map, "Keep the waiting list". Usable without it: a person sees their place on the list as it was brought across.
+- A person on the waiting list seeing their own place: slice 2. Usable without it: the list keeper can look at the carried-across list, and people waiting can still phone to ask, as they do today.
+- The committee looking at the list: slice 3. Usable without it: the list keeper can have the list carried across and look at it.
+- A person seeing anything else about their own place: slice 4. Usable without it: the list keeper can still have the list carried across in its order.
+- Someone else finding out a person's place for them: slice 5. Usable without it: the list keeper can still have the list carried across in its order.
 
 ## Size
-Criteria: 4.
+Criteria: 1.

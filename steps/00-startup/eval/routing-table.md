@@ -54,3 +54,8 @@ Whatever the user asks for:
 - A stage is done with its text: load it before anything of the stage
   is written or recorded. The user's answer to a stage's question,
   however short, is that stage's work.
+- Something the user decides that waits on the owner's list is the
+  answers stage's to record, whatever stage is next: load its text.
+- Told to skip the next stage, or to go past it: that is that stage's
+  to take, with its text. Load it; never go on to a later stage from
+  here.

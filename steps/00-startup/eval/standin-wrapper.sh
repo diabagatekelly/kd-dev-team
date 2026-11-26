@@ -15,7 +15,8 @@ for start in "$(pwd -P)" "${OLDPWD:-}"; do
 done
 if [ -n "$key" ]; then
   if [ -e "$key/absent/$me" ]; then echo "$me: command not found" >&2; exit 127; fi
-  STANDIN_STATE="$key" exec sh "${STANDIN_HOME:-/opt/standin}/$me" "$@"
+  # A scenario may leave one tool real (its machine's real/TOOL): an example that reads the real web.
+  [ -e "$key/real/$me" ] || STANDIN_STATE="$key" exec sh "${STANDIN_HOME:-/opt/standin}/$me" "$@"
 fi
 here=$(cd "$(dirname "$0")" && pwd)
 old_ifs=$IFS; IFS=:

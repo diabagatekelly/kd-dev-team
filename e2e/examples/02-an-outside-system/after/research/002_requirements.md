@@ -1,32 +1,34 @@
-# Requirements: Walkers record each walk they do
+# Requirements: Invoice clients for the month
 
-- [ ] **record-walk**: A walker can record a walk they did for a client, so that it is kept and no paper sheet is needed.
-- [ ] **see-client-walks**: The owner can see every walk recorded for a client, so that nothing has to be guessed.
+- [ ] **walker-walk-entry**: A walker can enter their own walks.
+- [ ] **owner-walk-correction**: The business owner can correct the walks a walker has entered.
+- [ ] **month-from-usual-walks**: A walker can start a month from the usual weekly walks.
+- [ ] **monthly-client-invoice**: The business owner can get each client an invoice for that client's walks in a month.
+- [ ] **invoice-payment-link**: The business owner can get each client a Tallypay payment link for their invoice.
 
 ## Out for now
-- Turning a month's walks into an invoice for each client (scope map row 2).
-- Pricing a walk: a 30-minute and a 60-minute walk are priced differently, and a second dog from the same home is half price. Prices come from the owner's price list. All of this belongs to invoicing.
-- Sending clients a Tallypay payment link (row 2).
-- Chasing clients who have not paid (row 3).
-- Paying the walkers through this too: not decided, and no part of recording walks.
+- Chasing clients who haven't paid on time: the scope map marks it "later".
 
 ## Limits that apply
-- **Tallypay stays**: does not apply here; recording walks takes no payment.
-- **Walkers only use their phones**: a walker must be able to do everything this activity gives them from a phone.
-- **Addresses and door codes seen only by the owner and the walker for that client**: wherever a walker sees a client in this activity, the address and door code of a client who is not theirs are never shown; the owner sees all.
+- Tallypay stays: the payment link for an invoice is a Tallypay one.
+- The walkers will only use their phones: applies. Whatever a walker does here, including entering walks, must be possible on their phone.
+- Clients' addresses and door codes seen only by the business owner and the walker for that client: applies. Nothing in entering walks or invoicing may show them to anyone else.
 
 ## Not yet confirmed
-1. **Whose clients (who, from where; bears on record-walk and the privacy limit).** Is each client walked by one walker, or can several walkers walk the same client? Who tells the product which walker has which client, and where does the list of about sixty clients start from? (The price list, described in `sources.md`, names 12 different clients, not sixty: is it the list of clients, or only part of it?) The answer decides whether a walker can record a walk for any client or only their own, and what they see of the others.
-2. **Regular walks and extras (which, when, covers; bears on record-walk).** A regular client has the same walks every week until they change or stop, and there are one-off extras. Must the walker still record each of those walks every time, as on the paper sheet today, or should the regular walks already be there for the walker to confirm? Is a one-off extra a walk like the others, or something recorded differently? The answer decides what "record a walk" is for a regular client, and whether keeping each client's weekly walks is an item of its own.
-3. **What else a walk holds (does; bears on record-walk and see-client-walks).** A walk is 30 or 60 minutes, and it can include a second dog from the same home. Beyond the day, the length and the dogs, is there anything else a walker must say about a walk, or the owner must see?
-4. **Dogs of different homes (which; bears on record-walk).** A second dog from the same home is known. Can one outing also cover dogs of different homes, and if so is it recorded as one walk or as one walk per home?
-5. **Mistakes (put right; bears on record-walk).** If a walker records a walk wrongly, who can correct or remove it, and until when? No item is written for this until you answer.
-6. **Who records (who; bears on record-walk).** Can the owner record a walk too, for example when a walker is ill? Are the holiday-cover walkers walkers in the same way, and are they included from the start?
-7. **Late recording (when; bears on record-walk).** Today the sheets are handed in at the end of the month. Must a walk be recorded on the day, or can a walker record it days later?
-8. **From today (bears on see-client-walks).** Do walks already on paper sheets for the month in progress need to come across, or does recording start fresh?
+Each of these waits on your decision or answer. None is settled.
+
+1. Where do the usual weekly walks come from, and who can change them? Also, is it right that the walker is the one who starts a month from them? Bears on **month-from-usual-walks**: the answer could add an item or change who it names.
+2. Everyone pays the list price for the length of the walk, nobody has a price of their own, only the business owner changes prices, and anything not on the list is added to it first. Must the business owner be able to add and change prices in the product, and can anything besides walks go on an invoice? The price list also has a Client column, naming a different client in each of its 12 rows (see `sources.md`): what is it for, if nobody has a price of their own? Bears on **monthly-client-invoice**: the answer could add items or widen this one.
+3. Can a walker put right a walk they entered, and until when can walks for a month be entered or changed? Bears on **walker-walk-entry** and **owner-walk-correction**: the answer could add an item.
+4. Must the business owner be able to check or change invoices before clients get them? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item. **The business owner does not know yet.**
+5. When an invoice turns out wrong after the client has it, what must the business owner be able to do? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item.
+6. Does each client always get exactly one invoice a month, or are there cases such as one payer for several clients, or one client needing more than one invoice? Bears on **monthly-client-invoice**: the answer could change it or add an item.
+7. Does anyone besides the business owner make or send invoices, or need to see them (apart from the client who gets one)? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could change who they name or add an item.
+8. Does anything that exists today have to come across, such as client details or earlier or unpaid invoices? Bears on **monthly-client-invoice** and **invoice-payment-link**: the answer could add an item.
 
 ## Outside systems and lasting things
-- Outside systems: none in this activity (Tallypay is not touched until invoices).
-- A walk: something a walker did for a client, kept over time.
-- A client: about sixty regular ones, each kept with address and door code.
-- A walker: four now, more with holiday cover.
+- Tallypay
+- Client
+- Walk
+- Usual weekly walk
+- Invoice
