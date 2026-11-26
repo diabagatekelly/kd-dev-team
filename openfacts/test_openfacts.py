@@ -413,6 +413,9 @@ class Draw(Folder):
         self.assertIn('- It quotes: payright F3: "returns the first payment"', said)
         self.assertIn('- payright F3: - F3: The same reference gives the first payment. "returns the first payment" (test T1)', said)
         self.assertNotIn("### A3", said)   # a choice that says nothing of PayRight is no claim
+        # One that rests on a fact of its research document without naming it is a claim too.
+        self.answer("A3", "## A3: Calls are bounded\nKind: chosen\nSays: A request is sent once.\nRests on: payright F1: \"To take a payment, send POST /v1/payments\"\nSettles: L.call-external-05.payment-request\n")
+        self.assertIn("### A3\nClaim: A request is sent once.", self.go("claims")[1])
 
     def test_a_claim_no_second_reader_has_read_is_refused(self):
         self.settled_by_a_run()

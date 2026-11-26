@@ -159,11 +159,12 @@ def claims(read):
         if answers.one(answer, "Kind").lower() not in ("fact", "chosen"):
             continue
         speaks = " ".join([answers.one(answer, "Says"), *answer["fields"].get("Criterion", [])])
-        if not any(re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I) for thing in outside.values()):
-            continue
         rests = answers.one(answer, "Rests on")
         cited = [(stem.lower().removesuffix(".md"), mark) for stem, marks in re.findall(r"([A-Za-z][\w.-]*),? (?:fact )?((?:[FOS]\d+(?:,? (?:and |or )?)?)+)", rests)
                  for mark in re.findall(r"[FOS]\d+", marks)]
+        # It names the thing, or rests on a fact of its research document without naming it (the real plans: half of them).
+        if not any(re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I) for thing in outside.values()) and not any(stem in outside for stem, _mark in cited):
+            continue
         words = [f"It quotes: {rests}"] + [f"{stem} {mark}: {lines[stem][mark]}" for stem, mark in dict.fromkeys(cited) if mark in lines.get(stem, {})]
         found.append({"name": answer["name"], "mark": str(questions.cksum(answers.plain(speaks + " " + rests).encode("utf-8"))), "claim": speaks, "words": words})
     return found
