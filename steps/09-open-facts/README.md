@@ -1,7 +1,9 @@
 # Stage 9: the tests of open facts
 
 **On trial (decision 56, 2026-11-26): tested as proposed below, at
-about $170. Not adopted.** Spent so far: $10.16.
+about $170. Not adopted.** Spent so far: $78.03. Still to run: the two
+real plans three times each (they wait for the provider's sandbox
+keys) and the four examples.
 
 ## The pilot (2026-11-26, $10.16 of about $12)
 
@@ -64,6 +66,61 @@ nothing, twelve are said by another fact than the one quoted, about
 four are arguable, which is at the edge of the bar's one in ten.
 Sonnet is proposed for the reader.
 
+## One real run a plan, the cases twice more (2026-11-26; $17.41)
+
+One run on each real plan from a kept stage 8 run, Sonnet, with the
+reader and without the provider's sandbox keys ($5.07 with the
+reader's own calls): both drawn. Tests 12 and 10 at the start, 17
+and 16 at the end; sorted 3 and 2 to run, 0 and 3 a page, 12 and 9
+a person's, 2 and 2 later; none settled. The reader read 70 and 69
+claims, flagged 29 in each, and 5 in each were still flagged after
+the answers were reworked. The owner's list 10 and 9, none taken
+off; read by me, eight and eight are plainly theirs and two and one
+borderline. Stage 9 itself cost $1.83 and $1.83 a run, the reader
+72 and 74 cents of it.
+
+Met (decision 29): on one plan ten criteria were lost, where an
+answer the reader still named was made a test. The text now has
+only the part named taken out, the choice and its criteria staying.
+The cases once more ($3.03, Sonnet 8 of 15): the evaluation has no
+reader at all and the stage was held for it; on a machine with no
+reader the drawing says the claims were read by nobody but their
+writer (a unit test).
+
+## Three runs, five runs twice, and every earlier stage (2026-11-26; $60.46)
+
+| With the text | Sonnet 5.5 | Haiku 5.5 | Cost |
+|---|---|---|---|
+| Three runs | 32 of 45 | 28 of 45 | $9.31 |
+| Five runs | 53 of 75 | 51 of 75 | $16.47 |
+| Five runs, after their changes | 69 of 75 (70 but for form) | 52 of 75 | $16.86 |
+
+Read, failure by failure. After three runs: files are written with
+the file tool whatever the shell says (a session took the
+evaluation's read-only shell for a read-only project); told to send
+to the real thing, it says they can make that test themselves; two
+checks asked for one wording. After five: a decision the
+requirements already took was read as "scope, the owner's" five
+times of five, and the text now has the documents looked in first;
+a test no page settled was left sorted as a page, with nothing said
+of who could make it, and is now sorted again, the script refusing
+it left so; what a test printed is kept by hand only where the
+command says so; two checks failed good answers.
+
+**Where the bar is not met:** 69 of 75, not 75. Sonnet's six are
+single slips in five cases: a looked-up fact under a heading of the
+session's own naming; a decision read as decided and its answer not
+made a fact; the answers drawn and not the open facts; after a skip,
+the one decision not shown; the open-facts file written again whole
+(twice). Haiku does not hold the stage: the page look-up and the
+user's own word fail in every run.
+
+Every earlier stage once on Sonnet with this one on trial ($15.64):
+113 of 115. The two: a check of form in the requirements, and the
+wording of "little to attack" in the security pass; neither touches
+what changed. The answers' look-up case five times ($1.49): 4 of 5,
+as when it was adopted.
+
 ## What it is
 
 The answers (stage 8) leave tests: things that turn on how something
@@ -118,7 +175,7 @@ start while one waits.
 | A decision that waits and is not read; one read as not theirs whose answer is unchanged | script, refused |
 | The answers drawn again with the open facts, in one command | script |
 | Whether the stage is done; that decisions still wait; a slice with nothing to test and nothing to decide needs no such stage | stage script |
-| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (169 lines) |
+| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (184 lines) |
 
 38 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
 the stage script, 5 for the driver, 21 for the cases.
