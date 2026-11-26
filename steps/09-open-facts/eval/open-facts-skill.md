@@ -86,15 +86,17 @@ the test. If they will not give it, the test is `open`.
 `Shows: <what it showed> "<the output's words>"` (in backquotes
 where they hold quote marks of their own). Add to the thing's
 research document, under a last heading `## Shown by a test`, a
-fact numbered on from the last: `- F31: <one sentence>. "<the
-output's words>" (test T1)`. Then change the answer in place: a
+fact numbered on from the last one there: `- F<next number>: <one
+sentence>. "<the output's words>" (test T1)`. Then change the answer in place: a
 fact or a choice resting on that fact and its words, with the
 criterion that now follows. An output that does not say it (an
 error, something else) leaves the test `open`: say no more than was
 printed. A run that shows only part of what was asked: what it
 showed goes into the answer's `Says`, as shown, and the block is
 sorted again for what is left, `person` or `later`, its script
-staying named. A test environment is not the real thing: how long the
+staying named. What a call of the thing takes, returns or refuses
+is settled by its test environment, and said to be shown there. A
+test environment is not the real thing: how long the
 real one takes, or what it does with real accounts, is not settled
 there.
 

@@ -95,13 +95,8 @@ class Stage(unittest.TestCase):
         # (decision 44) the first stage not built is the questions.
         # With the questions adopted (decision 48) it was the security pass (decision 46), with that
         # adopted (decision 51) the answers, and with those adopted (decision 55) the tests of open facts.
+        # ... and with those adopted (decision 58) the design.
         named = self.not_built()
-        self.assertIn("- next stage by the documents: tests of open facts", self.report())
-        self.assertRegex("tests of open facts", named)
-        self.assertNotRegex("answers", named)
-
-    def test_with_the_tests_of_open_facts_on_trial_that_scenario_moves_on_to_the_design(self):
-        named = self.not_built("open-facts")
         self.assertIn("- next stage by the documents: design", self.report())
         self.assertRegex("design", named)
         self.assertNotRegex("tests of open facts", named)

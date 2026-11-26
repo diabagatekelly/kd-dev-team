@@ -85,9 +85,9 @@ DOCUMENTS["slice-001/008_answers.md"] = _answers
 DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(
     DOCUMENTS["slice-001/007_questions/questions.md"].encode() + _answers.encode())
 NOT_BUILT = (r"\btests? of (the )?open facts|\bopen facts", [*NOT_BUILT[1], "slice-001/008_answers.md", "slice-001/008_answered.md"])
-# With the tests of open facts on trial (`KD_TRIAL=open-facts`) it is the design: the tests skipped at
+# With the tests of open facts adopted (2026-11-26, decision 58) it is the design: the tests skipped at
 # the user's word, and drawn with no decision waiting, are the shortest the stage script counts as done.
-if "open-facts" in os.environ.get("KD_TRIAL", "").split(","):
+if True:
     _open = "Skipped at the user's word, 2026-11-25: \"Skip the tests.\"\n"
     DOCUMENTS["slice-001/009_open-facts.md"] = _open
     DOCUMENTS["slice-001/009_tested.md"] = "# Tested\n\n<!-- drawn from: %s; waiting: 0 -->\n" % _questions.cksum(_answers.encode() + _open.encode())

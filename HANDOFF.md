@@ -14,21 +14,20 @@ it is the record; this page only says where things stand.
   together, for what the answers need of a thing committed to.
 - **While a project is planned its VM reads any website and sends
   to none** (decision 52): `startup/machine.sh web open|lock`.
-- **Stage 9, the tests of open facts, is tested and put to the
-  owner (decisions 56 and 57): $212.77. Not adopted until they
-  say.** Its README (`steps/09-open-facts/README.md`) has every
-  result, where the bar is not met and what no session has run. In
-  short: Sonnet 65 of 75 on the cases after the round (65 to 69
-  before it); on the two real plans 26 of
-  94 tests were run in the provider's test environment and 20
-  settled, none overturning a choice; the owner's list 7 to 11 in
-  six runs; the second reader built and working, flagging about a
-  third of the claims at first. On trial it is loaded with
-  `open-facts=steps/09-open-facts/eval/open-facts-skill.md`.
-  If the owner says it holds: add it to `make_plugin.SKILLS` and
-  `regress.STAGES`, move startup's case 21 to the design for good.
+- **Stage 9, the tests of open facts, is adopted on Sonnet 5.5**
+  (decision 58), at $212.77. Its README has every result, where the
+  bar is not met and what no session has run. Two sentences of its
+  text changed after the last run and were run by no session.
+- **Next: stage 10, the design.** Nothing of it is built, no
+  measure and no cost are agreed (the design's section 5: its
+  measure is agreed with the owner when the stage is reached). kad's
+  `architecture-design` and its synthesis file are the start; the
+  open facts and the owner's decisions are what it now reads.
+- **Owed to the library:** a question that would have asked for an
+  identifier that changes when a connection is made again
+  (decision 58; the one key fact in no run).
 
-## What stage 9 has to take on
+## What stage 9 took on (kept for the record)
 
 As built: 1 and 2 by the script and the text; 4 by the list read in
 the same file and brought at the stage's end; 3 is not built (the

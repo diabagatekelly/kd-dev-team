@@ -631,6 +631,29 @@ asking is listed apart, so it can be overturned.
     leaves its line. Then the cases five times and one real run a
     plan.
 
+58. **Stage 9, the tests of open facts, holds on Sonnet 5.5** (the
+    owner: "Go ahead", 2026-11-26, to the recommendation that it
+    holds as it stands with its limits recorded, and to two small
+    changes of the text left unrun), with the text of 193 lines in
+    `steps/09-open-facts/eval/open-facts-skill.md`, the script
+    `openfacts/openfacts.py` and the second reader's instructions
+    in `openfacts/reader.md`: $212.77 against the $170 first agreed
+    and the round of decision 57. Its text is adopted and its
+    fifteen cases join the regression build. Known and accepted
+    with it: 65 of 75 on the cases, not 75; a session calls almost
+    nothing settled by a run in a test environment (1 of 12 in the
+    last two real runs), writing what was shown into the answer;
+    the same test is sorted differently from run to run; one key
+    fact of the first plan (an identifier that changes when a
+    connection is made again) is in no run, and is owed to the
+    library as a question; the reader is never run inside a case,
+    and no example takes a provider through the stage. The two
+    changes made after the last run, and run by no session: the
+    number of a fact a test showed is written as the next one, not
+    as an example's; what a call of the thing takes, returns or
+    refuses is settled by its test environment. What no session
+    has run is listed in the stage's README.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,

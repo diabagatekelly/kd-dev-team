@@ -1,8 +1,13 @@
 # Stage 9: the tests of open facts
 
 **On trial (decision 56, 2026-11-26): tested as proposed below, at
-about $170, and one round more (decision 57): $212.77 spent. Put to
-the owner; not adopted until they say.**
+about $170, and one round more (decision 57): $212.77.**
+
+**Adopted on Sonnet 5.5 (2026-11-26, decision 58), with its limits
+recorded below.** Two sentences of the text were changed after the
+last run and no session has run them: the number of a fact a test
+showed is the next one, not an example's; what a call of the thing
+takes, returns or refuses is settled by its test environment.
 
 ## The round (decision 57; 2026-11-26; $46.84, of which $24.31 on the wrong code)
 
@@ -342,7 +347,7 @@ start while one waits.
 | A decision that waits and is not read; one read as not theirs whose answer is unchanged | script, refused |
 | The answers drawn again with the open facts, in one command | script |
 | Whether the stage is done; that decisions still wait; a slice with nothing to test and nothing to decide needs no such stage | stage script |
-| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (182 lines) |
+| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (193 lines) |
 
 38 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
 the stage script, 5 for the driver, 21 for the cases.
