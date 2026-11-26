@@ -465,11 +465,27 @@ class Draw(Folder):
         self.assertIn("1 claims read, a second reader could not be run", said)
         self.assertIn("A second reader could not be run: 1 of them were read by nobody but their writer.", (self.slice / "009_tested.md").read_text(encoding="utf-8"))
 
+    def test_a_verdict_with_nothing_more_said_does_not_take_the_next_claims_line(self):
+        # Met in the pilot: after "A3: silent" the line of A4 was read as what A3 said more, and A4 went unread: 16 of 51.
+        self.assertEqual(openfacts.VERDICT.findall("A3: silent\nA4: further: which errors are temporary\n- **A5**: Says.\nA6 - says"),
+                         [("A3", "silent", ""), ("A4", "further", "which errors are temporary"), ("A5", "Says", "")])
+
+    def test_a_tool_that_answers_with_no_reading_has_read_nothing(self):
+        # Met in the pilot: inside the evaluation the tool answered an error for nothing, and that was counted as a reading.
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        fake = self.top / "error.py"
+        fake.write_text("import json\nprint(json.dumps({'result': 'Not logged in', 'is_error': True, 'total_cost_usd': 0}))\n", encoding="utf-8")
+        out = io.StringIO()
+        openfacts.second_read(self.slice, out, command=[sys.executable, str(fake)], model="a-model")
+        self.assertIn("- NOT READ: the reader could not be run (it answered with no reading: Not logged in)", out.getvalue())
+        self.assertEqual(self.go("draw")[0], 0)
+
     def test_a_reader_that_answers_for_only_some_leaves_the_rest_unread(self):
         self.settled_by_a_run()
         (self.slice / "009_read.md").unlink()
         fake = self.top / "some.py"
-        fake.write_text("import json\nprint(json.dumps({'result': 'Here they are:\\n**A9**: says', 'total_cost_usd': 0}))\n", encoding="utf-8")
+        fake.write_text("import json\nprint(json.dumps({'result': 'Here they are:\\n**A9**: says', 'total_cost_usd': 0}))\n", encoding="utf-8")   # of another claim
         openfacts.second_read(self.slice, io.StringIO(), command=[sys.executable, str(fake)], model="a-model")
         self.assertIn("no second reader has read them as they stand (A1)", self.go("draw")[1])
 

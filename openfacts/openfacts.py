@@ -144,6 +144,8 @@ def kept_output(tests, block):
 READER = pathlib.Path(__file__).resolve().parent / "reader.md"
 READ_STAMP = "<!-- read by a second reader: %s -->"
 VERDICTS = ("says", "further", "silent")
+# One line a claim. Nothing here reads past its line's end: a verdict with no more said took the next claim's line with it (the pilot).
+VERDICT = re.compile(r"^[^\w\n]*(A\d+)[^\w\n]*:[^\w\n]*(says|further|silent)\b[^\w\n]*(.*)$", re.M | re.I)
 BATCH = 20
 
 
@@ -222,10 +224,13 @@ def second_read(folder, out=sys.stdout, command=None, model=None):
                                       cwd=nowhere, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=600)
             answer = __import__("json").loads(done.stdout)
             said, cost = answer.get("result") or "", cost + (answer.get("total_cost_usd") or 0.0)
+            if answer.get("is_error") or not VERDICT.search(said):   # a tool that answered with no reading (not signed in, refused) has read nothing
+                failed = f"it answered with no reading: {said[:120] or done.stderr[:120]}"
+                break
         except (OSError, ValueError, subprocess.TimeoutExpired) as error:
             failed = f"{type(error).__name__}: {str(error)[:120]}"
             break
-        told = {name: (verdict.lower(), more.strip()) for name, verdict, more in re.findall(r"^\W*(A\d+)\W*:\s*\W*(says|further|silent)\b\W*:?(.*)$", said, re.M | re.I)}
+        told = {name: (verdict.lower(), more.strip()) for name, verdict, more in VERDICT.findall(said)}
         for each in batch:
             if each["name"] in told:
                 kept[each["name"]] = (each["mark"], *told[each["name"]])
