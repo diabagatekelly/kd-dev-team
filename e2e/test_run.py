@@ -559,6 +559,25 @@ class Run(unittest.TestCase):
         planning = self.folder / "out" / "project" / "plans"
         self.assertEqual(sorted(path.name for path in run.in_a_folder_of_its_stage(planning)), ["kept.md", "questions.md", "states.md"])
 
+    def test_a_user_who_says_two_things_in_turn_to_a_session_that_writes_nothing_is_stuck_too(self):
+        # Met with the fourth example through stage 9: "Go on", "I don't know yet" and a longer answer, in turn, for 29 turns and $15.
+        (self.example / "brief.md").write_text(BRIEF.replace("| scope-map | Put the second one first. |", "").replace("At most 1.", ""))
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace("if n == 3:", "if n == 99:"))
+        sorter = self.folder / "sorter.json"
+        sorter.write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        real_ask, calls = run.ask, []
+
+        def ask(command, prompt, cwd, extra, env=None):
+            calls.append(1)   # the sorter's pick changes every other call, so the user never says one thing twice running
+            sorter.write_text('{"asked": ["today"], "uncovered": 0, "asks": true}' if len(calls) % 4 < 2 else '{"asked": [], "uncovered": 1, "asks": true}')
+            return real_ask(command, prompt, cwd, extra, env)
+
+        from unittest import mock
+        with mock.patch.object(run, "ask", ask):
+            summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 30, command=(sys.executable, str(fake)))
+        self.assertEqual(summary["ended"], "stuck: 8 turns left no new document")
+
     def test_the_questions_never_drawn_end_the_run_as_stuck(self):
         summary, _ = self.through(fake=self.QUESTIONS.replace("if n == 10:", "if n == 98:"), brief=self.SPOKEN, through="questions")
         self.assertEqual((summary["ended"], summary["questions"]), ("stuck: the user had only the same thing to say", []))

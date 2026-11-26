@@ -77,6 +77,7 @@ covers a question, count the question as uncovered.
 """
 DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers", "open-facts")
 MERGED = 7   # the number of the made-up pull request
+QUIET = 8   # turns with no new document after which a run is stuck, whatever the user says (the fourth example ran 29 turns, $15, at the slice)
 
 
 def section(brief, heading):
@@ -487,6 +488,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
                     "--no-session-persistence"]
     planning = project / brief.folder
     turns, session, said, ended, seen, cost, same = [], None, brief.opening, "the turns ran out", set(), 0.0, 0
+    quiet = 0
     if start:   # the user comes back to documents already written
         said, seen = brief.back, present(planning)
     sessions, merged, back, since = [], "", None, 0
@@ -580,6 +582,11 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         same = same + 1 if said == turn["user"] and not appeared else 0   # a turn that left a new document moved on
         if same == 2:   # said twice running, and this would be the third time
             ended = "stuck: the user had only the same thing to say"
+            break
+        # A user with two or three things to say, said in turn, is as stuck: eight turns that left no new document.
+        quiet = 0 if appeared else quiet + 1
+        if quiet == QUIET:
+            ended = f"stuck: {QUIET} turns left no new document"
             break
     (out / "transcript.md").write_text("\n\n".join(
         f"**User:** {turn['user']}\n\n**Session:** {turn['session']}" for turn in turns) + "\n", encoding="utf-8")
