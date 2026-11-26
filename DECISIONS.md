@@ -623,6 +623,14 @@ asking is listed apart, so it can be overturned.
     allows the provider's sandbox address for the evaluation VM and
     types its test keys there.
 
+57. **One more round of stage 9 before the owner says whether it
+    holds** (the owner: "The round", 2026-11-26), about $25 past
+    the $170 of decision 56: a test prints what the thing answered
+    and not a sentence of its own; a test a run settled only in
+    part is sorted again; an item taken off the owner's list always
+    leaves its line. Then the cases five times and one real run a
+    plan.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,

@@ -269,6 +269,32 @@ def second_read(folder, out=sys.stdout, command=None, model=None):
     return 0
 
 
+def waited(read):
+    """The decisions that waited for the owner when this stage began: kept by `next` the first time it is asked, or else
+    as the answers' own drawing lists them."""
+    kept = read["tests"] / "owner-list.before" if read["tests"] else None
+    if kept is not None and kept.is_file():
+        return kept.read_text(encoding="utf-8").split()
+    drawn = read["answered"].read_text(encoding="utf-8") if read["answered"] is not None and read["answered"].is_file() else ""
+    if "## For the owner, by harm" not in drawn:   # answers never drawn: the list as it stands now
+        return [answer["name"] for answer in waiting_owner(read["answers"])]
+    return re.findall(r"^### (A\d+):", drawn.split("## For the owner, by harm", 1)[-1].split("\n## ", 1)[0], re.M)
+
+
+def keep_waited(read):
+    """Kept once, where it can be: a shell that may not write the project leaves the answers' drawing as it was, which serves."""
+    document, _tested, tests = find(read["folder"])
+    if tests is None:   # no open-facts file yet: its folder of tests takes the next number, as the report names it
+        return
+    kept = tests / "owner-list.before"
+    if not kept.is_file():
+        try:
+            tests.mkdir(exist_ok=True)
+            kept.write_text(" ".join(waited(read)) + "\n", encoding="utf-8", newline="\n")
+        except OSError:
+            pass
+
+
 def waiting_owner(written):
     return [answer for answer in written if answers.one(answer, "Kind").lower() == "owner" and not answers.one(answer, "Decided")]
 
@@ -319,6 +345,10 @@ def problems(read):
                 say(f"{answer['name']} is no longer a test in the answers, and this block leaves it open: say what settled it, or leave the answer a test")
             if how == "page":
                 say("a page that did not say leaves the test to be sorted again: `How:` run, person or later, keeping `Read:` the addresses that were read")
+            if how == "run" and one(block, "Script") and (read["tests"] / f"{name}.out").is_file():
+                # Met on the real plans: a run that settled half a question left the other half sorted as run, as if this machine could still make it.
+                say("it was run and is still open: what the run did show goes into its answer's `Says`, and what is left is sorted again, `How:` person "
+                    "or later, the script staying named; or the script is put right and run again")
             continue
         if still:
             say(f"{answer['name']} is still a `test` in the answers: a settled test changes its answer in place, to a fact or a choice resting on what was shown")
@@ -331,9 +361,14 @@ def problems(read):
             output, why = kept_output(read["tests"], block) if one(block, "Script") else (None, "a test that was run names its `Script:`")
             if why:
                 say(why)
+            own = answers.plain((read["tests"] / one(block, "Script")).read_text(encoding="utf-8", errors="replace")) if output is not None else ""
             for each in quotes(shown) if output is not None else []:
                 if each not in answers.plain(output):
                     say(f"\"{each[:50]}\" is not in what {one(block, 'Script')} printed: give the output's own words")
+                elif each in own:
+                    # Met on the real plans: half the results quoted a sentence the script had composed ("same: yes").
+                    say(f"\"{each[:50]}\" is written in {one(block, 'Script')} itself: a result is what the thing answered (its status, its fields, as they "
+                        "came), not a sentence the script prints of its own. Have the script print the reply, run it again, and quote that")
         elif how == "page":
             for each in quotes(shown):
                 if each not in said:
@@ -371,6 +406,12 @@ def problems(read):
                      f"{' (' + more + ')' if more else ''}: cut the answer back to what its words say, or make it a `look up`; then `read` again")
     # The owner's list, read before it is brought: each decision that waits is one of the four kinds.
     waiting = waiting_owner(read["answers"])
+    still = {answer["name"] for answer in read["answers"] if answers.one(answer, "Kind").lower() == "owner"}
+    for name in waited(read):
+        # Met on the real plans: two items of high harm were taken off by changing their answers, with no line saying so.
+        if name not in still and name not in read["listed"]:
+            found.append(f"{name} waited for the owner when this stage began and no longer does: under `## The owner's list, read`, a line says what it "
+                         f"became and why (`- {name}: chosen: ...`, `decided: <the document>`, or `same as A1`)")
     for answer in waiting:
         kind = read["listed"].get(answer["name"], ("", ""))[0]
         if not kind:
@@ -585,6 +626,7 @@ def main(arguments, out=sys.stdout):
     waiting = waiting_owner(read["answers"])
     found = problems(read) if read["document"] else []
     if command == "next":
+        keep_waited(read)
         left = sorted((answer for answer in tests if answer["name"] not in taken),
                       key=lambda answer: answers.HARMS.index((answers.one(answer, "Harm").lower().split() or ["low"])[0].strip(".,:;"))
                       if (answers.one(answer, "Harm").lower().split() or ["low"])[0].strip(".,:;") in answers.HARMS else 2)
@@ -603,6 +645,8 @@ def main(arguments, out=sys.stdout):
     if read["document"] is None:
         print("no open facts yet: write NNN_open-facts.md in the slice's folder, NNN the next number there", file=out)
         return 1
+    keep_waited(read)   # before the answers are drawn again: their drawing is where the list as it was is read from
+    read = load(folder)
     # The answers a test changed are drawn again here, by their own script: one command draws both.
     if answers.main(["draw", folder], out) != 0:
         print("the answers do not hold as they stand (above): put them right first; the open facts are drawn after them", file=out)

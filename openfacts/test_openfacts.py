@@ -104,7 +104,8 @@ How: person
 Result: open
 Either way: an event older than the state already held changes nothing.
 """
-SCRIPT = 'echo \'{"id": "pay_1", "status": "pending", "same_reference": "returns the first payment"}\'\n'
+REPLY = '{"id": "pay_1", "status": "pending", "same_reference": "returns the first payment"}\n'
+SCRIPT = "cat reply.json\n"   # what the thing answered, which the script only passes on
 AGAINST = 'Against: https://sandbox.payright.example "Requests to sandbox.payright.example are test mode and move no money."\n'
 
 
@@ -159,6 +160,7 @@ class Folder(unittest.TestCase):
 
     def a_run(self, script=SCRIPT, more=AGAINST, shows='Shows: The same reference gives the first payment. "returns the first payment"'):
         self.put("009_tests/T1.sh", script)
+        self.put("009_tests/reply.json", REPLY)
         self.put("009_open-facts.md", f"# Open facts\n\n## T1: A lost reply\nAnswer: A1\nHow: run\n{more}Script: T1.sh\nResult: settled\n{shows}\n"
                  + OPEN.split("## T2", 1)[0].split("## T1")[0].replace("# Open facts\n", "") + "## T2" + OPEN.split("## T2", 1)[1] + READ)
 
@@ -347,7 +349,7 @@ class Draw(Folder):
         out.write_text(out.read_text(encoding="utf-8").replace("pending", "settled"), encoding="utf-8")
         self.assertIn("T1.out is not what the `run` command printed for T1.sh as it stands: run it again", self.go("draw")[1])
         self.go("run", "T1")
-        self.put("009_tests/T1.sh", SCRIPT + "echo more\n")
+        self.put("009_tests/T1.sh", SCRIPT + "echo more\n")   # the script changed after it was run
         self.assertIn("run it again", self.go("draw")[1])
 
     def test_an_output_kept_by_hand_exactly_as_printed_counts(self):
@@ -370,6 +372,36 @@ class Draw(Folder):
         self.assertEqual(self.go("draw")[0], 0)
         self.put("009_open-facts.md", text.replace('"returns the first payment"', '`"id": "pay_2", "status": "settled"`'))
         self.assertIn("is not in what T1.sh printed", self.go("draw")[1])
+
+    def test_a_sentence_the_script_itself_composed_is_not_a_result(self):
+        # Met on the real plans (decision 57): half the results quoted the script's own "same: yes", and it stood in the research as a fact.
+        self.a_run(script='cat reply.json >/dev/null && echo "both requests name the same payment"\n',
+                   shows='Shows: A repeat names the first payment. "both requests name the same payment"')
+        self.go("run", "T1")
+        self.answer("A1", FACT.replace('"returns the first payment"', '"To take a payment, send POST /v1/payments"').replace("payright F3", "payright F1"))
+        self.reader()
+        said = self.go("draw")[1]
+        self.assertIn('"both requests name the same payment" is written in T1.sh itself: a result is what the thing answered', said)
+        self.assertNotIn("is not in what T1.sh printed", said)
+
+    def test_a_test_that_was_run_and_is_still_open_is_sorted_again_with_its_script_named(self):
+        # Met on the real plans: a run settled half a question, and the half only a person could make stayed sorted as run.
+        self.a_run()
+        self.go("run", "T1")
+        text = (self.slice / "009_open-facts.md").read_text(encoding="utf-8")
+        half = text.replace('Result: settled\nShows: The same reference gives the first payment. "returns the first payment"',
+                            "Result: open\nEither way: a renewal with no reply is asked for by its reference before any second request.")
+        self.put("009_open-facts.md", half)
+        self.assertIn("T1 (line 3): it was run and is still open: what the run did show goes into its answer's `Says`, and what is left is sorted again", self.go("draw")[1])
+        self.put("009_open-facts.md", half.replace("How: run", "How: person"))
+        self.assertEqual(self.go("draw")[0], 0)
+
+    def test_a_run_refused_for_its_key_stays_a_run_left_open(self):
+        self.a_run(more=AGAINST + "Needs: PAYRIGHT_TEST_KEY\n")
+        text = (self.slice / "009_open-facts.md").read_text(encoding="utf-8")
+        self.put("009_open-facts.md", text.replace('Result: settled\nShows: The same reference gives the first payment. "returns the first payment"',
+                                                   "Result: open\nEither way: asked for by its reference before any second request."))
+        self.assertEqual(self.go("draw")[0], 0)
 
     def test_a_fact_shown_by_a_test_is_in_that_tests_words_and_names_it(self):
         self.settled_by_a_run()
@@ -534,6 +566,33 @@ class Draw(Folder):
         self.assertEqual(code, 0, said)
         self.assertIn("2 decisions wait for the owner, 1 taken off their list", said)
         self.assertIn("- taken off: A6 (chosen: a technical choice)", (self.slice / "009_tested.md").read_text(encoding="utf-8"))
+
+    def test_a_decision_taken_off_the_list_with_no_line_is_refused(self):
+        # Met on the real plans: one run took two items of high harm off by changing their answers, and nothing said so.
+        self.put("009_open-facts.md", OPEN + READ)
+        self.assertEqual(self.go("next")[0], 0)   # the list as it was is kept the first time the stage is asked
+        self.assertEqual((self.slice / "009_tests/owner-list.before").read_text(encoding="utf-8").split(), ["A4", "A5", "A6"])
+        self.answer("A6", "## A6: A missing setting\nKind: chosen\nSays: It stops and says which setting is missing.\nRests on: a default would hide the mistake.\nSettles: V.every-setting.missing\n")
+        self.put("009_open-facts.md", OPEN + READ.replace("- A6: rule: it is theirs\n", ""))
+        self.assertIn("A6 waited for the owner when this stage began and no longer does: under `## The owner's list, read`, a line says what it became", self.go("draw")[1])
+        self.put("009_open-facts.md", OPEN + READ.replace("- A6: rule: it is theirs", "- A6: chosen: a technical choice"))
+        self.assertEqual(self.go("draw")[0], 0)
+
+    def test_where_nothing_could_be_kept_the_list_as_it_was_is_read_from_the_answers_drawing(self):
+        self.go("next")   # no open-facts file yet: nothing is kept
+        self.assertFalse((self.slice / "009_tests").exists())
+        answers.main(["draw", str(self.slice)], io.StringIO())
+        self.answer("A6", "## A6: A missing setting\nKind: chosen\nSays: It stops.\nRests on: a default would hide the mistake.\nSettles: V.every-setting.missing\n")
+        self.put("009_open-facts.md", OPEN + READ.replace("- A6: rule: it is theirs\n", ""))
+        (self.slice / "009_tests").write_text("not a folder")   # as in a shell that may not write the project
+        self.assertIn("A6 waited for the owner when this stage began", self.go("draw")[1])
+
+    def test_a_decision_the_owner_took_has_not_been_taken_off(self):
+        self.put("009_open-facts.md", OPEN + READ)
+        self.go("next")
+        self.answer("A4", ANSWERS.split("## A4")[1].split("## A5")[0].join(["## A4", ""]).rstrip("\n") + '\nDecided: one named person (the user, 2026-11-25: "one person, me")\n')
+        self.put("009_open-facts.md", OPEN + READ.replace("- A4: rule: who may move money is the playhouse's own rule\n", ""))
+        self.assertEqual(self.go("draw")[0], 0)
 
     def test_answers_that_do_not_hold_are_put_right_first(self):
         self.put("009_open-facts.md", OPEN + READ)
