@@ -29,7 +29,10 @@ it goes on from there and ends once a research document is written, or after one
 there is nothing to research. With `--through questions` it goes on and ends once the questions
 are drawn (`questions.md` in the slice's questions folder). With `--through security` it goes on and
 ends once `security.md` is written beside them and the questions drawn again after it. With `--through
-answers` it goes on and ends once the answers are drawn by the script. With `--through
+answers` it goes on and ends once the answers are drawn by the script. With `--through open-facts` it
+goes on through the tests of open facts and ends once they are drawn with no decision left waiting
+for the owner (asked for a key or a site for a test, the user has none; shown their list, takes what
+is recommended), or once the answers are drawn and leave nothing to test or decide. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -42,7 +45,7 @@ texts has changed since, and the example is then run from its first message and 
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
-                          [--through merge|answers|security|questions|research|approach|slice|requirements] [--from STAGE]
+                          [--through merge|open-facts|answers|security|questions|research|approach|slice|requirements] [--from STAGE]
     python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
@@ -72,7 +75,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers", "open-facts")
 MERGED = 7   # the number of the made-up pull request
 
 
@@ -112,6 +115,12 @@ class Brief:
         self.topics.setdefault("search", ("whether the assistant may search the web for candidates", "No, don't search."))
         self.topics.setdefault("commit", ("whether to commit to, take or go with the way recommended for something needed "
                                           "from outside", "Yes, take what you recommend."))
+        # The tests of open facts: asked for a key or a site for a test, any user has none to give; shown
+        # the decisions that wait for them, takes what is recommended for each. A brief says otherwise.
+        self.topics.setdefault("test-access", ("a key or an account of a test environment, or a site to be allowed, so that a test "
+                                               "can be run", "I have no test account for it. Go on without it."))
+        self.topics.setdefault("decide", ("which option to take for the decisions brought to the owner as their list, or whether "
+                                          "to accept a risk said to be theirs", "I take what you recommend for each of them."))
         self.merged = section(text, "After the merge") or "That slice is built and merged. What's next?"
         self.not_known = section(text, "Not known") or "I don't know yet."
         self.go_on = section(text, "Nothing asked") or "Go on."
@@ -242,6 +251,8 @@ def present(planning):
         found.add("security")
     if planning.is_dir() and any(planning.glob("slice-*/*_answers.md")):
         found.add("answers")
+    if planning.is_dir() and any(planning.glob("slice-*/*_open-facts.md")):
+        found.add("open-facts")
     return found
 
 
@@ -262,6 +273,29 @@ def answered(planning):
     return [path for path in sorted(planning.glob("slice-*/*_answers.md"))
             if (drawing := path.with_name(path.name.replace("_answers.md", "_answered.md"))).is_file()
             and drawing.stat().st_mtime_ns >= path.stat().st_mtime_ns] if planning.is_dir() else []
+
+
+def tested(planning):
+    """The open facts the script has drawn with no decision left waiting for the owner: `tested.md`
+    beside them, no older than they or the answers are."""
+    found = []
+    for path in sorted(planning.glob("slice-*/*_open-facts.md")) if planning.is_dir() else []:
+        drawing = path.with_name(path.name.replace("_open-facts.md", "_tested.md"))
+        newest = max(each.stat().st_mtime_ns for each in [path, *path.parent.glob("*_answers.md")])
+        if drawing.is_file() and drawing.stat().st_mtime_ns >= newest and "; waiting: 0 -->" in drawing.read_text(encoding="utf-8"):
+            found.append(path)
+    return found
+
+
+def nothing_to_test(planning):
+    """The answers are drawn and leave no test and no decision for the owner: the stage script passes the tests of open facts over."""
+    drawn_ones = answered(planning)
+    for path in drawn_ones:
+        blocks = re.split(r"(?m)^## A\d+", path.read_text(encoding="utf-8"))[1:]
+        if any(re.search(r"(?m)^Kind:\s*test\b", block) or (re.search(r"(?m)^Kind:\s*owner\b", block) and not re.search(r"(?m)^Decided:\s*\S", block))
+               for block in blocks):
+            return False
+    return bool(drawn_ones)
 
 
 def in_a_folder_of_its_stage(planning):
@@ -395,12 +429,13 @@ def keep(out, example, stage, plugin):
     kept.mkdir(parents=True)
     for path in sorted(planning.rglob("*.md")):
         name = re.sub(r"^\d+_|(-v\d+)?\.md$", "", path.name)
-        if name in wanted or path.name == "sources.md" or (name == "answered" and "answers" in wanted):
+        if name in wanted or path.name == "sources.md" or (name == "answered" and "answers" in wanted) or (name == "tested" and "open-facts" in wanted):
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    if stage in ("approach", "research", "questions", "security", "answers"):   # the pages its quotes are from: research reads them and does not fetch them again
+    if stage in ("approach", "research", "questions", "security", "answers", "open-facts"):   # the pages its quotes are from: research reads them and does not fetch them again
         for path in [*sorted(planning.glob("slice-*/pages/*.txt")), *(research(planning) if stage != "approach" else []),
-                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security", "answers") else [])]:
+                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security", "answers", "open-facts") else []),
+                     *(sorted(path for path in planning.glob("slice-*/*_tests/*") if path.is_file()) if stage == "open-facts" else [])]:
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
@@ -501,6 +536,13 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "answers" and answered(planning):
             ended = "the answers were drawn"
             break
+        # The tests of open facts (stage 9): drawn by the script, and the owner's list brought and decided.
+        if through == "open-facts" and tested(planning):
+            ended = "the open facts were drawn and no decision waits for the owner"
+            break
+        if through == "open-facts" and nothing_to_test(planning):
+            ended = "the answers left nothing to test and nothing for the owner to decide"
+            break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -523,7 +565,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through in ("merge", "research", "questions", "security", "answers") and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research", "questions", "security", "answers", "open-facts") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
@@ -578,7 +620,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "answers", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "open-facts", "answers", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()

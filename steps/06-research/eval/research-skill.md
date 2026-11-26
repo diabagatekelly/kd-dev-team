@@ -145,8 +145,9 @@ things it must know of a thing committed to: its `lookups` command
 lists them. Look them all up in one go. For each, read first the
 pages already kept (the report's command lists them), then the
 thing's own pages, by the same rules as above. What a page says is
-added to the thing's document as a new fact, numbered on from the
-last, with its quote and address; what no page says is added as an
+added to the thing's document, under a last heading `## Looked up
+for the answers`, as a new fact numbered on from the last, with its
+quote and address; what no page says is added as an
 open point with the test that would settle it. Change no fact
 already there and no other document, run the report's check on the
 quotes, and say which were found and which were not.

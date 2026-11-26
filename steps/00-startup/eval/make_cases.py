@@ -76,14 +76,21 @@ NOT_BUILT = (r"\bsecurity", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped
 if _on_trial:
     DOCUMENTS["slice-001/007_questions/security.md"] = _security
     NOT_BUILT = (r"\banswers", [*NOT_BUILT[1], "slice-001/007_questions/security.md"])
-# With the answers on trial (`KD_TRIAL=answers`) it is the tests of open facts: the answers skipped at
-# the user's word, and drawn, are the shortest the stage script counts as done.
-if True:   # the answers are adopted (2026-11-25, decision 55): the first stage not built is the tests of open facts
-    _answers = "Skipped at the user's word, 2026-11-25: \"Skip the answers.\"\n"
-    DOCUMENTS["slice-001/008_answers.md"] = _answers
-    DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(
-        DOCUMENTS["slice-001/007_questions/questions.md"].encode() + _answers.encode())
-    NOT_BUILT = (r"\btests? of (the )?open facts|\bopen facts", [*NOT_BUILT[1], "slice-001/008_answers.md", "slice-001/008_answered.md"])
+# With the answers adopted (2026-11-25, decision 55) it is the tests of open facts: answers that leave
+# one test, and drawn, are the shortest the stage script sends on to that stage (answers skipped at
+# the user's word leave nothing to test and nothing to decide, and need no such stage).
+_answers = "# Answers\n\n## A1: What is not known\nKind: test\nSays: No page says.\nTest: one step against its test environment.\nHarm: low\nSettles: W.open\n"
+DOCUMENTS["slice-001/008_answers.md"] = _answers
+DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(
+    DOCUMENTS["slice-001/007_questions/questions.md"].encode() + _answers.encode())
+NOT_BUILT = (r"\btests? of (the )?open facts|\bopen facts", [*NOT_BUILT[1], "slice-001/008_answers.md", "slice-001/008_answered.md"])
+# With the tests of open facts on trial (`KD_TRIAL=open-facts`) it is the design: the tests skipped at
+# the user's word, and drawn with no decision waiting, are the shortest the stage script counts as done.
+if "open-facts" in os.environ.get("KD_TRIAL", "").split(","):
+    _open = "Skipped at the user's word, 2026-11-25: \"Skip the tests.\"\n"
+    DOCUMENTS["slice-001/009_open-facts.md"] = _open
+    DOCUMENTS["slice-001/009_tested.md"] = "# Tested\n\n<!-- drawn from: %s; waiting: 0 -->\n" % _questions.cksum(_answers.encode() + _open.encode())
+    NOT_BUILT = (r"\bdesign", [*NOT_BUILT[1], "slice-001/009_open-facts.md", "slice-001/009_tested.md"])
 
 
 def pull(number, title, branch, unresolved=0):

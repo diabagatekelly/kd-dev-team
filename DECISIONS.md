@@ -671,6 +671,52 @@ asking is listed apart, so it can be overturned.
   - kad's three skills are not an arm of the cases: they are set
     beside ours on the two real plans.
 
+- Stage 9, the tests of open facts, as built (2026-11-25), chosen
+  without asking; its test, its cost and three points of the owner's
+  are in `steps/09-open-facts/README.md`, and nothing paid has run:
+  - A test is sorted one of four ways: a page would say it (looked
+    up by research's second pass), one request to the thing's test
+    environment settles it (run), only a person can make it, or it
+    shows only in use. On three kept runs of the real plans, read,
+    about one test in five can be run and two thirds of the gravest
+    are the owner's own to make.
+  - A test is run by a command, never by the session's own shell:
+    it is sent only to an address the block names with the
+    documentation's own words that say it is a test environment,
+    what it printed is kept under a seal, and a result is given in
+    those words. Never the real thing, even at the user's word:
+    that test is theirs to make, and their word settles it.
+  - A key is typed by the user at a hidden prompt in a terminal of
+    the VM, kept outside the project, and taken out of whatever is
+    kept. One pasted into the conversation is not used.
+  - What a test shows is added to the thing's research document as
+    a fact, under `## Shown by a test`, so the answer rests on it
+    as on any fact and the answers' script is unchanged for it.
+  - A test left open says what the slice does either way; the ones
+    of high harm are shown to the owner with their list.
+  - The owner's list is read in the same file: each decision that
+    waits is theirs by one of four kinds, or taken off (a technical
+    choice, already decided, the same as another) with its answer
+    changed. More than twelve truly theirs stand, and are said.
+  - The stage is not done while a decision waits: the list is
+    brought, and the design does not start, until each is decided
+    or left at the owner's word (`Decided: left`).
+  - Answers that leave no test and no decision need no such stage:
+    the stage script passes it over.
+  - One command draws the answers and the open facts together.
+  - The examples' user, asked for a key or a site for a test, has
+    none; shown their list, takes what is recommended.
+  - The second reader of a claim against its quotation is not
+    built: it is the owner's first point.
+  - Met while building, and put right with unit tests: a fact the
+    second pass added made the questions stale and sent a session
+    back to them (their mark now leaves out what research adds
+    under its two later headings; one phrase of research's adopted
+    text names the heading); the answers' script took the words
+    between two quotations for a quotation. Both change adopted
+    things: every earlier stage is run once, and the answers'
+    look-up case five times, in stage 9's test.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the

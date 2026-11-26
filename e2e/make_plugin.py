@@ -59,6 +59,8 @@ def main(folder, trial=None):
     write(folder / "library" / "library.json", (ROOT / "library" / "library.json").read_text(encoding="utf-8"))
     # The script that says which questions no answer settles, and draws the answers.
     write(folder / "answers" / "answers.py", (ROOT / "answers" / "answers.py").read_text(encoding="utf-8"))
+    # The script that sorts the tests the answers leave, runs one and draws them: the stage script names it once the answers are drawn.
+    write(folder / "openfacts" / "openfacts.py", (ROOT / "openfacts" / "openfacts.py").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

@@ -463,6 +463,24 @@ class TheCommand(unittest.TestCase):
         self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n")
         self.assertEqual(run("check", self.folder, self.library), (0, "ok\n"))
 
+    def test_what_research_adds_for_the_answers_or_from_a_test_leaves_the_questions_drawn(self):
+        # Met building stage 9: a fact the second pass added sent a session back to the questions.
+        run("draw", self.folder, self.library)
+        document = sorted((self.folder).glob("[0-9]*_research/*.md"))[0]
+        for heading in ("## Looked up for the answers", "## Shown by a test"):
+            with document.open("a", encoding="utf-8", newline="\n") as handle:
+                handle.write(f"\n{heading}\n- F90: Found later. \"its own words here\" (https://docs.example/later)\n")
+            self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n", heading)
+        with document.open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write("\n## Open\n- O9: a heading that is not one of the two.\n")
+        self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n")   # still under the first of them
+
+    def test_a_research_fact_changed_above_those_headings_makes_the_questions_stale(self):
+        run("draw", self.folder, self.library)
+        document = sorted((self.folder).glob("[0-9]*_research/*.md"))[0]
+        document.write_text("- F0: put first.\n" + document.read_text(encoding="utf-8") + "\n## Shown by a test\n- F91: later.\n", encoding="utf-8", newline="\n")
+        self.assertTrue(run("state", self.folder, self.library)[1].startswith("stale:"))
+
     def test_a_document_changed_after_the_drawing_makes_the_questions_stale(self):
         run("draw", self.folder, self.library)
         with (self.folder / "004_slice.md").open("a", encoding="utf-8") as handle:

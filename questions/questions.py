@@ -257,6 +257,22 @@ def carried(research, standing=None):
     return found
 
 
+ADDED_LATER = re.compile(rb"^## (Looked up for the answers|Shown by a test)", re.M)
+
+
+def before_the_answers(data):
+    """A research document as the questions were drawn from it: what the answers had looked up and
+    what a test showed are added under headings of their own, and do not make the questions stale
+    (met building stage 9: a fact added by the second pass sent a session back to the questions)."""
+    found = ADDED_LATER.search(data)
+    if not found:
+        return data
+    lines = data[:found.start()].split(b"\n")[:-1]
+    while lines and not lines[-1].strip(b" \t\r"):   # the empty lines left before the heading are not the document's
+        lines.pop()
+    return b"".join(line + b"\n" for line in lines)
+
+
 def read_slice(folder):
     """The slice's documents as they stand: the latest of each by its number."""
     folder = pathlib.Path(folder)
@@ -267,8 +283,8 @@ def read_slice(folder):
 
     slice_doc, approach, research, kept = latest("[0-9]*_slice.md"), latest("[0-9]*_approach.md"), latest("[0-9]*_research"), latest("[0-9]*_questions")
     # In the order the stage script reads them for the same mark: the slice, the approach, research by name.
-    documents = [path.read_bytes() for path in [slice_doc, approach] + (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])
-                 if path and path.is_file()]
+    documents = [path.read_bytes() for path in [slice_doc, approach] if path and path.is_file()]
+    documents += [before_the_answers(path.read_bytes()) for path in (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])]
     return {
         "folder": folder,
         "slice": slice_doc.read_text(encoding="utf-8") if slice_doc else "",

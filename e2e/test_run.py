@@ -488,6 +488,54 @@ class Run(unittest.TestCase):
         # Not at turn 12: security is done and the answers begun, and nothing is drawn from them.
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers were drawn", 13))
 
+    # Carried on through the tests of open facts (stage 9): the answers leave a test, the open facts are
+    # drawn with two decisions waiting, the user takes what is recommended and they are drawn again.
+    OPEN_FACTS = ANSWERS.replace('write_text("# Answers\\n")', 'write_text("# Answers\\n\\n## A1: x\\nKind: test\\n")').replace(
+        '    if n == 99:\n', '    if n == 14:\n'
+        '        pathlib.Path("plans/slice-002/009_open-facts.md").write_text("# Open facts\\n")\n'
+        '        pathlib.Path("plans/slice-002/009_tested.md").write_text("<!-- drawn from: 1; waiting: 2 -->\\n")\n'
+        '    if n == 15:\n'
+        '        pathlib.Path("plans/slice-002/009_tested.md").write_text("<!-- drawn from: 2; waiting: 0 -->\\n")\n'
+        '    if n == 99:\n')
+
+    def test_carried_through_the_open_facts_it_ends_once_they_are_drawn_and_no_decision_waits(self):
+        self.assertIn("Kind: test", self.OPEN_FACTS)
+        summary, _ = self.through(fake=self.OPEN_FACTS, brief=self.SPOKEN, through="open-facts", turns=20)
+        # Not at turn 13 (the answers drawn, a test left) nor at 14 (drawn, two decisions waiting).
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the open facts were drawn and no decision waits for the owner", 15))
+
+    def test_answers_that_leave_nothing_to_test_or_decide_end_a_run_through_the_open_facts(self):
+        summary, _ = self.through(fake=self.ANSWERS, brief=self.SPOKEN, through="open-facts", turns=20)
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers left nothing to test and nothing for the owner to decide", 13))
+
+    def test_a_decision_still_waiting_in_the_answers_is_something_left(self):
+        planning = self.folder / "p"
+        (planning / "slice-001").mkdir(parents=True)
+        (planning / "slice-001/008_answers.md").write_text("## A1: x\nKind: owner\nOptions: a | b\n")
+        (planning / "slice-001/008_answered.md").write_text("drawn")
+        self.assertFalse(run.nothing_to_test(planning))
+        (planning / "slice-001/008_answers.md").write_text('## A1: x\nKind: owner\nDecided: a (the user, 2026-11-25: "a")\n\n## A2: y\nKind: chosen\n')
+        (planning / "slice-001/008_answered.md").write_text("drawn")
+        self.assertTrue(run.nothing_to_test(planning))
+
+    def test_shown_their_list_or_asked_for_a_test_key_the_user_has_plain_answers_unless_the_brief_says_otherwise(self):
+        brief = run.Brief(BRIEF)
+        self.assertEqual(brief.reply({"asked": ["test-access", "decide"], "uncovered": 0}, set(), False),
+                         "I have no test account for it. Go on without it. I take what you recommend for each of them.")
+
+    def test_the_open_facts_are_kept_with_their_drawing_and_their_tests(self):
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002"
+        (folder / "009_open-facts.md").write_text("written")
+        (folder / "009_tested.md").write_text("drawn")
+        (folder / "009_tests").mkdir()
+        (folder / "009_tests" / "T1.sh").write_text("echo")
+        (folder / "009_tests" / "T1.out").write_text("# seal")
+        kept = run.keep(self.folder / "done", self.example, "open-facts", self.folder / "plugin")
+        for name in ("009_open-facts.md", "009_tested.md", "009_tests/T1.sh", "009_tests/T1.out"):
+            self.assertTrue((kept / "slice-002" / name).is_file(), name)
+        self.assertFalse((run.keep(self.folder / "done", self.example, "answers", self.folder / "plugin") / "slice-002" / "009_tested.md").exists())
+
     def test_the_answers_are_kept_with_their_drawing(self):
         self.kept()
         folder = self.folder / "done" / "project" / "plans" / "slice-002"

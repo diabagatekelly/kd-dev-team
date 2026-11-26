@@ -14,10 +14,24 @@ it is the record; this page only says where things stand.
   together, for what the answers need of a thing committed to.
 - **While a project is planned its VM reads any website and sends
   to none** (decision 52): `startup/machine.sh web open|lock`.
-- **Next: stage 9, the tests of open facts.** Nothing of it is
-  built. No cost has been agreed for it.
+- **Stage 9, the tests of open facts, is built free and not
+  tested** (2026-11-25): `openfacts/openfacts.py`, the stage
+  script's part, the text and fifteen cases in
+  `steps/09-open-facts/`, the driver's `--through open-facts`. Its
+  test (about $170, pilot $12, the examples' owed pass inside it)
+  and three points of the owner's are in its README: the second
+  reader (not built), sending to a provider's test environment
+  with a key the user gives, and the cost. Nothing paid has run and
+  no session has run any of it: check `DECISIONS.md` for the
+  owner's yes before any paid run. On trial it is loaded with
+  `open-facts=steps/09-open-facts/eval/open-facts-skill.md`
+  (`KD_TRIAL=open-facts` moves startup's case to the design).
 
 ## What stage 9 has to take on
+
+As built: 1 and 2 by the script and the text; 4 by the list read in
+the same file and brought at the stage's end; 3 is not built (the
+owner's to say); 5 is counted on the real runs once they are made.
 
 From the design (`design/planning-phase.md`) and from what stage 8
 left (decisions 53 and 55):
@@ -58,6 +72,12 @@ run; expected and unexpected outcomes are told apart in no record.
   agreed that cost. The fourth example reads the real web and its
   later documents hold real sites' pages: they are kept in the
   audit repository (`e2e/kept/04-similar-verses/`), never here.
+- **Changed in adopted things while building stage 9, and run by
+  no session since:** the questions' mark (what research adds under
+  its two later headings no longer stales them), one phrase of
+  research's text, the answers' script (quote marks in pairs), the
+  made-up web (a host may ask for a key: rerun `setup-vm.sh` in the
+  VM). Stage 9's test runs every earlier stage once for them.
 - **No example reaches a merge.** `e2e/run.py --through merge`
   still waits only for research.
 - **Nothing forces the web locked before a build** (decision 52):
