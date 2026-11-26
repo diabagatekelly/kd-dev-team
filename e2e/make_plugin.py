@@ -61,6 +61,7 @@ def main(folder, trial=None):
     write(folder / "answers" / "answers.py", (ROOT / "answers" / "answers.py").read_text(encoding="utf-8"))
     # The script that sorts the tests the answers leave, runs one and draws them: the stage script names it once the answers are drawn.
     write(folder / "openfacts" / "openfacts.py", (ROOT / "openfacts" / "openfacts.py").read_text(encoding="utf-8"))
+    write(folder / "openfacts" / "reader.md", (ROOT / "openfacts" / "reader.md").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

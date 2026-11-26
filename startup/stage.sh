@@ -603,6 +603,7 @@ STAGES
       say "  a test is run, and what it printed kept, only by: $OPEN run $folder/$slice T1"
       say "  a key of a test environment is typed by the user at a hidden prompt, in a terminal of this VM, never in the conversation: $OPEN key NAME"
       say "  what a page would say is looked up as the answers' look-ups are: $ANSWERS lookups $folder/$slice"
+      say "  each answer that speaks of a thing committed to is read against the words it quotes by a second reader, which costs a little: $OPEN read $folder/$slice"
       say "  the answers and the open facts are checked and drawn together by script: $OPEN draw $folder/$slice"
       if [ -n "$obrought" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and both drawn again: $OPEN draw $folder/$slice"
       else say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;

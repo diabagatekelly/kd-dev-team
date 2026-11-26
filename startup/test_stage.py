@@ -501,6 +501,7 @@ class Stage(unittest.TestCase):
         self.assertRegex(out, r"a test is run, and what it printed kept, only by: .*openfacts\.py\" run planning/slice-001 T1")
         self.assertRegex(out, r"typed by the user at a hidden prompt, in a terminal of this VM, never in the conversation: CLAUDE_PLUGIN_DATA=\"[^\"]+\" python3 \".*openfacts\.py\" key NAME")
         self.assertRegex(out, r"looked up as the answers' look-ups are: python3 \".*answers\.py\" lookups planning/slice-001")
+        self.assertRegex(out, r"read against the words it quotes by a second reader, which costs a little: .*openfacts\.py\" read planning/slice-001")
         self.assertRegex(out, r"checked and drawn together by script: .*openfacts\.py\" draw planning/slice-001")
         self.assertRegex(out, r"- a page of documentation is read with: python3 \".*page\.py\" fetch URL --to planning/slice-001/pages")
 

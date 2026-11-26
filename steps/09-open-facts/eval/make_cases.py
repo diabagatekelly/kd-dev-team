@@ -387,7 +387,7 @@ def main(arm):
     (plugin / "startup").mkdir()
     for script in [*startup.STARTUP.glob("*.sh"), startup.STARTUP / "tracker.jq"]:
         shutil.copy(script, plugin / "startup" / script.name)
-    for script in ("research/page.py", "questions/questions.py", "library/library.json", "answers/answers.py", "openfacts/openfacts.py"):
+    for script in ("research/page.py", "questions/questions.py", "library/library.json", "answers/answers.py", "openfacts/openfacts.py", "openfacts/reader.md"):
         write(plugin / script, (ROOT / script).read_text(encoding="utf-8"))
     for name, source in q.load("make_plugin", ROOT / "e2e/make_plugin.py").SKILLS.items():
         if name != "open-facts":   # this stage's own text is one arm's, not every arm's

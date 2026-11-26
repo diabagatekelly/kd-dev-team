@@ -85,7 +85,7 @@ class Cases(unittest.TestCase):
                 self.assertIn("next stage by the documents: design (", report)
                 continue
             self.assertRegex(report, r"next stage by the documents: tests of open facts \(its document: planning/slice-001/009_open-facts\.md", case.name)
-            for command in ("next", "run", "key", "draw"):
+            for command in ("next", "run", "key", "read", "draw"):
                 self.assertRegex(report, rf'CLAUDE_PLUGIN_DATA="@DATA@" python3 "@STARTUP@/\.\./openfacts/openfacts\.py" {command} ', case.name)
             self.assertNotIn(str(ROOT), report)
 
@@ -157,6 +157,12 @@ class Cases(unittest.TestCase):
         fact = ('## A902: The form and zone of created_at\nKind: fact\nSays: PayRight gives created_at as a time in UTC, ending in Z.\n'
                 'Rests on: payright F14: "2026-03-02T18:30:00Z"\nSettles: V.created-at.*\n')
         (folder / "008_answers.md").write_text(text[:start] + fact, encoding="utf-8")
+        out = io.StringIO()
+        self.assertEqual(openfacts.main(["draw", str(folder)], out), 1)
+        self.assertIn("no second reader has read them as they stand (A902)", out.getvalue())
+        reader = project / "reader.py"   # the second reader, stood in: it finds that the claim rests on its words
+        reader.write_text("import json\nprint(json.dumps({'result': 'A902: says', 'total_cost_usd': 0.01}))\n", encoding="utf-8")
+        openfacts.second_read(folder, io.StringIO(), command=[sys.executable, str(reader)], model="a-model")
         out = io.StringIO()
         self.assertEqual(openfacts.main(["draw", str(folder)], out), 0, out.getvalue())
         self.assertRegex(out.getvalue(), cases.DREW + r"1 tests: 1 settled, 0 still open")

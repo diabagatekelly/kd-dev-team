@@ -134,6 +134,18 @@ class Folder(unittest.TestCase):
             code = openfacts.main([arguments[0], str(self.slice), *arguments[1:]], out)
         return code, out.getvalue()
 
+    def reader(self, says="says", cost=0.02, broken=False):
+        """A second reader that says the same of every claim it is handed, as the tool would answer."""
+        fake = self.top / "reader.py"
+        fake.write_text("import json, re, sys\n"
+                        + ("sys.exit(1)\n" if broken else "")
+                        + "prompt = sys.argv[sys.argv.index('-p') + 1]\n"
+                        f"print(json.dumps({{'result': '\\n'.join(name + ': {says}' for name in re.findall(r'^### (A\\d+)', prompt, re.M)), 'total_cost_usd': {cost}}}))\n",
+                        encoding="utf-8")
+        out = io.StringIO()
+        code = openfacts.second_read(self.slice, out, command=[sys.executable, str(fake)], model="a-model")
+        return code, out.getvalue()
+
     def answer(self, name, block):
         """Change one answer in place, as a session does once a test has settled it."""
         text = (self.slice / "008_answers.md").read_text(encoding="utf-8")
@@ -285,6 +297,7 @@ class Draw(Folder):
         self.go("run", "T1")
         self.put("006_research/payright.md", RESEARCH + SHOWN)
         self.answer("A1", FACT)
+        self.reader()
 
     def test_open_tests_with_what_holds_either_way_and_the_list_read_are_drawn_with_the_answers(self):
         self.put("009_open-facts.md", OPEN + READ)
@@ -358,6 +371,7 @@ class Draw(Folder):
         self.answer("A1", FACT)
         block = '# Open facts\n\n## T1: A lost reply\nAnswer: A1\nHow: page\nRead: https://docs.payright.example/payments\nResult: settled\nShows: It is said. "%s"\n'
         self.put("009_open-facts.md", block % "returns the first payment" + "## T2" + OPEN.split("## T2", 1)[1] + READ)
+        self.reader()
         self.assertEqual(self.go("draw")[0], 0)
         self.put("009_open-facts.md", block % "words no page holds anywhere" + "## T2" + OPEN.split("## T2", 1)[1] + READ)
         self.assertIn("is in no research document and no page kept for the slice", self.go("draw")[1])
@@ -388,6 +402,76 @@ class Draw(Folder):
     def test_a_test_with_no_block_is_refused(self):
         self.put("009_open-facts.md", OPEN.split("## T2")[0] + READ)
         self.assertIn("1 tests of the answers have no block (A2): `next` lists them", self.go("draw")[1])
+
+    # The second reader (decision 56): a model reading a model, which can only send an answer back.
+    def test_the_claims_are_the_answers_that_speak_of_what_is_committed_to_each_with_its_words(self):
+        self.settled_by_a_run()
+        code, said = self.go("claims")
+        self.assertEqual(code, 0)
+        self.assertIn("1 answers speak of a thing the slice is committed to", said)
+        self.assertIn("### A1\nClaim: A payment asked for again by its reference is PayRight's first payment, not a second. Given a renewal", said)
+        self.assertIn('- It quotes: payright F3: "returns the first payment"', said)
+        self.assertIn('- payright F3: - F3: The same reference gives the first payment. "returns the first payment" (test T1)', said)
+        self.assertNotIn("### A3", said)   # a choice that says nothing of PayRight is no claim
+
+    def test_a_claim_no_second_reader_has_read_is_refused(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        self.assertIn("1 answers speak of a thing committed to and no second reader has read them as they stand (A1): the `read` command hands them over", self.go("draw")[1])
+
+    def test_the_reader_is_handed_only_the_claims_and_its_verdicts_are_kept_with_what_it_cost(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        code, said = self.reader(cost=0.03)
+        self.assertEqual(code, 0)
+        self.assertIn("- read: 1 claims handed to a second reader (a-model), $0.03; 1 of 1 rest on their words, 0 go past them; kept in ", said)
+        self.assertRegex((self.slice / "009_read.md").read_text(encoding="utf-8"), r"<!-- read by a second reader: a-model -->[\s\S]*\n- A1 \[\d+\]: says\n")
+        self.assertIn("1 claims read", self.go("draw")[1])
+        self.assertIn("1 answers speak of it, and a second reader found that each rests on the words it quotes.", (self.slice / "009_tested.md").read_text(encoding="utf-8"))
+        # Read once: a second asking hands over nothing.
+        self.assertIn("- read: 0 claims handed", self.reader()[1])
+
+    def test_a_claim_read_as_going_past_its_words_is_refused_until_it_is_changed_and_read_again(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        said = self.reader(says="further: that it is never a second")[1]
+        self.assertIn("0 of 1 rest on their words, 1 go past them", said)
+        self.assertIn("- A1: further: that it is never a second", said)
+        refused = self.go("draw")
+        self.assertEqual(refused[0], 1)
+        self.assertIn("A1: a second reader found its words say less than it does (that it is never a second): cut the answer back to what its words say, "
+                      "or make it a `look up`; then `read` again", refused[1])
+        self.answer("A1", FACT.replace("is PayRight's first payment, not a second", "returns PayRight's first payment"))
+        self.assertIn("no second reader has read them as they stand (A1)", self.go("draw")[1])   # changed: its reading no longer counts
+        self.reader()
+        self.assertEqual(self.go("draw")[0], 0)
+
+    def test_a_claim_its_words_are_silent_on_is_refused_and_one_made_a_test_is_no_longer_a_claim(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        self.reader(says="silent")
+        self.assertIn("A1: a second reader found its words silent on it", self.go("draw")[1])
+
+    def test_a_reader_that_cannot_be_run_is_said_and_does_not_hold_the_stage(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        said = self.reader(broken=True)[1]
+        self.assertIn("- NOT READ: the reader could not be run (", said)
+        code, said = self.go("draw")
+        self.assertEqual(code, 0, said)
+        self.assertIn("1 claims read, a second reader could not be run", said)
+        self.assertIn("A second reader could not be run: 1 of them were read by nobody but their writer.", (self.slice / "009_tested.md").read_text(encoding="utf-8"))
+
+    def test_a_reader_that_answers_for_only_some_leaves_the_rest_unread(self):
+        self.settled_by_a_run()
+        (self.slice / "009_read.md").unlink()
+        fake = self.top / "some.py"
+        fake.write_text("import json\nprint(json.dumps({'result': 'Here they are:\\n**A9**: says', 'total_cost_usd': 0}))\n", encoding="utf-8")
+        openfacts.second_read(self.slice, io.StringIO(), command=[sys.executable, str(fake)], model="a-model")
+        self.assertIn("no second reader has read them as they stand (A1)", self.go("draw")[1])
+
+    def test_with_no_open_facts_file_there_is_nothing_to_read_yet(self):
+        self.assertEqual(self.reader()[0], 1)
 
     def test_a_decision_that_waits_and_is_not_read_is_refused(self):
         self.put("009_open-facts.md", OPEN + READ.replace("- A6: rule: it is theirs\n", ""))

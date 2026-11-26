@@ -96,6 +96,15 @@ choice, a line of the planning documents): begin your reply with
 it, what was written and what the test printed. Change the answer
 and its criteria; change no other document.
 
+**Each claim, read by another.** Once the tests are sorted and
+their answers changed, run the report's `read` command: a reader
+that is given nothing but each answer that speaks of a thing
+committed to, and the words it quotes, says whether those words say
+it. An answer it names as going past its words is cut back to what
+they say, or made a `look up` and looked up; then run `read` again.
+One still named after the second reading becomes a `test`. You
+never write its file. Where it could not be run, say so.
+
 **The owner's list, read before it is brought.** Once the tests are
 sorted, a line for each decision that waits, under a last heading:
 

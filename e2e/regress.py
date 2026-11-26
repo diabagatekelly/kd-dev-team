@@ -33,7 +33,7 @@ def overlay(plugin, root=ROOT, trial=None):
         make_plugin.write(plugin / "skills" / name / "SKILL.md", (root / source).read_text(encoding="utf-8"))
     shutil.copy(root / "steps/00-startup/eval/routing-table.md", plugin / "hooks" / "routing-table.md")
     # The script the stage script names once the questions are next, and the library it reads.
-    for script in ("questions/questions.py", "library/library.json", "answers/answers.py", "openfacts/openfacts.py"):
+    for script in ("questions/questions.py", "library/library.json", "answers/answers.py", "openfacts/openfacts.py", "openfacts/reader.md"):
         make_plugin.write(plugin / script, (root / script).read_text(encoding="utf-8"))
 
 
