@@ -91,6 +91,12 @@ function close_block() { if (kind == "test") tests++; if (kind == "owner" && !de
 /^Decided:[ \t]*[^ \t\r]/ { decided = 1 }
 END { close_block(); print "@tests " tests + 0; print "@waiting " waiting + 0 }'
 
+# What the questions are drawn from in a research document: the states whole, and of a thing committed to only
+# its open points and what it says of our documents (lines "- O1" and "- S1"). A fact added afterwards changes none.
+drawn_from() {
+  case "$1" in */states.md|states.md) cat "$1" ;; *) before_the_answers "$1" | grep -E '^[[:space:]]*[-*] [OS][0-9]+' ;; esac
+}
+
 # The latest numbered entry of that name in a folder, or nothing.
 numbered() { (cd "$1" 2>/dev/null && ls -d [0-9][0-9][0-9]_$2 2>/dev/null | sort | tail -1) | sed 's|/$||'; }
 
@@ -413,7 +419,7 @@ report() {
             # The security pass writes security.md beside it, and the questions are drawn again with
             # it: the mark is then of that file too, after the others.
             marked() { (cd "$dir" && { cat "$slice/$own"; [ -z "$approach" ] || cat "$approach"
-                      [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do before_the_answers "$rfolder/$file"; done
+                      [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do drawn_from "$rfolder/$file"; done
                       cat "$qfolder/$basis"; [ -z "$1" ] || cat "$qfolder/security.md"; }) 2>/dev/null | cksum | awk '{ print $1 }'; }
             qstate=stale
             if grep -q "drawn from: $(marked "") " "$dir/$qfolder/questions.md"; then

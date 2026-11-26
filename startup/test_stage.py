@@ -386,8 +386,8 @@ class Stage(unittest.TestCase):
     def draw(self, at, basis="kept.md", security=False):
         slice_folder = at.parent
         # As the questions' own script marks them: a research document without what was added to it later.
-        cut = the_questions_script().before_the_answers
-        together = b"".join(cut((slice_folder / name).read_bytes()) if "_research/" in name else (slice_folder / name).read_bytes() for name in
+        cut = the_questions_script().drawn_from
+        together = b"".join(cut(name.rsplit("/", 1)[-1], (slice_folder / name).read_bytes()) if "_research/" in name else (slice_folder / name).read_bytes() for name in
                             ("004_slice.md", "005_approach.md", "006_research/postbox.md", "006_research/states.md", f"{at.name}/{basis}",
                              *([f"{at.name}/security.md"] if security else [])))
         (at / "questions.md").write_text(f"# Questions\n\n<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
@@ -473,10 +473,15 @@ class Stage(unittest.TestCase):
             self.assertIn("- next stage by the documents: tests of open facts (", self.report(), heading)
         # A document whose lines end as Windows ends them is marked by its own bytes (met in CI: awk there rewrote them).
         document = folder / "006_research/postbox.md"
-        document.write_bytes(b"First line.\r\n\r\nSecond line.\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n")
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n- O9: later too.\r\n")
         self.draw(folder / "007_questions", security=True)
         self.assertIn("- next stage by the documents: answers (", self.report())   # the questions hold; the answers are to draw again from them
-        document.write_bytes(b"First line.\r\n\r\nSecond line.\r\n\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n- F92: More.\r\n")
+        # Met on the real plans (the round): facts looked up later were added among the first ones, with no heading, and the questions went stale.
+        document.write_bytes(b"- F1: First.\r\n- F50: Looked up later, with no heading.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n\r\nNot opened: nothing.\r\n\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n- F92: More.\r\n")
+        self.assertIn("- next stage by the documents: answers (", self.report())
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point, changed.\r\n- S1 AGREES: said.\r\n")
+        self.assertIn("- next stage by the documents: questions (", self.report())   # an open point changed is a question changed
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n")
         self.assertIn("- next stage by the documents: answers (", self.report())
         with (folder / "006_research/states.md").open("a", encoding="utf-8", newline="\n") as handle:
             handle.write("\nA row changed.\n")

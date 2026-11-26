@@ -67,9 +67,10 @@ _spec.loader.exec_module(_questions)
 _skipped = "Skipped at the user's word, 2026-11-24: \"Skip the questions.\"\n"
 _on_trial = True   # the security pass is adopted (2026-11-25, decision 51): the first stage not built is the answers
 _security = "Skipped at the user's word, 2026-11-25: \"Skip the security pass.\"\n" if _on_trial else ""
-_mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md",
-                                                             "slice-001/006_research/shelfmark.md", "slice-001/006_research/states.md")).encode()
-                         + _skipped.encode() + _security.encode())
+# As the questions' own script marks them: of a thing's research document, only what the questions are drawn from.
+_mark = _questions.cksum("".join(DOCUMENTS[name] for name in ("slice-001/004_slice.md", "slice-001/005_approach.md")).encode()
+                         + _questions.drawn_from("shelfmark.md", DOCUMENTS["slice-001/006_research/shelfmark.md"].encode())
+                         + DOCUMENTS["slice-001/006_research/states.md"].encode() + _skipped.encode() + _security.encode())
 DOCUMENTS["slice-001/007_questions/skipped.md"] = _skipped
 DOCUMENTS["slice-001/007_questions/questions.md"] = f"# Questions\n\n<!-- drawn from: {_mark} -->\n"
 NOT_BUILT = (r"\bsecurity", [*THROUGH_RESEARCH, "slice-001/007_questions/skipped.md", "slice-001/007_questions/questions.md"])

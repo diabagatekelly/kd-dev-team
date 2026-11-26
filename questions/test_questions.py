@@ -2,6 +2,7 @@
 import io
 import json
 import pathlib
+import re
 import sys
 import tempfile
 import unittest
@@ -423,8 +424,11 @@ class TheMark(unittest.TestCase):
     def test_it_is_of_the_bytes_of_the_documents_in_order_then_the_kept_file(self):
         folder, library = project()
         read, _entries, kept = questions.load(folder, library)
-        together = b"".join((folder / name).read_bytes() for name in
-                            ("004_slice.md", "005_approach.md", "006_research/payright.md", "006_research/states.md", "007_questions/kept.md"))
+        # Of a thing's research document only what the questions are drawn from: its open points and what it says of our documents.
+        carried = b"".join(line + b"\n" for line in (folder / "006_research/payright.md").read_bytes().split(b"\n") if re.match(rb"\s*[-*] [OS]\d+", line))
+        self.assertTrue(carried)
+        together = b"".join([(folder / "004_slice.md").read_bytes(), (folder / "005_approach.md").read_bytes(), carried,
+                             (folder / "006_research/states.md").read_bytes(), (folder / "007_questions/kept.md").read_bytes()])
         self.assertEqual(questions.stamp(read, kept["text"]), str(questions.cksum(together)))
 
 
@@ -482,10 +486,22 @@ class TheCommand(unittest.TestCase):
             handle.write("\n## Open\n- O9: a heading that is not one of the two.\n")
         self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n")   # still under the first of them
 
-    def test_a_research_fact_changed_above_those_headings_makes_the_questions_stale(self):
+    def test_a_fact_added_among_the_first_ones_with_no_heading_leaves_the_questions_drawn_and_a_changed_open_point_does_not(self):
+        # Met on the real plans (decision 57's round): every run added its looked-up facts so, and went back to the questions.
+        document = sorted((self.folder).glob("[0-9]*_research/*.md"))[0]
+        if document.name == "states.md":
+            document = [each for each in sorted(self.folder.glob("[0-9]*_research/*.md")) if each.name != "states.md"][0]
+        run("draw", self.folder, self.library)
+        text = document.read_text(encoding="utf-8")
+        document.write_text("- F77: Looked up later.\n" + text + "\nNot opened: one page.\n", encoding="utf-8", newline="\n")
+        self.assertEqual(run("state", self.folder, self.library)[1], "drawn\n")
+        document.write_text(text + "\n- O77: A new open point among the first ones.\n", encoding="utf-8", newline="\n")
+        self.assertTrue(run("state", self.folder, self.library)[1].startswith("stale:"))
+
+    def test_an_open_point_changed_above_those_headings_makes_the_questions_stale(self):
         run("draw", self.folder, self.library)
         document = sorted((self.folder).glob("[0-9]*_research/*.md"))[0]
-        document.write_text("- F0: put first.\n" + document.read_text(encoding="utf-8") + "\n## Shown by a test\n- F91: later.\n", encoding="utf-8", newline="\n")
+        document.write_text("- O0: put first.\n" + document.read_text(encoding="utf-8") + "\n## Shown by a test\n- F91: later.\n", encoding="utf-8", newline="\n")
         self.assertTrue(run("state", self.folder, self.library)[1].startswith("stale:"))
 
     def test_a_document_changed_after_the_drawing_makes_the_questions_stale(self):

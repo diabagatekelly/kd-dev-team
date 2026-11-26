@@ -282,6 +282,18 @@ def before_the_answers(data):
     return b"".join(line + b"\n" for line in lines)
 
 
+CARRIED = re.compile(rb"\s*[-*] [OS]\d+")
+
+
+def drawn_from(name, data):
+    """What the questions are drawn from in a research document: the states whole, and of a thing committed to only its
+    open points and what it says of our documents. A fact added to it afterwards changes no question (met on the real
+    plans, the round: looked-up facts were added among the others, with no heading, and every run went back to the questions)."""
+    if name == "states.md":
+        return data
+    return b"".join(line + b"\n" for line in before_the_answers(data).split(b"\n") if CARRIED.match(line))
+
+
 def read_slice(folder):
     """The slice's documents as they stand: the latest of each by its number."""
     folder = pathlib.Path(folder)
@@ -293,7 +305,7 @@ def read_slice(folder):
     slice_doc, approach, research, kept = latest("[0-9]*_slice.md"), latest("[0-9]*_approach.md"), latest("[0-9]*_research"), latest("[0-9]*_questions")
     # In the order the stage script reads them for the same mark: the slice, the approach, research by name.
     documents = [path.read_bytes() for path in [slice_doc, approach] if path and path.is_file()]
-    documents += [before_the_answers(path.read_bytes()) for path in (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])]
+    documents += [drawn_from(path.name, path.read_bytes()) for path in (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])]
     return {
         "folder": folder,
         "slice": slice_doc.read_text(encoding="utf-8") if slice_doc else "",
