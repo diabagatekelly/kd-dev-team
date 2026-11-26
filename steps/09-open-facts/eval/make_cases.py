@@ -154,8 +154,8 @@ TECHNICAL = [
           ["made from the ticket and the season, with a secret", "a random value saved before sending"],
           "a random value saved before sending, because it says nothing of the ticket.", "a repeat cannot be told from a second renewal.", "medium", "T.credentials.payment-reference"),
 ]
-DECIDED = [owner(923, "How a renewal may be paid", "A renewal must be paid for in some way.", ["by card only", "by card or by a transfer to the playhouse's account"],
-                 "by card only, because the office reconciles nothing by hand.", "nothing can be charged.", "high", "W.sensitive")]
+DECIDED = [owner(923, "Single tickets at a renewal", "A subscriber who renews may want single tickets in the same step.", ["renewals only", "renewals and single tickets together"],
+                 "renewals only, because it keeps the first slice thin.", "the renewal screen offers nothing else.", "medium", "W.sensitive")]
 TWICE = [owner(924, "What the office is told when a refund is too late", "After 90 days PayRight refuses a refund with refund_window_closed.",
                ["it is told to give the money back another way", "it is told no refund is possible"],
                "it is told to give the money back another way, because refunds were promised at any time.", "the office sees an error it cannot act on.", "medium", "T.her-details.refund-screen")]
@@ -284,7 +284,7 @@ SCENARIOS = [
       says("says-they-can-make-it-themselves", r"yourself|you (can|could|may)|your own|tell me what|what it show"),
       answer("the-answer-stays-a-test", 905, "test"), not_in_file(OPEN, "gives-nothing-as-settled", r"\nResult:\s*settled"), NOT_BY_HAND, *LEFT_ALONE], None),
     ("05-the-owners-list-read-before-it-is-brought",
-     "No test, and fourteen decisions wait for the owner: two technical choices become choices, one the requirements already decide becomes a fact, "
+     "No test, and fourteen decisions wait for the owner: two technical choices become choices, one the requirements already put out of this slice becomes a fact, "
      "one that asks again what another asks is made one with it; what is theirs stays; drawn with twelve or fewer; then the list is brought, once.",
      FOURTEEN, None, ("plain", False, False), q.GO_ON,
      [ASKED_WHAT_IS_LEFT,
@@ -340,8 +340,8 @@ SCENARIOS = [
      "first, with what was written and what was printed; that answer and its criterion changed with the test's own.",
      [ZONE, CLOCK], None, ("testing", True, True), q.GO_ON,
      [*SETTLED_ZONE, says("says-what-was-overturned", r"(?=[\s\S]*(UTC|\bZ\b|zone))(?=[\s\S]*(19:30|A906|playhouse's own time|was written|earlier (choice|answer)|criterion))"),
-      not_in_file(ANS, "the-criterion-on-the-guess-is-gone", r"the hour in created_at unchanged"),
-      answer("the-earlier-answer-now-rests-on-what-was-shown", 906, "(?:fact|chosen)", r"\nRests on:[^\n]*(payright[^\n]*F1[6-9]|open-facts)"),
+      not_in_file(ANS, "the-criterion-on-the-guess-is-gone", r"then it shows 19:30, the hour in created_at unchanged"),
+      answer("the-earlier-answer-now-says-what-was-shown", 906, "(?:fact|chosen)", r"\n(Says|Rests on|Criterion):[^\n]*(UTC|\bZ\b|time zone|payright[^\n]*F1[6-9]|open-facts|A902)"),
       DRAW, trace("the-command-drew", DREW + r"1 tests: 1 settled, 0 still open", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("10-the-answers-changed-after",
      "One test was sorted and drawn, then the answers gained another: only the new test gets a block, the one before is left as it was, drawn again.",

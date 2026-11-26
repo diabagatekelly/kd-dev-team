@@ -242,6 +242,17 @@ class Checks(unittest.TestCase):
         self.assertTrue(holds(drew, "drawn: x/009_tested.md: 0 tests: 0 settled, 0 still open (0 of high harm); 10 decisions wait for the owner, 4 taken off their list"))
         self.assertFalse(holds(drew, "drawn: x/009_tested.md: 0 tests: 0 settled, 0 still open (0 of high harm); 13 decisions wait for the owner, 1 taken off their list"))
 
+    def test_an_overturned_choice_passes_however_it_names_what_was_shown_and_fails_while_the_guess_stands(self):
+        # Met in the three runs: a good answer said "not the hour in created_at unchanged" and rested on the test's own answer, and failed both checks.
+        checks = self.checks("09")
+        good = ("## A906: The time a renewal was taken\nKind: chosen\nSays: The office is shown the time converted from created_at (UTC) to the playhouse's own time zone.\n"
+                "Rests on: A902, and the office reading its own clock.\nSettles: L.time-01.*\nUnder: renew-and-pay\n"
+                "Criterion: Given a renewal whose created_at is 2026-03-02T18:30:00Z, when the office opens it, then it shows that moment in the playhouse's own time zone, not the hour in created_at unchanged.\n")
+        for name in ("the-criterion-on-the-guess-is-gone", "the-earlier-answer-now-says-what-was-shown"):
+            self.assertTrue(holds(checks[name], good), name)
+        self.assertFalse(holds(checks["the-criterion-on-the-guess-is-gone"], cases.CLOCK))
+        self.assertFalse(holds(checks["the-earlier-answer-now-says-what-was-shown"], cases.CLOCK))
+
     def test_a_decision_left_is_recorded_as_left_in_their_words(self):
         checks = self.checks("06b")
         left = cases.THEIRS[4] + 'Decided: left: nothing is measured (the user, 2026-11-25: "leave it for now")\n'

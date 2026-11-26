@@ -16,6 +16,9 @@ left, runs a test and keeps what it printed, refuses what does not
 hold, and draws `tested.md`. You never write that drawing, nor what
 a test printed.
 
+Every file here is written and changed with your file tool. A shell
+that cannot write the folder says nothing of your file tool: use it.
+
 **Read first.** `answered.md` beside the answers (what is to test,
 by harm, and what waits for the owner), the research documents, and
 the report's `next` command. Then, for each thing committed to, the
@@ -52,7 +55,9 @@ Result: settled | open
    against an address its documentation says is for testing, where
    nothing real is changed and nobody's real data is: `Against: <the address>
    "<the page's words that say so>"`. Never the real thing, whatever
-   would be learned. Write the smallest script that settles it, in
+   would be learned: told to send it there, do not, say once why,
+   and that they can make that test themselves and tell you what it
+   showed. Write the smallest script that settles it, in
    the folder of tests beside the file (`NNN_tests/T1.sh`, plain
    shell and `curl`), printing only what settles it, and name it:
    `Script: T1.sh`. A key it needs is read from its environment by
