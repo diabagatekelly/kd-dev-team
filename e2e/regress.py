@@ -23,7 +23,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 STAGES = [("00-startup", ["--table"], "plugin-table"), ("01-problem", ["text"], "plugin-text"),
           ("02-scope-map", ["text"], "plugin-text"), ("03-requirements", ["kinds"], "plugin-kinds"), ("04-slice", ["text"], "plugin-text"),
           ("05-approach", ["text"], "plugin-text"), ("06-research", ["text"], "plugin-text"),
-          ("07-questions", ["text"], "plugin-text"), ("07b-security", ["text"], "plugin-text")]
+          ("07-questions", ["text"], "plugin-text"), ("07b-security", ["text"], "plugin-text"),
+          ("08-answers", ["text"], "plugin-text")]
 
 
 def overlay(plugin, root=ROOT, trial=None):

@@ -78,7 +78,7 @@ if _on_trial:
     NOT_BUILT = (r"\banswers", [*NOT_BUILT[1], "slice-001/007_questions/security.md"])
 # With the answers on trial (`KD_TRIAL=answers`) it is the tests of open facts: the answers skipped at
 # the user's word, and drawn, are the shortest the stage script counts as done.
-if "answers" in os.environ.get("KD_TRIAL", "").split(","):
+if True:   # the answers are adopted (2026-11-25, decision 55): the first stage not built is the tests of open facts
     _answers = "Skipped at the user's word, 2026-11-25: \"Skip the answers.\"\n"
     DOCUMENTS["slice-001/008_answers.md"] = _answers
     DOCUMENTS["slice-001/008_answered.md"] = "# Answered\n\n<!-- drawn from: %s -->\n" % _questions.cksum(

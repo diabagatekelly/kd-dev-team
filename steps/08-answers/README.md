@@ -1,7 +1,7 @@
 # Stage 8: the answers
 
-**Tested (decisions 53 and 54), $160.45 against the $125 first agreed and
-about $163 said since; put to the owner.**
+**Adopted on Sonnet 5.5, with research in two passes (2026-11-25,
+decision 55).** Tested at $160.45 against the $125 first agreed.
 
 ## The pilot (2026-11-25, $2.97 of about $125)
 

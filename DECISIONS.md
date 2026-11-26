@@ -591,6 +591,24 @@ asking is listed apart, so it can be overturned.
       pages kept. One session does both, as the questions stage
       loads the security text.
 
+55. **Stage 8, the answers, holds on Sonnet 5.5, with research in
+    two passes** (the owner: "Yes it holds"), with the text of 144
+    lines in `steps/08-answers/eval/answers-skill.md`, the script
+    `answers/answers.py` and the second pass in research's text:
+    $160.45 against the $125 first agreed. Its text is adopted and
+    its eight cases join the regression build. Known and accepted
+    with it: about one answer in fifteen that speaks of the
+    provider still says what nothing read says, and others quote
+    the wrong line of a fact that does say it; a slice's list for
+    the owner was 14 and 17 in two real runs of six, 8 and 12 once
+    technical choices and things already decided are taken off;
+    some of kad's concerns are said in an answer with no criterion,
+    and what a lock leaves after a crash or a close in progress
+    does with late work is in no run; Haiku does not look anything
+    up. A second reader of each claim against its quotation, and
+    of the owner's list, is for stage 9. What no session has run is
+    listed in the stage's README.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
