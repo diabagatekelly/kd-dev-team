@@ -380,9 +380,12 @@ class Draw(Folder):
         self.put("009_open-facts.md", block % "words no page holds anywhere" + "## T2" + OPEN.split("## T2", 1)[1] + READ)
         self.assertIn("is in no research document and no page kept for the slice", self.go("draw")[1])
 
-    def test_a_page_that_did_not_say_names_the_pages_read(self):
-        self.put("009_open-facts.md", OPEN.replace("How: later", "How: page") + READ)
-        self.assertIn("a page that did not say gives `Read:` the addresses of the pages that were read", self.go("draw")[1])
+    def test_a_test_no_page_settled_is_sorted_again_and_keeps_the_pages_read(self):
+        # Met in the five runs: left as "page, open", a test no longer said who could make it.
+        self.put("009_open-facts.md", OPEN.replace("How: later", "How: page\nRead: https://docs.payright.example/payments") + READ)
+        self.assertIn("T1 (line 3): a page that did not say leaves the test to be sorted again: `How:` run, person or later, keeping `Read:`", self.go("draw")[1])
+        self.put("009_open-facts.md", OPEN.replace("How: later", "How: later\nRead: https://docs.payright.example/payments") + READ)
+        self.assertEqual(self.go("draw")[0], 0)
 
     def test_what_only_a_person_could_see_is_settled_by_their_word(self):
         self.answer("A2", "## A2: Events out of order\nKind: chosen\nSays: An older event changes nothing.\nRests on: 009_open-facts.md T2.\nSettles: C.payright.O2\n")

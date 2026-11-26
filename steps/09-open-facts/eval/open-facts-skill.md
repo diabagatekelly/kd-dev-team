@@ -13,8 +13,9 @@ stays open, and then brings the owner their list, once.
 Your judgement is one file, the open facts, at the path the report
 names, and the scripts you write beside it. A script lists what is
 left, runs a test and keeps what it printed, refuses what does not
-hold, and draws `tested.md`. You never write that drawing, nor what
-a test printed.
+hold, and draws `tested.md`. You never write that drawing. What a
+test printed is kept by the command; only where it says it could not
+keep it do you keep it, exactly as it prints it, seal and all.
 
 Every file here is written and changed with your file tool. A shell
 that cannot write the folder says nothing of your file tool: use it.
@@ -48,8 +49,8 @@ Result: settled | open
    Found: the answer becomes a fact or a choice resting on the new
    fact and its words, and the block says `Result: settled` and
    `Shows: <what> "<the page's words>"`. Not found: the answer is a
-   `test` again, and the block says `Read: <the addresses read>` and
-   `Result: open`.
+   `test` again, the block keeps `Read: <the addresses read>`, and
+   the test is sorted again, by 2 to 4.
 2. `run`: one step this machine can take against the thing's test
    environment settles it: a request sent, its reply read. Only
    against an address its documentation says is for testing, where
@@ -134,9 +135,12 @@ Theirs is only a rule of the product in their own field; a matter
 of taste; a risk, a cost or an obligation to accept, and what
 cannot be taken back; what is in or out. A technical choice, or a
 way of protecting something, is `chosen`: change its answer to a
-choice, and only a risk left after it stays theirs. What a planning
-document or a decision of theirs already says is `decided`: change
-its answer to a fact resting on it. Two that one decision would
+choice, and only a risk left after it stays theirs. Before any is
+read as theirs, look for it in the problem, the requirements, the
+slice and the approach: what one of them already says, be it in or
+out, a limit or a commitment, is `decided`, however much it is a
+matter of scope: change its answer to a fact resting on that
+document. Two that one decision would
 settle are one: give one answer the other's questions and remove
 the other. If more than twelve are left, read them again; those
 truly theirs stand, and you say how many.

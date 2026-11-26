@@ -9,7 +9,7 @@ slice's folder, one block a test, and the scripts it runs in `NNN_tests/` beside
     Answer: A36                                  the answer of the answers file it is the test of
     How: page | run | person | later             a page would say; run here, against a test environment;
                                                  only a person with an account can; seen only once it is in use
-    Read: <the addresses of the pages read>      (page)
+    Read: <the addresses of the pages read>      (page, and a test sorted again after no page said)
     Against: <the test environment's address> "<the documentation's words that say it is one>"   (run, when it sends anywhere)
     Script: T1.sh                                (run) a shell script in NNN_tests/
     Needs: NAME, NAME                            (run) the keys it reads from its environment, never written anywhere
@@ -317,8 +317,8 @@ def problems(read):
                 say("a test left open says `Either way:` what the slice does so that it is safe whichever is true")
             if not still:
                 say(f"{answer['name']} is no longer a test in the answers, and this block leaves it open: say what settled it, or leave the answer a test")
-            if how == "page" and not ADDRESS.search(one(block, "Read")):
-                say("a page that did not say gives `Read:` the addresses of the pages that were read")
+            if how == "page":
+                say("a page that did not say leaves the test to be sorted again: `How:` run, person or later, keeping `Read:` the addresses that were read")
             continue
         if still:
             say(f"{answer['name']} is still a `test` in the answers: a settled test changes its answer in place, to a fact or a choice resting on what was shown")
