@@ -157,6 +157,18 @@ class Refused(Folder):
     def test_a_fact_that_rests_on_no_document(self):
         self.assertIn("a fact rests on a document of the slice", self.refused(FACT.replace("payright F3", "what providers usually do")))
 
+    def test_asked_from_inside_the_slices_folder_a_planning_document_is_still_known(self):
+        # Met in the cases: `draw .` from the slice's folder refused a fact resting on the requirements.
+        import os
+        self.write(FACT.replace('payright F3: "A request is refused after 30 seconds."', "002_requirements.md, Limits").replace("Given PayRight does not reply", "Given no reply comes") + REST)
+        here = os.getcwd()
+        os.chdir(self.slice)
+        try:
+            out = io.StringIO()
+            self.assertEqual(answers.main(["draw", "."], out), 0, out.getvalue())
+        finally:
+            os.chdir(here)
+
     def test_a_research_fact_named_with_no_document_of_the_slice(self):
         said = self.refused(FACT.replace("payright F3", "provider F3, and 004_slice.md"))
         self.assertIn("'provider' is no research document of the slice (payright)", said)

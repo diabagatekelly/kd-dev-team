@@ -57,7 +57,7 @@ UNBOUNDED = "unbounded, owner approved"
 
 def find(folder):
     """The slice's drawn questions, its answers and where the drawing goes, each a path or None."""
-    folder = pathlib.Path(folder)
+    folder = pathlib.Path(folder).resolve()   # asked from inside the slice's folder as `.`, its planning folder is still its parent
     drawn = sorted(folder.glob("[0-9]*_questions/questions.md"))
     answers = sorted(folder.glob("[0-9]*_answers.md"))
     answered = answers[-1].with_name(answers[-1].name.replace("_answers.md", "_answered.md")) if answers else None
@@ -130,7 +130,7 @@ def sources(slice_read):
     """What a fact may rest on: a criterion, a research document, a document of the planning folder."""
     names = set(questions.criteria(slice_read["slice"])) | {name[:-3] for name in slice_read["research"]}
     names |= {name for name in slice_read["research"]}
-    folder = slice_read["folder"]
+    folder = pathlib.Path(slice_read["folder"]).resolve()
     for path in [*folder.glob("*.md"), *folder.parent.glob("*.md"), *folder.glob("[0-9]*_questions/*.md")]:
         names |= {path.name, re.sub(r"^\d+_", "", path.name)}
     return names

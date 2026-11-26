@@ -48,7 +48,8 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
    in one line. A question wrongly dismissed is lost for good: where
    you are not sure, answer it.
 3. `look up`: it turns on how a thing the slice is committed to
-   behaves, and its research document does not say. Do not answer
+   behaves, and its research document does not say, or leaves it
+   as an open point: the first read was a short one. Do not answer
    it from what such systems usually do, and do not make it a test
    yet: say in `Says` exactly what must be known. They are looked
    up together, below.
@@ -104,7 +105,8 @@ report's `lookups` command. Where it lists any, load the research
 text and do what it says of things the answers ask for, all of them
 in one go. Then change each `look up` answer in place: a `fact` or
 a choice resting on the new fact and its words, or a `test` where
-no page says.
+no page says or none could be opened. None is left as `look up`:
+the script draws nothing while one is.
 
 **The work.** Run `next`. Answer what it lists by adding blocks to
 the end of the answers file with your file tool, never through the
