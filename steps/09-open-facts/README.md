@@ -1,8 +1,68 @@
 # Stage 9: the tests of open facts
 
-**Built free (2026-11-25). Its test and cost are proposed below and
-not agreed: nothing paid has run, and no session has run any of
-it.**
+**On trial (decision 56, 2026-11-26): tested as proposed below, at
+about $170. Not adopted.** Spent so far: $10.16.
+
+## The pilot (2026-11-26, $10.16 of about $12)
+
+Each case once ($5.20). With the text: Sonnet 7 of 15 (8 but for a
+check of form), Haiku 8 of 15. Bare: 2 of 15 on each, so bare is
+not run three times.
+
+What it met, and what each became (decision 29):
+
+- **A test that a page answers was sorted as a person's** (01, both
+  models): its `Test:` spoke of the test environment and nothing
+  told the session to look at which pages nobody had read. The text
+  now has the pages kept and the documentation's first page read
+  before a test is sorted.
+- **A decision the owner left "for now" stayed waiting** (06b, every
+  arm): decisions are recorded by the answers' text, which knows
+  nothing of leaving one. The report's own line now says how one
+  left is recorded.
+- **The made-up research said a card token needs a form in a
+  browser,** so three sessions rightly judged the test not one this
+  machine could make (02, 03a, 09). The fixture now holds what the
+  test page says.
+- **A check took writing a script for sending it** (03c), and **a
+  decision "already decided" named the provider,** which the
+  answers' script refuses as a fact with no words of its research
+  (05). Both fixtures corrected, the first with a unit test.
+- **The second reader cannot be launched inside the evaluation:**
+  the tool is not signed in there and answered an error for
+  nothing, which the script counted as a reading. A tool that
+  answers with no reading has read nothing; the drawing then says
+  so and the stage is not held. A unit test. In the cases the
+  reader is therefore never run: it is measured on the real plans.
+- **The pilot's two real runs went to the questions, not here**
+  ($1.03): a kept stage 8 run added its looked-up facts with no
+  heading of their own, so its questions were stale, as the fault
+  found while building says. The private launcher now goes on a
+  turn at a time, as the product would.
+
+**The second reader, measured** ($3.59): the 250 claims of four kept
+real runs, handed over twenty at a time, on Haiku and Sonnet.
+
+| | First instructions | After one rewrite |
+|---|---|---|
+| Flagged by Sonnet, of 250 | 134 | 86 |
+| Flagged by Haiku | 222 | 95, and 20 left unread in one run |
+| Cost of one pass, Sonnet and Haiku | $1.63 and $0.12 | $1.72 and $0.13 |
+
+Read, twelve of the first flags: ten were what the product does
+*if* the thing does something, taken for a claim that it does. The
+rewrite says so, and that a number the product sets for itself, and
+a statement that something is not documented, are not claims. A
+fault of the script's own dropped 16 verdicts of 51: a verdict with
+nothing more said took the next claim's line (a unit test). After
+the rewrite Sonnet flags 34%, about what two sessions' earlier read
+found of claims whose own quotation does not say them. Of the eight
+claims that read named as resting on nothing, at least six are
+among its flags (matched by their wording; there is no key by
+answer). Of the twenty it flags in one run, read: four rest on
+nothing, twelve are said by another fact than the one quoted, about
+four are arguable, which is at the edge of the bar's one in ten.
+Sonnet is proposed for the reader.
 
 ## What it is
 
@@ -58,7 +118,7 @@ start while one waits.
 | A decision that waits and is not read; one read as not theirs whose answer is unchanged | script, refused |
 | The answers drawn again with the open facts, in one command | script |
 | Whether the stage is done; that decisions still wait; a slice with nothing to test and nothing to decide needs no such stage | stage script |
-| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (155 lines) |
+| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (169 lines) |
 
 38 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
 the stage script, 5 for the driver, 21 for the cases.
