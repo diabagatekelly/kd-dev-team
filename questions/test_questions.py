@@ -425,7 +425,7 @@ class TheMark(unittest.TestCase):
         folder, library = project()
         read, _entries, kept = questions.load(folder, library)
         # Of a thing's research document only what the questions are drawn from: its open points and what it says of our documents.
-        carried = b"".join(line + b"\n" for line in (folder / "006_research/payright.md").read_bytes().split(b"\n") if re.match(rb"\s*[-*] [OS]\d+", line))
+        carried = b"".join(line.replace(b"\r", b"") + b"\n" for line in (folder / "006_research/payright.md").read_bytes().split(b"\n") if re.match(rb"\s*[-*] [OS]\d+", line))
         self.assertTrue(carried)
         together = b"".join([(folder / "004_slice.md").read_bytes(), (folder / "005_approach.md").read_bytes(), carried,
                              (folder / "006_research/states.md").read_bytes(), (folder / "007_questions/kept.md").read_bytes()])
