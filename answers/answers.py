@@ -5,7 +5,7 @@ A session writes `NNN_answers.md` in the slice's folder: one block an answer, an
 settles as many of the drawn questions as it truly answers.
 
     ## A1: <a short title>
-    Kind: fact | chosen | owner | test | not here
+    Kind: fact | chosen | owner | test | not here | look up
     Says: <what holds, what is chosen, what is to decide, what is not known, or why it does not arise>
     Rests on: <fact: the document and its line, fact or criterion; chosen: the reason>
     Settles: <ids of questions.md, separated by commas; `L.entry.*` is every thing of that entry>
@@ -20,8 +20,14 @@ settles as many of the drawn questions as it truly answers.
 
 Usage:
     python3 -I answers.py next SLICE [HOW-MANY]   the questions no answer settles yet, in the drawing's order
+    python3 -I answers.py lookups SLICE           the answers that wait for research: what each needs to know
     python3 -I answers.py draw SLICE              refuse what does not hold; else write NNN_answered.md beside it
     python3 -I answers.py state SLICE             none | written N of M | drawn | stale
+
+A `look up` answer says what must be known of a thing the slice is committed to before its
+questions can be settled (decision 54): research looks them up together, and each then becomes a
+fact, a choice or a test. Nothing is drawn while one is left. An answer that speaks of such a
+thing rests on a fact of its research document and on that document's own words, in quotes.
 
 A user who says to skip the stage: the file is one line, `Skipped at the user's word, DATE: "their
 words"`, and the drawing says that nothing is answered.
@@ -37,10 +43,10 @@ _spec = importlib.util.spec_from_file_location("questions", pathlib.Path(__file_
 questions = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(questions)
 
-KINDS = ("fact", "chosen", "owner", "test", "not here")
+KINDS = ("fact", "chosen", "owner", "test", "not here", "look up")
 HARMS = ("high", "medium", "low")
 NEEDS = {"fact": ("Says", "Rests on"), "chosen": ("Says", "Rests on"), "owner": ("Says", "Options", "Recommended", "If left", "Harm"),
-         "test": ("Says", "Test", "Harm"), "not here": ("Says",)}
+         "test": ("Says", "Test", "Harm"), "not here": ("Says",), "look up": ("Says",)}
 FIELDS = ("Kind", "Says", "Rests on", "Settles", "Under", "Criterion", "Options", "Recommended", "If left", "Harm", "Test", "Decided")
 SKIPPED = re.compile(r"^skipped at the user's word", re.I | re.M)
 STAMP = "<!-- drawn from: %s -->"
@@ -107,6 +113,19 @@ def settles(answer, ids):
     return took, unknown
 
 
+def plain(text):
+    """Words as they compare: one case, one kind of quote mark, one space."""
+    for curly, straight in (("\u2018", "'"), ("\u2019", "'"), ("\u201c", '"'), ("\u201d", '"'), ("\u2013", "-"), ("\u2014", "-"), ("\u00a0", " ")):
+        text = text.replace(curly, straight)
+    return re.sub(r"\s+", " ", text).lower()
+
+
+def said_by(slice_read):
+    """{research document's stem: its words and those of the pages kept for the slice, as they compare}."""
+    pages = " ".join(path.read_text(encoding="utf-8", errors="replace") for path in sorted(slice_read["folder"].glob("pages/*.txt")))
+    return {name[:-3].lower(): plain(text + " " + pages) for name, text in slice_read["research"].items()}
+
+
 def sources(slice_read):
     """What a fact may rest on: a criterion, a research document, a document of the planning folder."""
     names = set(questions.criteria(slice_read["slice"])) | {name[:-3] for name in slice_read["research"]}
@@ -126,6 +145,7 @@ def problems(answers, ids, slice_read):
     # rests on a fact that document holds (met on the real plans: one answer in five did not).
     facts = {name[:-3].lower(): set(re.findall(r"^- ([FOS]\d+)\b", text, re.M)) for name, text in slice_read["research"].items()}
     outside = {questions.slug(name): name for name in questions.committed(slice_read["approach"]) if questions.slug(name) in facts}
+    words = said_by(slice_read)
     for answer in answers:
         name, kind = answer["name"], one(answer, "Kind").lower()
         say = lambda words: found.append(f"{name} (line {answer['line']}): {words}")   # noqa: E731
@@ -167,7 +187,14 @@ def problems(answers, ids, slice_read):
                     say(f"{stem} {mark} is an open point of the research: what rests on it is a `test`, or is chosen so as to hold either way")
             for stem, thing in outside.items():
                 if re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I) and not any(doc == stem and mark[0] in "FS" for doc, mark in cited):
-                    say(f"it speaks of {thing} and rests on no fact of {stem}.md (`{stem} F1`): name the fact, or leave how {thing} behaves to a `test`")
+                    say(f"it speaks of {thing} and rests on no fact of {stem}.md (`{stem} F1`): name the fact, or make it a `look up`")
+                elif re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I):
+                    quoted = [each for each in re.findall(r'"([^"]{12,})"', plain(rests))]
+                    if not quoted:
+                        say(f"it speaks of {thing}: `Rests on` gives the words of {stem}.md it rests on, in quotes (twelve letters or more)")
+                    for each in quoted:
+                        if each.strip(" .,;") not in words[stem]:
+                            say(f"\"{each[:50]}\" is not in {stem}.md or a page kept for the slice: quote its own words, or make it a `look up`")
         owed = [each for each in took if each in ("W.target", "W.obligations")]
         if owed and kind not in ("fact", "owner"):
             say(f"{', '.join(owed)}: a target and an obligation are what the documents say (`fact`) or the owner's (`owner`), never chosen for them")
@@ -176,7 +203,9 @@ def problems(answers, ids, slice_read):
         if kind == "owner" and one(answer, "Options") and len([each for each in one(answer, "Options").split("|") if each.strip()]) < 2:
             say("a decision for the owner has at least two options, separated by `|`: with one, it is chosen and recorded")
         written = answer["fields"].get("Criterion", [])
-        if written and kind not in ("fact", "chosen") and not (kind == "owner" and one(answer, "Decided")):
+        if kind == "look up" and (written or one(answer, "Under")):
+            say("a `look up` answer waits for research: it has no criterion yet")
+        elif written and kind not in ("fact", "chosen") and not (kind == "owner" and one(answer, "Decided")):
             say(f"a criterion is written from a fact, a choice or a decision the owner has taken (`Decided:`); from a {kind} answer it waits")
         if one(answer, "Decided") and kind != "owner":
             say("only a decision for the owner is `Decided:`, and by them")
@@ -269,7 +298,7 @@ def state(folder):
 
 
 def main(arguments, out=sys.stdout):
-    if len(arguments) < 2 or arguments[0] not in ("next", "draw", "state"):
+    if len(arguments) < 2 or arguments[0] not in ("next", "lookups", "draw", "state"):
         print(__doc__, file=out)
         return 2
     command, folder = arguments[0], arguments[1]
@@ -282,6 +311,12 @@ def main(arguments, out=sys.stdout):
         return 1
     found, taken = problems(answers, ids, questions.read_slice(folder)) if answers else ([], {})
     left = [name for name in ids if name not in taken]
+    waiting = [answer for answer in answers if one(answer, "Kind").lower() == "look up"]
+    if command == "lookups":
+        print(f"{len(waiting)} answers wait for research. For each, what must be known:", file=out)
+        for answer in waiting:
+            print(f"- {answer['name']}: {answer['title']}: {one(answer, 'Says')}", file=out)
+        return 0
     if command == "next":
         many = int(arguments[2]) if len(arguments) > 2 else 60
         print(f"{len(ids) - len(left)} of {len(ids)} questions are settled by {len(answers)} answers; {len(left)} are left.", file=out)
@@ -289,6 +324,8 @@ def main(arguments, out=sys.stdout):
             print(f"- {name}: {ids[name]}", file=out)
         if len(left) > many:
             print(f"and {len(left) - many} more: answer these, then ask again.", file=out)
+        if not left and waiting:
+            print(f"{len(waiting)} answers are still to look up ({', '.join(answer['name'] for answer in waiting)}): `lookups` lists what each needs.", file=out)
         if found:
             print("\nNot holding in the answers as written:\n" + "\n".join(found), file=out)
         return 0
@@ -301,6 +338,9 @@ def main(arguments, out=sys.stdout):
                           f"None of the {len(ids)} questions is answered, and the slice has no criteria from them: a risk accepted, for the owner's list.", ""])
         said = f"skipped at the user's word: none of the {len(ids)} questions is answered"
         return keep(answered, text, said, out)
+    if waiting:
+        found.append(f"{len(waiting)} answers are still to look up ({', '.join(answer['name'] for answer in waiting)}): research looks them up "
+                     "together, and each then becomes a fact, a choice or a test")
     if left:
         found.append(f"{len(left)} questions are settled by no answer (the first: {', '.join(left[:5])}): `next` lists them")
     if found:

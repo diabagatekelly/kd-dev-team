@@ -525,7 +525,7 @@ STAGES
       fi ;;
   esac
   case "$next" in
-    approach*|research*)
+    approach*|research*|answers*)
       say "- a page of documentation is read with: $PAGE fetch URL --to $folder/$slice/pages"
       say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT"
       kept=$(ls "$dir/$slice/pages"/*.txt 2>/dev/null | wc -l | tr -d ' ')
@@ -537,6 +537,7 @@ STAGES
       say "  the questions are drawn again with security.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
     answers*)
       say "- the questions no answer settles yet, sixty at a time: $ANSWERS next $folder/$slice"
+      say "  what the answers still need looked up in the research, together: $ANSWERS lookups $folder/$slice"
       say "  the answers are checked and drawn by script once none is left: $ANSWERS draw $folder/$slice" ;;
     questions*)
       say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"

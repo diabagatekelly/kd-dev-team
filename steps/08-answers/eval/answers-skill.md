@@ -29,7 +29,7 @@ and nothing more. `L.entry.*` is every thing of a library entry;
 
 ```markdown
 ## A1: <a short title>
-Kind: fact | chosen | owner | test | not here
+Kind: fact | chosen | owner | test | not here | look up
 Says: <what holds, what is chosen, what is to decide, what is not known, or why it does not arise>
 Rests on: <fact: the document and its line, fact or criterion; chosen: the reason>
 Settles: <ids, separated by commas>
@@ -47,12 +47,16 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
 2. `not here`: the question does not arise in this slice. Say why
    in one line. A question wrongly dismissed is lost for good: where
    you are not sure, answer it.
-3. `test`: it turns on how something outside behaves, and no page
-   read says. Say what is not known, the test that would settle it
+3. `look up`: it turns on how a thing the slice is committed to
+   behaves, and its research document does not say. Do not answer
+   it from what such systems usually do, and do not make it a test
+   yet: say in `Says` exactly what must be known. They are looked
+   up together, below.
+4. `test`: looked up, and no page says. Say what is not known, the test that would settle it
    (`Test:`), and `Harm:` high, medium or low if the guess is wrong.
    Write no criterion on the guess. An open point of the research
    is a test, not a fact, however likely it looks.
-4. `owner`: only one of these four. A rule of the product in the
+5. `owner`: only one of these four. A rule of the product in the
    user's own field that the documents cannot know. A matter of
    taste, or of how they want to experience the product. A risk, a
    cost or an obligation they must accept, and any choice that
@@ -65,15 +69,17 @@ Criterion: Given <a state>, when <one action or event>, then <what someone can s
    theirs. How fast and how reliable it must be, and what law or
    contract binds it, are theirs wherever the documents do not say:
    the script refuses them chosen.
-5. `chosen`: everything else. Good practice in security, in what a
+6. `chosen`: everything else. Good practice in security, in what a
    person is told and in what is recorded is applied, not asked. A
    technical problem with a known solution is solved: say what is
    chosen and, in `Rests on`, why. The user can overturn it later.
    A choice says nothing of how something outside behaves that the
    research does not say. An answer that speaks of a thing the slice
-   is committed to names the fact of its research document it rests
-   on (`payright F6`), and the script refuses it otherwise: choose
-   what holds either way and leave the rest to a test.
+   is committed to gives, in `Rests on`, the fact of its research
+   document and that document's own words in quotes (`payright F6:
+   "returns the first payment"`): the script looks for them there
+   and refuses the answer otherwise. Say no more of the thing than
+   those words say.
 
 **Criteria.** Write one where someone could see the behaviour go
 wrong, under the slice's item it belongs to. What an answer says
@@ -92,6 +98,13 @@ criterion: a thing only said is a thing nobody tests.
 
 Wording of messages and the fields of a record are not criteria:
 say them in `Says`.
+
+**Looked up, together.** Once `next` lists nothing, run the
+report's `lookups` command. Where it lists any, load the research
+text and do what it says of things the answers ask for, all of them
+in one go. Then change each `look up` answer in place: a `fact` or
+a choice resting on the new fact and its words, or a `test` where
+no page says.
 
 **The work.** Run `next`. Answer what it lists by adding blocks to
 the end of the answers file with your file tool, never through the

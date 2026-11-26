@@ -435,6 +435,9 @@ class Stage(unittest.TestCase):
         out = self.secured()
         self.assertRegex(out, r"- the questions no answer settles yet, sixty at a time: python3 \".*answers\.py\" next planning/slice-001")
         self.assertRegex(out, r"checked and drawn by script once none is left: python3 \".*answers\.py\" draw planning/slice-001")
+        # Decision 54: what the answers need of a thing committed to is looked up then, from the pages.
+        self.assertRegex(out, r"looked up in the research, together: python3 \".*answers\.py\" lookups planning/slice-001")
+        self.assertRegex(out, r"- a page of documentation is read with: python3 \".*page\.py\" fetch URL --to planning/slice-001/pages")
 
     def test_answers_written_in_and_not_drawn_keep_the_answers_next(self):
         self.answered(drawn=False)

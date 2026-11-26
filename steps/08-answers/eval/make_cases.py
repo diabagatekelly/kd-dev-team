@@ -95,7 +95,8 @@ DRAWN = [{"type": "tool_used", "name": "draws-with-the-command", "tool": "Bash",
          trace("the-command-drew", r"drawn(?:: |, and not written)[^\n]{0,400}?\d+ answers settle \d+ questions", never=False),
          trace("does-not-write-the-drawing-by-hand", WROTE + r"_answered[.]md")]
 ASKED_WHAT_IS_LEFT = {"type": "tool_used", "name": "form-asks-the-command-what-is-left", "tool": "Bash", "min": 1, "input_match": r"answers\.py[\s\S]*\bnext\b"}
-LEFT_ALONE = [trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach|_research/|_questions/)"),
+# Research's document may gain what the answers had looked up (decision 54); its states and every other document are left.
+LEFT_ALONE = [trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach|_research/states|_questions/)"),
               trace("writes-no-later-document", WROTE + r"_(open-facts|design|screens|stack|readiness)")]
 NOT_WHOLE = trace("form-never-writes-the-answers-again-whole", r"\"name\"\s*:\s*\"Write\"[\s\S]{0,80}?file_path\\?\"\s*:\s*\\?\"[^\"]*_answers[.]md")
 NOT_WRITTEN = trace("writes-no-answers-file", WROTE + r"_answers[.]md")
@@ -173,6 +174,17 @@ SCENARIOS = [
      [block("settles-the-new-question", "(?:fact|chosen|owner|test)", r"T\.her-details\.refund-request"), *DRAWN[:2], NOT_WHOLE,
       in_file(ANS, "leaves-the-answers-before", r"## A1: [^\n]*\nKind: chosen\nSays: Settled in an earlier session"), *LEFT_ALONE, q.ASKS_NOTHING[1]], "ask", None),
 ]
+SCENARIOS.append(
+    ("07-what-research-did-not-say-is-looked-up",
+     "Two questions left turn on what happens when a payment request gets no reply, which the research left open and a page of the provider's reference says: looked up with the page command, added to the research as a new fact with its words, and the answer rests on them; no fact before is changed.",
+     "paid", lambda drawn: before(drawn, ("C.payright.O1", "L.call-external-01.payment-request")), False, None, q.GO_ON,
+     [{"type": "tool_used", "name": "asks-what-is-to-look-up", "tool": "Bash", "min": 1, "input_match": r"answers\.py[\s\S]*\blookups\b"},
+      {"type": "tool_used", "name": "reads-a-page-with-the-command", "tool": "Bash", "min": 1, "input_match": r"page\.py[\s\S]*\b(fetch|lines)\b"},
+      in_file("@RESEARCH@", "adds-the-fact-with-the-pages-words", r"(?:^|\n)- F1[2-9]:[^\n]*may still have been taken"),
+      in_file("@RESEARCH@", "leaves-the-facts-before", r"(?:^|\n)- F1: A payment is taken with one request\."),
+      block("the-answer-rests-on-the-new-fact-and-its-words", "(?:fact|chosen)", r"C\.payright\.O1", r"\nRests on:[^\n]*payright[^\n]*F1[2-9][^\n]*\"[^\"\n]{12,}\""),
+      no_block("does-not-leave-it-to-a-test", "test", r"C\.payright\.O1"),
+      *DRAWN[:2], NOT_WHOLE, *LEFT_ALONE, q.ASKS_NOTHING[1]], "ask", None))
 BARE_TABLE = q.BARE_TABLE.replace("The questions stage", "The answers stage")
 
 
@@ -252,8 +264,12 @@ def main(arm):
         assert str(ROOT) not in report, (name, report)
         machine.set("gh/summary", done.stdout.split("\nTracker\n")[1].split("\nDocuments\n")[0])
         machine.set("web/allowed", "api.anthropic.com")
+        if name.startswith("07"):   # the provider's site, with the reference page research did not read
+            machine.set("web/allowed", "api.anthropic.com\n" + q.research.HOST)
+            for page, body in q.research.with_reference().items():
+                machine.set(f"web/pages/{q.research.HOST}/{page}", body)
         checks = list(graders) + ([] if may == "ask" else q.ASKS_NOTHING) + used
-        checks = json.loads(json.dumps(checks).replace(ANS, document))
+        checks = json.loads(json.dumps(checks).replace(ANS, document).replace("@RESEARCH@", folder.replace("007_questions/", "006_research/payright.md")))
         case = plugin / "evals" / name
         write(case / "report.txt", report)
         write(case / "case.yaml", problem.case_yaml(name, description, prompt, checks, earlier)

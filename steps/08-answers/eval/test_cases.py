@@ -64,8 +64,8 @@ class Cases(unittest.TestCase):
     def report(self, name):
         return (self.evals / name / "report.txt").read_text(encoding="utf-8")
 
-    def test_seven_cases_are_built_and_each_has_checks(self):
-        self.assertEqual(len(re.findall(r": \d+ checks", self.built)), 7)
+    def test_eight_cases_are_built_and_each_has_checks(self):
+        self.assertEqual(len(re.findall(r": \d+ checks", self.built)), 8)
 
     def test_the_small_slice_starts_with_nothing_answered_and_the_commands_given(self):
         report = self.report("01-a-small-slice-from-nothing")
@@ -96,6 +96,13 @@ class Cases(unittest.TestCase):
         import json
         lines = [json.loads(line) for line in (self.evals / "04b-the-user-insists/history.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
         self.assertEqual([line["type"] for line in lines], ["user", "assistant"])
+
+    def test_the_look_up_case_has_a_page_that_says_what_research_left_open(self):
+        case = self.evals / "07-what-research-did-not-say-is-looked-up"
+        self.assertIn("may still have been taken", (case / "state/web/pages/docs.payright.example/reference").read_text(encoding="utf-8"))
+        self.assertNotIn("may still have been taken", next((case / "project/planning/slice-001").glob("*_research/payright.md")).read_text(encoding="utf-8"))
+        self.assertIn('answers.py" lookups planning/slice-001', self.report("07-what-research-did-not-say-is-looked-up"))
+        self.assertIn("page.py", self.report("07-what-research-did-not-say-is-looked-up"))
 
     def test_the_plugin_carries_the_script_and_this_stages_text(self):
         self.assertTrue((HERE / "plugin-text/answers/answers.py").is_file())

@@ -27,7 +27,7 @@ QUESTIONS = """# Questions
 FACT = """## A1: Calls are bounded
 Kind: fact
 Says: A payment request is refused after 30 seconds.
-Rests on: payright F3
+Rests on: payright F3: "A request is refused after 30 seconds."
 Settles: L.call-external-05.*
 Under: renew-and-pay
 Criterion: Given PayRight does not reply, when 30 seconds have passed, then she is shown that nothing was taken.
@@ -150,7 +150,7 @@ class Refused(Folder):
         self.assertIn("it says 'guess'", self.refused(FACT.replace("Kind: fact", "Kind: guess")))
 
     def test_a_field_its_kind_needs(self):
-        self.assertIn("a fact answer says its `Rests on`", self.refused(FACT.replace("Rests on: payright F3\n", "")))
+        self.assertIn("a fact answer says its `Rests on`", self.refused(FACT.replace('Rests on: payright F3: "A request is refused after 30 seconds."\n', "")))
         self.assertIn("a owner answer says its `If left`", self.refused(FACT + REST.replace("If left: nobody can refund.\n", "")))
         self.assertIn("a test answer says its `Test`", self.refused(FACT + REST.replace("Test: a failed call in PayRight's test mode, and the records read after.\n", "")))
 
@@ -163,7 +163,7 @@ class Refused(Folder):
 
     def test_a_research_fact_may_be_named_in_several_ways(self):
         for source in ("payright.md F3", "payright F3 and F4", "PayRight, F3", "payright fact F3"):
-            self.write(FACT.replace("payright F3", source) + REST)
+            self.write(FACT.replace("payright F3:", source + ":") + REST)
             self.assertEqual(self.run_it("draw")[0], 0, source)
 
     def test_a_research_fact_its_document_does_not_have(self):
@@ -176,7 +176,7 @@ class Refused(Folder):
     def test_a_choice_that_speaks_of_what_is_committed_to_and_names_no_fact_of_it(self):
         speaks = REST.replace("A renewal with no token is refused before anything is sent.", "PayRight refuses a renewal with no token.")
         self.assertIn("A2 (line 11): it speaks of PayRight and rests on no fact of payright.md", self.refused(FACT + speaks))
-        self.write(FACT + speaks.replace("Rests on: nothing can be charged without it.", "Rests on: payright F4: nothing can be charged without it."))
+        self.write(FACT + speaks.replace("Rests on: nothing can be charged without it.", "Rests on: payright F4: \"A reply names the payment.\""))
         self.assertEqual(self.run_it("draw")[0], 0)
 
     def test_a_target_or_an_obligation_chosen_for_the_owner(self):
@@ -186,6 +186,32 @@ class Refused(Folder):
         self.assertIn("W.target: a target and an obligation are what the documents say", self.refused(FACT + REST + chosen))
         self.write(FACT + REST + chosen.replace("Kind: chosen", "Kind: fact").replace("it is a sum.", "002_requirements.md, Limits."))
         self.assertEqual(self.run_it("draw")[0], 0)
+
+    def test_what_is_committed_to_is_spoken_of_in_its_documents_own_words(self):
+        # Decision 54: naming a fact was not enough: one answer in five named a fact that did not say it.
+        self.assertIn("gives the words of payright.md it rests on, in quotes", self.refused(FACT.replace(': "A request is refused after 30 seconds."', "")))
+        self.assertIn('"a request is refused after a minute." is not in payright.md or a page kept',
+                      self.refused(FACT.replace("refused after 30 seconds.\"", "refused after a minute.\"")))
+
+    def test_the_words_may_be_those_of_a_page_kept_for_the_slice_and_differ_in_case_and_spacing(self):
+        (self.slice / "pages").mkdir()
+        (self.slice / "pages" / "docs.payright.example-payments.txt").write_text("URL: x\nA payment\n  is abandoned after 30 SECONDS.\n")
+        self.write(FACT.replace('"A request is refused after 30 seconds."', "\u201ca payment is abandoned after 30 seconds\u201d") + REST)
+        self.assertEqual(self.run_it("draw")[0], 0)
+
+    def test_an_answer_to_look_up_holds_the_drawing_and_is_listed_with_what_it_needs(self):
+        look = "\n## A6: The date's form\nKind: look up\nSays: Which form PayRight gives a payment's date in.\nSettles: L.call-external-05.refund-request\n"
+        self.write(FACT.replace("L.call-external-05.*", "L.call-external-05.payment-request") + REST + look)
+        code, said = self.run_it("draw")
+        self.assertEqual(code, 1)
+        self.assertIn("1 answers are still to look up (A6)", said)
+        self.assertIn("- A6: The date's form: Which form PayRight gives a payment's date in.", self.run_it("lookups")[1])
+        self.assertIn("1 answers are still to look up (A6): `lookups` lists what each needs.", self.run_it("next")[1])
+        self.assertEqual(self.run_it("state")[1].strip(), "written 6 of 6")
+
+    def test_an_answer_to_look_up_has_no_criterion_yet(self):
+        look = "\n## A6: The date's form\nKind: look up\nSays: Which form.\nSettles: L.call-external-05.refund-request\nUnder: renew-and-pay\nCriterion: Given a, when b, then c.\n"
+        self.assertIn("a `look up` answer waits for research", self.refused(FACT.replace("L.call-external-05.*", "L.call-external-05.payment-request") + REST + look))
 
     def test_a_fact_may_rest_on_a_criterion_or_a_planning_document(self):
         for source in ("renew-and-pay / 1", "002_requirements.md, Limits", "requirements.md"):

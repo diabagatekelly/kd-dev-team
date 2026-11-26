@@ -571,6 +571,26 @@ asking is listed apart, so it can be overturned.
     **a slice brings them at most 12 decisions** on the two real
     plans, each read for whether it is truly theirs.
 
+54. **Research is done in two passes: up front as now, and again,
+    together, for what the answers need of a thing committed to**
+    (the owner: "isn't it better to batch the research when we have
+    the questions for that slice that we know need to be answered
+    by the external source"; "Yes" to building and testing it at
+    about $30). It partly reverses decision 42. Met at stage 8:
+    about one answer in five that spoke of the provider said what
+    its research did not, on Sonnet and on Opus alike (Opus was
+    tried at the owner's question, $5.77, and Sonnet kept), and
+    several "tests" were only a page to read.
+    - Chosen without asking: an answer that turns on such a thing
+      and finds nothing in its research is `look up`, and nothing
+      is drawn while one is left; research reads the pages kept,
+      then the thing's own, and adds each finding as a new fact
+      with its quote, or an open point; an answer that speaks of
+      the thing gives the fact and the document's own words in
+      quotes, which the script looks for in the document and the
+      pages kept. One session does both, as the questions stage
+      loads the security text.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
