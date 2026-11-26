@@ -106,9 +106,13 @@ their answers changed, run the report's `read` command: a reader
 that is given nothing but each answer that speaks of a thing
 committed to, and the words it quotes, says whether those words say
 it. An answer it names as going past its words is cut back to what
-they say, or made a `look up` and looked up; then run `read` again.
-One still named after the second reading becomes a `test`. You
-never write its file. Where it could not be run, say so.
+they say, given the fact that does say it, or made a `look up` and
+looked up; then run `read` again. From one still named after the
+second reading, take out what the reader names: what the product
+does, and its criteria, stay, and no criterion is lost for it. Only
+where the choice cannot stand without the part taken out does the
+answer become a `test`. You never write the reader's file. Where it
+could not be run, say so.
 
 **The owner's list, read before it is brought.** Once the tests are
 sorted, a line for each decision that waits, under a last heading:
