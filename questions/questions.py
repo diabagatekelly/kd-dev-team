@@ -291,7 +291,8 @@ def drawn_from(name, data):
     plans, the round: looked-up facts were added among the others, with no heading, and every run went back to the questions)."""
     if name == "states.md":
         return data
-    return b"".join(line + b"\n" for line in before_the_answers(data).split(b"\n") if CARRIED.match(line))
+    # Without the ends Windows gives its lines: the stage script takes these lines with grep, which there drops them (met in CI).
+    return b"".join(line.replace(b"\r", b"") + b"\n" for line in before_the_answers(data).split(b"\n") if CARRIED.match(line))
 
 
 def read_slice(folder):

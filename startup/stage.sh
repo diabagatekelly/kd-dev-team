@@ -94,7 +94,7 @@ END { close_block(); print "@tests " tests + 0; print "@waiting " waiting + 0 }'
 # What the questions are drawn from in a research document: the states whole, and of a thing committed to only
 # its open points and what it says of our documents (lines "- O1" and "- S1"). A fact added afterwards changes none.
 drawn_from() {
-  case "$1" in */states.md|states.md) cat "$1" ;; *) before_the_answers "$1" | grep -E '^[[:space:]]*[-*] [OS][0-9]+' ;; esac
+  case "$1" in */states.md|states.md) cat "$1" ;; *) before_the_answers "$1" | grep -E '^[[:space:]]*[-*] [OS][0-9]+' | tr -d '\r' ;; esac   # grep on Windows drops the ends of its lines, elsewhere it keeps them
 }
 
 # The latest numbered entry of that name in a folder, or nothing.
