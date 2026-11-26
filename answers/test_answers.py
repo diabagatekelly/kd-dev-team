@@ -76,7 +76,8 @@ class Folder(unittest.TestCase):
         (self.top / "planning" / "002_requirements.md").write_text("# Requirements\n")
 
     def write(self, text):
-        (self.slice / "008_answers.md").write_text("# Answers: slice 1\n\n" + text)
+        # As a session's file tool writes it, on every system (Windows' own encoding has no curly quote).
+        (self.slice / "008_answers.md").write_text("# Answers: slice 1\n\n" + text, encoding="utf-8", newline="\n")
 
     def run_it(self, *arguments):
         out = io.StringIO()
