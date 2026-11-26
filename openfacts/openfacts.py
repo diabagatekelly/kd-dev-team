@@ -517,6 +517,7 @@ def run(folder, name, out=sys.stdout, environ=None, timeout=120, today=None):
         return refuse(f"it needs {', '.join(missing)}, which this machine does not have. A key is never typed into the conversation or written "
                       f"in a file of the project: the user types it at a hidden prompt, in a terminal of this VM:\n"
                       + "".join(f"  python3 {me} key {each}\n" for each in missing)
+                      + (f"  The keys it does have, by name: {', '.join(sorted({*held, *(each for each in environ if each in held)}))}: a script reads those names.\n" if held else "")
                       + "  Ask for it once, saying what it is for; without it the test is left open.")
     secrets = {each: environ.get(each) or held[each] for each in needed}
     try:

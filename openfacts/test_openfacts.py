@@ -265,6 +265,14 @@ class Run(Folder):
         self.assertIn("sent with <PAYRIGHT_TEST_KEY> and", said)
         self.assertNotIn("sk_test_typed", said)
 
+    def test_a_key_asked_for_under_another_name_is_told_the_names_this_machine_has(self):
+        # The owner's keys are kept under names of their choosing: a script that guesses another name is told which there are, never a value.
+        openfacts.keep_key("PLAID_SECRET", "s3cr3t-value", self.top / "data" / "test-keys", io.StringIO())
+        self.a_run(more=AGAINST + "Needs: PLAID_SANDBOX_SECRET\n")
+        said = self.go("run", "T1", environ={**os.environ, "CLAUDE_PLUGIN_DATA": str(self.top / "data")})[1]
+        self.assertIn("The keys it does have, by name: PLAID_SECRET: a script reads those names.", said)
+        self.assertNotIn("s3cr3t-value", said)
+
     def test_a_long_output_is_kept_only_in_part_and_a_slow_test_is_stopped(self):
         self.a_run(script="i=0; while [ $i -lt 80 ]; do echo line $i; i=$((i+1)); done\n", more="")
         self.go("run", "T1")
