@@ -535,7 +535,9 @@ class Stage(unittest.TestCase):
         out = self.report()
         self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md, drawn; 3 decisions wait for "
                       "the owner: their list is brought to them now, once, the gravest first, and each decision they take is recorded)", out)
-        self.assertRegex(out, r"- a decision the owner takes on their list is recorded in planning/slice-001/008_answers\.md, and both drawn again: .*openfacts\.py\" draw")
+        # Met in the pilot: a decision left "for now" stayed waiting, since the answers' text, which records decisions, knows nothing of leaving one.
+        self.assertRegex(out, r"- a decision the owner takes on their list is recorded in planning/slice-001/008_answers\.md, and one they leave is recorded there too "
+                              r"\(`Decided: left: <what happens then> \(the user, DATE: \"their words\"\)`\); both are then drawn again: .*openfacts\.py\" draw")
 
     def test_open_facts_changed_after_the_drawing_are_to_be_drawn_again(self):
         folder = self.tested()

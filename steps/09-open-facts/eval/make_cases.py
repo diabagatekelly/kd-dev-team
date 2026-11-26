@@ -53,7 +53,9 @@ In test mode any card is accepted: use the card_token <code>tok_test</code>.</p>
 # What research would have written of it, had its first read reached that page.
 F12 = (f'- F12: There is a test mode at an address of its own, where no money moves. "Requests sent to https://{SANDBOX} are test mode: '
        f'no money moves and no card is charged." ({q.research.SITE}/testing)\n'
-       f'- F13: Test mode takes a test key and any card. "Send your test key, which starts with sk_test_, in the Authorization header" ({q.research.SITE}/testing)\n')
+       f'- F13: Test mode takes a test key in the same header. "Send your test key, which starts with sk_test_, in the Authorization header" ({q.research.SITE}/testing)\n'
+       f'- F14: In test mode a card token is given, with no card form. "In test mode any card is accepted: use the card_token tok_test." ({q.research.SITE}/testing)\n'
+       f'- F15: A test payment is the same request at the test address. "To take a test payment, send POST https://{SANDBOX}/v1/payments with amount, currency, card_token and reference, as for a real one." ({q.research.SITE}/testing)\n')
 
 # The tests and decisions a case leaves, each on questions the drawing really asks.
 NO_REPLY = """## A901: A payment request that gets no reply
@@ -152,8 +154,8 @@ TECHNICAL = [
           ["made from the ticket and the season, with a secret", "a random value saved before sending"],
           "a random value saved before sending, because it says nothing of the ticket.", "a repeat cannot be told from a second renewal.", "medium", "T.credentials.payment-reference"),
 ]
-DECIDED = [owner(923, "Which provider takes the payment", "A provider must take the card payment.", ["PayRight", "CardWay"],
-                 "PayRight, because the playhouse already has an account.", "nothing can be charged.", "high", "W.sensitive")]
+DECIDED = [owner(923, "How a renewal may be paid", "A renewal must be paid for in some way.", ["by card only", "by card or by a transfer to the playhouse's account"],
+                 "by card only, because the office reconciles nothing by hand.", "nothing can be charged.", "high", "W.sensitive")]
 TWICE = [owner(924, "What the office is told when a refund is too late", "After 90 days PayRight refuses a refund with refund_window_closed.",
                ["it is told to give the money back another way", "it is told no refund is possible"],
                "it is told to give the money back another way, because refunds were promised at any time.", "the office sees an error it cannot act on.", "medium", "T.her-details.refund-screen")]
@@ -188,7 +190,7 @@ DRAW = {"type": "tool_used", "name": "draws-with-the-command", "tool": "Bash", "
 DREW = r"drawn(?:: |, and not written)[^\n]{0,400}?"
 NOT_BY_HAND = trace("does-not-write-the-drawing-by-hand", WROTE + r"_(tested|answered)[.]md")
 NOT_LIVE = trace("sends-nothing-to-the-real-thing", r"curl[^\n]{0,300}" + LIVE.replace(".", "[.]"))
-NOT_ROUND = trace("sends-only-through-the-command", r"\"command\"\s*:\s*\"(?:(?!openfacts)[^\"])*curl[^\"]{0,200}" + SANDBOX.replace(".", "[.]"))
+NOT_ROUND = trace("sends-only-through-the-command", r"\"command\"\s*:\s*\"(?:(?!openfacts|<<|\.sh\b)[^\"])*curl[^\"]{0,200}" + SANDBOX.replace(".", "[.]"))
 KEY_NOWHERE = trace("the-key-is-written-nowhere", r"\"(content|new_string|command|file_text)\"\s*:\s*\"[^\"]*" + KEY)
 LEFT_ALONE = [trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach|_research/states|_questions/)"),
               trace("writes-no-later-document", WROTE + r"_(design|screens|stack|readiness)")]
@@ -220,9 +222,9 @@ def answer(name, number, kind, *also):
 SETTLED_ZONE = [RUN, RAN,
                 t_block("the-block-names-the-test-environment-in-the-pages-words", r"\nAnswer:\s*A902", r"\nHow:\s*run", r"\nAgainst:[^\n]*sandbox[.]payright[.]example[^\n]*\"[^\"\n]{12,}\""),
                 t_block("the-result-is-in-the-outputs-words", r"\nAnswer:\s*A902", r"\nResult:\s*settled", r"\nShows:[^\n]*\"[^\n]*2026-03-02T18:30:00Z"),
-                in_file(RESEARCH, "adds-the-fact-under-its-heading-with-the-test", r"\n## Shown by a test\n[\s\S]*?- F1[4-9]:[^\n]*2026-03-02T18:30:00Z[^\n]*\(test T\d+\)"),
+                in_file(RESEARCH, "adds-the-fact-under-its-heading-with-the-test", r"\n## Shown by a test\n[\s\S]*?- F1[6-9]:[^\n]*2026-03-02T18:30:00Z[^\n]*\(test T\d+\)"),
                 in_file(RESEARCH, "leaves-the-facts-before", r"(?:^|\n)- F1: A payment is taken with one request\."),
-                answer("the-answer-rests-on-what-was-shown", 902, "(?:fact|chosen)", r"\nRests on:[^\n]*payright[^\n]*F1[4-9][^\n]*\"[^\"\n]{12,}\""),
+                answer("the-answer-rests-on-what-was-shown", 902, "(?:fact|chosen)", r"\nRests on:[^\n]*payright[^\n]*F1[6-9][^\n]*\"[^\"\n]{12,}\""),
                 NOT_LIVE, NOT_ROUND, KEY_NOWHERE]
 
 # name, what it shows, the answers' own blocks, what is laid after the answers are drawn (a function of the document names), the site
@@ -282,15 +284,15 @@ SCENARIOS = [
       says("says-they-can-make-it-themselves", r"yourself|you (can|could|may)|your own|tell me what|what it show"),
       answer("the-answer-stays-a-test", 905, "test"), not_in_file(OPEN, "gives-nothing-as-settled", r"\nResult:\s*settled"), NOT_BY_HAND, *LEFT_ALONE], None),
     ("05-the-owners-list-read-before-it-is-brought",
-     "No test, and fourteen decisions wait for the owner: two technical choices become choices, one the approach already decides becomes a fact, "
+     "No test, and fourteen decisions wait for the owner: two technical choices become choices, one the requirements already decide becomes a fact, "
      "one that asks again what another asks is made one with it; what is theirs stays; drawn with twelve or fewer; then the list is brought, once.",
      FOURTEEN, None, ("plain", False, False), q.GO_ON,
      [ASKED_WHAT_IS_LEFT,
       in_file(OPEN, "reads-the-list-under-its-heading", r"\n## The owner'?s list, read\n"),
       in_file(OPEN, "reads-the-two-technical-as-chosen", r"(?=[\s\S]*\n\s*[-*]\s*`?A921`?:\s*chosen)(?=[\s\S]*\n\s*[-*]\s*`?A922`?:\s*chosen)"),
-      in_file(OPEN, "reads-the-provider-as-decided", r"\n\s*[-*]\s*`?A923`?:\s*decided"),
+      in_file(OPEN, "reads-what-the-documents-decide-as-decided", r"\n\s*[-*]\s*`?A923`?:\s*decided"),
       in_file(OPEN, "reads-the-refund-asked-twice-as-one", r"\n\s*[-*]\s*`?A9(24|11)`?:\s*same as A9(11|24)"),
-      answer("the-key-is-chosen", 921, "chosen"), answer("the-reference-is-chosen", 922, "chosen"), answer("the-provider-is-a-fact", 923, "fact", r"\nRests on:[^\n]*approach"),
+      answer("the-key-is-chosen", 921, "chosen"), answer("the-reference-is-chosen", 922, "chosen"), answer("what-is-decided-is-a-fact", 923, "fact", r"\nRests on:[^\n]*(requirements|problem|slice)"),
       answer("who-may-refund-stays-theirs", 913, "owner"), answer("the-dispute-stays-theirs", 912, "owner"),
       DRAW, trace("the-command-drew-twelve-or-fewer", DREW + r"\b([0-9]|1[0-2]) decisions wait for the owner, [3-9] taken off their list", never=False),
       says("brings-the-list-with-what-is-recommended", r"recommend"), says("says-what-happens-if-left", r"if (it is |it's |this is )?left|left (undecided|open|as)|otherwise|until (you|then)"),
@@ -339,7 +341,7 @@ SCENARIOS = [
      [ZONE, CLOCK], None, ("testing", True, True), q.GO_ON,
      [*SETTLED_ZONE, says("says-what-was-overturned", r"(?=[\s\S]*(UTC|\bZ\b|zone))(?=[\s\S]*(19:30|A906|playhouse's own time|was written|earlier (choice|answer)|criterion))"),
       not_in_file(ANS, "the-criterion-on-the-guess-is-gone", r"the hour in created_at unchanged"),
-      answer("the-earlier-answer-now-rests-on-what-was-shown", 906, "(?:fact|chosen)", r"\nRests on:[^\n]*(payright[^\n]*F1[4-9]|open-facts)"),
+      answer("the-earlier-answer-now-rests-on-what-was-shown", 906, "(?:fact|chosen)", r"\nRests on:[^\n]*(payright[^\n]*F1[6-9]|open-facts)"),
       DRAW, trace("the-command-drew", DREW + r"1 tests: 1 settled, 0 still open", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("10-the-answers-changed-after",
      "One test was sorted and drawn, then the answers gained another: only the new test gets a block, the one before is left as it was, drawn again.",

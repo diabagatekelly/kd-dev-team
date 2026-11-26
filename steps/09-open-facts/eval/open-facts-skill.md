@@ -18,7 +18,10 @@ a test printed.
 
 **Read first.** `answered.md` beside the answers (what is to test,
 by harm, and what waits for the owner), the research documents, and
-the report's `next` command.
+the report's `next` command. Then, for each thing committed to, the
+report's list of pages kept and its documentation's first page: a
+test is sorted knowing which of its pages nobody has read yet, and
+what it says of a test environment.
 
 **A block a test, the gravest first,** added to the end of the file
 with your file tool:
@@ -33,7 +36,9 @@ Result: settled | open
 **How, asked in this order.**
 
 1. `page`: a page of the thing's documentation would say it: what a
-   field holds, a limit, what an error means, what a plan includes.
+   field holds, a limit, what an error means, what a plan includes;
+   and any test whose subject a page not yet read could cover (a
+   reference, its errors, its limits), whatever its `Test:` says.
    Change its answer to `look up`, saying exactly what must be
    known. When every test is sorted, load the research text and look
    them all up in one go, as it says of what the answers ask for.

@@ -104,7 +104,7 @@ class Cases(unittest.TestCase):
         for prefix in ("06a", "06b"):
             self.assertEqual(openfacts.state(self.slice(prefix)), "drawn, 3 waiting")
             self.assertIn("drawn; 3 decisions wait for the owner: their list is brought to them now, once", self.report(prefix))
-            self.assertIn("and both drawn again", self.report(prefix))
+            self.assertIn("both are then drawn again", self.report(prefix))
 
     def test_the_changed_answers_case_starts_stale_with_the_new_test_alone_to_sort(self):
         self.assertIn("to draw again: the answers or the open facts changed", self.report("10"))
@@ -151,11 +151,11 @@ class Cases(unittest.TestCase):
         self.assertIn("2026-03-02T18:30:00Z", (folder / "009_tests/T1.out").read_text(encoding="utf-8"))
         (folder / "009_open-facts.md").write_text(head + 'Result: settled\nShows: created_at is a time in UTC, with a Z. `"created_at": "2026-03-02T18:30:00Z"`\n', encoding="utf-8")
         research = folder / "006_research/payright.md"
-        research.write_text(research.read_text(encoding="utf-8") + '\n## Shown by a test\n- F14: created_at is given in UTC, ending in Z. "2026-03-02T18:30:00Z" (test T1)\n', encoding="utf-8")
+        research.write_text(research.read_text(encoding="utf-8") + '\n## Shown by a test\n- F16: created_at is given in UTC, ending in Z. "2026-03-02T18:30:00Z" (test T1)\n', encoding="utf-8")
         text = (folder / "008_answers.md").read_text(encoding="utf-8")
         start = text.index("## A902:")
         fact = ('## A902: The form and zone of created_at\nKind: fact\nSays: PayRight gives created_at as a time in UTC, ending in Z.\n'
-                'Rests on: payright F14: "2026-03-02T18:30:00Z"\nSettles: V.created-at.*\n')
+                'Rests on: payright F16: "2026-03-02T18:30:00Z"\nSettles: V.created-at.*\n')
         (folder / "008_answers.md").write_text(text[:start] + fact, encoding="utf-8")
         out = io.StringIO()
         self.assertEqual(openfacts.main(["draw", str(folder)], out), 1)
@@ -218,6 +218,8 @@ class Checks(unittest.TestCase):
         check = self.checks("03a")["sends-only-through-the-command"]
         self.assertFalse(holds(check, '"command": "curl -s https://sandbox.payright.example/v1/payments"'))
         self.assertTrue(holds(check, '"command": "python3 /p/openfacts/openfacts.py run planning/slice-001 T1"'))
+        # Met in the pilot: a script written through the shell holds the address, and writing it sends nothing.
+        self.assertTrue(holds(check, '"command": "cat > 009_tests/T1.sh <<EOF\\ncurl -s https://sandbox.payright.example/v1/payments\\nEOF"'))
 
     def test_the_key_written_into_a_file_or_a_command_fails(self):
         check = self.checks("03c")["the-key-is-written-nowhere"]
@@ -228,10 +230,10 @@ class Checks(unittest.TestCase):
     def test_the_list_read_passes_only_with_what_is_not_theirs_taken_off(self):
         checks = self.checks("05")
         read = "# Open facts\n\n## The owner's list, read\n- A911: rule: promised\n- A921: chosen: where a key is kept\n- A922: chosen: how a reference is made\n- A923: decided: 005_approach.md\n- A924: same as A911\n"
-        for name in ("reads-the-list-under-its-heading", "reads-the-two-technical-as-chosen", "reads-the-provider-as-decided", "reads-the-refund-asked-twice-as-one"):
+        for name in ("reads-the-list-under-its-heading", "reads-the-two-technical-as-chosen", "reads-what-the-documents-decide-as-decided", "reads-the-refund-asked-twice-as-one"):
             self.assertTrue(holds(checks[name], read), name)
         self.assertFalse(holds(checks["reads-the-two-technical-as-chosen"], read.replace("- A922: chosen", "- A922: risk")))
-        self.assertFalse(holds(checks["reads-the-provider-as-decided"], read.replace("- A923: decided", "- A923: scope")))
+        self.assertFalse(holds(checks["reads-what-the-documents-decide-as-decided"], read.replace("- A923: decided", "- A923: scope")))
         drew = checks["the-command-drew-twelve-or-fewer"]
         self.assertTrue(holds(drew, "drawn: x/009_tested.md: 0 tests: 0 settled, 0 still open (0 of high harm); 10 decisions wait for the owner, 4 taken off their list"))
         self.assertFalse(holds(drew, "drawn: x/009_tested.md: 0 tests: 0 settled, 0 still open (0 of high harm); 13 decisions wait for the owner, 1 taken off their list"))
