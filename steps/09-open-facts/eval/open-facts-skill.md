@@ -122,8 +122,9 @@ truly theirs stand, and you say how many.
 `tested.md`. Put right what it names and draw again. Where it says
 a drawing could not be written, say so and leave it.
 
-**Bring the list, once.** When the report says decisions wait, show
-them from `answered.md`, the gravest first: for each, what is to
+**Bring the list, once.** Once it is drawn and decisions wait (the
+command and the report say how many), show them from `answered.md`,
+the gravest first: for each, what is to
 decide, the options, the one recommended and why, and what happens
 if it is left. After them, each open fact of high harm: what is not
 known, what only they could do to know it, and what the slice does

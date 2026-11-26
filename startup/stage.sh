@@ -76,7 +76,10 @@ STAGES
 # a test showed are added under headings of their own, and do not make the questions stale.
 ADDED_LATER='^## (Looked up for the answers|Shown by a test)'
 before_the_answers() {
-  if grep -Eq "$ADDED_LATER" "$1"; then awk -v added="$ADDED_LATER" '$0 ~ added { exit } /^[ \t\r]*$/ { held = held $0 "\n"; next } { printf "%s%s\n", held, $0; held = "" }' "$1"; else cat "$1"; fi
+  # Only a number is taken from awk, and the lines are then copied as they are: awk on Windows
+  # rewrites the ends of lines, and the mark must be of the document's own bytes.
+  keep=$(awk -v added="$ADDED_LATER" '$0 ~ added { found = 1; exit } $0 !~ /^[ \t\r]*$/ { last = NR } END { print (found ? last + 0 : -1) }' "$1")
+  if [ "$keep" = -1 ]; then cat "$1"; elif [ "$keep" != 0 ]; then head -n "$keep" "$1"; fi
 }
 
 # What the answers leave for the stage after them: "@tests N" answers still a test, "@waiting N"

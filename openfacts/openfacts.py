@@ -296,8 +296,9 @@ def state(folder):
     return f"written {len(sorted_out)} of {len(tests | sorted_out)}"
 
 
-def key_store():
-    return pathlib.Path(os.environ.get("CLAUDE_PLUGIN_DATA") or pathlib.Path.home() / ".kd-dev-team") / "test-keys"
+def key_store(environ=None):
+    environ = os.environ if environ is None else environ
+    return pathlib.Path(environ.get("CLAUDE_PLUGIN_DATA") or pathlib.Path.home() / ".kd-dev-team") / "test-keys"
 
 
 def keys(store=None):
@@ -359,7 +360,7 @@ def run(folder, name, out=sys.stdout, environ=None, timeout=120, today=None):
             return refuse(f"its script names {', '.join(other)}, which is not the test environment ({against.group(1)}): a test sends nowhere else")
     environ = dict(os.environ if environ is None else environ)
     needed = [each.strip("` ") for each in re.split(r"[,\s]+", one(block, "Needs")) if each.strip("` ")]
-    held = keys()
+    held = keys(key_store(environ))
     missing = [each for each in needed if not (environ.get(each) or held.get(each))]
     if missing:
         me = pathlib.Path(__file__).resolve()

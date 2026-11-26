@@ -58,9 +58,9 @@ start while one waits.
 | A decision that waits and is not read; one read as not theirs whose answer is unchanged | script, refused |
 | The answers drawn again with the open facts, in one command | script |
 | Whether the stage is done; that decisions still wait; a slice with nothing to test and nothing to decide needs no such stage | stage script |
-| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (154 lines) |
+| How a test is sorted; the script that settles it; what its output shows; what holds either way; whether a decision is theirs | text (155 lines) |
 
-37 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
+38 unit tests for the script (`openfacts/test_openfacts.py`), 10 for
 the stage script, 5 for the driver, 21 for the cases.
 
 ## Set beside kad

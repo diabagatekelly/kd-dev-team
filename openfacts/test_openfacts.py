@@ -217,7 +217,7 @@ class Run(Folder):
 
     def test_a_key_the_machine_does_not_have_is_asked_of_the_user_at_a_hidden_prompt(self):
         self.a_run(more=AGAINST + "Needs: PAYRIGHT_TEST_KEY\n")
-        code, said = self.go("run", "T1", environ={"PATH": os.environ["PATH"], "CLAUDE_PLUGIN_DATA": str(self.top / "data")})
+        code, said = self.go("run", "T1", environ={**os.environ, "PAYRIGHT_TEST_KEY": "", "CLAUDE_PLUGIN_DATA": str(self.top / "data")})
         self.assertEqual(code, 3)
         self.assertIn("- NOT RUN: T1: it needs PAYRIGHT_TEST_KEY, which this machine does not have", said)
         self.assertRegex(said, r"python3 .*openfacts\.py key PAYRIGHT_TEST_KEY\n")
@@ -225,7 +225,7 @@ class Run(Folder):
 
     def test_a_key_is_given_to_the_script_and_is_in_nothing_kept(self):
         self.a_run(script='echo "sent with $PAYRIGHT_TEST_KEY and it returns the first payment"\n', more=AGAINST + "Needs: PAYRIGHT_TEST_KEY\n")
-        code, said = self.go("run", "T1", environ={"PATH": os.environ["PATH"], "PAYRIGHT_TEST_KEY": "sk_test_12345"})
+        code, said = self.go("run", "T1", environ={**os.environ, "PAYRIGHT_TEST_KEY": "sk_test_12345"})
         self.assertEqual(code, 0, said)
         kept = (self.slice / "009_tests/T1.out").read_text(encoding="utf-8")
         self.assertIn("sent with <PAYRIGHT_TEST_KEY> and", kept)
@@ -240,6 +240,14 @@ class Run(Folder):
         self.assertNotIn(str(self.top / "planning"), str(store))
         self.assertEqual(openfacts.keep_key("lower", "x", store, io.StringIO()), 2)
         self.assertEqual(openfacts.keep_key("EMPTY", "  ", store, io.StringIO()), 1)
+
+    def test_a_key_the_user_typed_is_read_from_the_plugins_own_folder_and_given_to_the_script(self):
+        openfacts.keep_key("PAYRIGHT_TEST_KEY", "sk_test_typed", self.top / "data" / "test-keys", io.StringIO())
+        self.a_run(script='echo "sent with $PAYRIGHT_TEST_KEY and it returns the first payment"\n', more=AGAINST + "Needs: PAYRIGHT_TEST_KEY\n")
+        code, said = self.go("run", "T1", environ={**os.environ, "PAYRIGHT_TEST_KEY": "", "CLAUDE_PLUGIN_DATA": str(self.top / "data")})
+        self.assertEqual(code, 0, said)
+        self.assertIn("sent with <PAYRIGHT_TEST_KEY> and", said)
+        self.assertNotIn("sk_test_typed", said)
 
     def test_a_long_output_is_kept_only_in_part_and_a_slow_test_is_stopped(self):
         self.a_run(script="i=0; while [ $i -lt 80 ]; do echo line $i; i=$((i+1)); done\n", more="")
