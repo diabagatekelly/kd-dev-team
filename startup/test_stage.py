@@ -545,6 +545,74 @@ class Stage(unittest.TestCase):
         self.assertIn("tests of open facts (its document: planning/slice-001/009_open-facts.md, to draw again: the answers or the open facts changed after "
                       "slice-001/009_tested.md was drawn)", self.report())
 
+    # The design (stage 10): design.md is the session's, designed.md the script's, with the mark of the answers'
+    # drawing, the open facts' and the design, how many decisions of the design wait and how many things go back.
+    def designed(self, waiting=0, back=0, drawn=True, open_facts=True):
+        folder = self.tested() if open_facts else self.answered(text="# Answers\n\n## A1: Chosen\nKind: chosen\nSays: It is.\nRests on: good practice.\nSettles: C.x.O1\n")
+        (folder / "010_design.md").write_text("# Design\n", encoding="utf-8", newline="\n")
+        if drawn:
+            names = ["008_answered.md", *(["009_tested.md"] if open_facts else []), "010_design.md"]
+            mark = the_questions_script().cksum(b"".join((folder / name).read_bytes() for name in names))
+            (folder / "010_designed.md").write_text(f"# Designed\n\n<!-- drawn from: {mark}; waiting: {waiting}; back: {back} -->\n", encoding="utf-8")
+        return folder
+
+    def test_after_the_open_facts_the_design_is_next_with_its_commands(self):
+        self.tested()
+        out = self.report()
+        self.assertIn("- next stage by the documents: design (its document: planning/slice-001/010_design.md)", out)
+        self.assertIn('designing/design.py" next planning/slice-001', out)
+        self.assertIn('designing/design.py" draw planning/slice-001', out)
+
+    def test_a_design_written_and_not_drawn_keeps_the_stage_next(self):
+        self.designed(drawn=False)
+        self.assertIn("- next stage by the documents: design (its document: planning/slice-001/010_design.md, written in, and not yet drawn: "
+                      "what has no home yet is still to place)", self.report())
+
+    def test_a_design_drawn_with_nothing_waiting_is_done(self):
+        self.designed()
+        out = self.report()
+        self.assertIn("design (slice-001/010_design.md)", out)
+        self.assertIn("- next stage by the documents: screens (its document: planning/slice-001/011_screens.md)", out)
+        self.assertNotIn("out of order", out)
+        # Met building the cases: a user who comes back on a finished design had no command to draw it again with.
+        self.assertRegex(out, r"- the design is changed only in planning/slice-001/010_design\.md, and drawn again by script: python3 \".*design\.py\" draw planning/slice-001")
+
+    def test_a_planning_folder_with_a_space_in_its_name_is_read_the_same(self):
+        self.designed()
+        (self.machine.project / "planning").rename(self.machine.project / "my planning")
+        self.machine.run("stage.sh", "remember", "my planning")
+        out = self.report()
+        self.assertIn("design (slice-001/010_design.md)", out)
+        self.assertIn("- next stage by the documents: screens (", out)
+
+    def test_a_design_drawn_where_the_answers_left_nothing_to_test_is_done(self):
+        self.designed(open_facts=False)
+        self.assertIn("- next stage by the documents: screens (", self.report())
+
+    def test_a_design_with_decisions_waiting_brings_them(self):
+        self.designed(waiting=2)
+        out = self.report()
+        self.assertIn("design (its document: planning/slice-001/010_design.md, drawn; 2 decisions of the design wait for the owner: they are brought to them "
+                      "now, once, the gravest first", out)
+        self.assertIn("- a decision the owner takes on the design's list is recorded on that decision in planning/slice-001/010_design.md", out)
+
+    def test_a_design_that_sends_something_back_says_so(self):
+        self.designed(back=1)
+        self.assertIn("design (its document: planning/slice-001/010_design.md, drawn; 1 things the design found go back to an earlier stage", self.report())
+
+    def test_a_design_changed_after_the_drawing_is_to_be_drawn_again(self):
+        folder = self.designed()
+        (folder / "010_design.md").write_text("# Design\n\nChanged.\n", encoding="utf-8")
+        self.assertIn("design (its document: planning/slice-001/010_design.md, to draw again: the answers, the open facts or the design changed after "
+                      "slice-001/010_designed.md was drawn", self.report())
+
+    def test_open_facts_changed_under_the_design_come_first_and_nothing_is_called_out_of_order(self):
+        folder = self.designed()
+        (folder / "009_open-facts.md").write_text("# Open facts\n\nChanged.\n", encoding="utf-8")
+        out = self.report()
+        self.assertIn("- next stage by the documents: tests of open facts (", out)
+        self.assertNotIn("out of order", out)
+
     def test_answers_changed_under_the_open_facts_come_first_and_nothing_is_called_out_of_order(self):
         folder = self.tested()
         (folder / "008_answers.md").write_text("# Answers\n\nChanged.\n", encoding="utf-8")
@@ -707,6 +775,9 @@ class Stage(unittest.TestCase):
         tests = next(at.parent.glob("*_open-facts.md"))
         mark = the_questions_script().cksum(answers.read_bytes() + tests.read_bytes())
         tests.with_name(tests.name.replace("_open-facts", "_tested")).write_text(f"<!-- drawn from: {mark}; waiting: 0 -->\n", encoding="utf-8")
+        design = next(at.parent.glob("*_design.md"))
+        mark = the_questions_script().cksum(b"".join(path.read_bytes() for path in [*at.parent.glob("*_answered.md"), *at.parent.glob("*_tested.md"), design]))
+        design.with_name(design.name.replace("_design", "_designed")).write_text(f"<!-- drawn from: {mark}; waiting: 0; back: 0 -->\n", encoding="utf-8")
         out = self.report()
         self.assertIn("- every planning document of slice 1 exists", out)
         self.assertIn("- next stage by the documents: none, slice 1 is planned and ready to build", out)

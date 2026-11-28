@@ -504,6 +504,25 @@ class Run(unittest.TestCase):
         # Not at turn 13 (the answers drawn, a test left) nor at 14 (drawn, two decisions waiting).
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the open facts were drawn and no decision waits for the owner", 15))
 
+    # Carried on through the design (stage 10): drawn with one decision of its own waiting, the user takes what is
+    # recommended and it is drawn again.
+    DESIGN = OPEN_FACTS.replace('    if n == 99:\n', '    if n == 16:\n'
+        '        pathlib.Path("plans/slice-002/010_design.md").write_text("# Design\\n")\n'
+        '        pathlib.Path("plans/slice-002/010_designed.md").write_text("<!-- drawn from: 1; waiting: 1; back: 0 -->\\n")\n'
+        '    if n == 17:\n'
+        '        pathlib.Path("plans/slice-002/010_designed.md").write_text("<!-- drawn from: 2; waiting: 0; back: 0 -->\\n")\n'
+        '    if n == 99:\n')
+
+    def test_carried_through_the_design_it_ends_once_it_is_drawn_with_nothing_waiting(self):
+        summary, _ = self.through(fake=self.DESIGN, brief=self.SPOKEN, through="design", turns=24)
+        # Not at turn 15 (the open facts drawn) nor at 16 (the design drawn, a decision of its own waiting).
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the design was drawn, with no decision waiting and nothing going back", 17))
+
+    def test_a_design_that_sends_something_back_ends_the_run_two_turns_later(self):
+        fake = self.DESIGN.replace("waiting: 1; back: 0", "waiting: 0; back: 1").replace("waiting: 0; back: 0", "waiting: 0; back: 1")
+        summary, _ = self.through(fake=fake, brief=self.SPOKEN, through="design", turns=24)
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the design was drawn and sends something back to an earlier stage", 17))
+
     def test_answers_that_leave_nothing_to_test_or_decide_end_a_run_through_the_open_facts(self):
         summary, _ = self.through(fake=self.ANSWERS, brief=self.SPOKEN, through="open-facts", turns=20)
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers left nothing to test and nothing for the owner to decide", 13))

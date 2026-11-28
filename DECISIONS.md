@@ -654,6 +654,64 @@ asking is listed apart, so it can be overturned.
     refuses is settled by its test environment. What no session
     has run is listed in the stage's README.
 
+59. **The pilot of stage 10, the design, is agreed** (the owner:
+    "Yes, then run the pilot", 2026-11-28), at about $16, on the
+    proposal in `steps/10-design/README.md`: its measure (a private
+    key of defects a structure could have prevented, counted by
+    reading, kad's own designs as the mark), a second short list
+    of the owner's brought once when the design is drawn, and about
+    $160 in all. The pilot's real cost is reported before anything
+    else runs, and the rest is said again with it. Agreed with it,
+    after the owner asked whether the screens belong to this stage
+    and whether they change a structure: the order is kept (screens
+    are stage 11), and the design names what the person sees as one
+    tactical part, with what it reads and asks of the others; how
+    it looks is not said there.
+
+- After the pilot of stage 10 (2026-11-28, $10.70), chosen without
+  asking, and run by no session yet:
+  - The script says when the project already has code, in `next`,
+    and refuses a design with no `## Already there` there: Sonnet
+    designed the case with code without opening a file of it.
+  - A state goes back to research only when a person is shown it or
+    can act in it; a state of a decision's own mechanism is that
+    decision's. What an earlier stage recorded and settled does not
+    go back again. In the cases every Sonnet design sent one to two
+    things back, Haiku up to eight.
+  - The cases no longer ask that nothing goes back: the made-up
+    slice does lack a state its own open fact shows the person, and
+    sessions were right to say so. What goes back is read instead.
+  - The check that the code was read named a tool the grader does
+    not have (`*`); it reads the transcript now.
+
+- Stage 10 after three runs and one round of tuning (2026-11-28;
+  the owner: "Go ahead", "Yes", "Yes" to each round and to the
+  closing passes, about $63, with the bars missed on record), $47
+  spent of about $125, chosen without asking:
+  - The text names the cases of what fails (an older layout, a
+    setting there and wrong, a fault inside a request, one bad item
+    among many, a loop bounded where the promise is made, what
+    trying again removes), has a claim taken where the thing starts,
+    and makes deleting a person's kept data the owner's every time.
+    The first is written after seeing which items of the private
+    key were missed: the count on the same two plans is partly the
+    text learning the key, said to the owner before it was run.
+  - Counted by read-only sessions not shown earlier counts, items
+    held of twelve and of eight: 6, 2, 6 and 4, 4, 4 before; 9, 7, 9
+    and 5, 3, 4 after (kad's own designs: 1 and 1). No item absent
+    after. Missed: every item about two things at once in every run
+    (one run of six does not say when the one key is made); half of
+    the rest held on the second plan (4, 2, 3 of 7).
+  - The design is not tuned further toward the key. What stays
+    "part" in every run is behaviour, not structure, and is owed to
+    the library as questions: a setting that is a wrong number;
+    the rule on where a data file may be kept; a poll that fails
+    once; one bad record among a page; the identifier a posted
+    transaction replaced; a failure before a connect starts.
+  - Case 06 accepts a session that stops at the question of the
+    slice's width, which the slice's own text asks of it; the check
+    of "what happens if left" takes "if you leave it undecided".
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
@@ -815,6 +873,59 @@ asking is listed apart, so it can be overturned.
     the text's own example of a fact's number (`F31`) is copied in
     one run of five.
 
+- Stage 10, the design, as built (2026-11-28), chosen without
+  asking; its measure, its test, its cost and three points of the
+  owner's are in `steps/10-design/README.md`, and nothing paid has
+  run:
+  - The session's judgement is one file of parts, boundaries and
+    decisions; a script lists what has no home, refuses what does
+    not hold and draws `NNN_designed.md`. Its folder is `designing/`:
+    `design/` holds the plugin's own design document.
+  - The unit of a home is the answer, not the criterion: a chosen
+    answer with no criterion is read by nobody else, which is how
+    "said with no criterion" is closed. A dismissed answer and a
+    fact with no criterion need none.
+  - A strategic part never names a thing committed to, and one
+    tactical part isolates it: held by script, by the thing's name.
+  - What the design says of a thing committed to rests on a research
+    fact with its words, as an answer does, on an open test, or is
+    named `unknown` with what is done either way.
+  - **No technology is picked here.** A boundary says what the slice
+    needs of whatever stands behind it and whether this slice forces
+    a choice; the stack stage picks against it. kad's design chose
+    the store and the screen's shape; here that would be a belief
+    about a dependency nobody researched.
+  - A dependency the user did not name: something the slice needs
+    from outside goes back to the approach, which has its way to
+    research; the way back from a technology picked is the stack
+    stage's.
+  - kad's approval of every decision one at a time is not carried
+    (the design document's section 4). A decision is the owner's
+    only as a cost in money, a risk no structure removes, or what
+    cannot be taken back.
+  - kad's three checks are answered yes or no on every chosen
+    decision, and the script draws those with three yes as records.
+    Where they are kept for good is stage 14's.
+  - What keeps two things apart carries five orders of events, each
+    required; a hole in a chosen decision is refused. Every design
+    says whether anything runs at once, and "nothing" is refused
+    where the answers settle a question about two things at once.
+  - What goes back to an earlier stage keeps the design open; the
+    stage script says so, and names no other stage as next for it.
+  - Asked for a structure the principles argue against, the slice is
+    designed as recommended and the cost said once; insisted on, it
+    is recorded as the owner's.
+  - kad's skill is not an arm of the cases; its designs of the two
+    real plans are the mark. The key those are counted against (the
+    defects a structure could have prevented, twelve and eight) is
+    this session's own reading, fixed before any run, private.
+  - A real run starts from a kept stage 9 run whose owner's list
+    waits: the launcher's user takes what is recommended, as the
+    examples' user does; it is nobody's real decision.
+  - The examples are to be run from their kept answers: the open
+    facts' kept documents are stale by that stage's last two
+    sentences.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the
@@ -838,9 +949,22 @@ asking is listed apart, so it can be overturned.
 - **A second slice that commits to a thing already researched**
   (whether the earlier document is carried forward, and what is read
   again): when an example reaches a second slice's research.
-- **A dependency the user did not name** (a library the design or
-  the stack picks) has no way back to research in the order as
-  written: with the design and stack stages.
+- **A dependency the user did not name:** for the design, settled
+  as built (a need from outside goes back to the approach; no
+  technology is picked there). What a pick of the stack stage does
+  to get back to research is still owed, to that stage.
+- **A screen that needs of the structure what the design does not
+  give** (a view of two parts together, in a shape no part offers):
+  the screens stage sends it back to the design, a `design:` line
+  in its own "goes back", as the design does to the stages before
+  it. A behaviour the screen would add goes back to the answers or
+  the requirements instead. Owed to stage 11.
+- **The architecture map** kad's design consulted first: no map
+  exists before a build; owed when the build makes one.
+- **A decision of the design taken mid-build under a delegation**
+  (kad's): with the first build stage.
+- **Where the design's decisions that earn a record are kept for
+  good:** with the planning pull request (stage 14).
 
 ## Chosen without asking; the owner can overturn any of these
 

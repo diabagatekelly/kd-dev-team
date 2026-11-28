@@ -26,6 +26,8 @@ ANSWERS="python3 \"$(cd "$(dirname "$0")" && pwd)/../answers/answers.py\""
 # And the one that sorts the tests the answers leave, runs one and keeps what it printed, and draws them.
 OPEN="python3 \"$(cd "$(dirname "$0")" && pwd)/../openfacts/openfacts.py\""
 [ -z "${CLAUDE_PLUGIN_DATA:-}" ] || OPEN="CLAUDE_PLUGIN_DATA=\"$CLAUDE_PLUGIN_DATA\" $OPEN"
+# And the one that says what has no home in the design yet, refuses what does not hold, and draws it.
+DESIGN="python3 \"$(cd "$(dirname "$0")" && pwd)/../designing/design.py\""
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
@@ -343,7 +345,7 @@ report() {
     slice=${slice:-slice-001}
   fi
   found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
-  rfolder=""; stale=""; qfolder=""; qstate=""; adone=""; odone=""; obrought=""
+  rfolder=""; stale=""; qfolder=""; qstate=""; adone=""; odone=""; obrought=""; ddone=""; dbrought=""
   own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
   [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
@@ -510,6 +512,39 @@ report() {
 }- tests of open facts: not needed, the answers leave nothing to test and nothing for the owner to decide ($adone)"
           continue
         fi ;;
+      design)
+        # The design, counted: design.md is the session's, and designed.md is drawn from it by script once
+        # everything settled before has its home. The stage is done while that drawing carries the mark of
+        # the answers' drawing, the open facts' and the design as they stand, no decision of the design
+        # waits for the owner and nothing goes back to an earlier stage.
+        if [ "$there" = yes ] && [ -n "$adone" ] && [ -z "$next" ]; then
+          designed="$under${is%_design.md}_designed.md"
+          stamp=$(grep "drawn from: $( (cat "$dir/${adone%_answers.md}_answered.md"; [ -z "$odone" ] || cat "$dir/${odone%_open-facts.md}_tested.md"
+                                        cat "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }'); waiting: " "$dir/$designed" 2>/dev/null | head -1)
+          waits=$(say "$stamp" | sed -n 's/.*waiting: \([0-9]*\).*/\1/p'); goes=$(say "$stamp" | sed -n 's/.*back: \([0-9]*\).*/\1/p')
+          ddone="$under$is"
+          if [ "$waits" = 0 ] && [ "$goes" = 0 ]; then
+            found="${found:+$found, }$name ($under$is)"
+            continue
+          fi
+          missing="${missing:+$missing, }$name"
+          if [ -n "$stamp" ] && [ "$goes" != 0 ]; then
+            owes="drawn; $goes things the design found go back to an earlier stage: each is said to the user now, with the stage whose it is, and the design is taken up again once that stage has changed its document"
+          elif [ -n "$stamp" ]; then
+            dbrought=$waits
+            owes="drawn; $waits decisions of the design wait for the owner: they are brought to them now, once, the gravest first, and each decision they take is recorded"
+          elif [ -f "$dir/$designed" ]; then
+            owes="to draw again: the answers, the open facts or the design changed after $designed was drawn; only what the change brings is given its home"
+          else
+            owes="written in, and not yet drawn: what has no home yet is still to place"
+          fi
+          next="$name (its document: $folder/$under$is, $owes)"
+          continue
+        elif [ "$there" = yes ]; then
+          # Written, and an earlier stage is being changed or drawn again: it comes first, and says so itself.
+          missing="${missing:+$missing, }$name"
+          continue
+        fi ;;
     esac
     if [ "$there" = yes ]; then
       found="${found:+$found, }$name ($under$is)"
@@ -613,8 +648,15 @@ STAGES
       say "  the answers and the open facts are checked and drawn together by script: $OPEN draw $folder/$slice"
       if [ -n "$obrought" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and one they leave is recorded there too (\`Decided: left: <what happens then> (the user, DATE: \"their words\")\`); both are then drawn again: $OPEN draw $folder/$slice"
       else say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;
+    design*)
+      say "- what the earlier stages settled that has no home in the design yet, sixty at a time, and what does not hold as written: $DESIGN next $folder/$slice"
+      say "  the design is checked and drawn by script, never written by hand: $DESIGN draw $folder/$slice"
+      [ -z "$dbrought" ] || say "- a decision the owner takes on the design's list is recorded on that decision in $folder/$ddone (\`Decided: <the choice> (the user, DATE: \"their words\")\`), and the design drawn again: $DESIGN draw $folder/$slice"
+      if [ -n "$odone" ]; then say "- a decision the owner takes on an answer is recorded in $folder/$adone, and the answers and the open facts drawn again: $OPEN draw $folder/$slice"
+      elif [ -n "$adone" ]; then say "- a decision the owner takes on an answer is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;
     *)
       # The answers stay the place a decision of the owner's is recorded, whatever stage is next.
+      [ -z "$ddone" ] || say "- the design is changed only in $folder/$ddone, and drawn again by script: $DESIGN draw $folder/$slice"
       if [ -n "$odone" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers and the open facts drawn again: $OPEN draw $folder/$slice"
       elif [ -n "$adone" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;
   esac

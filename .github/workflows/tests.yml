@@ -20,4 +20,4 @@ jobs:
         shell: bash
         run: |
           py=python3; command -v python3 >/dev/null || py=python
-          for d in library briefs judge startup research questions answers openfacts steps/03-requirements/eval steps/04-slice/eval steps/05-approach/eval steps/06-research/eval steps/07-questions/eval steps/07b-security/eval steps/08-answers/eval steps/09-open-facts/eval e2e; do (cd "$d" && "$py" -I -m unittest -q) || exit 1; done
+          for d in library briefs judge startup research questions answers openfacts designing steps/03-requirements/eval steps/04-slice/eval steps/05-approach/eval steps/06-research/eval steps/07-questions/eval steps/07b-security/eval steps/08-answers/eval steps/09-open-facts/eval steps/10-design/eval e2e; do (cd "$d" && "$py" -I -m unittest -q) || exit 1; done
