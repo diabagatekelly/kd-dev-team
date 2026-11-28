@@ -56,6 +56,7 @@ words"`, and the drawing says that nothing was designed.
 No model, no cost.
 """
 import importlib.util
+import os
 import pathlib
 import re
 import sys
@@ -167,6 +168,24 @@ def load(folder):
     drawn = [path for path in (facts["answered"], facts["tested"] if facts["document"] else None, document) if path is not None and path.is_file()]
     return {"folder": folder, "document": document, "designed": designed, "facts": facts, "slice": slice_read, "kept": kept,
             "blocks": blocks, "sections": sections, "mark": str(questions.cksum(b"".join(path.read_bytes() for path in drawn)))}
+
+
+CODE_FILES = {".py", ".js", ".jsx", ".ts", ".tsx", ".go", ".rs", ".java", ".kt", ".rb", ".php", ".cs", ".swift", ".c", ".cc", ".cpp", ".h", ".sh", ".sql", ".html", ".css"}
+NOT_CODE = {"node_modules", "venv", "dist", "build", "target", "vendor", "__pycache__"}
+
+
+def code(read, most=5):
+    """Files of code the project already has beside its planning folder, the first few: a design that never read them names anew what is there."""
+    planning = read["folder"].parent
+    found = []
+    for top, folders, files in os.walk(planning.parent):
+        folders[:] = sorted(each for each in folders if not each.startswith(".") and each not in NOT_CODE and pathlib.Path(top, each) != planning)
+        for each in sorted(files):
+            if pathlib.Path(each).suffix.lower() in CODE_FILES:
+                found.append(pathlib.Path(top, each).relative_to(planning.parent).as_posix())
+                if len(found) == most:
+                    return found
+    return found
 
 
 def wanted(read):
@@ -403,6 +422,9 @@ def problems(read):
             found.append(f"`## Tests` does not say {thing} is faked, at its wire: no test of the slice calls the real thing")
     if not sections.get("kept for later slices"):
         found.append("`## Kept for later slices` names what a later slice will read of this one (an identifier, a position reached, where a thing came from), or `none: <why>`")
+    if not sections.get("already there") and code(read):
+        found.append(f"the project already has code ({', '.join(code(read))}) and the design does not say what of it the slice touches: read it, then "
+                     "`## Already there` names what exists and is used under its name, or `none: <why the slice touches nothing of it>`")
     for line in back(read):
         if line.partition(":")[0].strip().lower() not in BACK or not line.partition(":")[2].strip():
             found.append(f"`## Goes back` names the stage whose it is ({', '.join(BACK)}), then what: '{line[:60]}'")
@@ -549,6 +571,9 @@ def main(arguments, out=sys.stdout):
             print("Committed to, each isolated by one tactical part: " + ", ".join(outside(read).values()), file=out)
         if concurrent(read):
             print(f"Answers that settle questions about two things at once: {', '.join(concurrent(read))}", file=out)
+        if code(read):
+            print(f"The project already has code ({', '.join(code(read))}): read what the slice will touch before naming a part; what exists is used under "
+                  "its name and said under `## Already there`", file=out)
         builds = later(read)
         print("Slices that build on this one: " + ("; ".join(builds) if builds else "none in the set as it stands"), file=out)
         if found:

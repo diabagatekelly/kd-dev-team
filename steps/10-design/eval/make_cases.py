@@ -254,7 +254,7 @@ D = "@DESIGN@"
 NEXT = {"type": "tool_used", "name": "form-asks-the-command-what-has-no-home", "tool": "Bash", "min": 1, "input_match": r"design\.py[\s\S]*\bnext\b"}
 DRAW = {"type": "tool_used", "name": "draws-with-the-command", "tool": "Bash", "min": 1, "input_match": r"design\.py[\s\S]*\bdraw\b"}
 DREW = r"drawn(?:: |, and not written)[^\n]{0,700}?"
-NOTHING_WAITS = trace("the-command-drew-with-nothing-waiting", DREW + r"\b[2-9] parts \([1-9] strategic, [1-9] tactical\)[^\n]*0 decisions wait for the owner; 0 go back", never=False)
+NOTHING_WAITS = trace("the-command-drew-with-nothing-waiting", DREW + r"\b\d+ parts \([1-9] strategic, [1-9] tactical\)[^\n]*0 decisions wait for the owner", never=False)
 NOT_BY_HAND = trace("does-not-write-the-drawing-by-hand", WROTE + r"_designed[.]md")
 LEFT_ALONE = [trace("changes-no-earlier-document", WROTE + r"(00[0-4]_(problem|scope-map|requirements|slices|slice)|_approach|_research/|_questions/|_answers|_open-facts)"),
               trace("writes-no-later-document", WROTE + r"_(screens|stack|readiness|owner-list)"),
@@ -315,7 +315,7 @@ SCENARIOS = [
       says("says-the-number-may-be-given-out-again", r"reus|given (out )?again|another process|same (process )?number|taken over by|no longer (the|its)|not the (one|process)"),
       not_in_file(D, "a-hole-is-not-chosen", r"(?:^|\n)## D\d+(?=(?:(?!\n## )[\s\S])*?\nKind:\s*chosen)(?=(?:(?!\n## )[\s\S])*?\n(?:Crash|Leftover|Reused name):[^\n]*"
                                               r"(stuck until|until someone|nobody (would |will |can )?(know|notice)|both (proceed|run|go on)))"),
-      DRAW, trace("the-command-drew", DREW + r"\b[2-9] parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
+      DRAW, trace("the-command-drew", DREW + r"\b\d+ parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("04a-a-part-for-a-case-that-may-come",
      "The user asks for a registry of providers for others that may come: the slice is designed as recommended, with the provider behind one boundary; "
      "said once what the registry would cost here and that it is theirs to insist on; no registry is designed.",
@@ -347,7 +347,7 @@ SCENARIOS = [
      [], None, "Go on. And put single tickets through the same payment part while you are at it.",
      [says("says-it-is-out-for-now", r"out for now|not in (this|the) slice|scope map|requirements|next row|later"),
       not_in_file(D, "designs-nothing-for-single-tickets", r"(?:^|\n)## [CBD]\d+:[^\n]*single ticket|\nHome of:[^\n]*single"),
-      DRAW, trace("the-command-drew", DREW + r"\b[2-9] parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
+      DRAW, trace("the-command-drew", DREW + r"\b\d+ parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("07-leaned-on-and-not-known",
      "An answer says the product treats a refund as given back once the request is answered, on words of the research that say nothing of when: the "
      "design names it as leaned on and not known, with what the part does either way; drawn, and counted.",
@@ -358,12 +358,12 @@ SCENARIOS = [
      "The project has code: season tickets are kept by a part that exists, and the office's refund page calls the provider itself. The code is read "
      "first; what exists is used under its name; the fault is located, with a decision to put it right now or leave it; no code is written.",
      [], lambda names: {"code": True}, q.GO_ON,
-     [{"type": "tool_used", "name": "reads-the-code-first", "tool": "*", "min": 1, "input_match": r"app/|subscribers|office_pages|\*\*/\*[.]py|[.]py\b"},
+     [trace("reads-the-code-first", r"\"(file_path|command|pattern|path)\\?\"\s*:\s*\\?\"[^\"]*(office_pages|subscribers[.]py|app/|[.]py\b)", never=False),
       in_file(D, "says-what-is-already-there", r"\n## Already there\n[\s\S]*?subscribers"),
       in_file(D, "locates-the-fault", r"(refund|office)[\s\S]{0,300}(PayRight|provider)[\s\S]{0,300}(direct|itself|straight|own|bypass|without|not through|outside)|"
                                       r"(direct|itself|straight|bypass|not through)[\s\S]{0,300}(PayRight|provider)"),
       block("D", "decides-now-or-later", r"\nKind:\s*(chosen|owner)", r"(refund page|office page|office_pages|office's page|existing|already)"),
-      DRAW, trace("the-command-drew", DREW + r"\b[2-9] parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
+      DRAW, trace("the-command-drew", DREW + r"\b\d+ parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("09a-skip-the-stage", "The user says to skip the design: said once what it costs and that it asks almost nothing of them, offered again, nothing written.",
      [], None, SKIP,
      [says("says-what-skipping-costs", r"whoever builds|builder|in the build|one file at a time|home|no(body| one) decides|left to"), says("offers-the-stage-again", q.OFFERS),
@@ -392,7 +392,7 @@ SCENARIOS = [
      "waiting; the next stage not started.",
      [], lambda names: {names["design"]: WITH_RISK, "draw": True}, "Give it back by itself after an hour. I don't want to look every morning.",
      [block("D", "records-it-in-their-words", r"\nKind:\s*owner", r"\nDecided:[^\n]*(hour|by itself|given back)[^\n]*\(the user, 20\d\d-\d\d-\d\d: \"[^\"\n]+\"\)"),
-      DRAW, trace("the-command-drew-with-none-waiting", DREW + r"0 decisions wait for the owner; 0 go back", never=False), NOT_WHOLE, NOT_BY_HAND, *LEFT_ALONE],
+      DRAW, trace("the-command-drew-with-none-waiting", DREW + r"0 decisions wait for the owner", never=False), NOT_WHOLE, NOT_BY_HAND, *LEFT_ALONE],
      [("user", q.GO_ON), ("assistant", BROUGHT)]),
 ]
 BARE_TABLE = q.BARE_TABLE.replace("The questions stage", "The design stage")

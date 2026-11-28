@@ -185,8 +185,15 @@ Under `## Goes back`, a line each, the stage first:
 - `approach:` the slice needs something from outside that the
   approach does not have: it is committed to there, and researched,
   before the design leans on it;
-- `research:` a state the slice needs that `states.md` lacks;
+- `research:` a state the slice needs that `states.md` lacks, when
+  a person is shown it or can act in it. A state only a decision's
+  own mechanism passes through (a claim taken, a request sent and
+  not yet answered) is that decision's, said in its orders;
 - `answers:` two answers that cannot both hold.
+
+What an earlier stage already recorded and settled (a statement of
+the plan that research checked, a risk the owner accepted) does not
+go back a second time.
 
 Asked for something the requirements or the slice put out: nothing
 of it is designed. Say that it is out, and whose it is to change.

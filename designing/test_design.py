@@ -398,6 +398,19 @@ class Refused(Slice):
     def test_code_that_is_already_there_is_named_as_it_is(self):
         self.assertEqual(self.run_("draw", DESIGN + "\n## Already there\n- app/subscribers.py keeps the season tickets: used as it is.\n")[0], 0)
 
+    def test_a_project_that_has_code_is_said_by_next_and_refused_until_the_design_says_what_it_touches(self):
+        (self.planning.parent / "app").mkdir()
+        (self.planning.parent / "app" / "subscribers.py").write_text("TICKETS = {}\n", encoding="utf-8")
+        (self.planning.parent / "README.md").write_text("# Playhouse\n", encoding="utf-8")
+        self.assertIn("The project already has code (app/subscribers.py): read what the slice will touch", self.run_("next", DESIGN)[1])
+        self.refused(DESIGN, "the project already has code (app/subscribers.py) and the design does not say what of it the slice touches")
+        self.assertEqual(self.run_("draw", DESIGN + "\n## Already there\n- app/subscribers.py keeps the season tickets: used as it is.\n")[0], 0)
+
+    def test_a_project_with_only_its_planning_and_a_readme_has_no_code(self):
+        (self.planning.parent / "README.md").write_text("# Playhouse\n", encoding="utf-8")
+        self.assertNotIn("already has code", self.run_("next", DESIGN)[1])
+        self.assertEqual(self.run_("draw", DESIGN)[0], 0)
+
     def test_what_goes_back_keeps_the_design_open(self):
         code, said = self.run_("draw", DESIGN + "\n## Goes back\n- approach: telling a subscriber by email needs a way to send one, which the approach does not have.\n")
         self.assertEqual(code, 0, said)

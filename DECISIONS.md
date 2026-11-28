@@ -668,6 +668,22 @@ asking is listed apart, so it can be overturned.
     tactical part, with what it reads and asks of the others; how
     it looks is not said there.
 
+- After the pilot of stage 10 (2026-11-28, $10.70), chosen without
+  asking, and run by no session yet:
+  - The script says when the project already has code, in `next`,
+    and refuses a design with no `## Already there` there: Sonnet
+    designed the case with code without opening a file of it.
+  - A state goes back to research only when a person is shown it or
+    can act in it; a state of a decision's own mechanism is that
+    decision's. What an earlier stage recorded and settled does not
+    go back again. In the cases every Sonnet design sent one to two
+    things back, Haiku up to eight.
+  - The cases no longer ask that nothing goes back: the made-up
+    slice does lack a state its own open fact shows the person, and
+    sessions were right to say so. What goes back is read instead.
+  - The check that the code was read named a tool the grader does
+    not have (`*`); it reads the transcript now.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
