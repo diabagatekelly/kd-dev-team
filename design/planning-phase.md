@@ -195,7 +195,7 @@ proposal to begin with research): stage 0, then 1, 2, 3 and on, one
 stage at a time, each with its test read by the owner before the
 next. The order itself changed on 2026-11-23 (decision 36): the slice
 before any dependency is chosen, research after. Stage 4 has its measure and holds
-(`../steps/04-slice/README.md`, decision 39). Stage 5 holds (`../steps/05-approach/README.md`, decision 41), and so does stage 6 (`../steps/06-research/README.md`, decision 44), with the owner's condition that the gaps research leaves are shown closed once stages 7 to 9 are stacked on it. Stage 7's test is proposed (`../steps/07-questions/README.md`). Stages 10 and 11 have no measure yet: each is agreed
+(`../steps/04-slice/README.md`, decision 39). Stage 5 holds (`../steps/05-approach/README.md`, decision 41), and so does stage 6 (`../steps/06-research/README.md`, decision 44), with the owner's condition that the gaps research leaves are shown closed once stages 7 to 9 are stacked on it. Stages 7, 7b and 8 hold (decisions 48, 51, 55). Stage 9 holds (`../steps/09-open-facts/README.md`, decisions 56 to 58). Stages 10 and 11 have no measure yet: each is agreed
 with the owner when the stage is reached, before its text is judged.
 
 ## 7. For the owner to decide

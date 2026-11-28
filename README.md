@@ -34,6 +34,8 @@ design are recorded under `next-plugin/validation/`.
 | `questions/`, `library/` | stage 7's script and the 290-entry library it reads (250, and 40 from OWASP's verification standard in four kinds: sign-in, stored data, files taken in, misuse); unit tests |
 | `steps/07b-security/eval/security-skill.md` | the security pass's text, 116 lines, adopted on Sonnet 5.5 (decision 51): six facts about the slice and what someone who means harm would want, written beside the questions; the script draws 30 fixed questions for the facts that hold and one for each row asked |
 | `steps/08-answers/eval/answers-skill.md` | stage 8's text, 144 lines, adopted on Sonnet 5.5 (decision 55): every drawn question settled by an answer of one of six kinds (fact, not here, look up, test, owner, chosen), and the criteria that follow |
+| `steps/09-open-facts/eval/open-facts-skill.md` | stage 9's text, 193 lines, adopted on Sonnet 5.5 (decision 58): each test the answers leave sorted (a page, a run, a person's, later), what can be settled settled, each claim read by a second reader, the owner's list read and brought once |
+| `openfacts/` | stage 9's script and the second reader's instructions: the tests the answers leave, the gravest first; one run only against a test environment its documentation names, what it printed kept under a seal and never a sentence of the script's own; a key typed at a hidden prompt; each claim handed to a fresh reader with only its words; the owner's list read, and what is taken off kept with its line; the drawing |
 | `answers/` | stage 8's script: which questions no answer settles yet, what the answers still need looked up, the refusals (a fact on no document, a claim about a thing committed to without its document's own words, a criterion on a guess, a wait with no number, a target chosen for the owner) and the drawing of the criteria, the owner's list, the tests and the choices |
 | `research/` | for stages 5 and 6: `page.py` reads a page of documentation as text through the VM's allowed sites, keeps a copy and checks every quote in a research document against its saved page; unit tests |
 | `e2e/` | the adopted stages run together on whole examples: a driver with a scripted user, the examples, and the table of what each run found and the test it became |
@@ -41,18 +43,20 @@ design are recorded under `next-plugin/validation/`.
 | `steps/02-scope-map/eval/scope-map-skill.md` | stage 2's text, 56 lines, the drawing of the scope map: adopted on Sonnet 5.5 (decision 24) |
 | `steps/03-requirements/eval/requirements-skill-kinds.md` | stage 3's text, 94 lines, the requirements of the map's "now" activity as a list to check off, with the planner's questions from a walk of nine kinds of gap: adopted on Sonnet 5.5 (decision 28); `startup/stage.sh` counts the list |
 
-## Where the work stands (2026-11-25)
+## Where the work stands (2026-11-26)
 
-Stages 0 to 8 hold, all on Sonnet 5.5: startup, the problem, the
+Stages 0 to 9 hold, all on Sonnet 5.5: startup, the problem, the
 scope map, the requirements, the slice, the approach, research,
-the questions with the security pass after them, and the answers.
+the questions with the security pass after them, the answers, and
+the tests of open facts.
 Research is done in two passes (decision 54): up front, and again,
 together, for what the answers need of a thing committed to. While
 a project is planned its VM reads any website and sends to none
-(decision 52). **Next is stage 9, the tests of open facts**, which
-also takes a second reader of each claim against its quotation and
-of the owner's list (decision 55), and after which the owner's list
-is brought to them once (decision 53). `HANDOFF.md` says where
+(decision 52), but to a provider's test environment the user
+allows (decision 56). **Stage 9 holds too (decision 58)**, with
+a second reader of each claim against its quotation and the owner's
+list read and brought once before the design. **Next is stage 10,
+the design.** `HANDOFF.md` says where
 everything is and what is owed.
 
 The table below is the state of 2026-11-23, when the first five

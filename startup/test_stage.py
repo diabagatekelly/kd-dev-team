@@ -95,16 +95,11 @@ class Stage(unittest.TestCase):
         # (decision 44) the first stage not built is the questions.
         # With the questions adopted (decision 48) it was the security pass (decision 46), with that
         # adopted (decision 51) the answers, and with those adopted (decision 55) the tests of open facts.
+        # ... and with those adopted (decision 58) the design.
         named = self.not_built()
-        self.assertIn("- next stage by the documents: tests of open facts", self.report())
-        self.assertRegex("tests of open facts", named)
-        self.assertNotRegex("answers", named)
-
-    def test_with_the_answers_on_trial_that_scenario_moves_on_to_the_tests_of_open_facts(self):
-        named = self.not_built("answers")
-        self.assertIn("- next stage by the documents: tests of open facts", self.report())
-        self.assertRegex("tests of open facts", named)
-        self.assertNotRegex("answers", named)
+        self.assertIn("- next stage by the documents: design", self.report())
+        self.assertRegex("design", named)
+        self.assertNotRegex("tests of open facts", named)
 
     def test_a_project_never_seen_has_no_planning_folder(self):
         out = self.report()
@@ -385,7 +380,9 @@ class Stage(unittest.TestCase):
 
     def draw(self, at, basis="kept.md", security=False):
         slice_folder = at.parent
-        together = b"".join((slice_folder / name).read_bytes() for name in
+        # As the questions' own script marks them: a research document without what was added to it later.
+        cut = the_questions_script().drawn_from
+        together = b"".join(cut(name.rsplit("/", 1)[-1], (slice_folder / name).read_bytes()) if "_research/" in name else (slice_folder / name).read_bytes() for name in
                             ("004_slice.md", "005_approach.md", "006_research/postbox.md", "006_research/states.md", f"{at.name}/{basis}",
                              *([f"{at.name}/security.md"] if security else [])))
         (at / "questions.md").write_text(f"# Questions\n\n<!-- drawn from: {the_questions_script().cksum(together)} -->\n", encoding="utf-8")
@@ -422,10 +419,10 @@ class Stage(unittest.TestCase):
         self.assertNotIn("out of order", out)
 
     # The answers (stage 8): answers.md is the session's, answered.md the script's, with their mark.
-    def answered(self, drawn=True):
+    def answered(self, drawn=True, text="# Answers\n\n## A1: A lost reply\nKind: test\nSays: Not known.\nTest: one.\nHarm: high\nSettles: C.x.O1\n"):
         self.secured()
         folder = self.machine.project / "planning/slice-001"
-        (folder / "008_answers.md").write_text("# Answers\n", encoding="utf-8")
+        (folder / "008_answers.md").write_text(text, encoding="utf-8", newline="\n")
         if drawn:
             mark = the_questions_script().cksum((folder / "007_questions/questions.md").read_bytes() + (folder / "008_answers.md").read_bytes())
             (folder / "008_answered.md").write_text(f"# Answered\n\n<!-- drawn from: {mark} -->\n", encoding="utf-8")
@@ -461,6 +458,99 @@ class Stage(unittest.TestCase):
         (folder / "008_answers.md").write_text("# Answers\n\nChanged.\n", encoding="utf-8")
         self.assertIn("answers (its document: planning/slice-001/008_answers.md, to draw again: the questions or the answers changed after "
                       "slice-001/008_answered.md was drawn; only what the change brings is answered)", self.report())
+
+    def test_what_research_adds_for_the_answers_or_from_a_test_does_not_send_the_session_back_to_the_questions(self):
+        # Met building stage 9: research's second pass added a fact and the questions were named as next again.
+        folder = self.answered()
+        for heading in ("## Looked up for the answers", "## Shown by a test"):
+            with (folder / "006_research/postbox.md").open("a", encoding="utf-8", newline="\n") as handle:
+                handle.write(f"\n{heading}\n- F90: Found later.\n")
+            self.assertIn("- next stage by the documents: tests of open facts (", self.report(), heading)
+        # A document whose lines end as Windows ends them is marked by its own bytes (met in CI: awk there rewrote them).
+        document = folder / "006_research/postbox.md"
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n- O9: later too.\r\n")
+        self.draw(folder / "007_questions", security=True)
+        self.assertIn("- next stage by the documents: answers (", self.report())   # the questions hold; the answers are to draw again from them
+        # Met on the real plans (the round): facts looked up later were added among the first ones, with no heading, and the questions went stale.
+        document.write_bytes(b"- F1: First.\r\n- F50: Looked up later, with no heading.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n\r\nNot opened: nothing.\r\n\r\n\r\n## Shown by a test\r\n- F91: Later.\r\n- F92: More.\r\n")
+        self.assertIn("- next stage by the documents: answers (", self.report())
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point, changed.\r\n- S1 AGREES: said.\r\n")
+        self.assertIn("- next stage by the documents: questions (", self.report())   # an open point changed is a question changed
+        document.write_bytes(b"- F1: First.\r\n- O1: An open point.\r\n- S1 AGREES: said.\r\n")
+        self.assertIn("- next stage by the documents: answers (", self.report())
+        with (folder / "006_research/states.md").open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write("\nA row changed.\n")
+        self.assertIn("- next stage by the documents: questions (", self.report())
+
+    # The tests of open facts (stage 9): open-facts.md is the session's, tested.md the script's, with the
+    # mark of the answers and the open facts and how many decisions still wait for the owner.
+    OWNER = "\n## A2: Who may refund\nKind: owner\nSays: Not said.\nOptions: a | b\nRecommended: a.\nIf left: a.\nHarm: high\nSettles: W.who\n"
+
+    def tested(self, waiting=0, drawn=True, **more):
+        folder = self.answered(**more)
+        (folder / "009_open-facts.md").write_text("# Open facts\n", encoding="utf-8", newline="\n")
+        if drawn:
+            mark = the_questions_script().cksum((folder / "008_answers.md").read_bytes() + (folder / "009_open-facts.md").read_bytes())
+            (folder / "009_tested.md").write_text(f"# Tested\n\n<!-- drawn from: {mark}; waiting: {waiting} -->\n", encoding="utf-8")
+        return folder
+
+    def test_with_the_tests_next_the_report_gives_their_commands(self):
+        self.answered()
+        out = self.report()
+        self.assertRegex(out, r"- the tests the answers leave, the gravest first, and the decisions for the owner not read yet: (CLAUDE_PLUGIN_DATA=\"[^\"]+\" )?python3 \".*openfacts\.py\" next planning/slice-001")
+        self.assertRegex(out, r"a test is run, and what it printed kept, only by: .*openfacts\.py\" run planning/slice-001 T1")
+        self.assertRegex(out, r"typed by the user at a hidden prompt, in a terminal of this VM, never in the conversation: CLAUDE_PLUGIN_DATA=\"[^\"]+\" python3 \".*openfacts\.py\" key NAME")
+        self.assertRegex(out, r"looked up as the answers' look-ups are: python3 \".*answers\.py\" lookups planning/slice-001")
+        self.assertRegex(out, r"read against the words it quotes by a second reader, which costs a little: .*openfacts\.py\" read planning/slice-001")
+        self.assertRegex(out, r"checked and drawn together by script: .*openfacts\.py\" draw planning/slice-001")
+        self.assertRegex(out, r"- a page of documentation is read with: python3 \".*page\.py\" fetch URL --to planning/slice-001/pages")
+
+    def test_answers_that_leave_nothing_to_test_and_nothing_to_decide_need_no_tests_stage(self):
+        self.answered(text="# Answers\n\n## A1: Chosen\nKind: chosen\nSays: x.\nRests on: y.\nSettles: L.a\n" + self.OWNER
+                      + 'Decided: a (the user, 2026-11-25: "a")\n')
+        out = self.report()
+        self.assertIn("- tests of open facts: not needed, the answers leave nothing to test and nothing for the owner to decide (slice-001/008_answers.md)", out)
+        self.assertIn("- next stage by the documents: design (its document: planning/slice-001/009_design.md)", out)
+        self.assertNotIn("openfacts.py\" next", out)
+
+    def test_a_decision_that_waits_for_the_owner_alone_keeps_the_tests_stage(self):
+        self.answered(text="# Answers\n" + self.OWNER)
+        self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md)", self.report())
+
+    def test_open_facts_written_and_not_drawn_keep_the_stage_next(self):
+        self.tested(drawn=False)
+        self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md, written in, and not yet "
+                      "drawn: the tests with no block and the decisions not read are still to do)", self.report())
+
+    def test_the_stage_is_done_once_drawn_with_no_decision_waiting(self):
+        self.tested()
+        out = self.report()
+        self.assertIn("tests of open facts (slice-001/009_open-facts.md)", out)
+        self.assertIn("- next stage by the documents: design (its document: planning/slice-001/010_design.md)", out)
+        self.assertRegex(out, r"recorded in planning/slice-001/008_answers\.md, and the answers and the open facts drawn again: .*openfacts\.py\" draw planning/slice-001")
+        self.assertNotIn("out of order", out)
+
+    def test_drawn_with_decisions_waiting_the_list_is_brought_before_the_design(self):
+        self.tested(waiting=3)
+        out = self.report()
+        self.assertIn("- next stage by the documents: tests of open facts (its document: planning/slice-001/009_open-facts.md, drawn; 3 decisions wait for "
+                      "the owner: their list is brought to them now, once, the gravest first, and each decision they take is recorded)", out)
+        # Met in the pilot: a decision left "for now" stayed waiting, since the answers' text, which records decisions, knows nothing of leaving one.
+        self.assertRegex(out, r"- a decision the owner takes on their list is recorded in planning/slice-001/008_answers\.md, and one they leave is recorded there too "
+                              r"\(`Decided: left: <what happens then> \(the user, DATE: \"their words\"\)`\); both are then drawn again: .*openfacts\.py\" draw")
+
+    def test_open_facts_changed_after_the_drawing_are_to_be_drawn_again(self):
+        folder = self.tested()
+        (folder / "009_open-facts.md").write_text("# Open facts\n\nChanged.\n", encoding="utf-8")
+        self.assertIn("tests of open facts (its document: planning/slice-001/009_open-facts.md, to draw again: the answers or the open facts changed after "
+                      "slice-001/009_tested.md was drawn)", self.report())
+
+    def test_answers_changed_under_the_open_facts_come_first_and_nothing_is_called_out_of_order(self):
+        folder = self.tested()
+        (folder / "008_answers.md").write_text("# Answers\n\nChanged.\n", encoding="utf-8")
+        out = self.report()
+        self.assertIn("- next stage by the documents: answers (its document: planning/slice-001/008_answers.md, to draw again", out)
+        self.assertNotIn("out of order", out)
 
     def test_a_security_file_changed_after_the_drawing_has_the_questions_drawn_again(self):
         self.secured()
@@ -614,6 +704,9 @@ class Stage(unittest.TestCase):
         answers = next(at.parent.glob("*_answers.md"))
         mark = the_questions_script().cksum((at / "questions.md").read_bytes() + answers.read_bytes())
         answers.with_name(answers.name.replace("_answers", "_answered")).write_text(f"<!-- drawn from: {mark} -->\n", encoding="utf-8")
+        tests = next(at.parent.glob("*_open-facts.md"))
+        mark = the_questions_script().cksum(answers.read_bytes() + tests.read_bytes())
+        tests.with_name(tests.name.replace("_open-facts", "_tested")).write_text(f"<!-- drawn from: {mark}; waiting: 0 -->\n", encoding="utf-8")
         out = self.report()
         self.assertIn("- every planning document of slice 1 exists", out)
         self.assertIn("- next stage by the documents: none, slice 1 is planned and ready to build", out)

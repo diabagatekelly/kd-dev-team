@@ -24,7 +24,8 @@ SKILLS = {"problem": "steps/01-problem/eval/problem-skill.md",
           "research": "steps/06-research/eval/research-skill.md",
           "questions": "steps/07-questions/eval/questions-skill.md",
           "security": "steps/07b-security/eval/security-skill.md",
-          "answers": "steps/08-answers/eval/answers-skill.md"}
+          "answers": "steps/08-answers/eval/answers-skill.md",
+          "open-facts": "steps/09-open-facts/eval/open-facts-skill.md"}
 HOOK = """#!/bin/sh
 # The startup report of this machine and project, then what to do with it.
 sh "${CLAUDE_PLUGIN_ROOT}/startup/report.sh"
@@ -59,6 +60,9 @@ def main(folder, trial=None):
     write(folder / "library" / "library.json", (ROOT / "library" / "library.json").read_text(encoding="utf-8"))
     # The script that says which questions no answer settles, and draws the answers.
     write(folder / "answers" / "answers.py", (ROOT / "answers" / "answers.py").read_text(encoding="utf-8"))
+    # The script that sorts the tests the answers leave, runs one and draws them: the stage script names it once the answers are drawn.
+    write(folder / "openfacts" / "openfacts.py", (ROOT / "openfacts" / "openfacts.py").read_text(encoding="utf-8"))
+    write(folder / "openfacts" / "reader.md", (ROOT / "openfacts" / "reader.md").read_text(encoding="utf-8"))
     for name, source in {**SKILLS, **(trial or {})}.items():
         write(folder / "skills" / name / "SKILL.md", (ROOT / source).read_text(encoding="utf-8"))
     return folder

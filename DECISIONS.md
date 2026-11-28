@@ -609,6 +609,51 @@ asking is listed apart, so it can be overturned.
     of the owner's list, is for stage 9. What no session has run is
     listed in the stage's README.
 
+56. **Stage 9, the tests of open facts, is tested as proposed in
+    `steps/09-open-facts/README.md`** (the owner: "Yes to all 3",
+    2026-11-26), at about $170, with a pilot of about $12 first
+    whose real cost is reported before the rest is run. With it:
+    **a second reader of each claim against its quotation is built
+    and measured**, a model reading a model inside the product,
+    which grades nothing and decides nothing and can only send an
+    answer back to be looked up; and **the stage sends to a
+    provider's test environment, the one address the user allows,
+    with a key the user types** (decision 52's "sends to none"
+    holds for everything else). For the two real plans the owner
+    allows the provider's sandbox address for the evaluation VM and
+    types its test keys there.
+
+57. **One more round of stage 9 before the owner says whether it
+    holds** (the owner: "The round", 2026-11-26), about $25 past
+    the $170 of decision 56: a test prints what the thing answered
+    and not a sentence of its own; a test a run settled only in
+    part is sorted again; an item taken off the owner's list always
+    leaves its line. Then the cases five times and one real run a
+    plan.
+
+58. **Stage 9, the tests of open facts, holds on Sonnet 5.5** (the
+    owner: "Go ahead", 2026-11-26, to the recommendation that it
+    holds as it stands with its limits recorded, and to two small
+    changes of the text left unrun), with the text of 193 lines in
+    `steps/09-open-facts/eval/open-facts-skill.md`, the script
+    `openfacts/openfacts.py` and the second reader's instructions
+    in `openfacts/reader.md`: $212.77 against the $170 first agreed
+    and the round of decision 57. Its text is adopted and its
+    fifteen cases join the regression build. Known and accepted
+    with it: 65 of 75 on the cases, not 75; a session calls almost
+    nothing settled by a run in a test environment (1 of 12 in the
+    last two real runs), writing what was shown into the answer;
+    the same test is sorted differently from run to run; one key
+    fact of the first plan (an identifier that changes when a
+    connection is made again) is in no run, and is owed to the
+    library as a question; the reader is never run inside a case,
+    and no example takes a provider through the stage. The two
+    changes made after the last run, and run by no session: the
+    number of a fact a test showed is written as the next one, not
+    as an example's; what a call of the thing takes, returns or
+    refuses is settled by its test environment. What no session
+    has run is listed in the stage's README.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
@@ -670,6 +715,105 @@ asking is listed apart, so it can be overturned.
     research, which already has it.
   - kad's three skills are not an arm of the cases: they are set
     beside ours on the two real plans.
+
+- Stage 9, the tests of open facts, as built (2026-11-25), chosen
+  without asking; its test, its cost and three points of the owner's
+  are in `steps/09-open-facts/README.md`, and nothing paid has run:
+  - A test is sorted one of four ways: a page would say it (looked
+    up by research's second pass), one request to the thing's test
+    environment settles it (run), only a person can make it, or it
+    shows only in use. On three kept runs of the real plans, read,
+    about one test in five can be run and two thirds of the gravest
+    are the owner's own to make.
+  - A test is run by a command, never by the session's own shell:
+    it is sent only to an address the block names with the
+    documentation's own words that say it is a test environment,
+    what it printed is kept under a seal, and a result is given in
+    those words. Never the real thing, even at the user's word:
+    that test is theirs to make, and their word settles it.
+  - A key is typed by the user at a hidden prompt in a terminal of
+    the VM, kept outside the project, and taken out of whatever is
+    kept. One pasted into the conversation is not used.
+  - What a test shows is added to the thing's research document as
+    a fact, under `## Shown by a test`, so the answer rests on it
+    as on any fact and the answers' script is unchanged for it.
+  - A test left open says what the slice does either way; the ones
+    of high harm are shown to the owner with their list.
+  - The owner's list is read in the same file: each decision that
+    waits is theirs by one of four kinds, or taken off (a technical
+    choice, already decided, the same as another) with its answer
+    changed. More than twelve truly theirs stand, and are said.
+  - The stage is not done while a decision waits: the list is
+    brought, and the design does not start, until each is decided
+    or left at the owner's word (`Decided: left`).
+  - Answers that leave no test and no decision need no such stage:
+    the stage script passes it over.
+  - One command draws the answers and the open facts together.
+  - The examples' user, asked for a key or a site for a test, has
+    none; shown their list, takes what is recommended.
+  - The second reader of a claim against its quotation is not
+    built: it is the owner's first point.
+  - Met while building, and put right with unit tests: a fact the
+    second pass added made the questions stale and sent a session
+    back to them (their mark now leaves out what research adds
+    under its two later headings; one phrase of research's adopted
+    text names the heading); the answers' script took the words
+    between two quotations for a quotation. Both change adopted
+    things: every earlier stage is run once, and the answers'
+    look-up case five times, in stage 9's test.
+
+- Stage 9 as run (decision 56), 2026-11-26, chosen without asking;
+  $165.93 of about $170, put to the owner and not adopted:
+  - The second reader is a session of the tool's own, started by
+    the script with nothing but the claims and their words, twenty
+    at a time, on Sonnet (Haiku left a fifth unread in one run and
+    flagged nine in ten at first). The script keeps its verdicts
+    with a mark of each claim, so a changed answer is read again;
+    the drawing refuses a claim flagged or unread. On a machine
+    with no reader the drawing says the claims were read by nobody
+    but their writer, and the stage is not held.
+  - A claim is an answer that names the thing committed to, or
+    rests on a fact of its research document without naming it.
+  - What the reader still names after a second reading is taken
+    out of the answer; the choice and its criteria stay.
+  - A test no page settled is sorted again and keeps the pages
+    read; the script refuses it left as a page.
+  - Before a decision is read as the owner's, the documents are
+    looked in: what one already says is decided, scope or not.
+  - A run refused for a key it names is told the names of the keys
+    the machine has, never a value.
+  - A decision the owner leaves is recorded as left, by the
+    report's own line: the answers' adopted text is not changed.
+  - The owner's sandbox keys were piped from their keychain into
+    the evaluation VM at their word, shown nowhere.
+  - The examples' documents are kept again after every stage (the
+    owner's yes), the fourth's privately. A run that leaves no new
+    document for eight turns is stuck.
+  - Of an earlier stage: only a table headed "State" gives states.
+  - Known and left, for the owner's word on whether the stage
+    holds: a test's script may print a sentence of its own, and
+    that sentence is then quoted as the result; the same test is
+    sorted differently from run to run; an item taken off the
+    owner's list by changing its answer alone leaves no line.
+
+- The round (decision 57) as run, 2026-11-26; $212.77 in all, put
+  to the owner and not adopted:
+  - Each of the three changes is a refusal of the script as well as
+    a sentence of the text. The list as it stood when the stage
+    began is kept the first time the stage is asked, or read from
+    the answers' own drawing.
+  - Its first launch ran on the commit before it ($24.31, said to
+    the owner at once). A paid launch now begins with a check, by
+    checksum, that the VM, the built plugin and its texts are those
+    of the commit, and runs nothing otherwise.
+  - Of a research document the questions' mark covers only what
+    they are drawn from (its open points and what it says of the
+    planning documents), taken without Windows line ends.
+  - Known and left: after the round a session calls almost nothing
+    settled by a run in a test environment (1 of 12 run), writing
+    what was shown into the answer and leaving the test a person's;
+    the text's own example of a fact's number (`F31`) is copied in
+    one run of five.
 
 ## Put off to the stage that needs them
 

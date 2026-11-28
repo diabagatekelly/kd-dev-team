@@ -25,7 +25,7 @@ class Regress(unittest.TestCase):
 
     def test_every_stage_with_an_adopted_text_is_rebuilt(self):
         self.assertEqual([stage for stage, _, _ in regress.STAGES],
-                         ["00-startup", "01-problem", "02-scope-map", "03-requirements", "04-slice", "05-approach", "06-research", "07-questions", "07b-security", "08-answers"])
+                         ["00-startup", "01-problem", "02-scope-map", "03-requirements", "04-slice", "05-approach", "06-research", "07-questions", "07b-security", "08-answers", "09-open-facts"])
 
 
 class Plugin(unittest.TestCase):

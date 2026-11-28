@@ -24,7 +24,7 @@ STAGES = [("00-startup", ["--table"], "plugin-table"), ("01-problem", ["text"], 
           ("02-scope-map", ["text"], "plugin-text"), ("03-requirements", ["kinds"], "plugin-kinds"), ("04-slice", ["text"], "plugin-text"),
           ("05-approach", ["text"], "plugin-text"), ("06-research", ["text"], "plugin-text"),
           ("07-questions", ["text"], "plugin-text"), ("07b-security", ["text"], "plugin-text"),
-          ("08-answers", ["text"], "plugin-text")]
+          ("08-answers", ["text"], "plugin-text"), ("09-open-facts", ["text"], "plugin-text")]
 
 
 def overlay(plugin, root=ROOT, trial=None):
@@ -33,7 +33,7 @@ def overlay(plugin, root=ROOT, trial=None):
         make_plugin.write(plugin / "skills" / name / "SKILL.md", (root / source).read_text(encoding="utf-8"))
     shutil.copy(root / "steps/00-startup/eval/routing-table.md", plugin / "hooks" / "routing-table.md")
     # The script the stage script names once the questions are next, and the library it reads.
-    for script in ("questions/questions.py", "library/library.json", "answers/answers.py"):
+    for script in ("questions/questions.py", "library/library.json", "answers/answers.py", "openfacts/openfacts.py", "openfacts/reader.md"):
         make_plugin.write(plugin / script, (root / script).read_text(encoding="utf-8"))
 
 

@@ -488,6 +488,54 @@ class Run(unittest.TestCase):
         # Not at turn 12: security is done and the answers begun, and nothing is drawn from them.
         self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers were drawn", 13))
 
+    # Carried on through the tests of open facts (stage 9): the answers leave a test, the open facts are
+    # drawn with two decisions waiting, the user takes what is recommended and they are drawn again.
+    OPEN_FACTS = ANSWERS.replace('write_text("# Answers\\n")', 'write_text("# Answers\\n\\n## A1: x\\nKind: test\\n")').replace(
+        '    if n == 99:\n', '    if n == 14:\n'
+        '        pathlib.Path("plans/slice-002/009_open-facts.md").write_text("# Open facts\\n")\n'
+        '        pathlib.Path("plans/slice-002/009_tested.md").write_text("<!-- drawn from: 1; waiting: 2 -->\\n")\n'
+        '    if n == 15:\n'
+        '        pathlib.Path("plans/slice-002/009_tested.md").write_text("<!-- drawn from: 2; waiting: 0 -->\\n")\n'
+        '    if n == 99:\n')
+
+    def test_carried_through_the_open_facts_it_ends_once_they_are_drawn_and_no_decision_waits(self):
+        self.assertIn("Kind: test", self.OPEN_FACTS)
+        summary, _ = self.through(fake=self.OPEN_FACTS, brief=self.SPOKEN, through="open-facts", turns=20)
+        # Not at turn 13 (the answers drawn, a test left) nor at 14 (drawn, two decisions waiting).
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the open facts were drawn and no decision waits for the owner", 15))
+
+    def test_answers_that_leave_nothing_to_test_or_decide_end_a_run_through_the_open_facts(self):
+        summary, _ = self.through(fake=self.ANSWERS, brief=self.SPOKEN, through="open-facts", turns=20)
+        self.assertEqual((summary["ended"], summary["session_turns"]), ("the answers left nothing to test and nothing for the owner to decide", 13))
+
+    def test_a_decision_still_waiting_in_the_answers_is_something_left(self):
+        planning = self.folder / "p"
+        (planning / "slice-001").mkdir(parents=True)
+        (planning / "slice-001/008_answers.md").write_text("## A1: x\nKind: owner\nOptions: a | b\n")
+        (planning / "slice-001/008_answered.md").write_text("drawn")
+        self.assertFalse(run.nothing_to_test(planning))
+        (planning / "slice-001/008_answers.md").write_text('## A1: x\nKind: owner\nDecided: a (the user, 2026-11-25: "a")\n\n## A2: y\nKind: chosen\n')
+        (planning / "slice-001/008_answered.md").write_text("drawn")
+        self.assertTrue(run.nothing_to_test(planning))
+
+    def test_shown_their_list_or_asked_for_a_test_key_the_user_has_plain_answers_unless_the_brief_says_otherwise(self):
+        brief = run.Brief(BRIEF)
+        self.assertEqual(brief.reply({"asked": ["test-access", "decide"], "uncovered": 0}, set(), False),
+                         "I have no test account for it. Go on without it. I take what you recommend for each of them.")
+
+    def test_the_open_facts_are_kept_with_their_drawing_and_their_tests(self):
+        self.kept()
+        folder = self.folder / "done" / "project" / "plans" / "slice-002"
+        (folder / "009_open-facts.md").write_text("written")
+        (folder / "009_tested.md").write_text("drawn")
+        (folder / "009_tests").mkdir()
+        (folder / "009_tests" / "T1.sh").write_text("echo")
+        (folder / "009_tests" / "T1.out").write_text("# seal")
+        kept = run.keep(self.folder / "done", self.example, "open-facts", self.folder / "plugin")
+        for name in ("009_open-facts.md", "009_tested.md", "009_tests/T1.sh", "009_tests/T1.out"):
+            self.assertTrue((kept / "slice-002" / name).is_file(), name)
+        self.assertFalse((run.keep(self.folder / "done", self.example, "answers", self.folder / "plugin") / "slice-002" / "009_tested.md").exists())
+
     def test_the_answers_are_kept_with_their_drawing(self):
         self.kept()
         folder = self.folder / "done" / "project" / "plans" / "slice-002"
@@ -510,6 +558,25 @@ class Run(unittest.TestCase):
         # What the session and the script write in the questions folder carries the folder's number, not one of its own.
         planning = self.folder / "out" / "project" / "plans"
         self.assertEqual(sorted(path.name for path in run.in_a_folder_of_its_stage(planning)), ["kept.md", "questions.md", "states.md"])
+
+    def test_a_user_who_says_two_things_in_turn_to_a_session_that_writes_nothing_is_stuck_too(self):
+        # Met with the fourth example through stage 9: "Go on", "I don't know yet" and a longer answer, in turn, for 29 turns and $15.
+        (self.example / "brief.md").write_text(BRIEF.replace("| scope-map | Put the second one first. |", "").replace("At most 1.", ""))
+        fake = self.folder / "fake.py"
+        fake.write_text(FAKE.replace("if n == 3:", "if n == 99:"))
+        sorter = self.folder / "sorter.json"
+        sorter.write_text('{"asked": ["today"], "uncovered": 0, "asks": true}')
+        real_ask, calls = run.ask, []
+
+        def ask(command, prompt, cwd, extra, env=None):
+            calls.append(1)   # the sorter's pick changes every other call, so the user never says one thing twice running
+            sorter.write_text('{"asked": ["today"], "uncovered": 0, "asks": true}' if len(calls) % 4 < 2 else '{"asked": [], "uncovered": 1, "asks": true}')
+            return real_ask(command, prompt, cwd, extra, env)
+
+        from unittest import mock
+        with mock.patch.object(run, "ask", ask):
+            summary = run.run(self.example, self.folder / "out", self.folder / "plugin", "m", "s", 30, command=(sys.executable, str(fake)))
+        self.assertEqual(summary["ended"], "stuck: 8 turns left no new document")
 
     def test_the_questions_never_drawn_end_the_run_as_stuck(self):
         summary, _ = self.through(fake=self.QUESTIONS.replace("if n == 10:", "if n == 98:"), brief=self.SPOKEN, through="questions")

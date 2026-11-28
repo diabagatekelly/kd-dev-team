@@ -189,7 +189,8 @@ def problems(answers, ids, slice_read):
                 if re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I) and not any(doc == stem and mark[0] in "FS" for doc, mark in cited):
                     say(f"it speaks of {thing} and rests on no fact of {stem}.md (`{stem} F1`): name the fact, or make it a `look up`")
                 elif re.search(r"\b" + re.escape(thing) + r"\b", speaks, re.I):
-                    quoted = [each for each in re.findall(r'"([^"]{12,})"', plain(rests))]
+                    # Quote marks are taken in pairs: the words between one quotation's end and the next one's start are not a quotation.
+                    quoted = [each for each in re.findall(r'"([^"]*)"', plain(rests)) if len(each) >= 12]
                     if not quoted:
                         say(f"it speaks of {thing}: `Rests on` gives the words of {stem}.md it rests on, in quotes (twelve letters or more)")
                     for each in quoted:

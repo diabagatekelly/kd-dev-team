@@ -1,17 +1,25 @@
-# Slices: Invoice clients for the month
+# Slices: invoice clients for the month
 
 | # | Slice | Items | Builds on | State |
 |---|---|---|---|---|
-| 1 | Enter a walk as a walker | walker-walk-entry | nothing | chosen |
-| 2 | Correct a walker's entry | owner-walk-correction | 1 | open |
-| 3 | Make a client's invoice from a month's walks | monthly-client-invoice | 1 | open |
-| 4 | Get a Tallypay payment link for an invoice | invoice-payment-link | 3 | open |
-| 5 | Get invoices and their payment links to clients | monthly-client-invoice, invoice-payment-link | 3, 4 | open |
-| 6 | Start a month from the usual weekly walks | month-from-usual-walks | 1 | open |
+| 1 | Give a client the month's invoice at list prices | monthly-client-invoice | nothing | chosen |
+| 2 | Send a client the payment link for an invoice | invoice-payment-link | 1 | open |
+| 3 | See which clients have not paid | see-who-unpaid | 2 | open |
+| 4 | Add something missing from the price list, then charge it | price-list-addition | 1 | open |
+| 5 | Invoice walks from before and after a price change | monthly-client-invoice | 1 | open |
 
 ## Where to start
-- Recommended first: slice 1. It shows a walker's walk recorded from their phone, it needs no other slice, and every other slice builds on it, directly or through another.
-- Slice 1 can be started now. Slices 2 and 3 can be started once 1 is built, and slice 4 once 3 is. Their ordinary path does not depend on an unanswered question; the answers may still add to them or to the requirements.
-- Slice 3 covers only walks at the list price for their length, as one invoice for one client. Anything else on an invoice, changing prices in the product and other invoicing arrangements wait on questions 2 and 6.
-- Slice 5 cannot be started: whether the business owner must check or change invoices before clients get them is not decided (question 4). Questions 5, 7 and 8 also bear on it.
-- Slice 6 cannot be started: where the usual weekly walks come from, who changes them and who starts a month from them are unanswered (question 1).
+Slice 1 is chosen and started at the owner's word. Its criteria are written, but its build waits on questions 1, 4 and 5. No other slice can be started yet. The numbers below are those of the questions under "Not yet confirmed" in the requirements.
+
+- Slice 1 waits on question 1 (what a client's name on a price list row means, which could change what is charged), question 4 (checking before clients get invoices) and question 5 (one, several or shared invoices).
+- Slice 2 waits for slice 1.
+- Slice 3 waits for slice 2.
+- Slice 4 waits for slice 1 and on questions 1 and 2.
+- Slice 5 waits for slice 1 and on question 2 (whether prices change, and which price is then charged).
+
+Questions 3 (putting a wrong invoice right) and 6 (what must come across) hold back no slice as listed, but their answers could add items.
+
+Recommended first, and chosen: slice 1. It shows the owner a month's invoice made from walks and list prices, and every other slice builds on it, directly or through another.
+
+## What changed
+- Slice 1 was started before questions 1, 4 and 5 were answered, and what waits is marked in its document. The owner's words: "Start it now, and mark what waits on my decision."

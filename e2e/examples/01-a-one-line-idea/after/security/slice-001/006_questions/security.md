@@ -3,19 +3,19 @@
 ## Facts about the slice
 | Fact | Holds | Source |
 |---|---|---|
-| browser | yes | The documents do not say how the list keeper uses it (slice-001/004_slice.md, Thin path) |
-| network | yes | The documents do not say whether it answers requests at a network address (slice-001/004_slice.md, Thin path) |
-| calls-out | no | "Outside systems: none." (002_requirements.md); the slice's "Needs from outside" is "none" |
-| dependency | yes | The documents do not say what it is made from (slice-001/004_slice.md) |
-| several-people | yes | "The committee can see the waiting list." and "A person on the waiting list can see where they stand on it" (002_requirements.md) |
-| unguessable | yes | The documents do not say whether it makes any such value (slice-001/004_slice.md) |
+| browser | yes | bring-notebook-order-across / 1: the list keeper is shown the list; the documents do not say it is not in a web browser |
+| network | yes | bring-notebook-order-across / 2: the list keeper comes back to the list; the documents do not say it answers no requests at a network address |
+| calls-out | no | slice-001/004_slice.md, "Needs from outside": none |
+| dependency | yes | bring-notebook-order-across / 1: the documents do not say it uses no component someone else wrote |
+| several-people | yes | 002_requirements.md, bring-notebook-order-across and see-where-they-stand: the list keeper keeps a list of other people, who are to see their own place |
+| unguessable | yes | bring-notebook-order-across / 2: the list keeper comes back to the list; the documents do not say no link, code or session is made for that |
 
 ## What someone who means harm would want
 | Wanted | Through | Worst from there | Asked |
 |---|---|---|---|
-| `waiting-details` | `list-view` | Someone not entitled to the list reads the names and places of the people waiting. | yes |
-| `waiting-details` | `carry-across` | Someone who can watch the list being carried across learns who is waiting and in what order. | yes |
-| `waiting-details` | `stored-list` | Someone who reaches the kept list or a copy of it takes everyone's names and places. | yes |
-| `waiting-list` | `carry-across` | Someone moves a friend higher or leaves a person out as the list is carried across, so that person loses their turn for a plot. | yes |
-| `waiting-list` | `carry-across` | Someone sends a different list, or an old one again, and it replaces the true order for everyone waiting. | yes |
-| `waiting-list` | `list-view` | Someone makes the list keeper be shown an order other than the one kept, so a wrong order is taken to be right. | yes |
+| `waiting-people` | `shown-list` | Someone other than the list keeper reads the names of the people waiting and the order they are in. | yes |
+| `waiting-people` | `bringing-across` | Someone who can read what passes while the list is brought across learns who is waiting and in what order. | yes |
+| `waiting-people` | `way-back-in` | Someone gets in as the list keeper and reads the name and place of everyone waiting. | yes |
+| `waiting-list` | `bringing-across` | Someone who wants a plot sooner gets a changed order brought across, in their own way or in the list keeper's name, and a person who has waited longer is put behind. | yes |
+| `waiting-list` | `way-back-in` | Someone takes over the way in and shuts the list keeper out, who can no longer see the list they brought across. | yes |
+| `waiting-list` | `shown-list` | A person waiting gives a name written to be acted on rather than read, and when it is shown to the list keeper the list they see or the list kept is changed. | yes |

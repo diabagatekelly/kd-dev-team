@@ -2,9 +2,10 @@
 # Stand-in for curl, for tests: a made-up web under $STANDIN_STATE/web.
 #   web/allowed            one host a line: what the VM lets through; any other host answers 403
 #   web/pages/HOST/PATH    a page's body ("index" for the site's first page); PATH.down answers 503
+#   web/keys/HOST          a key that host demands: a call that does not carry it anywhere answers 401
 S="${STANDIN_STATE:?}/web"
 { printf 'curl %s\n' "$*" >> "$STANDIN_STATE/calls.log"; } 2>/dev/null
-out=""; format=""; url=""
+out=""; format=""; url=""; all="$*"
 while [ $# -gt 0 ]; do
   case "$1" in
     -o) out=$2; shift ;;
@@ -18,6 +19,7 @@ rest=${url#*://}; host=${rest%%/*}; path=${rest#"$host"}; path=${path%%[?#]*}; p
 [ -n "$path" ] || path=index
 code=200; body=""
 if ! grep -qx "$host" "$S/allowed" 2>/dev/null; then code=403; body="Blocked by network policy: $host is not on this VM's list."
+elif [ -f "$S/keys/$host" ] && ! printf '%s' "$all" | grep -qF "$(cat "$S/keys/$host")"; then code=401; body='{"error": "invalid_key", "message": "No valid key was sent."}'
 elif [ -f "$S/pages/$host/$path.down" ]; then code=503; body="Service unavailable."
 elif [ -f "$S/pages/$host/$path" ]; then body=$(cat "$S/pages/$host/$path")
 else code=404; body="Not found."; fi

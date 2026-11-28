@@ -23,6 +23,9 @@ PAGE="python3 \"$(cd "$(dirname "$0")" && pwd)/../research/page.py\""
 QUESTIONS="python3 \"$(cd "$(dirname "$0")" && pwd)/../questions/questions.py\""
 # And the one that says which questions no answer settles yet, and draws the answers.
 ANSWERS="python3 \"$(cd "$(dirname "$0")" && pwd)/../answers/answers.py\""
+# And the one that sorts the tests the answers leave, runs one and keeps what it printed, and draws them.
+OPEN="python3 \"$(cd "$(dirname "$0")" && pwd)/../openfacts/openfacts.py\""
+[ -z "${CLAUDE_PLUGIN_DATA:-}" ] || OPEN="CLAUDE_PLUGIN_DATA=\"$CLAUDE_PLUGIN_DATA\" $OPEN"
 store="${CLAUDE_PLUGIN_DATA:-$HOME/.kd-dev-team}/planning-folders"
 
 inside() { case "$1" in /*|[A-Za-z]:*) say "$1" ;; *) say "$root/$1" ;; esac; }
@@ -67,6 +70,31 @@ stack and repository|SLICE/stack.md
 readiness|SLICE/readiness.md
 the owner's list|SLICE/owner-list.md
 STAGES
+}
+
+# A research document as the questions were drawn from it: what the answers had looked up and what
+# a test showed are added under headings of their own, and do not make the questions stale.
+ADDED_LATER='^## (Looked up for the answers|Shown by a test)'
+before_the_answers() {
+  # Only a number is taken from awk, and the lines are then copied as they are: awk on Windows
+  # rewrites the ends of lines, and the mark must be of the document's own bytes.
+  keep=$(awk -v added="$ADDED_LATER" '$0 ~ added { found = 1; exit } $0 !~ /^[ \t\r]*$/ { last = NR } END { print (found ? last + 0 : -1) }' "$1")
+  if [ "$keep" = -1 ]; then cat "$1"; elif [ "$keep" != 0 ]; then head -n "$keep" "$1"; fi
+}
+
+# What the answers leave for the stage after them: "@tests N" answers still a test, "@waiting N"
+# decisions for the owner not yet taken.
+LEFT='
+function close_block() { if (kind == "test") tests++; if (kind == "owner" && !decided) waiting++; kind = ""; decided = 0 }
+/^## A[0-9]+/ { close_block(); next }
+/^Kind:/ { kind = tolower($0); sub(/^kind:[ \t]*/, "", kind); sub(/[ \t\r]+$/, "", kind); next }
+/^Decided:[ \t]*[^ \t\r]/ { decided = 1 }
+END { close_block(); print "@tests " tests + 0; print "@waiting " waiting + 0 }'
+
+# What the questions are drawn from in a research document: the states whole, and of a thing committed to only
+# its open points and what it says of our documents (lines "- O1" and "- S1"). A fact added afterwards changes none.
+drawn_from() {
+  case "$1" in */states.md|states.md) cat "$1" ;; *) before_the_answers "$1" | grep -E '^[[:space:]]*[-*] [OS][0-9]+' | tr -d '\r' ;; esac   # grep on Windows drops the ends of its lines, elsewhere it keeps them
 }
 
 # The latest numbered entry of that name in a folder, or nothing.
@@ -315,7 +343,7 @@ report() {
     slice=${slice:-slice-001}
   fi
   found=""; missing=""; next=""; disorder=""; needs=""; approach=""; counted=""; skipped=""; research=""
-  rfolder=""; stale=""; qfolder=""; qstate=""; adone=""
+  rfolder=""; stale=""; qfolder=""; qstate=""; adone=""; odone=""; obrought=""
   own=""; [ -z "$slice" ] || own=$(numbered "$dir/$slice" "slice.md")
   [ -z "$own" ] || needs=$(awk "$NEEDS" "$dir/$slice/$own")
   while IFS='|' read -r name document; do
@@ -391,7 +419,7 @@ report() {
             # The security pass writes security.md beside it, and the questions are drawn again with
             # it: the mark is then of that file too, after the others.
             marked() { (cd "$dir" && { cat "$slice/$own"; [ -z "$approach" ] || cat "$approach"
-                      [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do cat "$rfolder/$file"; done
+                      [ -z "$rfolder" ] || for file in $(cd "$rfolder" && LC_ALL=C ls *.md 2>/dev/null); do drawn_from "$rfolder/$file"; done
                       cat "$qfolder/$basis"; [ -z "$1" ] || cat "$qfolder/security.md"; }) 2>/dev/null | cksum | awk '{ print $1 }'; }
             qstate=stale
             if grep -q "drawn from: $(marked "") " "$dir/$qfolder/questions.md"; then
@@ -447,6 +475,39 @@ report() {
             || owes="written in, and not yet drawn: the questions no answer settles are still to answer"
           missing="${missing:+$missing, }$name"
           [ -n "$next" ] || next="answers (its document: $folder/$under$is, $owes)"
+          continue
+        fi ;;
+      "tests of open facts")
+        # The tests of open facts, counted: open-facts.md is the session's, and tested.md is drawn from
+        # it and the answers by script. The stage is done while that drawing carries their mark and no
+        # decision waits for the owner: their list is brought to them once, here, before the design
+        # (decision 53). Answers that leave nothing to test and nothing to decide need no such stage.
+        if [ "$there" = yes ] && [ -n "$adone" ]; then
+          tested="$under${is%_open-facts.md}_tested.md"
+          stamp=$(grep "drawn from: $( (cat "$dir/$adone" "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }'); waiting: " "$dir/$tested" 2>/dev/null | sed 's/.*waiting: \([0-9]*\).*/\1/' | head -1)
+          odone="$under$is"
+          if [ "$stamp" = 0 ]; then
+            found="${found:+$found, }$name ($under$is)"
+            continue
+          fi
+          missing="${missing:+$missing, }$name"
+          if [ -n "$stamp" ]; then
+            obrought=$stamp
+            owes="drawn; $stamp decisions wait for the owner: their list is brought to them now, once, the gravest first, and each decision they take is recorded"
+          elif [ -f "$dir/$tested" ]; then
+            owes="to draw again: the answers or the open facts changed after $tested was drawn"
+          else
+            owes="written in, and not yet drawn: the tests with no block and the decisions not read are still to do"
+          fi
+          [ -n "$next" ] || next="$name (its document: $folder/$under$is, $owes)"
+          continue
+        elif [ "$there" = yes ]; then
+          # Written, and the answers are being changed or drawn again: they come first, and say so themselves.
+          missing="${missing:+$missing, }$name"
+          continue
+        elif [ -n "$adone" ] && [ "$(awk "$LEFT" "$dir/$adone" | tr '\n' ' ')" = "@tests 0 @waiting 0 " ]; then
+          skipped="${skipped:+$skipped
+}- tests of open facts: not needed, the answers leave nothing to test and nothing for the owner to decide ($adone)"
           continue
         fi ;;
     esac
@@ -525,7 +586,7 @@ STAGES
       fi ;;
   esac
   case "$next" in
-    approach*|research*|answers*)
+    approach*|research*|answers*|"tests of open facts"*)
       say "- a page of documentation is read with: $PAGE fetch URL --to $folder/$slice/pages"
       say "  and every quote written from one is then looked for in its saved page: $PAGE check $folder/$slice/pages DOCUMENT"
       kept=$(ls "$dir/$slice/pages"/*.txt 2>/dev/null | wc -l | tr -d ' ')
@@ -543,9 +604,19 @@ STAGES
       say "- what a question may apply to, and the library's kinds: $QUESTIONS things $folder/$slice"
       say "  the questions of a kind, every kind read, four or five at a time: $QUESTIONS library KIND KIND ..."
       say "  the questions are drawn from kept.md by script, never written by hand: $QUESTIONS draw $folder/$slice" ;;
+    "tests of open facts"*)
+      say "- the tests the answers leave, the gravest first, and the decisions for the owner not read yet: $OPEN next $folder/$slice"
+      say "  a test is run, and what it printed kept, only by: $OPEN run $folder/$slice T1"
+      say "  a key of a test environment is typed by the user at a hidden prompt, in a terminal of this VM, never in the conversation: $OPEN key NAME"
+      say "  what a page would say is looked up as the answers' look-ups are: $ANSWERS lookups $folder/$slice"
+      say "  each answer that speaks of a thing committed to is read against the words it quotes by a second reader, which costs a little: $OPEN read $folder/$slice"
+      say "  the answers and the open facts are checked and drawn together by script: $OPEN draw $folder/$slice"
+      if [ -n "$obrought" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and one they leave is recorded there too (\`Decided: left: <what happens then> (the user, DATE: \"their words\")\`); both are then drawn again: $OPEN draw $folder/$slice"
+      else say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;
     *)
       # The answers stay the place a decision of the owner's is recorded, whatever stage is next.
-      [ -z "$adone" ] || say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice" ;;
+      if [ -n "$odone" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers and the open facts drawn again: $OPEN draw $folder/$slice"
+      elif [ -n "$adone" ]; then say "- a decision the owner takes on their list is recorded in $folder/$adone, and the answers drawn again: $ANSWERS draw $folder/$slice"; fi ;;
   esac
   if [ -n "$next" ]; then say "- next stage by the documents: $next"; return 0; fi
   # A slice fully planned goes to the build; it is built when merged work names its criteria.

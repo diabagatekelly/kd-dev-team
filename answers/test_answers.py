@@ -206,6 +206,12 @@ class Refused(Folder):
         self.assertIn('"a request is refused after a minute." is not in payright.md or a page kept',
                       self.refused(FACT.replace("refused after 30 seconds.\"", "refused after a minute.\"")))
 
+    def test_the_words_between_two_quotations_are_not_taken_for_one(self):
+        # Met building stage 9: after a short quotation, what followed up to the next quote mark was looked for as words of the page.
+        rests = 'Rests on: payright F3: "refused" (said of every call, whatever it carries) "A request is refused after 30 seconds."'
+        self.write(FACT.replace('Rests on: payright F3: "A request is refused after 30 seconds."', rests) + REST)
+        self.assertEqual(self.run_it("draw")[0], 0)
+
     def test_the_words_may_be_those_of_a_page_kept_for_the_slice_and_differ_in_case_and_spacing(self):
         (self.slice / "pages").mkdir()
         (self.slice / "pages" / "docs.payright.example-payments.txt").write_text("URL: x\nA payment\n  is abandoned after 30 SECONDS.\n")

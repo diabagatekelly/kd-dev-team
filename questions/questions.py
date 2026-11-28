@@ -227,7 +227,16 @@ def states(states_text):
         if "owner" in heading.lower():
             dead = [line.strip()[2:].strip() for line in lines if line.strip().startswith(("- ", "* "))]
             continue
-        table = rows(lines)
+        # Only a table of states: one whose first column is headed "State". A second table under the same heading (met with
+        # the fourth example: undecided points, written as a table) had its heading and every row drawn as states of the thing.
+        table, block = [], []
+        for line in [*lines, ""]:
+            if line.strip().startswith("|"):
+                block.append(line)
+                continue
+            if block and re.sub(r"[`*\s]", "", block[0].strip().strip("|").split("|")[0]).lower() == "state":
+                table += rows(block)
+            block = []
         if table:
             things[heading] = [(row[0].strip("` "), row[-1], row) for row in table if row and row[0].strip("` ")]
     return things, dead
@@ -257,6 +266,35 @@ def carried(research, standing=None):
     return found
 
 
+ADDED_LATER = re.compile(rb"^## (Looked up for the answers|Shown by a test)", re.M)
+
+
+def before_the_answers(data):
+    """A research document as the questions were drawn from it: what the answers had looked up and
+    what a test showed are added under headings of their own, and do not make the questions stale
+    (met building stage 9: a fact added by the second pass sent a session back to the questions)."""
+    found = ADDED_LATER.search(data)
+    if not found:
+        return data
+    lines = data[:found.start()].split(b"\n")[:-1]
+    while lines and not lines[-1].strip(b" \t\r"):   # the empty lines left before the heading are not the document's
+        lines.pop()
+    return b"".join(line + b"\n" for line in lines)
+
+
+CARRIED = re.compile(rb"\s*[-*] [OS]\d+")
+
+
+def drawn_from(name, data):
+    """What the questions are drawn from in a research document: the states whole, and of a thing committed to only its
+    open points and what it says of our documents. A fact added to it afterwards changes no question (met on the real
+    plans, the round: looked-up facts were added among the others, with no heading, and every run went back to the questions)."""
+    if name == "states.md":
+        return data
+    # Without the ends Windows gives its lines: the stage script takes these lines with grep, which there drops them (met in CI).
+    return b"".join(line.replace(b"\r", b"") + b"\n" for line in before_the_answers(data).split(b"\n") if CARRIED.match(line))
+
+
 def read_slice(folder):
     """The slice's documents as they stand: the latest of each by its number."""
     folder = pathlib.Path(folder)
@@ -267,8 +305,8 @@ def read_slice(folder):
 
     slice_doc, approach, research, kept = latest("[0-9]*_slice.md"), latest("[0-9]*_approach.md"), latest("[0-9]*_research"), latest("[0-9]*_questions")
     # In the order the stage script reads them for the same mark: the slice, the approach, research by name.
-    documents = [path.read_bytes() for path in [slice_doc, approach] + (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])
-                 if path and path.is_file()]
+    documents = [path.read_bytes() for path in [slice_doc, approach] if path and path.is_file()]
+    documents += [drawn_from(path.name, path.read_bytes()) for path in (sorted(research.glob("*.md"), key=lambda each: each.name) if research else [])]
     return {
         "folder": folder,
         "slice": slice_doc.read_text(encoding="utf-8") if slice_doc else "",

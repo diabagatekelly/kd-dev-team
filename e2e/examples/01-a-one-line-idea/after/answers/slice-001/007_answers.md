@@ -1,387 +1,478 @@
-# Answers: slice 1
-
-## A1: The notebook's people are shown once each, in its order
+## A1: The notebook stays the list to go by
 Kind: fact
-Says: Carrying the list across shows the list keeper every person in the notebook list, each once, in the notebook's order, and nobody else.
-Rests on: criterion notebook-order-kept / 1
-Settles: S.waiting-list.not-carried-across.notebook-order-kept-1
-Under: notebook-order-kept
+Says: This slice cannot change the list once it is brought across. The notebook is still kept up to date as today and is there to check against, so it stands where the two differ.
+Rests on: slice-001/004_slice.md, "Left for later": the notebook can still be kept up to date as it is today, and still holds the order to check against.
+Settles: L.sync-11.waiting-list, W.unavailable
 
-## A2: Entered, checked, then kept by one deliberate step
+## A2: The list says it is a copy of the notebook
 Kind: chosen
-Says: The names are put in as an unfinished list that is not yet the waiting list. The list keeper can add, change, move and remove entries in it. The whole of it is then shown, numbered, to check against the notebook. It becomes the waiting list only through a separate "keep this list" step, which asks for confirmation, shows the number of people with the first and last names, and says that this version of the product cannot change the list afterwards. All checks are made before that step.
-Rests on: a mistake in order costs a person their turn, so it must be catchable before it is kept; a question that shows the count and both ends gives the reader something to check rather than a bare yes or no.
-Settles: L.user-action-09.carry-across
-Under: notebook-order-kept
-Criterion: Given an unfinished list holding the invented names Wren Example then Ash Sample, when the list keeper moves Ash Sample above Wren Example, then Ash Sample is shown first and Wren Example second.
-Criterion: Given a complete unfinished list, when the list keeper chooses to keep it, then they are shown the number of people, the first and last names and a warning that it cannot then be changed, and nothing is kept until they confirm.
+Says: The product cannot know what has since been written in the notebook. The kept list says that it is the order as brought across, that later changes in the notebook are not in it, and that the notebook is the one to go by. It does not compare the two. Before anything is brought across, it says that no list has been brought across yet.
+Rests on: A person must not take an old copy for the current order, and the product has no way to read the notebook.
+Settles: L.sync-01.waiting-list, L.sync-04.shown-list, S.waiting-list.behind-notebook.bring-notebook-order-across-2, S.waiting-list.behind-notebook.time, C.states.dead-end.2
+Under: bring-notebook-order-across
+Criterion: Given a list that has been brought across, when the list keeper opens it, then it says that changes made in the notebook since are not in it and that the notebook is the one to go by.
+Criterion: Given that nothing has been brought across, when the list keeper opens the list, then they see that no list has been brought across yet.
 
-## A3: The unfinished list is saved as it goes and can be left and resumed
+## A3: Checked as a whole, then kept all at once
 Kind: chosen
-Says: Each entry added, changed, moved or removed is saved when it is made, and is shown as saved only once it has been stored. Leaving, signing out, a reload, a discarded screen or a restart loses at most the one entry still being typed, and the keeper is warned before leaving with one typed but not added. On return the keeper finds the unfinished list, clearly marked as not yet the waiting list, and carries on or discards it. Discarding asks first and removes all of it. Nothing finishes it or keeps it without the keeper, however long it waits, and there is no stuck state to detect because it only moves when the keeper acts. How long an abandoned one may be held is part of the question of how long names are kept.
-Rests on: typing a whole notebook may take more than one sitting, and elderly or non-technical volunteers must be able to stop without losing work.
-Settles: L.durable-write-12.carry-across, L.startup-read-04.carry-across, L.lifecycle-04.carry-across, L.user-action-05.carry-across, L.user-action-06.carry-across, L.user-action-10.carry-across, L.user-action-11.carry-across, L.long-operation-03.carry-across, L.long-operation-04.carry-across, L.long-operation-05.carry-across, L.long-operation-06.carry-across, L.long-operation-09.carry-across, S.waiting-list.being-carried-across.notebook-order-kept-1, S.waiting-list.being-carried-across.reopened, S.waiting-list.being-carried-across.restart, S.waiting-list.being-carried-across.time, C.states.waiting-list.being-carried-across, C.states.dead-end.1
-Under: notebook-order-kept
-Criterion: Given an unfinished list with two added entries, when the product is restarted and the list keeper signs in, then both entries are there in the same order, marked as not yet kept.
-Criterion: Given a name typed but not yet added, when the list keeper tries to leave the screen, then they are warned that it will be lost.
-Criterion: Given an unfinished list, when the list keeper discards it and confirms, then nothing has been carried across and none of its names is shown.
+Says: The list keeper gives the people in order into an unfinished list. While it is unfinished they can correct, remove, add and move entries. Then they are shown the whole of it, numbered, with the number of people, and asked to confirm that it matches the notebook. Only that confirmation makes it the kept list, all of it or none of it. The confirmation says it cannot be changed afterwards in the product as this slice builds it, because putting right is left for slice 3. An unfinished list is never shown as the waiting list.
+Rests on: The order must be exactly the notebook's, a part list would put people in the wrong place, and one check of the whole list at the one step that matters is a question a person will still read.
+Settles: L.sync-08.bringing-across, L.durable-write-01.waiting-list, L.durable-write-06.waiting-list, L.durable-write-08.waiting-list, L.concurrency-02.waiting-list, L.concurrency-05.bringing-across, L.lifecycle-01.bringing-across, L.lifecycle-02.bringing-across, L.lifecycle-05.waiting-list, L.user-action-09.bringing-across, L.long-operation-08.bringing-across, S.waiting-list.not-brought-across.bring-notebook-order-across-1, S.waiting-list.being-brought-across.bring-notebook-order-across-1
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list of Person C, Person A and Person B, when the list keeper asks to finish, then they see all three numbered 1 to 3 in that order, the count of 3, and a question whether this matches the notebook, saying what confirming will fix.
+Criterion: Given a confirmed list of which only part reached storage, when the list keeper opens the product, then no part of it is shown as the kept list and the whole unfinished list is there.
+Criterion: Given an unfinished list with Person B placed before Person A by mistake, when the list keeper moves Person A above Person B and confirms, then the kept list has Person A before Person B.
 
-## A4: The list is kept whole or not at all
+## A4: Unfinished work is saved as it goes
 Kind: chosen
-Says: Keeping the list is one change: afterwards the whole list with its order is stored, or none of it is and the unfinished list is as it was. The people and their positions are written and read together, so no screen ever shows a part-kept list as the waiting list. "Your list is kept" is said only after the stored list has been read back and matches what was confirmed. There is never a half-made list to undo or clear by hand.
-Rests on: a part of a waiting list looks like a whole one and would drop people from their turn.
-Settles: L.sync-08.carry-across, L.durable-write-01.waiting-list, L.durable-write-02.carry-across, L.durable-write-06.waiting-list, L.concurrency-03.list-view, L.concurrency-05.list-view, L.lifecycle-01.carry-across, L.lifecycle-02.waiting-list, L.long-operation-07.carry-across, L.long-operation-08.carry-across
-Under: notebook-order-kept
-Criterion: Given a complete unfinished list, when keeping it is cut off partway and the product is next opened, then the list keeper is shown either the whole list as kept or the whole unfinished list marked as not kept, never part of either as kept.
-Criterion: Given a complete unfinished list, when storing the list fails, then the list keeper is not told it is kept.
+Says: Each entry is saved to the unfinished list as it is given, and is marked saved only once it is stored. Leaving, closing, reloading, a discarded screen or an interruption loses at most the entry not yet marked saved. On return the product shows the unfinished list, says that it is not finished, and lets the list keeper carry on or discard it. It never finishes by itself. Discarding asks first and removes every entry.
+Rests on: Giving about 40 entries takes a while, and a volunteer who is interrupted should neither lose the work nor end up with a part list taken for the whole.
+Settles: L.durable-write-12.bringing-across, L.startup-read-04.waiting-list, L.lifecycle-04.bringing-across, L.user-action-05.bringing-across, L.user-action-06.bringing-across, L.user-action-10.bringing-across, L.long-operation-03.bringing-across, L.long-operation-04.bringing-across, L.long-operation-05.bringing-across, L.long-operation-06.bringing-across, S.waiting-list.being-brought-across.reopened, S.waiting-list.being-brought-across.bring-notebook-order-across-2, C.states.waiting-list.being-brought-across
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list with two entries marked saved, when the list keeper closes the product and opens it again, then both are there in order, the list is marked unfinished, and they can carry on or discard it.
+Criterion: Given an unfinished list, when the list keeper chooses to discard it and confirms, then none of its entries is shown again and the product says no list has been brought across.
 
-## A5: A failed keep says so and leaves the unfinished list
+## A5: An unfinished list left alone
 Kind: chosen
-Says: If keeping fails for any reason (no space, a storage error, storage in use, read-only), the keeper is told the list is not kept, that their entries are still there, and to try again or contact whoever set the product up. The cause goes only into the record. Nothing is retried automatically, and there is no limit on the keeper's own later tries. A try after a failure is believed only once the stored list reads back as confirmed. Storage in use is waited for at most 10 seconds. A failed try never overwrites or removes what was saved before. If storing a single entry fails, the entry is shown as not saved.
-Rests on: an honest failure with the work preserved is safe whatever the storage does, and an automatic retry could report success falsely.
-Settles: L.durable-write-04.carry-across, L.durable-write-05.carry-across, L.concurrency-08.carry-across, L.concurrency-09.carry-across, L.logging-07.carry-across, S.waiting-list.carry-across-failed.*, C.states.waiting-list.carry-across-failed, C.states.dead-end.2
-Under: notebook-order-kept
-Criterion: Given a complete unfinished list and no storage space left, when the list keeper confirms keeping it, then they are told it is not kept, and the unfinished list is still there complete.
-Criterion: Given storage stays in use by something else, when the list keeper confirms keeping, then within 10 seconds they are told it is not kept and can try again.
-Criterion: Given a keep that failed, when the product is restarted, then the unfinished list is shown as not kept and nothing keeps it without the list keeper.
+Says: An unfinished list that nobody has touched for 30 days is removed, with its names. While it exists the product says when it will be removed in days left. The notebook still holds everything.
+Rests on: Names should not be kept for work that was given up, 30 days leaves time for a volunteer to come back, and nothing is lost that the notebook does not hold.
+Settles: L.lifecycle-08.bringing-across, S.waiting-list.being-brought-across.time
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list untouched for 30 days, when the list keeper next opens the product, then none of its names is shown and they are told it was removed and that they can start again from the notebook.
 
-## A6: What the keeper sees while keeping, and when no reply comes
+## A6: Nothing happens to a list by waiting
 Kind: chosen
-Says: On confirming, the screen at once says the list is being kept and the button cannot be used again. If no result has arrived after 30 seconds, the keeper is told it is not yet known whether the list was kept and to reload; reloading shows what is really stored. The keep step cannot be stopped once confirmed. A second request while one is running never makes a second list.
-Rests on: a visible state with a fixed give-up time tells working from stopped without claiming a result.
-Settles: L.user-action-01.carry-across, L.long-operation-01.carry-across, L.long-operation-02.carry-across, L.long-operation-11.carry-across, S.waiting-list.being-carried-across.again, L.concurrency-04.carry-across
-Under: notebook-order-kept
-Criterion: Given a complete unfinished list, when two confirmations to keep it arrive at the same moment, then one list is kept with each entry once.
-Criterion: Given a keep with no reply, when 30 seconds have passed, then the list keeper is told it is not known whether the list was kept and to reload.
+Says: Time alone neither starts a list nor changes or removes a kept one in this slice. How long names are kept at all is for the owner.
+Rests on: Removing or reordering a kept list unasked would change people's places.
+Settles: S.waiting-list.not-brought-across.time, S.waiting-list.brought-across.time
+Under: bring-notebook-order-across
+Criterion: Given a kept list of three people, when 90 days pass with nobody using the product, then it still shows the same three in the same order.
 
-## A7: A kept list cannot be carried over or replaced in this slice
-Kind: chosen
-Says: Once a list is kept, every request to add to it, change it, keep another or discard it is refused, whether it comes from a screen, an old page, a second window or a direct call, and the person is told a list is already kept and that this version cannot change it. This holds when the kept list is out of date or wrong. What should be done about a mistake found afterwards is on the owner's list.
-Rests on: the slice includes no changing of a kept list (003_slices.md), and silent replacement would let an old or altered list take the true order's place.
-Settles: L.concurrency-01.carry-across, L.misuse-01.carry-across, V.notebook-order.twice, S.waiting-list.carried-across.notebook-order-kept-1, S.waiting-list.carried-across.again, S.waiting-list.out-of-date.notebook-order-kept-1, S.waiting-list.out-of-date.again, S.waiting-list.wrong.notebook-order-kept-1, S.waiting-list.wrong.again
-Under: notebook-order-kept
-Criterion: Given a kept list, when a request to keep a different list is sent directly, then it is refused and the list keeper is still shown the first list unchanged.
-Criterion: Given a second window opened before the list was kept, when the list keeper adds an entry from it, then it is refused and they are told a list is already kept.
+## A7: The order kept is the order shown
+Kind: fact
+Says: Coming back to the list shows the same people in the same order as were brought across.
+Rests on: bring-notebook-order-across / 2
+Settles: S.waiting-list.brought-across.bring-notebook-order-across-2, L.long-operation-10.waiting-list
 
-## A8: Two windows cannot overwrite each other
+## A8: Nothing to come back to yet
 Kind: chosen
-Says: Every change says which version of the unfinished list it was made from. A change from an older version is refused, never merged or repeated by itself; the window says the list changed elsewhere and shows the current one. A window or device shows the current list on its next load or action; nothing is pushed to it. Only one running copy of the product may write the stored list, and stored changes are refused if the stored version has moved on.
-Rests on: refusing stale changes keeps the order from being altered without the keeper seeing it.
-Settles: L.concurrency-06.list-view, L.user-action-07.list-view, L.concurrency-12.waiting-list, L.startup-read-06.waiting-list
-Under: notebook-order-kept
-Criterion: Given two windows showing the same unfinished list, when one adds an entry and the other then moves an entry, then the move is refused and the second window shows the list including the added entry.
+Says: Coming back before anything is confirmed shows either that no list has been brought across or the unfinished list marked as unfinished. Reloading changes nothing, and doing it again at once changes nothing.
+Rests on: The list keeper must know which of the two they are looking at.
+Settles: S.waiting-list.not-brought-across.bring-notebook-order-across-2, S.waiting-list.not-brought-across.again, S.waiting-list.not-brought-across.reopened, L.misuse-01.bringing-across
+Under: bring-notebook-order-across
+Criterion: Given that nothing has been brought across, when a request is made to confirm a list or to see the kept list, then no list is kept or shown and the person is told that none has been brought across.
 
-## A9: Reloading, stepping back and saved addresses
+## A9: Only one list is ever brought across
 Kind: chosen
-Says: Reloading or stepping back never repeats a change. Every screen shows what is stored now: after keeping, stepping back shows the kept list with no way to enter or keep again. A saved address opened while signed out leads to sign-in and shows no name; one pointing at an unfinished list that no longer exists shows the current state.
-Rests on: showing only the current state avoids a second action and a stale order.
-Settles: L.user-action-02.list-view, L.user-action-03.list-view, L.user-action-12.list-view, S.waiting-list.not-carried-across.reopened, S.waiting-list.carried-across.reopened, S.waiting-list.out-of-date.reopened, S.waiting-list.wrong.reopened
-Under: notebook-order-kept
-Criterion: Given the list has just been kept, when the list keeper steps back and reloads, then they are shown the kept list once and are offered no way to keep it again.
-Criterion: Given nobody is signed in, when a saved address of the list is opened, then sign-in is shown and no name appears.
+Says: Once a list is kept, another cannot be brought across over it or added to it. Trying says that a list is already there and shows it. A second confirmation of the same list, from a double press, a reload or an old screen, changes nothing and shows the kept list. Putting it right is left for slice 3.
+Rests on: A second list replacing or joining the first would change people's places without anyone meaning it.
+Settles: L.sync-02.bringing-across, L.concurrency-09.bringing-across, L.long-operation-12.bringing-across, V.list-order.twice, S.waiting-list.brought-across.bring-notebook-order-across-1, S.waiting-list.brought-across.again, S.waiting-list.brought-across.reopened, S.waiting-list.behind-notebook.bring-notebook-order-across-1, S.waiting-list.behind-notebook.again, S.waiting-list.behind-notebook.reopened, L.user-action-02.shown-list, L.user-action-03.shown-list
+Under: bring-notebook-order-across
+Criterion: Given a kept list, when anyone tries to bring across another, then the kept list is unchanged and they are told one is already there.
+Criterion: Given the confirmation of a list has just succeeded, when the list keeper reloads or steps back and confirms again, then there is still one list with each person once, in the same order.
 
-## A10: Nothing carried across, and how old a list is
+## A10: One thing at a time, and stale screens refused
 Kind: chosen
-Says: With nothing entered, the keeper is told no list has been carried across and offered to start; a restart or any length of time changes nothing. A kept list shows the date it was kept and says that anything changed in the notebook since is not in it. "Nothing carried across" is shown only when the storage is reachable, recognised and empty.
-Rests on: a dated list cannot pass for a current one.
-Settles: L.sync-04.list-view, S.waiting-list.not-carried-across.again, S.waiting-list.not-carried-across.restart, S.waiting-list.not-carried-across.time, S.waiting-list.carried-across.restart, S.waiting-list.carried-across.time, S.waiting-list.out-of-date.restart, S.waiting-list.out-of-date.time, S.waiting-list.wrong.restart, S.waiting-list.wrong.time
-Under: notebook-order-kept
-Criterion: Given nothing has been entered, when the signed-in list keeper opens the product, then they are told no list has been carried across.
-Criterion: Given a kept list, when the list keeper opens it after a restart, then it shows the same people in the same order, the date it was kept, and that later notebook changes are not in it.
+Says: While a confirmation is running, the control is not usable and a second one is not accepted. A change to the unfinished list made from a window that has not seen a later change is refused, and that window is told to look at the list as it now is. This holds for any number of windows or running copies of the product. Nothing is repeated automatically. A window learns of changes when it is next used or reloaded.
+Rests on: Refusing a stale change is the known way to stop one window silently undoing another.
+Settles: L.concurrency-01.waiting-list, L.concurrency-06.shown-list, L.concurrency-08.bringing-across, L.concurrency-12.waiting-list, L.startup-read-06.waiting-list, L.user-action-01.bringing-across, L.user-action-07.bringing-across, L.long-operation-11.bringing-across, S.waiting-list.being-brought-across.again
+Under: bring-notebook-order-across
+Criterion: Given two windows showing the same unfinished list, when an entry is added in the first and then the second tries to change or confirm it without reloading, then the change is refused, the first window's entry remains, and the second window is told to reload.
+Criterion: Given a confirmation is running, when the list keeper presses confirm again, then only one list is kept.
 
-## A11: One name field, taken as written
+## A11: The shown list is one moment's list
 Kind: chosen
-Says: Each entry is one required field holding the name whole, as the notebook writes it, with one part or many. All letters, marks, digits, punctuation and spaces of any language are accepted. Line breaks, tabs, control characters and invisible direction or zero-width characters that serve no part of a name are refused; unusual spaces become ordinary ones, while joiners that a script needs are kept. Spaces at the ends are removed and runs of spaces become one; an empty result is refused. A name may be up to 200 characters as a reader counts them; a longer one is refused with the limit stated and never cut. Rules are enforced where the data is stored, not only on screen. A refusal appears beside the field, says what is wrong and how to put it right, and keeps what was typed. What to do with a notebook line that cannot be read or is not one full name is on the owner's list.
-Rests on: refusing only what cannot be seen or breaks the row lets real names through, and a cut name could make two people look alike.
-Settles: L.limits-07.carry-across, L.user-input-01.person-name, L.user-input-03.person-name, L.user-input-04.person-name, L.user-input-05.carry-across, L.user-input-06.carry-across, L.user-input-07.person-name, L.text-03.person-name, L.text-05.person-name
-Under: notebook-order-kept
-Criterion: Given an unfinished list, when a name of only spaces is added, then it is refused beside the field and the list is unchanged.
-Criterion: Given an unfinished list, when a name of 201 characters is added, then it is refused, the 200 limit is stated, and nothing is cut or saved.
-Criterion: Given an unfinished list, when the invented name "  Zoë   O'Sample-Placeholder " is added, then it is shown as "Zoë O'Sample-Placeholder".
-Criterion: Given a request sent directly with an empty name, when it arrives, then it is refused and nothing is saved.
+Says: What is shown is the whole list as it stood at one moment, every person once, never a mix of before and after a change.
+Rests on: A mix could show a person twice or not at all.
+Settles: L.concurrency-03.shown-list
+Under: bring-notebook-order-across
+Criterion: Given a list being confirmed in one window, when it is opened in another at the same time, then it shows either no kept list or all of the kept list.
 
-## A12: Matching names are pointed out, never merged
+## A12: Waiting, progress and giving up
 Kind: chosen
-Says: Names need not be unique. Every entry is its own place, and the product never merges or removes one. Entries that match when capitals (by language-independent folding), accents composed differently and extra spaces are set aside are pointed out to the keeper before keeping, and the keeper says whether they are two people or one entered twice, then removes the extra if one. The names themselves are stored with their capitals as typed.
-Rests on: two people can share a name, so only the keeper can tell, while "each once" requires a double entry to be noticed.
+Says: While saving, the product shows that it is saving. If no answer comes within 30 seconds it stops waiting, says it could not tell whether the save happened, and asks the list keeper to reload to see what is there. It does not retry by itself. Nothing is saved or reported later in the background, so there is no late result to be told of.
+Rests on: A volunteer must be able to tell working from stopped, and saying saved or failed without knowing would mislead.
+Settles: L.sync-03.bringing-across, L.durable-write-02.bringing-across, L.long-operation-01.bringing-across, L.long-operation-02.bringing-across, L.long-operation-07.bringing-across, L.long-operation-09.bringing-across
+Under: bring-notebook-order-across
+Criterion: Given the product cannot be reached, when the list keeper saves an entry, then they see that it is saving and within 30 seconds are told it is not known to be saved and to reload to check.
+Criterion: Given an entry marked saved, when the product is stopped and started again, then the entry is still there.
+
+## A13: A save that fails
+Kind: chosen
+Says: Whatever the cause, lack of space included, a failed save is said to have failed, what was stored before is unchanged, and the entry is not marked saved. The product does not retry by itself or treat a later success as proof: it reads the stored list again before showing it as saved. The list keeper is told they can try again, and that if it keeps failing the notebook is still the list and who set the product up should be told. Every save being refused leaves the list unfinished or not brought across.
+Rests on: Reading back what is stored is the only sound answer after storage reports failure, and a list keeper who is not technical needs one plain next step.
+Settles: L.durable-write-04.bringing-across, L.durable-write-05.bringing-across, L.logging-07.bringing-across, S.waiting-list.refused-each-time.bring-notebook-order-across-1, S.waiting-list.refused-each-time.bring-notebook-order-across-2, S.waiting-list.refused-each-time.again, S.waiting-list.refused-each-time.reopened, S.waiting-list.refused-each-time.time, C.states.waiting-list.refused-each-time
+Under: bring-notebook-order-across
+Criterion: Given storage refuses every save, when the list keeper tries to confirm the list twice, then each time they are told it was not kept, that they can try again or tell whoever set the product up, and that the notebook is still the list, and no list is shown as kept.
+Criterion: Given a save fails, when the message is shown, then it holds no name, no internal error text and no trace.
+
+## A14: A stored list that cannot be trusted
+Kind: chosen
+Says: Each time the list is read, the product checks that it is the product's own, complete and unaltered: places run from 1 with none missing or repeated, each has a name, and the whole matches what was recorded when it was kept. If it fails, is not recognisably the product's, or cannot be opened, the product shows no part of it as the list, does not treat it as never brought across, does not overwrite it, and says to go by the notebook and tell whoever set the product up. If it can be read but not changed, a list that passes is shown and any save says it failed. This is also what happens if the platform has removed or emptied it after it was kept.
+Rests on: A part or altered list would put people in the wrong place; failing closed and keeping the damaged data for recovery is the known safe course.
+Settles: L.durable-write-03.waiting-list, L.durable-write-09.waiting-list, L.durable-write-11.waiting-list, L.startup-read-01.waiting-list, L.startup-read-02.waiting-list, L.startup-read-03.waiting-list, L.startup-read-05.waiting-list, L.startup-read-07.waiting-list, V.stored-list.empty, V.stored-list.missing, V.stored-list.malformed, V.stored-list.twice, S.waiting-list.stopped-by-itself.bring-notebook-order-across-1, S.waiting-list.stopped-by-itself.bring-notebook-order-across-2, S.waiting-list.stopped-by-itself.again, S.waiting-list.stopped-by-itself.reopened, S.waiting-list.stopped-by-itself.time, C.states.waiting-list.stopped-by-itself
+Under: bring-notebook-order-across
+Criterion: Given a kept list whose stored order has been altered outside the product, when the list keeper opens it, then no list is shown, and they are told it cannot be trusted, to go by the notebook, and to tell whoever set the product up.
+Criterion: Given a kept list whose stored data has been removed or cannot be opened, when the list keeper opens the product, then they are not told that no list was ever brought across and are not offered to bring one over it.
+
+## A15: Spare copies and bringing one back
+Kind: chosen
+Says: A copy of the stored data is taken once a day, only as a whole that was saved, and kept for 30 days unless the owner sets another period. Its protection and access are the same as the original's. Bringing one back is tried once before real names go in. A copy brought back passes the same checks as in A14, and the list keeper is told which day it is from and to check it against the notebook. Wrong but readable data is found by that check against the notebook, and copies reach back 30 days. How much loss and downtime is acceptable is for the owner.
+Rests on: A daily whole copy that has been restored once is the known protection, and the notebook is an independent record to check a restored list against.
+Settles: L.durable-write-10.waiting-list, L.startup-read-08.waiting-list, L.startup-read-09.waiting-list, L.startup-read-10.waiting-list
+Under: bring-notebook-order-across
+Criterion: Given a kept list of invented people and the previous day's copy, when the stored data is lost and the copy is brought back, then the same people appear in the same order, with a notice of the copy's day and to check it against the notebook.
+
+## A16: What a name may be
+Kind: chosen
+Says: Each place has one field, the name, taken whole and as written, so two or more names in one notebook entry stay together. It is required, 1 to 200 characters after spaces at the ends are removed. Letters of any language, marks, digits, spaces and punctuation are accepted. Line breaks and invisible control characters are refused, and unusual spaces are made ordinary ones. Length is counted in characters as a person sees them and nothing is ever cut. Capitals are kept as typed. Which entries in the notebook count as places is for the owner.
+Rests on: Names do not fit fixed parts, so one free field with only unseen characters refused is the known safe rule; 200 is far above a real name.
+Settles: L.user-input-01.person-name, L.user-input-03.person-name, L.user-input-04.person-name, L.user-input-07.person-name, L.limits-07.bringing-across, L.text-03.person-name, L.text-05.person-name, V.person-name.missing
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list, when the list keeper gives an empty or all-spaces name, then nothing is added and they are asked for a name.
+Criterion: Given an unfinished list, when the list keeper gives a name of 201 characters, then nothing is added or cut, what they typed stays, and they are told the limit of 200.
+Criterion: Given an unfinished list, when the list keeper gives the invented name "  Zoë O'Example-Test " , then it is saved as "Zoë O'Example-Test".
+
+## A17: The same name twice
+Kind: chosen
+Says: Names need not be unique, and two people with one name keep two places. Names count as the same for the warning when they match ignoring capitals, extra spaces and different encodings of the same letter, by general rules not tied to one language, judged when compared; the stored name stays as typed. The list keeper is warned, shown the other place, and may keep both or remove one. Nothing is merged.
+Rests on: Two different people can share a name, while the same entry typed twice is a likely slip.
 Settles: L.user-input-09.person-name, L.text-01.person-name, L.text-02.person-name
-Under: notebook-order-kept
-Criterion: Given an unfinished list containing the invented names "Ash Sample" and "ash sample", when the list keeper goes to keep it, then both are pointed out with their positions and neither is removed unless the keeper removes it.
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list with Person A at place 1, when the list keeper adds "person a", then they are warned that the name is already at place 1 and can keep both or remove the new one, and neither is changed or merged.
 
-## A13: Text is only ever text and cannot disturb the list
+## A18: Rules are enforced by the product, and refusals are plain
 Kind: chosen
-Says: A name is shown, stored and passed on only as text, never run as page code, a command or a query. Each name is isolated so that right-to-left text cannot move the numbers or neighbouring text. Similar names are told apart by their position number, shown in a typeface that distinguishes look-alike characters. Rows and messages wrap and grow; nothing is cut off.
-Rests on: standard handling of outside text.
-Settles: L.user-input-10.person-name, L.text-09.person-name, L.text-10.list-view, L.text-12.list-view
-Under: notebook-order-kept
-Criterion: Given an unfinished list, when the invented name "<b>Moss</b>" is added, then it is shown exactly as typed, tags included.
-Criterion: Given a 200-character name in the list, when the list is shown on a narrow screen, then the whole name can be read.
+Says: Every rule on names, order, size and who may act is enforced where the list is stored, whatever the screen has checked. A request carries only what it is meant to set; places are worked out from the order, and any other field makes it refused. A refusal says by the entry concerned what is wrong and what to do, and keeps what was typed.
+Rests on: A check on the screen alone can be bypassed.
+Settles: L.user-input-05.bringing-across, L.user-input-06.bringing-across, L.misuse-02.bringing-across, L.misuse-07.bringing-across, L.limits-06.bringing-across, V.list-order.malformed
+Under: bring-notebook-order-across
+Criterion: Given a signed-in list keeper, when a request that bypasses the screen sends an empty name, a place number of its own, or an order that is not a list, then it is refused and the stored list is unchanged.
 
-## A14: The order is the sequence of entries
+## A19: An empty list, and how large a list may be
 Kind: chosen
-Says: The order is nothing but the sequence of the entries; positions are numbered 1 upward by the product and are never typed. A list with no entries cannot be kept. A request with a missing, null or wrongly formed order, or with gaps, repeated positions or unknown entries, is refused whole, and the keeper is told nothing was changed. Only the fields name and order are accepted; any other field sent is refused with the request.
-Rests on: a position computed from the sequence cannot disagree with it.
-Settles: V.notebook-order.empty, V.notebook-order.missing, V.notebook-order.malformed, L.misuse-02.carry-across, L.misuse-07.carry-across
-Under: notebook-order-kept
-Criterion: Given an unfinished list with no entries, when keeping it is requested, then it is refused and the list keeper is told to add the names first.
-Criterion: Given an unfinished list, when a request arrives with a missing order, a repeated position or an extra field, then it is refused and the stored list is unchanged.
+Says: A list with nobody on it, or with no order sent, cannot be confirmed. A list holds up to 500 people. The 501st is refused, saying so and to tell whoever set the product up. A stored list over that size fails the checks of A14.
+Rests on: The problem says about 40 people are waiting, so 500 leaves ample room while bounding what is accepted.
+Settles: L.limits-04.waiting-list, V.list-order.empty, V.list-order.missing, V.list-order.long, V.stored-list.long
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list with nobody on it, when the list keeper asks to finish, then nothing is kept and they are told to add the people first.
+Criterion: Given an unfinished list of 500 invented people, when one more is added, then it is refused with the limit and what to do, and the 500 are unchanged.
 
-## A15: Up to 500 people, shown in one numbered list
+## A20: The whole list on one page
 Kind: chosen
-Says: The list takes at most 500 people. Adding a further one is refused, saying the limit and to contact whoever set the product up; nothing already entered is lost. A request far over the size of a full list is refused before it is processed. The whole list is shown as one scrolling list in one order, numbered throughout, with no paging or re-sorting.
-Rests on: about 40 people are waiting for 84 plots (000_problem.md), so 500 leaves ample room while bounding any request.
-Settles: L.limits-04.waiting-list, L.limits-06.carry-across, L.limits-08.list-view, L.presentation-12.list-view, L.long-operation-12.carry-across, V.notebook-order.long
-Under: notebook-order-kept
-Criterion: Given an unfinished list of 500 entries, when another is added, then it is refused, the limit of 500 is stated, and the 500 remain.
-Criterion: Given a list longer than one screen, when the list keeper scrolls through it, then positions run from 1 to the last without a gap or repeat, in notebook order.
+Says: The list is shown whole on one page that scrolls, each person with their place number counted from 1, in the notebook's order throughout. The count reads "1 person" or "3 people"; with nobody it says no one has been added. The wording is in English. Long names wrap and labels have room to grow.
+Rests on: Checking against the notebook is easiest with the whole of about 40 people in one place.
+Settles: L.limits-08.shown-list, L.presentation-04.shown-list, L.presentation-12.shown-list, L.text-12.shown-list
+Under: bring-notebook-order-across
+Criterion: Given a kept list of 60 invented people, when the list keeper opens it, then all 60 are reachable by scrolling one page, numbered 1 to 60 in order.
+Criterion: Given an unfinished list with one person, when it is shown, then the count reads "1 person".
 
-## A16: Only the signed-in list keeper may enter or see the list
+## A21: A name is only ever text
 Kind: chosen
-Says: In this slice one account, the list keeper's, may enter, keep and see the list. Everyone else, signed in or not, is refused everything that no rule allows. Every request is checked where the data is held, whatever screen it came from; the list has one owner and each request is checked against it. Identity and permission are never taken from anything the device can alter. If the check cannot be completed, the request is refused. A reply holds only what that screen needs. The committee's and waiting people's access belong to later slices.
-Rests on: the requirement that names are not shown to everyone (002_requirements.md); deny by default is the safe rule until later slices add others.
-Settles: L.authorization-01.carry-across, L.authorization-01.list-view, L.authorization-02.waiting-list, L.authorization-03.list-view, L.authorization-04.waiting-list, L.authorization-08.list-view, L.authorization-10.list-view, L.stored-data-08.list-view, T.waiting-details.list-view, F.several-people.fields, F.several-people.groups, W.who-sees, X.waiting-details.replies
-Under: new: only-the-keeper
-Criterion: Given a kept list and nobody signed in, when the list is requested directly, then it is refused and the reply holds no name.
-Criterion: Given nobody signed in, when a request to add an entry is sent directly, then it is refused and the list is unchanged.
-Criterion: Given the permission check cannot be completed, when the list is requested, then it is refused and no name is sent.
+Says: A name is shown, stored and passed on only as text and is never run or read as markup or a command. Each name is isolated so that right-to-left or reordering characters cannot disturb its place number or other rows; characters that only reorder text are refused. Look-alike names are told apart by their place numbers and checked against the notebook.
+Rests on: Escaping on output and isolating each value is the known answer to text written to be acted on.
+Settles: L.user-input-10.person-name, L.text-09.shown-list, L.text-10.shown-list, T.waiting-list.shown-list
+Under: bring-notebook-order-across
+Criterion: Given the invented name "<script>alert(1)</script>" in a list, when the list is shown, then those characters appear as written, nothing runs and the order is unchanged.
 
-## A17: Requests made in the keeper's name from elsewhere are refused
+## A22: Only the list keeper
 Kind: chosen
-Says: Only requests of the kind made for changing can change anything; opening a link or loading a page changes nothing. Each change must carry proof it came from the product's own page.
-Rests on: standard protection against requests forged by another site.
-Settles: L.authorization-06.carry-across, L.authorization-07.carry-across
-Under: new: only-the-keeper
-Criterion: Given the list keeper is signed in, when another site's page sends a request to keep or change the list, then it is refused and the list is unchanged.
-Criterion: Given an unfinished list, when any of the product's addresses is only opened, then nothing is added, kept or discarded.
+Says: In this slice only the signed-in list keeper may see or act on the list, unfinished or kept. Everyone else, and anything no rule mentions, is refused. Each request is checked where the data is, not only on the screen, and if the check cannot be completed the request is refused. What others may see is decided when the slices that show it are built. There is one list and one account, with no groups and no record partly hidden from the one who may see it.
+Rests on: The requirements say people's names are not shown to everyone and leave open who else may see; refusing by default is the known safe course.
+Settles: L.authorization-01.waiting-list, L.authorization-03.bringing-across, L.authorization-04.waiting-list, L.authorization-08.shown-list, L.user-action-12.shown-list, T.waiting-people.shown-list, W.who-sees
+Under: new: keep-list-private
+Criterion: Given a kept list, when someone not signed in opens its address or sends a request for it or to change it, then they see no name, place or count and nothing changes, and they are asked to sign in.
+Criterion: Given the check of who is asking cannot be completed, when the list is requested, then no name is shown and the person is told to try again later.
 
-## A18: The first way in, and the only ways in
+## A23: One account, made at setup
 Kind: chosen
-Says: A fresh product has no account and no default password. Whoever sets it up creates the keeper's account with a one-time code, handed over in person, that works once and ends after 24 hours; the keeper then sets their own password of at least 12 characters, with known-breached ones refused. That is the only way in apart from a replacement code made the same way. Sign-in gives the same answer whether or not an account exists, and there is no public sign-up. A new session is made at every sign-in and any earlier one is dropped, so the page shows whose account is signed in. Codes, session identifiers and request proofs come from a cryptographically secure random source. Who may hand out a replacement code is on the owner's list.
-Rests on: one account for a volunteer needs no public route in, and each extra route is another thing to protect.
-Settles: L.sign-in-02.list-view, L.sign-in-03.list-view, L.sign-in-05.list-view, L.sign-in-06.list-view, L.sign-in-10.list-view, L.authorization-12.list-view, F.unguessable.made
-Under: new: only-the-keeper
-Criterion: Given a fresh product, when any sign-in is tried before setup, then it is refused.
-Criterion: Given a setup code that has been used once or is more than 24 hours old, when it is entered, then it is refused and the person is told to ask for a new one.
-Criterion: Given sign-in with a wrong password and with an unknown account, when each is tried, then both show the same message.
-## A19: Guessing, sessions and signing out
+Says: No account exists until setup, which makes the one list keeper account. There is no sign-up, no default or spare account and no default password. Whoever sets the product up gives the list keeper, in person or by a route only they receive, a link that works once and for 24 hours, with which they choose their own password. An expired or used link says so and to ask for a new one. There is one way to sign in: that account and password. What the list keeper sets is known to nobody else.
+Rests on: A single account with a one-time first link leaves nothing guessable or shared behind.
+Settles: L.secrets-02.way-back-in, L.sign-in-02.way-back-in, L.sign-in-05.way-back-in, L.sign-in-06.way-back-in
+Under: new: keep-list-private
+Criterion: Given a setup link already used or more than 24 hours old, when it is opened, then no password can be set and the person is told to ask for a new link.
+Criterion: Given a freshly set up product, when someone tries to sign up or to sign in with a common default name and password, then no account is made and none is entered.
+
+## A24: Guessing at sign-in
 Kind: chosen
-Says: After 5 wrong tries in a row sign-in waits 15 minutes, and the person is told how long. A session ends after 30 minutes unused and 12 hours in all. One session at a time: a new sign-in ends the old one, and a replacement code or password change ends all sessions. Signing out or losing access stops the session at the next request, and stepping back shows no name. A password change or replacement is shown at the next sign-in with its time. Changing the password asks for the current one; keeping the list needs only the signed-in session and the confirmation. Because entries are saved as made, an ended session loses at most the entry being typed.
-Rests on: short, single sessions limit a device left open, and saved entries make that harmless to a slow typist.
-Settles: L.sign-in-01.list-view, L.sign-in-07.list-view, L.sign-in-08.list-view, L.sign-in-09.list-view, L.sign-in-11.carry-across, L.sign-in-12.list-view, L.authorization-11.list-view, L.user-action-04.list-view, L.accessibility-11.carry-across, L.misuse-03.carry-across, L.misuse-04.carry-across
-Under: new: only-the-keeper
-Criterion: Given 5 wrong passwords in a row, when a sixth try is made within 15 minutes, then it is refused and the wait is stated.
-Criterion: Given a session unused for 30 minutes, when the list is requested, then sign-in is asked for and no name is sent.
-Criterion: Given a session 12 hours old, when the list is requested, then sign-in is asked for.
-Criterion: Given the list keeper has signed out, when they step back, then no name is shown.
-Criterion: Given a session on one device, when the keeper signs in on another, then the first is refused at its next request.
+Says: The password is at least 12 characters, may be a phrase, may be pasted or filled by a password manager, and common ones are refused. After 5 wrong tries in a row, further tries wait 15 minutes, with the wait said; this ends by itself, so the list keeper is not locked out for good. A wrong try never says which part was wrong. At the next sign-in the list keeper is told of wrong tries since the last one.
+Rests on: A long password with a short growing barrier to guessing is established practice and does not let a stranger lock the keeper out for good.
+Settles: L.sign-in-01.way-back-in, L.misuse-03.bringing-across, L.misuse-04.bringing-across
+Under: new: keep-list-private
+Criterion: Given 5 wrong passwords in a row, when a sixth try is made within 15 minutes, even with the right one, then it is refused and the person is told to wait 15 minutes.
+Criterion: Given wrong tries since the last sign-in, when the list keeper signs in, then they are told how many there were.
 
-## A20: Names stay out of addresses, caches and the device
+## A25: How long being signed in lasts
 Kind: chosen
-Says: No name or password is put in an address. Replies holding names are marked not to be stored by the browser or anything in between. The browser stores no names; only a session cookie that page code cannot read, sent only over encrypted connections and not with other sites' requests. No address is sent to other sites.
-Rests on: standard handling of personal data in a browser.
-Settles: L.stored-data-05.person-name, L.stored-data-06.list-view, L.stored-data-10.waiting-list, F.browser.kept-by-browser, F.browser.known-by, F.browser.came-from
-Under: new: only-the-keeper
-Criterion: Given a signed-in keeper who has viewed the list, when the browser's stored data and history are looked through, then no name is found in them.
+Says: Signed in ends after 30 minutes unused or 12 hours in all, or when the list keeper signs out. A fresh session is made at each sign-in and any earlier one on that browser ends. Up to 3 can be open at once; a fourth ends the oldest. Two minutes before the unused limit the product warns and lets them stay signed in. Entries marked saved are kept; after signing in again they carry on.
+Rests on: Short sessions limit what a shared or lost device reaches, and saved entries and a warning mean a slow volunteer loses nothing.
+Settles: L.sign-in-08.way-back-in, L.sign-in-09.way-back-in, L.sign-in-10.way-back-in, L.user-action-11.way-back-in, L.accessibility-11.bringing-across
+Under: new: keep-list-private
+Criterion: Given a signed-in list keeper unused for 28 minutes, when the warning appears and they choose to stay, then they remain signed in; when they do nothing for 2 more minutes, the next request asks them to sign in and shows no name.
+Criterion: Given signing in has ended partway through an unfinished list, when the list keeper signs in again, then every entry marked saved is there.
 
-## A21: The page runs only its own code
+## A26: Signing out, ending sessions and changing the password
 Kind: chosen
-Says: The page loads code and styles only from the product itself, with no other party's code. It cannot be framed by another site, replies are sent with their true type and the browser told not to guess, data replies are never run as pages, no other site's page may read replies, the page takes no messages from other windows, and it never sends anyone on to an address someone supplied.
-Rests on: standard browser protections; nothing in the slice needs the opposite.
-Settles: F.browser.context, F.browser.page-policy, F.browser.framing, F.browser.type-guessing, F.browser.other-sites, F.browser.messages, F.browser.others-code, F.browser.sent-on, T.waiting-list.list-view
-Under: new: only-the-keeper
-Criterion: Given another site's page, when it tries to show the product inside a frame, then the browser does not show it.
-Criterion: Given the product's pages, when everything they load is listed, then nothing comes from another party's address.
+Says: Signing out takes effect at once, and stepping back shows no name. The list keeper can end all other sessions; changing the password does so too, as does removing access, at once. Changing the password needs the current one, and the product tells the list keeper on the screen at the next sign-in that it changed. Bringing the list across needs the password again if it was last given more than 15 minutes before. If a password is exposed, the list keeper changes it, or whoever set the product up ends all sessions and issues a new one-time link as soon as they are told; nobody can get in with the old one afterwards.
+Rests on: Ending access at once and asking again before the one step that fixes everyone's order is established practice.
+Settles: L.secrets-05.way-back-in, L.sign-in-07.way-back-in, L.sign-in-11.way-back-in, L.sign-in-12.way-back-in, L.authorization-11.way-back-in, L.user-action-04.shown-list
+Under: new: keep-list-private
+Criterion: Given the list keeper has signed out, when someone steps back on that device or uses what was held before, then no name is shown.
+Criterion: Given two devices signed in, when the password is changed on one, then the other's next request is refused.
+Criterion: Given the password was last given more than 15 minutes ago, when the list keeper confirms the list, then it is kept only after they give the password again.
 
-## A22: Only what is meant to be reachable
+## A27: What proves who someone is
 Kind: chosen
-Says: The product answers only to its own host name over an encrypted connection; a plain request is redirected and carries no data back, and another host name is refused. It trusts facts added by something in between only from the one component set up to add them. Each address accepts only the kinds of request it needs. Diagnostic modes, file listings, source history, test code and documentation pages are off or absent where real names are held. Refusals and errors name no component, version or path. A fresh installation has only sign-in switched on. Someone looking over the keeper's shoulder is not something the product can stop.
-Rests on: the least reachable surface is the safe default.
-Settles: F.network.answers-to, F.network.transport, F.network.in-between, F.network.kinds-of-request, F.network.left-on, F.network.gives-away, L.configuration-06.list-view, L.configuration-11.list-view, T.waiting-details.carry-across
-Under: new: only-the-keeper
-Criterion: Given the real installation, when a plain unencrypted request for the list is made, then no name is returned.
-Criterion: Given the real installation, when an error is provoked, then the reply shows no trace, version or file path.
-## A23: Settings are few, checked at start and safe by default
+Says: The browser holds only a random session value that means nothing by itself, out of reach of the page's code, sent only over the encrypted connection and only to this product. Who the person is and what they may do is looked up by the product and never taken from the device. The product shows which account is signed in. The password is stored only in a form made for passwords that cannot be turned back into it, and travels only encrypted. Any secret the product itself needs is kept outside the code, readable only by the running product and whoever sets it up.
+Rests on: This is the established way to hold sessions and passwords; the account name on screen shows the keeper they are in their own.
+Settles: L.secrets-01.way-back-in, L.secrets-09.way-back-in, L.authorization-10.way-back-in, L.authorization-12.way-back-in, F.browser.known-by
+Under: new: keep-list-private
+Criterion: Given a signed-in browser, when its stored session value is altered or made up, then the request is refused and no name is shown.
+Criterion: Given a password has been set, when the stored data, the code and the records are looked through, then the password appears in none of them.
+
+## A28: Values that cannot be guessed
 Kind: chosen
-Says: The settings are where the list is stored, the host name, whether this is a trial or the real installation, and any secret key. All are checked at start; a missing or invalid one stops the start with a message naming the setting, never its secret value, to whoever started it. There is no default that opens access. Only whoever sets the product up can change them, outside the product; nothing in a request can. A trial uses invented names only, has its own storage, says on screen that it is a trial, and otherwise runs the same settings.
-Rests on: failing at start is better than running with names somewhere unintended.
-Settles: L.configuration-01.waiting-list, L.configuration-03.waiting-list, L.configuration-05.list-view, L.configuration-07.waiting-list, L.configuration-12.waiting-list, V.every-setting.outside
-Under: new: safe-start
-Criterion: Given the storage setting is missing, when the product is started, then it does not start and names that setting.
-Criterion: Given a trial installation, when any screen is opened, then it says it is a trial.
+Says: The session value and the one-time setup link are the only values meant to be unguessable. Each is made fresh from the platform's secure random source with at least 128 bits, expires as in A23 and A25, and is stored so that reading the store does not give a usable one.
+Rests on: This is the established way to make such values.
+Settles: F.unguessable.made
+Under: new: keep-list-private
+Criterion: Given two setup links and two sessions made one after another, when they are compared, then none can be worked out from another, and the stored data holds none in usable form.
 
-## A24: A list that cannot be trusted is never shown as the list
+## A29: Another site acting in the list keeper's name
 Kind: chosen
-Says: The people and their positions are stored together with a check value over the whole. At start and at every read, the product tells apart: nothing stored; stored and sound; present but damaged, changed, disagreeing, unrecognised or unreadable. In the last case it shows no order and offers no new carrying across, never overwrites or deletes what is there, and tells the keeper the stored list cannot be trusted, to use the notebook and contact whoever set it up. The check value catches damage but not someone able to recompute it. If storage can be read but not written, a sound list is shown, marked as unchangeable, and nothing is repaired. A recovered list is shown as recovered, with its date and number of people, and is not relied on until the keeper has checked it against the notebook. A readable but wrong list is found only by checking it against the notebook; how far back a good copy goes is on the owner's list.
-Rests on: showing a damaged order as true would be worse than showing none.
-Settles: L.durable-write-08.waiting-list, L.durable-write-09.waiting-list, L.startup-read-01.waiting-list, L.startup-read-02.waiting-list, L.startup-read-03.waiting-list, L.startup-read-05.waiting-list, L.startup-read-08.waiting-list, L.lifecycle-05.waiting-list
-Under: new: safe-start
-Criterion: Given a stored list altered outside the product, when the list keeper opens it, then no order is shown and they are told it cannot be trusted and to use the notebook.
-Criterion: Given an unrecognised file where the list is stored, when the product starts, then that file is left unchanged and no new carrying across is offered.
-Criterion: Given a sound list that can be read but not written, when the keeper opens it, then it is shown and marked as unchangeable.
+Says: Anything that changes something needs a deliberate send from the product's own page, carrying proof it came from there; following a link or loading a page changes nothing. Pages of other sites may not call the product or read its replies, frame it or send it messages, and the product takes no messages from other windows. It never sends a person on to an address someone else supplied. It tells other sites nothing about the address a person came from.
+Rests on: These are the established defences against requests forged from another site.
+Settles: L.authorization-06.bringing-across, L.authorization-07.bringing-across, F.browser.framing, F.browser.came-from, F.browser.other-sites, F.browser.messages, F.browser.sent-on
+Under: new: keep-list-private
+Criterion: Given a signed-in list keeper, when another site's page sends a request to confirm a list, or a link to the product is followed, then nothing is changed.
+Criterion: Given another site tries to show the product inside its page, when the page loads, then the product is not shown there.
 
-## A25: Copies and versions
+## A30: What the page may load and how replies are read
 Kind: chosen
-Says: Everything that makes up the saved list, its version, its check value and any unfinished list, is copied and restored together, by a method that takes it as it stood at one moment; a partial set fails the check and is treated as untrustworthy. The stored form carries a version number. A version meeting data from a later one refuses to open it, changes nothing and says a newer version is needed; so an earlier version put back leaves the newer data intact.
-Rests on: refusing is the one behaviour that cannot lose data written by a later version.
-Settles: L.durable-write-10.waiting-list, L.durable-write-11.waiting-list, L.migration-01.waiting-list, L.migration-03.waiting-list
-Under: new: safe-start
-Criterion: Given a list stored with a later version number, when the product starts, then it shows no list, says a newer version is needed, and leaves the stored data unchanged.
+Says: The page runs only the product's own code and styles from its own address, with nothing from another party loaded while it runs, and the browser is told to block anything else. Every reply states its type and the browser is told not to guess another. A reply meant as data cannot run as a page. No one can submit a file.
+Rests on: A strict page policy and declared types are established defences.
+Settles: F.browser.context, F.browser.page-policy, F.browser.type-guessing, F.browser.others-code
+Under: new: keep-list-private
+Criterion: Given the product's pages and data replies, when they are inspected in a browser, then nothing loads from another address, other code is blocked, each reply states its type with guessing forbidden, and opening a data address runs nothing.
 
-## A26: The stored list is closed to everyone else
+## A31: The connection and what can be reached
 Kind: chosen
-Says: Names and order are the sensitive data: seeing them exposes who is waiting, and changing them can cost a person their turn. The stored list, the unfinished list and every copy are encrypted while stored, readable only by the product and whoever runs it. Keys are kept apart from the data and the code, each used for one purpose (stored data, sessions), and replaceable; an exposed key is replaced and the data re-encrypted. A lost data key means the list is restored from a readable copy or carried across again from the notebook. The session key being replaced only signs people out.
-Rests on: a copy taken without its key then gives nothing away.
-Settles: L.stored-data-01.waiting-list, L.stored-data-02.waiting-list, L.stored-data-03.waiting-list, L.stored-data-04.waiting-list, T.waiting-details.stored-list, X.waiting-details.stored, W.sensitive, W.prize
-Under: new: only-the-keeper
-Criterion: Given a copy of the stored data without its key, when it is searched for a name that was entered, then the name is not found.
+Says: Every connection is encrypted; an unencrypted one is sent to the encrypted address without carrying any list data, and the browser is told to use only encryption. The product answers only under its own address and refuses other host names. It trusts no sender-supplied fact about where a request came from. Each address accepts only the kinds of request it needs. No diagnostic mode, file listing, source history, documentation, measurement page or test code can be reached where it is really used, and a refusal does not say what the product is built from or show a trace.
+Rests on: These are established hardening measures.
+Settles: T.waiting-people.bringing-across, F.network.answers-to, F.network.transport, F.network.in-between, F.network.kinds-of-request, F.network.left-on, F.network.gives-away
+Under: new: keep-list-private
+Criterion: Given the product in real use, when it is asked over an unencrypted connection, under another host name, with a kind of request it does not accept, or for a diagnostic or source address, then no name is returned and the reply shows no trace or component name.
 
-## A27: What is recorded, and never names
+## A32: Settings that are safe as they come
 Kind: chosen
-Says: Records are made of: setup, sign-in, refused sign-in and lockout, sign-out, password change, each opening of the list, the list kept, discarded, keep failed, refused attempts to change or reach the list, and a failed trust check. Each says what happened, the outcome, which account if any, the number of people where relevant, and the time from the server's clock in UTC with a sequence number. They hold no name, order, password, code or session value, and no free text typed by anyone, so outside text cannot forge a line. Errors carry an error code and no request contents. Nothing is sent to monitoring or measurement. Test data and examples use invented names only. Opening the list is recorded, which is how reading is traced.
-Rests on: fairness may need to be shown later, which needs events and times but not names.
-Settles: L.logging-01.carry-across, L.logging-02.carry-across, L.logging-03.person-name, L.logging-04.person-name, L.logging-11.carry-across, L.stored-data-12.waiting-list, X.waiting-details.logs, X.waiting-details.errors-inside, X.waiting-details.errors-shown, X.waiting-details.telemetry, X.waiting-details.samples
-Under: new: records
-Criterion: Given a list has been kept, when the records are read, then one shows that it was kept, by which account, how many people and when, and none holds an entered name.
-Criterion: Given a failed keep, when the records, the error and the screen are read, then no entered name appears in the record or the error.
-Criterion: Given the files kept with the code, when their examples and test data are read, then every name in them is invented.
+Says: With nothing changed the product is closed: it needs sign-in, has diagnostic modes off and switches on nothing the criteria do not need. Settings can be changed only by whoever sets it up, never by a request or a page. A missing, empty, malformed or out-of-range setting that is needed stops the product from starting, with a message naming the setting, not its value, to whoever sets it up.
+Rests on: Safe defaults and refusing to start on a bad setting stop a mistake from opening the list.
+Settles: L.configuration-05.waiting-list, L.configuration-06.waiting-list, L.configuration-11.waiting-list, L.configuration-12.waiting-list, V.every-setting.missing, V.every-setting.empty, V.every-setting.malformed, V.every-setting.outside
+Under: new: keep-list-private
+Criterion: Given a needed setting is missing, empty, malformed or out of range, when the product starts, then it does not serve the list and names the setting, without its value, to whoever sets it up.
 
-## A28: Records are protected and bounded
+## A33: Trials and tests use invented people only
 Kind: chosen
-Says: Records are kept apart from the list, and the product can only add to them; each is numbered and chained to the one before, so a gap or change shows when checked. Only whoever runs the product can read or remove them, and a copy goes with the list's spare copies if there are any. Ordinary records are limited to 10 MB; repeated refusals are counted into one record, and at the limit the oldest refusals go first while kept-list records stay. If the record of keeping the list cannot be written, the list is not kept. If a record of a refusal cannot be written, the refusal still stands.
-Rests on: the one change that sets everyone's place must never go unrecorded.
-Settles: L.logging-05.carry-across, L.logging-06.carry-across, L.logging-08.carry-across, L.logging-10.carry-across
-Under: new: records
-Criterion: Given records cannot be written, when the list keeper confirms keeping the list, then it is not kept and they are told so.
-Criterion: Given a record removed from the middle, when the records are checked, then the gap is reported.
+Says: Any trial copy, test data and example uses invented names only and never a copy of the real list. A trial differs from the real one only in its address, its secrets and its data.
+Rests on: The requirements say names are not to be shown to everyone, and a trial is less guarded.
+Settles: L.configuration-07.waiting-list, X.waiting-people.samples
+Under: new: keep-list-private
+Criterion: Given the code, its tests and any trial copy, when they are looked through, then every person in them is invented and none comes from the notebook or the real list.
 
-## A29: Use by keyboard, screen reader and enlarged text
+## A34: What is recorded
 Kind: chosen
-Says: Everything, including moving an entry, is done with the keyboard alone, using named "move up", "move down" and "move to position" controls with no dragging needed. Focus is always visibly outlined and can leave every part; when something holding focus closes, focus goes to the control that opened it or the next entry. Every control has a spoken name saying what it does and to which position. Results and refusals are announced. Anything not text, and any meaning shown by colour, also has words. Text contrast is at least 4.5 to 1 in every state. At twice the text size nothing is lost or overlaps. Nothing moves except a progress sign, which stays still for anyone who asked for less motion and is given in words.
-Rests on: the recognised accessibility level (WCAG 2.2 AA), and volunteers and members who are not technical.
-Settles: L.accessibility-01.carry-across, L.accessibility-02.carry-across, L.accessibility-03.carry-across, L.accessibility-04.carry-across, L.accessibility-05.carry-across, L.accessibility-06.list-view, L.accessibility-07.carry-across, L.accessibility-08.list-view, L.accessibility-09.list-view, L.accessibility-10.list-view, L.accessibility-12.list-view
-Under: new: usable-by-all
-Criterion: Given only a keyboard, when the list keeper enters, reorders, checks and keeps a list, then every step can be done with the focused item visible.
-Criterion: Given a screen reader, when keeping the list succeeds or fails, then the result is read out.
-Criterion: Given text at twice its size, when the list is shown, then every name, number and control can be read and used.
+Says: A record is written for setup, each sign-in and wrong try, each lockout, password change and ending of access, each confirmed or discarded or removed list, each failed save and each failed check of the stored list. Each says what happened, which account, when by the product's own server clock in universal time, whether it worked, and for a list how many people; records are kept in the order written. Reading the list is recorded the same way, as that it was read. No name, password or session value goes into a record, and no text a person typed goes in at all. If the record of confirming or discarding a list cannot be written, that action is not carried out and the person is told it failed; other failures to record do not stop use.
+Rests on: These events show later what happened to the order without copying anyone's name into records.
+Settles: L.logging-01.waiting-list, L.logging-02.bringing-across, L.logging-03.person-name, L.logging-04.person-name, L.logging-05.bringing-across, L.logging-11.waiting-list, L.stored-data-12.waiting-list, X.waiting-people.logs
+Under: new: keep-list-private
+Criterion: Given a list of invented people is entered, confirmed and read, and one save fails, when the records are looked through, then the confirmation, reading and failure are there with account, time, result and count, and no name, password or session value is.
+Criterion: Given records cannot be written, when the list keeper confirms a list, then it is not kept and they are told it failed.
 
-## A30: Components are listed, sourced and kept up to date
+## A35: Looking after the records
 Kind: chosen
-Says: Every component, including those brought in by others, is listed with its version and source and fetched only from the named source with its checksum verified. As few as possible are trusted with passwords, names or install-time execution, and install-time scripts are off unless needed. Known flaws are checked automatically on every change and at least weekly; a serious one is replaced within 14 days.
-Rests on: standard supply-chain practice.
-Settles: F.dependency.known-flaw, F.dependency.inventory, F.dependency.look-alike, F.dependency.trusted-most
-Under: new: safe-start
-Criterion: Given a component whose checksum does not match the list, when the product is built, then the build fails.
+Says: Records are kept apart from the list with the daily copy, so the loss of one machine loses at most a day of them. Only whoever sets the product up can read them, and nothing in the product changes or removes them; their numbering shows a gap. They are capped at a size far above a year's use, with the oldest removed first and that removal recorded. Nobody reads them routinely: they are read when the list keeper reports something wrong. The list keeper is told on the screen of failures and wrong sign-ins as they affect them. How long records are kept is part of what the owner decides about keeping people's details.
+Rests on: A society of volunteers has no one to watch records, so what matters is shown to the list keeper and the rest is there when needed.
+Settles: L.logging-06.waiting-list, L.logging-08.waiting-list, L.logging-09.bringing-across, L.logging-10.waiting-list
+Under: new: keep-list-private
+Criterion: Given the list keeper is signed in, when they use anything in the product, then no way is offered to change or remove a record.
 
-## A31: Heavy use by someone else cannot run up cost or block the keeper unnoticed
+## A36: Names do not leak
 Kind: chosen
-Says: Only the keeper can run anything beyond sign-in. Sign-in tries are limited and request sizes bounded, and nothing in the slice is paid for per use by the product's own design. A stranger causing the lockout can delay the keeper by 15 minutes at a time. What the place the product runs charges is covered by the test of hosting.
-Rests on: bounding the open route limits what a stranger can use up.
-Settles: L.misuse-06.carry-across
-Under: new: only-the-keeper
+Says: Names, places and the order never go into an error's message or trace, an error shown to whoever asked, or an address or its query. Nothing is sent to any monitoring or measurement service. A successful reply carries names only to the signed-in list keeper and only what the screen shows.
+Rests on: Keeping personal details out of errors, addresses and measurement is established practice.
+Settles: L.stored-data-05.person-name, L.stored-data-08.shown-list, X.waiting-people.errors-inside, X.waiting-people.errors-shown, X.waiting-people.telemetry, X.waiting-people.replies
+Under: new: keep-list-private
+Criterion: Given a list of invented people, when it is used and each failure in these criteria is made to happen, then no name appears in any address, error message, trace or request to another party, and replies carry no field the screen does not need.
 
-## A32: No second source and nothing in short supply by request
+## A37: Names are not left behind in browsers or on the way
 Kind: chosen
-Says: An earlier place is the scarce thing. Positions come only from the sequence the keeper confirmed, through the one account, and no request can set a position for one person outside that sequence. Entering a person twice is pointed out as a matching name. Favouritism by the person doing the typing is on the owner's list.
-Rests on: the order can then be got only through the checked list.
-Settles: L.misuse-08.waiting-list
-Under: notebook-order-kept
+Says: Pages and replies that show names are marked not to be stored by browsers or anything in between. The product stores no names on the device; only the session value of A27 is held there.
+Rests on: This keeps the list off shared devices and intermediate stores.
+Settles: L.stored-data-06.shown-list, L.stored-data-10.waiting-list, F.browser.kept-by-browser
+Under: new: keep-list-private
+Criterion: Given the list keeper has viewed the list and signed out, when the browser's stored data and cache are looked through, then no name is found.
 
-## A33: A second pair of eyes on the order
-Kind: owner
-Says: Whether the list keeper alone may keep the list, or someone else must check it against the notebook first. The product cannot tell whether a name was moved up or left out while typing, and plots have gone to a friend out of turn before. A different or old list sent to replace a kept one is a separate threat, which the product refuses.
-Options: a second committee member reads the whole list against the notebook with the list keeper before it is kept, and the committee notes who and when | the list keeper checks and keeps it alone
-Recommended: a second committee member reads the whole list against the notebook with the list keeper before it is kept, and the committee notes who and when, because it needs no change to the product and gives something to show if the order is questioned
-If left: the list keeper can keep it alone, and nobody can show that it matches the notebook.
-Harm: high
-Settles: L.misuse-05.carry-across, T.waiting-list.carry-across
-Under: notebook-order-kept
+## A38: How stored names are protected
+Kind: chosen
+Says: What harms someone here is the names and their order (seen), the order (changed) and the sign-in values. The list, its unfinished form and every copy are encrypted where stored, with keys kept and managed apart from the data, each used only for that, readable only by the running product and whoever sets it up. Nobody else can open them. Whoever sets the product up keeps a spare of the keys somewhere separate. A replaced key is brought in without losing data; an exposed one is replaced and the data encrypted again; if all copies of a key are lost the list cannot be read and is brought across again from the notebook. The only other party that may hold the data is whoever the product runs on, which receives it to store and serve it and for nothing else.
+Rests on: Encryption at rest with separately held keys is established, and the notebook means a lost key does not lose the list.
+Settles: L.stored-data-01.waiting-list, L.stored-data-02.waiting-list, L.stored-data-03.waiting-list, L.stored-data-04.waiting-list, L.stored-data-07.waiting-list, X.waiting-people.stored, W.sensitive
+Under: new: keep-list-private
+Criterion: Given the stored data and a copy of it without the keys, when they are looked through, then no invented name in the list can be read.
 
-## A34: A mistake or change after the list is kept
-Kind: owner
-Says: In this slice a kept list cannot be changed, so it can go out of date or stay wrong, and keeping it cannot be undone inside the product. Which list counts meanwhile is yours to decide, as is whether this is acceptable.
-Options: the notebook stays the true list until the product can change its own | the kept list is the true list from the day it is kept, and changes wait | changing a kept list is brought into this slice
-Recommended: the notebook stays the true list until the product can change its own, because nobody's turn then depends on a copy that cannot be put right
-If left: the kept list cannot be changed and nothing says which list counts.
-Harm: high
-Settles: L.lifecycle-03.carry-across, L.user-action-08.carry-across, C.states.waiting-list.out-of-date, C.states.waiting-list.wrong, C.states.dead-end.3, C.states.dead-end.4, C.states.dead-end.5
-Under: notebook-order-kept
+## A39: The ways someone could take the order or the way in
+Kind: chosen
+Says: Getting in as the list keeper to read the list is met by A23 to A27, and an attempt shows as wrong tries told to the keeper and recorded. A changed order cannot be brought across without the keeper's session and fresh password, over a kept list not at all, and the keeper checks it whole against the notebook before it is kept; confirmations are recorded. Someone taking over the way in is met by the same measures and noticed when the keeper cannot sign in or sees sessions or changes they did not make; the notebook remains, and recovery is what the owner decides.
+Rests on: These follow from the measures already chosen.
+Settles: T.waiting-people.way-back-in, T.waiting-list.bringing-across, T.waiting-list.way-back-in, L.misuse-08.waiting-list
+Under: new: keep-list-private
+Criterion: Given a signed-in session older than 15 minutes in someone else's hands, when they try to confirm an unfinished list without the password, then nothing is kept and the refusal is recorded.
 
-## A35: Notebook lines that are not one clear name
-Kind: owner
-Says: What the list keeper does with a line that is crossed out, unreadable, only part of a name, naming two people, or out of sequence through arrows or insertions. The product needs one non-empty name per place and cannot know your rule.
-Options: the list keeper and one other committee member agree each such line before the list is kept, entering what is known with its place | the list keeper decides each such line alone
-Recommended: the list keeper and one other committee member agree each such line before the list is kept, entering what is known with its place, because each is a judgement about someone's turn
-If left: the list keeper decides each one while typing, with no note of it.
-Harm: high
-Settles: L.user-input-02.person-name
-Under: notebook-order-kept
+## A40: Usable without a mouse or sight
+Kind: chosen
+Says: Everything can be done by keyboard, nothing traps it, and the focused item is clearly marked. When something is removed or closed, focus moves to the next sensible item. Every control has a name and purpose that a screen reader announces, results of saving and refusals are announced, and anything not text has words. Colour never carries meaning alone. Text contrast is at least 4.5 to 1 in every state, text enlarged to twice its size loses nothing, and nothing moves for someone who asked for less motion. The list is shown as a numbered list a screen reader can follow.
+Rests on: These are established accessibility measures, and many members are elderly.
+Settles: L.accessibility-01.bringing-across, L.accessibility-02.shown-list, L.accessibility-03.shown-list, L.accessibility-04.bringing-across, L.accessibility-05.bringing-across, L.accessibility-06.shown-list, L.accessibility-07.bringing-across, L.accessibility-08.shown-list, L.accessibility-09.shown-list, L.accessibility-10.shown-list, L.accessibility-12.shown-list
+Under: bring-notebook-order-across
+Criterion: Given only a keyboard, when the list keeper signs in, enters, corrects, moves, removes and confirms entries and signs out, then each can be done, focus is always visible and never trapped or lost.
+Criterion: Given a screen reader, when an entry is saved or refused, then the result is announced and each control's name and each person's place are read.
+Criterion: Given text at twice its size and reduced motion asked for, when each screen is used, then nothing is cut off or moves, and text keeps a contrast of at least 4.5 to 1.
 
-## A36: The list does not end in this slice
+## A41: Looking after the parts other people wrote
+Kind: chosen
+Says: The build keeps a list of every component, those they bring with them included, with where each comes from, at fixed versions checked against recorded fingerprints from the intended source. As few as possible are used, and those that see passwords, read what is typed or run at install are the ones reviewed first. Known flaws are checked for automatically. Who acts on a warning and how soon is part of what the owner decides about upkeep.
+Rests on: Pinned, listed and checked components are established practice.
+Settles: F.dependency.inventory, F.dependency.look-alike, F.dependency.trusted-most
+Under: new: keep-list-private
+Criterion: Given the built product, when its component list is compared with what is installed, then each is listed with source and version, and a component whose fingerprint does not match is refused.
+
+## A42: No groups and nothing partly hidden
 Kind: not here
-Says: Nothing in this slice ends or removes a kept waiting list, so there is no ended list for anything to happen to; the slice removes no thing (006_questions/kept.md, lifecycle dropped). What is left when the list is finished with is on the owner's list.
-Settles: S.waiting-list.ended.*
-Under: notebook-order-kept
+Says: There is one society, one list and one account that sees it, so there are no groups to keep apart and no field hidden from someone who may see the record.
+Settles: F.several-people.fields, F.several-people.groups
 
-## A37: Who takes over, and who can let them in
-Kind: owner
-Says: Who may replace the list keeper, who removes the old keeper's access, and who may give a new one-time code if the way in is lost.
-Options: the committee decides, and whoever set the product up gives the new code and ends the old access the same day | the list keeper names their own replacement
-Recommended: the committee decides, and whoever set the product up gives the new code and ends the old access the same day, because control of the list then does not rest with one person
-If left: only whoever set the product up can restore access, on no agreed authority.
-Harm: medium
-Settles: L.authorization-05.waiting-list, L.sign-in-04.list-view
-Under: new: only-the-keeper
+## A43: This slice has no way to end the list
+Kind: not here
+Says: No criterion ends or closes the waiting list, so the ended state cannot be reached in this slice; removing an unfinished list is A4 and A5, and keeping names is for the owner.
+Settles: S.waiting-list.ended.bring-notebook-order-across-1, S.waiting-list.ended.bring-notebook-order-across-2, S.waiting-list.ended.again, S.waiting-list.ended.reopened, S.waiting-list.ended.time, C.states.waiting-list.ended
 
-## A38: How long names and records are kept
-Kind: owner
-Says: How long the list, an abandoned unfinished list, any copies, and the records are held, what ends them, and what is left when the list is finished with. The slice itself removes nothing but a discarded unfinished list.
-Options: the list is held while the waiting list runs, an unfinished list untouched for 90 days is removed, copies go after 90 days and records after 2 years | everything is held until the committee asks for its removal
-Recommended: the list is held while the waiting list runs, an unfinished list untouched for 90 days is removed, copies go after 90 days and records after 2 years, because names are not then held without a reason while fairness can still be shown
-If left: everything stays until someone removes it by hand.
-Harm: medium
-Settles: L.lifecycle-08.carry-across, L.long-operation-10.waiting-list, L.stored-data-09.waiting-list, L.logging-12.carry-across, C.states.waiting-list.ended, C.states.dead-end.6
-Under: new: records
+## A44: Changes in the notebook while it is being brought across
+Kind: chosen
+Says: The product takes only what the list keeper gives. A change in the notebook during the work gets in only if the keeper puts it in the unfinished list before confirming; the check at confirmation asks that it match the notebook as it is now.
+Rests on: The product cannot see the notebook, so the whole-list check is where such a change is caught.
+Settles: L.sync-07.bringing-across
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list, when the list keeper is asked to confirm, then the question asks whether it matches the notebook as it stands now.
 
-## A39: What law or agreement binds the handling of names
+## A45: Who notices it is broken
+Kind: chosen
+Says: The list keeper notices when they use it, because every failure is shown to them with what to do. Nothing watches it for them in this slice, and the notebook remains meanwhile.
+Rests on: Only the list keeper uses this slice, and watching would add cost and work for volunteers.
+Settles: W.noticed
+Under: bring-notebook-order-across
+Criterion: Given storage is unavailable, when the list keeper opens the product, then they are told it is not working, to go by the notebook and to tell whoever set it up.
+
+## A46: What someone who means harm would want
+Kind: fact
+Says: The names of the people waiting and their order, a better place for someone, and the list keeper's way in.
+Rests on: bring-notebook-order-across / 1; the requirements say people's names are not shown to everyone.
+Settles: W.prize
+
+## A47: A mistake found after the list is kept
+Kind: fact
+Says: In this slice a kept list cannot be undone, put right or brought across again, a mistake made while bringing it across included. That is left for slice 3, and the notebook holds the order to check against meanwhile.
+Rests on: slice-001/004_slice.md, "Left for later": putting right a place that is wrong, including one brought across wrongly, is slice 3, and the notebook still holds the order to check against.
+Settles: L.lifecycle-03.bringing-across, L.user-action-08.bringing-across, C.states.dead-end.1
+
+## A48: Your duties for people's details, and the council's terms
 Kind: owner
-Says: The list is personal data. The documents do not say what data protection law, council lease term or society rule applies, such as what the people waiting must be told. This is not a statement of what the law requires.
-Options: a committee member checks what applies before real names are entered | real names are entered without that check
-Recommended: a committee member checks what applies before real names are entered, because the duty falls on the society and may change what is built
-If left: only invented names should be entered.
+Says: What law, society rule or term of the council lease covers keeping the names of people waiting in the product? The documents do not say. Data protection law may apply, and this planning has not checked it.
+Rests on: An obligation that only the society can find out and accept.
+Options: Find out what applies before any real name is put in, building and trying it with invented names meanwhile | Put real names in without finding out, accepting that risk
+Recommended: Find out first, because the names belong to other people and the lease renewal depends on fair dealing.
+If left: It can be built and tried with invented names, and no real name should go in.
 Harm: high
 Settles: W.obligations
-Under: new: records
+Decided: Find out what applies before any real name is put in, building and trying it with invented names meanwhile (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: new: keep-list-private
+Criterion: Given the society has not yet found out what applies to keeping the names, when the product and its copies are looked through, then every name in them is invented.
 
-## A40: How reliable it must be, and who notices a failure
+## A49: How long people's details are kept
 Kind: owner
-Says: How long it may be out of use, how slow is too slow, who notices a fault, whether spare copies are kept, and how much may be lost. In this slice the notebook still holds the list. A failure during use is shown to the keeper; nobody else is told automatically.
-Options: the notebook is kept safe as the fallback, one spare copy is made when the list is kept and restoring it is tried once, an outage of a few days is acceptable, and the list keeper reports faults to whoever set it up | the notebook is the only fallback and no spare copy is made | the product must be watched and restored within an agreed number of hours
-Recommended: the notebook is kept safe as the fallback, one spare copy is made when the list is kept and restoring it is tried once, an outage of a few days is acceptable, and the list keeper reports faults to whoever set it up, because it suits volunteers and a small budget
-If left: no spare copy is promised, no speed or uptime is promised, and a fault is noticed only when the keeper next uses it.
+Says: How long should the names, their copies and the records of what happened be kept? This slice removes no kept name.
+Rests on: An obligation the society must accept.
+Options: Keep the list while the society uses it, records for 12 months and copies for 30 days, and remove everything if the society stops using it | Set other periods, from what the society finds it is bound by
+Recommended: The first, because it keeps what is needed to answer a question raised at a yearly meeting and no more; check it against what you find about your duties.
+If left: Nothing kept is removed, apart from abandoned unfinished lists and copies older than 30 days.
 Harm: medium
-Settles: L.startup-read-09.waiting-list, L.startup-read-10.waiting-list, L.logging-09.carry-across, W.unavailable, W.target, W.noticed
-Under: new: safe-start
+Settles: L.stored-data-09.waiting-list, L.logging-12.waiting-list
+Decided: Keep the list while the society uses it, records for 12 months and copies for 30 days, and remove everything if the society stops using it (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: new: keep-list-private
+Criterion: Given a record more than 12 months old and a copy more than 30 days old, when the stored data is looked through, then neither is there.
+Criterion: Given a kept list in use for more than 12 months, when the list keeper opens it, then it is still there.
+Criterion: Given the society has stopped using the product and it has been closed down, when its storage, copies and records are looked through, then no list, name or record is left.
 
-## A41: Whether the place it is stored keeps data through a power cut
-Kind: test
-Says: Where the list will be stored is not chosen, so it is not known whether what is reported stored survives a power cut or restart.
-Test: once the storage is chosen, read its own documentation on durability, then cut it off during and just after a save and compare what is read back.
+## A50: What in the notebook counts as a place
+Kind: owner
+Says: Is each entry still waiting one place, taken in the order written, with only the name coming across? What about crossed-out entries, entries naming two people, or anything noted beside a name that affects who is ahead?
+Rests on: A rule of the society that the documents do not give.
+Options: Each entry still waiting is one place, in written order, name only, with crossed-out entries left out | The notebook has other marks or details that change who counts or who is ahead, which you describe
+Recommended: The first if it is true of your notebook, because you asked for the order just as it is; if anything else decides who is ahead, say so before the build.
+If left: Only names in the order you give them are kept, and anything else stays in the notebook.
 Harm: high
-Settles: L.durable-write-03.waiting-list
-Under: new: safe-start
+Settles: L.user-input-02.bringing-across
+Decided: Each entry still waiting is one place, in written order, name only, with crossed-out entries left out (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: bring-notebook-order-across
+Criterion: Given an unfinished list, when the list keeper adds an entry, then only a name is asked for and it takes the place in the order where it is put.
 
-## A42: Whether the place it runs can remove the data by itself
-Kind: test
-Says: It is not known whether the chosen place deletes stored data on redeploys, inactivity, unpaid bills or plan limits, or what can be got back.
-Test: once it is chosen, read its terms and documentation on deletion and recovery, and check that data survives a restart and a redeploy.
-Harm: high
-Settles: L.startup-read-07.waiting-list
-Under: new: safe-start
+## A51: A second person checking the order
+Kind: owner
+Says: Should a second committee member check the list against the notebook before it is relied on? In this slice only the list keeper acts.
+Rests on: A rule of the society about fairness.
+Options: A second committee member checks it against the notebook, outside the product, before anyone relies on it | The list keeper's own check is enough
+Recommended: A second person's check, because it costs little, needs nothing built and gives the committee something to say about fairness after last year's row.
+If left: The list keeper's own check is the only one.
+Harm: medium
+Settles: L.misuse-05.bringing-across
+Decided: A second committee member checks it against the notebook, outside the product, before anyone relies on it (the user, 2026-11-26: "I take what you recommend for each of them.")
 
-## A43: Who else receives the data
-Kind: test
-Says: The product itself sends the names to no other party. It is not known what the place it runs, or anything between it and the keeper, receives, keeps or passes on, or what it charges against the 10 pounds a month.
-Test: once the hosting is chosen, read its data, logging, sharing and pricing terms, and check its logs after a trial with invented names.
+## A52: If the list keeper cannot get in, or someone else takes over
+Kind: owner
+Says: If the list keeper forgets the password, loses access or hands the job on, who may give access to them or to a new list keeper?
+Rests on: A rule of the society about who may be trusted with the list.
+Options: The person who set the product up gives a new one-time link only when two committee members ask, and ends the old access | The person who set the product up does so when the list keeper alone asks, and for a new list keeper when the committee asks
+Recommended: The second, with the link going only to the person named and all old access ending, because it is simple for volunteers and a new keeper still needs the committee.
+If left: Nobody has agreed a way back in, and the notebook is all there is if access is lost.
+Harm: medium
+Settles: L.sign-in-04.way-back-in, L.authorization-05.way-back-in
+Decided: The person who set the product up gives a new one-time link when the list keeper alone asks, and for a new list keeper when the committee asks; the link goes only to the person named and all old access ends (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: new: keep-list-private
+Criterion: Given a new one-time link has been issued for the list keeper or a new one, when the old password or an old session is used, then it is refused.
+Criterion: Given a new one-time link, when the person named uses it within 24 hours, then they set their own password and see the same kept list, and the link does not work again.
+
+## A53: Who looks after it and its fixes
+Kind: owner
+Says: The committee has no technical members. Who applies security fixes when a component has a known flaw, and how soon?
+Rests on: A risk and a cost the society must accept.
+Options: Choose a way of building that leaves as much upkeep as possible to the service it runs on, and name someone who applies the rest within 14 days, sooner for a serious flaw | Accept that flaws may go unfixed until someone is found
+Recommended: The first, because it holds other people's names and five non-technical volunteers cannot be expected to patch it. Any cost has to fit the 10 pounds a month.
+If left: It can be built and tried with invented names, but nobody is responsible for fixing it.
 Harm: high
-Settles: L.stored-data-07.waiting-list
-Under: new: only-the-keeper
+Settles: F.dependency.known-flaw
+Decided: Choose a way of building that leaves as much upkeep as possible to the service it runs on, and name someone who applies the rest within 14 days, sooner for a serious flaw (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: new: keep-list-private
+Criterion: Given a known flaw in a component that the service it runs on does not look after, when 14 days have passed since the warning, then the product in use no longer holds the flawed version.
+
+## A54: How reliable it must be
+Kind: owner
+Says: How often may it fail, how slow is too slow, and how much recent work may be lost, before you would say it does not work?
+Rests on: How fast and reliable it must be is the society's to say.
+Options: It may be out of use for up to a few days, up to a day of work may be lost if storage fails, and pages should appear within 5 seconds on an ordinary connection | It must be back the same day with nothing confirmed ever lost
+Recommended: The first, because the notebook is there meanwhile and a stricter promise is likely to cost more than 10 pounds a month allows, which has not been priced.
+If left: It is built with daily copies and no promise about time out of use.
+Harm: low
+Settles: W.target
+Decided: It may be out of use for up to a few days, up to a day of work may be lost if storage fails, and pages should appear within 5 seconds on an ordinary connection (the user, 2026-11-26: "I take what you recommend for each of them.")
+Under: bring-notebook-order-across
+Criterion: Given a list of 500 invented people and an ordinary connection, when any page is opened, then it appears within 5 seconds.
+Criterion: Given storage has failed, when the latest copy is brought back, then everything saved more than 24 hours before the failure is there.
