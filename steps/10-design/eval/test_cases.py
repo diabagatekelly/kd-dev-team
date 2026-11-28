@@ -100,6 +100,14 @@ class Cases(unittest.TestCase):
             self.assertEqual(code, 1, said)
             self.assertFalse(self.judged("01", "file", text)[check])
 
+    def test_a_design_with_no_part_for_what_the_person_sees_fails_the_first_case(self):
+        gone = cases.PARTS.replace(cases.PARTS[cases.PARTS.index("## C7:"):cases.PARTS.index("## B1:")], "").replace(", C7", "")
+        said, code, text = self.written("01", gone)
+        self.assertEqual(code, 0, said)   # the script cannot know the slice has a screen: only the case's check says it
+        judged = self.judged("01", "file", text)
+        self.assertFalse(judged.pop("what-the-person-sees-is-a-tactical-part-that-reads-the-others"))
+        self.assertEqual(set(judged.values()), {True})
+
     def test_two_things_at_once_are_refused_until_given_homes_and_pass_when_walked(self):
         said, code, _text = self.written("02", cases.PARTS)
         self.assertEqual(code, 1)

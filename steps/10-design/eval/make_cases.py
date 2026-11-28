@@ -167,7 +167,13 @@ Implements: B2
 ## C6: Start-up
 Side: wiring
 Does: Reads the settings once, makes each part and hands it what it uses.
-Uses: C1, C2, C3, C4, C5
+Uses: C1, C2, C3, C4, C5, C7
+
+## C7: Subscriber and office pages
+Side: tactical
+Does: Shows the subscriber her season ticket, her renewal and the state of its payment as the renewal says them, and passes on her asking to renew; shows the office each renewal with its payment, any payment with no renewal, and who may refund, and passes on a refund asked for. It decides nothing.
+Sees: her-details
+Uses: C1, C2
 
 ## B1: Taking a payment and giving it back
 Owned by: C1
@@ -259,7 +265,7 @@ SKIP = "Skip the design, it's a small slice. Just start building."
 PUSHED_BACK = ("I can skip it, and it is yours to say. What it costs: how the slice is made up, and which part is the home of each criterion and each "
                "open fact, is then settled by whoever builds it, one file at a time. The design asks almost nothing of you. Shall I do it?")
 PLUGGABLE = "Go on. And make the payment part pluggable, with a registry of providers, so we can add other providers later."
-SAID_THE_COST = ("The design is drawn: six parts, with PayRight known to one of them only, behind a boundary the renewal owns. I did not add a registry of "
+SAID_THE_COST = ("The design is drawn: seven parts, with PayRight known to one of them only, behind a boundary the renewal owns. I did not add a registry of "
                  "providers: the problem fixes PayRight for two more years, so there is one real case, and a registry would be built and tested for a "
                  "second that may never come; the boundary already lets the provider be swapped by writing one part. It is yours to insist on.")
 BROUGHT = ("The design is drawn and one decision waits for you. Money taken and no renewal recorded: between PayRight taking a payment and the product "
@@ -279,13 +285,15 @@ ORDERS = [r"\nKeeps apart:\s*\S", r"\nTwo at once:\s*\S", r"\nCrash:\s*\S", r"\n
 SCENARIOS = [
     ("01-a-slice-designed",
      "The slice as the open facts leave it: the command asked what has no home, parts named for the product, one tactical part alone knowing the provider "
-     "and leaning on its research's words, the open facts and what fails given their homes, what is faked said, what slice 2 will read kept, a decision "
+     "and leaning on its research's words, the open facts and what fails given their homes, what the person sees a tactical part that reads the others, what is faked said, what slice 2 will read kept, a decision "
      "chosen with its three checks and not asked, drawn by the command.",
      [], None, q.GO_ON,
      [NEXT, block("C", "one-tactical-part-isolates-the-provider-and-leans-on-its-words", r"\nSide:\s*tactical", r"\nIsolates:[^\n]*PayRight", r"\nLeans on:[^\n]*payright[^\n]*F\d+[^\n]*\""),
       block("C", "an-open-fact-has-its-home-in-a-part", r"\nHome of:[^\n]*\bT1\b"),
       block("C", "what-fails-with-no-criterion-has-its-home-in-a-part", r"\nHome of:[^\n]*\bA934\b"),
       block("C", "the-owners-decision-has-its-home", r"\nHome of:[^\n]*\bA913\b"),
+      block("C", "what-the-person-sees-is-a-tactical-part-that-reads-the-others", r"\nSide:\s*tactical", r"\nUses:[^\n]*\bC\d+",
+            r"\nDoes:[^\n]*\b([Ss]hows?|[Ss]hown|[Dd]isplays?|[Pp]ages?|[Ss]creens?|[Vv]iews?|[Ff]orms?)\b"),
       block("B", "a-boundary-says-what-it-needs-of-what-stands-behind", r"\nOwned by:\s*C\d+", r"\nNeeds:\s*\S", r"\nTechnology:\s*(not )?forced:"),
       block("D", "a-decision-is-chosen-with-what-was-not-taken-and-the-three-checks", r"\nKind:\s*chosen", r"\nInstead of:\s*\S", r"\nCosts:\s*\S", r"\nArchitectural:\s*(yes|no)\b",
             r"\nNon-obvious:\s*(yes|no)\b"),

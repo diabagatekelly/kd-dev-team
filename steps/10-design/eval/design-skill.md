@@ -77,6 +77,15 @@ Leans on: payright F6 "<its document's own words>"; T2
   open test. **`Holds`** names the states of a lasting thing it
   keeps and moves. **`Sees`** names each class of sensitive values
   that passes through it: the fewer parts, the better.
+- **What the person sees is a part too.** Where the slice has a
+  screen, a command or a message it sends, one tactical part is it:
+  it shows what the strategic parts say and passes on what the
+  person asks, and decides nothing. Its `Does` names what it reads
+  and what it asks, of which part (`Uses`), in the product's words:
+  every value a criterion says is shown. Where one view needs
+  things of two parts together, say which part gives them together.
+  No layout, no component: how it looks is the next stage's, and no
+  strategic part says how a thing is shown.
 - **What fails has a home too.** For each thing that can fail or
   stop half way (no reply, a save that fails after the money moved,
   the product stopped between two steps, a start that finds what it

@@ -654,6 +654,20 @@ asking is listed apart, so it can be overturned.
     refuses is settled by its test environment. What no session
     has run is listed in the stage's README.
 
+59. **The pilot of stage 10, the design, is agreed** (the owner:
+    "Yes, then run the pilot", 2026-11-28), at about $16, on the
+    proposal in `steps/10-design/README.md`: its measure (a private
+    key of defects a structure could have prevented, counted by
+    reading, kad's own designs as the mark), a second short list
+    of the owner's brought once when the design is drawn, and about
+    $160 in all. The pilot's real cost is reported before anything
+    else runs, and the rest is said again with it. Agreed with it,
+    after the owner asked whether the screens belong to this stage
+    and whether they change a structure: the order is kept (screens
+    are stage 11), and the design names what the person sees as one
+    tactical part, with what it reads and asks of the others; how
+    it looks is not said there.
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,
@@ -895,6 +909,12 @@ asking is listed apart, so it can be overturned.
   as built (a need from outside goes back to the approach; no
   technology is picked there). What a pick of the stack stage does
   to get back to research is still owed, to that stage.
+- **A screen that needs of the structure what the design does not
+  give** (a view of two parts together, in a shape no part offers):
+  the screens stage sends it back to the design, a `design:` line
+  in its own "goes back", as the design does to the stages before
+  it. A behaviour the screen would add goes back to the answers or
+  the requirements instead. Owed to stage 11.
 - **The architecture map** kad's design consulted first: no map
   exists before a build; owed when the build makes one.
 - **A decision of the design taken mid-build under a delegation**

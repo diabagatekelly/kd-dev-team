@@ -135,6 +135,12 @@ carried, or not, with why.
     recorded in their words.
 12. Told to skip: once what it costs, then recorded and drawn.
 13. Changed after: only what the change brings.
+14. What the person sees (a screen, a command, a message sent) is
+    one tactical part that reads the others and decides nothing;
+    what it reads and asks is named, how it looks is not (the
+    owner's question of 2026-11-28: screens are stage 11, and the
+    one thing of a screen that can change a structure is what it
+    reads).
 
 ## Cases (fourteen; `eval/make_cases.py`)
 
@@ -145,7 +151,7 @@ failures with no criterion.
 
 | Case | Shows |
 |---|---|
-| 01 a slice designed | 1, 2, 3, 5 |
+| 01 a slice designed | 1, 2, 3, 5, 14 |
 | 02 two things at once | 4 |
 | 03 a lock the user proposes | 4, 7 |
 | 04a a part for a case that may come; 04b the user insists | 6, 7 |
