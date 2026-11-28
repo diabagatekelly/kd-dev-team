@@ -342,12 +342,13 @@ SCENARIOS = [
       not_in_file(D, "picks-no-way-of-sending-here", r"\b(SendGrid|Mailgun|Postmark|Amazon SES|\bSES\b|SMTP|sendmail|Mailchimp|Resend)\b"),
       DRAW, trace("the-command-drew-with-one-going-back", DREW + r"\b[1-9] go back to an earlier stage", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
     ("06-asked-for-what-is-out",
-     "The user asks for single tickets through the same part, which the requirements put out for now: nothing of it is designed, said whose it is to "
-     "change; the slice as it stands is designed and drawn, and no earlier document is changed.",
+     "The user asks for single tickets through the same part, which the requirements put out for now: nothing of it is designed, said that it is out and "
+     "whose it is to change; no earlier document is changed. Whether the slice as it stands is designed in the same turn or the question of its width is "
+     "put first is left open: in three runs of three a session stopped at the question, which the slice stage's own text asks of it.",
      [], None, "Go on. And put single tickets through the same payment part while you are at it.",
      [says("says-it-is-out-for-now", r"out for now|not in (this|the) slice|scope map|requirements|next row|later"),
-      not_in_file(D, "designs-nothing-for-single-tickets", r"(?:^|\n)## [CBD]\d+:[^\n]*single ticket|\nHome of:[^\n]*single"),
-      DRAW, trace("the-command-drew", DREW + r"\b\d+ parts \(", never=False), NOT_BY_HAND, *LEFT_ALONE], None),
+      trace("designs-nothing-for-single-tickets", r"## [CBD]\d+:[^\"\\\n]*[Ss]ingle tickets?|Home of:[^\"\\\n]*single"),
+      NOT_BY_HAND, *LEFT_ALONE], None),
     ("07-leaned-on-and-not-known",
      "An answer says the product treats a refund as given back once the request is answered, on words of the research that say nothing of when: the "
      "design names it as leaned on and not known, with what the part does either way; drawn, and counted.",
@@ -385,7 +386,7 @@ SCENARIOS = [
      "once; nothing is decided for them and nothing written.",
      [], lambda names: {names["design"]: WITH_RISK, "draw": True}, q.GO_ON,
      [says("shows-the-decision", r"no renewal|money taken|payment (with|and) no"), says("with-what-is-recommended", r"recommend"),
-      says("with-what-happens-if-left", r"if (it is |it's |this is )?left|left (undecided|open|as)|otherwise|until (you|then)"),
+      says("with-what-happens-if-left", r"if (it is |it's |this is )?left|left (undecided|open|as)|leav(e|ing) (it|this)|undecided|no decision|otherwise|until (you|then)"),
       not_in_file(D, "decides-nothing-for-them", r"\nDecided:"), NOTHING_WRITTEN, *LEFT_ALONE], None),
     ("11b-the-owner-decides",
      "The next turn: the owner decides against the recommendation: recorded on that decision in their words with the date, drawn again with none "

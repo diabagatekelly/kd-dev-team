@@ -87,11 +87,17 @@ Leans on: payright F6 "<its document's own words>"; T2
   No layout, no component: how it looks is the next stage's, and no
   strategic part says how a thing is shown.
 - **What fails has a home too.** For each thing that can fail or
-  stop half way (no reply, a save that fails after the money moved,
-  the product stopped between two steps, a start that finds what it
-  stored unreadable or its address taken), one part records it and
-  says what state is left. A design whose parts cover only what
-  works has left the rest to the builder.
+  stop half way, one part records it and says what state is left:
+  no reply; a save that fails after the step that cannot be taken
+  back; the product stopped between two steps; a start that finds
+  what it stored unreadable, of an older layout, or its address
+  taken; a setting that is there and wrong; a fault nobody foresaw
+  inside a request; one bad item among many from outside (the one
+  set aside, or the whole refused: say which); a loop over what the
+  outside gives, bounded in count and in time where the promise is
+  made; what trying again removes and what it keeps. Name the case,
+  not only the concern. A design whose parts cover only what works
+  has left the rest to the builder.
 
 **A boundary** is where a strategic part asks for something it must
 not know how to get.
@@ -147,7 +153,9 @@ Leftover: <a marker left behind, or removed or changed by hand while its owner r
 Reused name: <the marker names an owner that died, and the name now belongs to something alive>
 ```
 
-Each says what state is left and who would notice. "Cannot happen"
+A claim is taken where the thing starts, in one step with what it
+checks (say what), never after the step that cannot be taken back.
+Each line says what state is left and who would notice. "Cannot happen"
 only with its reason. If a line comes to both going on, nobody
 knowing, or stuck until someone sees to it, change what keeps them
 apart until none does. If none can be found, the decision is the
@@ -175,7 +183,10 @@ keeps those with three as records of their own.
 **The owner's** (`Kind: owner`, with `Options:` two or more,
 `Recommended:`, `If left:`, `Harm:`) is only: a cost in money; a
 risk no structure removes; what cannot be taken back once people's
-data is in it. Never a choice between two sound structures.
+data is in it. A decision that deletes what is kept of a person's
+data, or leaves no way to give it back, is the owner's every time,
+however clear the better option looks. Never a choice between two
+sound structures.
 
 **What is another stage's goes back, and is not settled here.**
 Under `## Goes back`, a line each, the stage first:
@@ -184,7 +195,8 @@ Under `## Goes back`, a line each, the stage first:
   changes something they confirm (a limit, what is in or out);
 - `approach:` the slice needs something from outside that the
   approach does not have: it is committed to there, and researched,
-  before the design leans on it;
+  before the design leans on it. A boundary with nothing committed
+  to behind it does not settle it;
 - `research:` a state the slice needs that `states.md` lacks, when
   a person is shown it or can act in it. A state only a decision's
   own mechanism passes through (a claim taken, a request sent and
