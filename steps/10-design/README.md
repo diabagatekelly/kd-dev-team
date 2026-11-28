@@ -60,7 +60,7 @@ of their last stage 9 runs for nothing: 111 and 180 things.
 | Whether the stage is done, how many decisions wait, what goes back; the command that draws a finished design again | stage script |
 | Which parts there are, which side each is on, what is strategic; what a part leans on; what keeps two things apart and what each order leaves; what is the owner's; neither too much nor too little | text (240 lines) |
 
-43 unit tests for the script (`designing/test_design.py`), 9 for the
+43 unit tests for the script (`designing/test_design.py`), 10 for the
 stage script, 2 for the driver, 16 for the cases.
 
 ## Set beside kad

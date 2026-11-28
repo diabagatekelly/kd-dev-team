@@ -577,6 +577,14 @@ class Stage(unittest.TestCase):
         # Met building the cases: a user who comes back on a finished design had no command to draw it again with.
         self.assertRegex(out, r"- the design is changed only in planning/slice-001/010_design\.md, and drawn again by script: python3 \".*design\.py\" draw planning/slice-001")
 
+    def test_a_planning_folder_with_a_space_in_its_name_is_read_the_same(self):
+        self.designed()
+        (self.machine.project / "planning").rename(self.machine.project / "my planning")
+        self.machine.run("stage.sh", "remember", "my planning")
+        out = self.report()
+        self.assertIn("design (slice-001/010_design.md)", out)
+        self.assertIn("- next stage by the documents: screens (", out)
+
     def test_a_design_drawn_where_the_answers_left_nothing_to_test_is_done(self):
         self.designed(open_facts=False)
         self.assertIn("- next stage by the documents: screens (", self.report())

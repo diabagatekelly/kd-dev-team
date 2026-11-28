@@ -519,8 +519,8 @@ report() {
         # waits for the owner and nothing goes back to an earlier stage.
         if [ "$there" = yes ] && [ -n "$adone" ] && [ -z "$next" ]; then
           designed="$under${is%_design.md}_designed.md"
-          drawn="$dir/${adone%_answers.md}_answered.md"; [ -z "$odone" ] || drawn="$drawn $dir/${odone%_open-facts.md}_tested.md"
-          stamp=$(grep "drawn from: $( (cat $drawn "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }'); waiting: " "$dir/$designed" 2>/dev/null | head -1)
+          stamp=$(grep "drawn from: $( (cat "$dir/${adone%_answers.md}_answered.md"; [ -z "$odone" ] || cat "$dir/${odone%_open-facts.md}_tested.md"
+                                        cat "$dir/$under$is") 2>/dev/null | cksum | awk '{ print $1 }'); waiting: " "$dir/$designed" 2>/dev/null | head -1)
           waits=$(say "$stamp" | sed -n 's/.*waiting: \([0-9]*\).*/\1/p'); goes=$(say "$stamp" | sed -n 's/.*back: \([0-9]*\).*/\1/p')
           ddone="$under$is"
           if [ "$waits" = 0 ] && [ "$goes" = 0 ]; then
