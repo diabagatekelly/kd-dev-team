@@ -684,6 +684,34 @@ asking is listed apart, so it can be overturned.
   - The check that the code was read named a tool the grader does
     not have (`*`); it reads the transcript now.
 
+- Stage 10 after three runs and one round of tuning (2026-11-28;
+  the owner: "Go ahead", "Yes", "Yes" to each round and to the
+  closing passes, about $63, with the bars missed on record), $47
+  spent of about $125, chosen without asking:
+  - The text names the cases of what fails (an older layout, a
+    setting there and wrong, a fault inside a request, one bad item
+    among many, a loop bounded where the promise is made, what
+    trying again removes), has a claim taken where the thing starts,
+    and makes deleting a person's kept data the owner's every time.
+    The first is written after seeing which items of the private
+    key were missed: the count on the same two plans is partly the
+    text learning the key, said to the owner before it was run.
+  - Counted by read-only sessions not shown earlier counts, items
+    held of twelve and of eight: 6, 2, 6 and 4, 4, 4 before; 9, 7, 9
+    and 5, 3, 4 after (kad's own designs: 1 and 1). No item absent
+    after. Missed: every item about two things at once in every run
+    (one run of six does not say when the one key is made); half of
+    the rest held on the second plan (4, 2, 3 of 7).
+  - The design is not tuned further toward the key. What stays
+    "part" in every run is behaviour, not structure, and is owed to
+    the library as questions: a setting that is a wrong number;
+    the rule on where a data file may be kept; a poll that fails
+    once; one bad record among a page; the identifier a posted
+    transaction replaced; a failure before a connect starts.
+  - Case 06 accepts a session that stops at the question of the
+    slice's width, which the slice's own text asks of it; the check
+    of "what happens if left" takes "if you leave it undecided".
+
 - The security pass as built (decisions 46, 48, 49), 2026-11-25,
   chosen without asking:
   - It writes one file, `security.md`, in the questions' own folder,

@@ -185,8 +185,10 @@ keeps those with three as records of their own.
 risk no structure removes; what cannot be taken back once people's
 data is in it. A decision that deletes what is kept of a person's
 data, or leaves no way to give it back, is the owner's every time,
-however clear the better option looks. Never a choice between two
-sound structures.
+however clear the better option looks: replacing kept rows by
+newer ones deletes them, and what ending a thing (a disconnect, a
+removal) does with what was kept of it is always said, by an answer
+or by such a decision. Never a choice between two sound structures.
 
 **What is another stage's goes back, and is not settled here.**
 Under `## Goes back`, a line each, the stage first:
