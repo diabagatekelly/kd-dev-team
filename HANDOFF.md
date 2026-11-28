@@ -1,64 +1,59 @@
-# Handoff (2026-11-26)
+# Handoff (2026-11-28)
 
 For the session that takes the work on. Read `DECISIONS.md` first:
 it is the record; this page only says where things stand.
 
 ## Where it stands
 
-- Branch `open-facts-stage`, pull request #9, a draft with CI green
-  on all three systems and no reviewer comments. Merging is the
-  owner's. Stage 9 was built, tested and adopted on it. Once it is
-  merged, the next stage starts on a new branch from main: a branch
-  whose pull request is merged has no CI.
+- Pull request #9 (stage 9) is merged. Branch `design-stage` from
+  main, a draft pull request: stage 10 is built free on it and
+  **proposed, not agreed**. Merging is the owner's.
 - **Adopted, all on Sonnet 5.5:** stages 0 to 9, with the security
   pass (7b) after the questions. Each stage's README under `steps/`
   has its test, what each run met and what no session has run.
-- **Research is in two passes** (decision 54): up front, and again,
-  together, for what the answers need of a thing committed to.
-- **While a project is planned its VM reads any website and sends
-  to none** (decision 52), but to a provider's test environment the
-  user allows, with a key they type (decision 56).
-- **A second reader, a model reading a model inside the product**
-  (decision 56): each answer that speaks of a thing committed to is
-  handed, with only the words it rests on, to a fresh session; what
-  it flags is cut back or looked up. It grades nothing.
-- **The owner's list is read and brought once, at the end of
-  stage 9, before the design** (decision 53); the design does not
-  start while a decision waits.
-- **Next: stage 10, the design.** Nothing of it is built. No
-  measure, no test and no cost are agreed.
+- **Stage 10, the design:** `steps/10-design/README.md` is the
+  proposal: a measure (a private key of what a structure could have
+  prevented in the two real builds, counted beside kad's own
+  designs), fourteen cases, about $160, a pilot of about $16 first,
+  and three points of the owner's. **Nothing paid has run, and no
+  session has run any of it. Check `DECISIONS.md` for their yes
+  before any launch.**
+- Research is in two passes (decision 54). While a project is
+  planned its VM reads any website and sends to none (decision 52),
+  but to a provider's test environment the user allows (decision
+  56). A second reader reads each claim against its words (decision
+  56). The owner's list is brought once, at the end of stage 9
+  (decision 53).
 
-## What stage 10 has to take on
+## Stage 10 as built
 
-From the design (`design/planning-phase.md`, row 10 and section 5)
-and the decisions:
+- `designing/design.py next|draw|state` (43 unit tests); the text
+  `steps/10-design/eval/design-skill.md`; fourteen cases
+  (`eval/make_cases.py bare|text`, 16 unit tests).
+- The stage script counts the design by its drawing's mark, what
+  waits and what goes back. On trial: `design=steps/10-design/eval/design-skill.md`
+  after `e2e/regress.py` or `e2e/make_plugin.py`; `KD_TRIAL=design`
+  moves startup's case of a stage not built to the screens;
+  `e2e/run.py --through design`.
+- What it chose without asking is in `DECISIONS.md` ("Stage 10, the
+  design, as built"). The largest: no technology is picked in the
+  design (a boundary says what is needed; the stack stage picks),
+  and no decision of structure is put to the user.
+- Private, in the audit repository under `10-design/`: the key and
+  kad's count against it (`README.md`), `in/preflight.sh SHA`,
+  `in/pilot10.sh RUNS TAG`, `in/real10.sh NAME PLANNING ARM`. Real
+  runs start from `09-open-facts/runs/real4/kv1` and `kw1`.
+- After the owner's yes: wait for CI on the commit, copy `in/` to
+  the VM, run the preflight, then the pilot; report its real cost
+  before anything else.
 
-1. **Structure, boundaries, where each criterion lives.** kad's
-   `architecture-design` (583 lines, with `adr`) is the start, and
-   its synthesis file `kad-dev-team-plugin/.synthesis/software-architect.md`
-   holds the principles it was built from: carry each or say why
-   not (decision 46: kad's design skills are revisited thoroughly
-   at stages 10 and 11).
-2. **It has no measure yet.** The design's section 5 says so of
-   the design and screens stages: each is agreed with the owner
-   when the stage is reached, before its text is judged. Put a
-   measure to them with the stage's test and cost.
-3. **What it reads now that kad's design did not have:** the
-   answers and their criteria (`NNN_answered.md`), the open facts
-   with what the slice does either way (`NNN_tested.md`), the
-   owner's decisions recorded on their answers, the research with
-   what was looked up and what a test showed, and the states.
-4. **Put off to it, in `DECISIONS.md`:** a dependency the user did
-   not name (a library the design picks) has no way back to
-   research; kad's three checks for whether a decision earns a
-   record; nine security concerns of the second plan that wait for
-   a design to be chosen (decision 51).
-5. **Left by stages 8 and 9 for a design to meet:** some of kad's
-   concerns are said in an answer with no criterion; what a lock
-   leaves after a crash, and what a close in progress does with a
-   retry or a login, are in no run; an answer cut back from "it
-   does this" to "the product treats it as this" still leans on
-   the thing, with no test opened.
+## After stage 10
+
+Stage 11, the screens (kad's `design-system`, `screen-design`,
+`accessibility-review`, revisited thoroughly: decision 46), has no
+measure yet. Stage 12, the stack, owes: picking against what each
+boundary of the design needs, and the way back to research for what
+it picks.
 
 ## Known of stage 9 (decision 58)
 
@@ -88,7 +83,9 @@ and the decisions:
 - **Not run since the round of stage 9:** the examples, and every
   earlier stage's cases (they ran before the questions' mark
   changed for the last time; the unit tests show the cases'
-  drawings unchanged).
+  drawings unchanged). Both are in stage 10's proposed test. The
+  examples' kept documents after the open facts are stale; those
+  after the answers are not.
 - **No example reaches a merge.** `e2e/run.py --through merge`
   still waits only for research.
 - **Nothing forces the web locked before a build** (decision 52):
@@ -134,7 +131,7 @@ The owner's standing rules are in the memory of this project and in
 | What | Where |
 |---|---|
 | A stage's text, cases and result | `steps/NN-name/eval/` and `steps/NN-name/README.md` |
-| Scripts, with unit tests | `startup/`, `research/`, `questions/`, `answers/`, `openfacts/`, `library/` |
+| Scripts, with unit tests | `startup/`, `research/`, `questions/`, `answers/`, `openfacts/`, `designing/`, `library/` |
 | Every adopted text loaded together | `e2e/make_plugin.py`, `e2e/regress.py` |
 | The four examples and their driver | `e2e/examples/`, `e2e/run.py`, findings in `e2e/README.md` |
 | A stage on trial before it is adopted | `e2e/regress.py NAME=TEXT`; `KD_TRIAL=NAME` moves startup's case of a stage not built |

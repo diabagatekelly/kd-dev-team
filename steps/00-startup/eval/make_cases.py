@@ -92,6 +92,14 @@ if True:
     DOCUMENTS["slice-001/009_open-facts.md"] = _open
     DOCUMENTS["slice-001/009_tested.md"] = "# Tested\n\n<!-- drawn from: %s; waiting: 0 -->\n" % _questions.cksum(_answers.encode() + _open.encode())
     NOT_BUILT = (r"\bdesign", [*NOT_BUILT[1], "slice-001/009_open-facts.md", "slice-001/009_tested.md"])
+# With the design on trial (`KD_TRIAL=design`) it is the screens: a design skipped at the user's word, and drawn, is the
+# shortest the stage script counts as done.
+if "design" in os.environ.get("KD_TRIAL", "").split(","):
+    _design = "Skipped at the user's word, 2026-11-28: \"Skip the design.\"\n"
+    DOCUMENTS["slice-001/010_design.md"] = _design
+    DOCUMENTS["slice-001/010_designed.md"] = "# Designed\n\n<!-- drawn from: %s; waiting: 0; back: 0 -->\n" % _questions.cksum(
+        (DOCUMENTS["slice-001/008_answered.md"] + DOCUMENTS["slice-001/009_tested.md"] + _design).encode())
+    NOT_BUILT = (r"\bscreens?", [*NOT_BUILT[1], "slice-001/010_design.md", "slice-001/010_designed.md"])
 
 
 def pull(number, title, branch, unresolved=0):

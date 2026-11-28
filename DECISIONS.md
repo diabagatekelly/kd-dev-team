@@ -815,6 +815,59 @@ asking is listed apart, so it can be overturned.
     the text's own example of a fact's number (`F31`) is copied in
     one run of five.
 
+- Stage 10, the design, as built (2026-11-28), chosen without
+  asking; its measure, its test, its cost and three points of the
+  owner's are in `steps/10-design/README.md`, and nothing paid has
+  run:
+  - The session's judgement is one file of parts, boundaries and
+    decisions; a script lists what has no home, refuses what does
+    not hold and draws `NNN_designed.md`. Its folder is `designing/`:
+    `design/` holds the plugin's own design document.
+  - The unit of a home is the answer, not the criterion: a chosen
+    answer with no criterion is read by nobody else, which is how
+    "said with no criterion" is closed. A dismissed answer and a
+    fact with no criterion need none.
+  - A strategic part never names a thing committed to, and one
+    tactical part isolates it: held by script, by the thing's name.
+  - What the design says of a thing committed to rests on a research
+    fact with its words, as an answer does, on an open test, or is
+    named `unknown` with what is done either way.
+  - **No technology is picked here.** A boundary says what the slice
+    needs of whatever stands behind it and whether this slice forces
+    a choice; the stack stage picks against it. kad's design chose
+    the store and the screen's shape; here that would be a belief
+    about a dependency nobody researched.
+  - A dependency the user did not name: something the slice needs
+    from outside goes back to the approach, which has its way to
+    research; the way back from a technology picked is the stack
+    stage's.
+  - kad's approval of every decision one at a time is not carried
+    (the design document's section 4). A decision is the owner's
+    only as a cost in money, a risk no structure removes, or what
+    cannot be taken back.
+  - kad's three checks are answered yes or no on every chosen
+    decision, and the script draws those with three yes as records.
+    Where they are kept for good is stage 14's.
+  - What keeps two things apart carries five orders of events, each
+    required; a hole in a chosen decision is refused. Every design
+    says whether anything runs at once, and "nothing" is refused
+    where the answers settle a question about two things at once.
+  - What goes back to an earlier stage keeps the design open; the
+    stage script says so, and names no other stage as next for it.
+  - Asked for a structure the principles argue against, the slice is
+    designed as recommended and the cost said once; insisted on, it
+    is recorded as the owner's.
+  - kad's skill is not an arm of the cases; its designs of the two
+    real plans are the mark. The key those are counted against (the
+    defects a structure could have prevented, twelve and eight) is
+    this session's own reading, fixed before any run, private.
+  - A real run starts from a kept stage 9 run whose owner's list
+    waits: the launcher's user takes what is recommended, as the
+    examples' user does; it is nobody's real decision.
+  - The examples are to be run from their kept answers: the open
+    facts' kept documents are stale by that stage's last two
+    sentences.
+
 ## Put off to the stage that needs them
 
 - **Locking the web again before the build** (decision 52): the
@@ -838,9 +891,16 @@ asking is listed apart, so it can be overturned.
 - **A second slice that commits to a thing already researched**
   (whether the earlier document is carried forward, and what is read
   again): when an example reaches a second slice's research.
-- **A dependency the user did not name** (a library the design or
-  the stack picks) has no way back to research in the order as
-  written: with the design and stack stages.
+- **A dependency the user did not name:** for the design, settled
+  as built (a need from outside goes back to the approach; no
+  technology is picked there). What a pick of the stack stage does
+  to get back to research is still owed, to that stage.
+- **The architecture map** kad's design consulted first: no map
+  exists before a build; owed when the build makes one.
+- **A decision of the design taken mid-build under a delegation**
+  (kad's): with the first build stage.
+- **Where the design's decisions that earn a record are kept for
+  good:** with the planning pull request (stage 14).
 
 ## Chosen without asking; the owner can overturn any of these
 

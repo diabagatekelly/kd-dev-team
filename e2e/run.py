@@ -33,6 +33,8 @@ answers` it goes on and ends once the answers are drawn by the script. With `--t
 goes on through the tests of open facts and ends once they are drawn with no decision left waiting
 for the owner (asked for a key or a site for a test, the user has none; shown their list, takes what
 is recommended), or once the answers are drawn and leave nothing to test or decide. With `--through
+design` it goes on through the design and ends once it is drawn with no decision of its own left waiting
+and nothing going back to an earlier stage, or two turns after it is drawn with something going back. With `--through
 requirements` it ends as it did before the slice stage existed, after the session's first turn
 that began with a requirements document in the planning folder. It also ends when the user would
 say the same thing a third time running, or at --max-turns.
@@ -45,7 +47,7 @@ texts has changed since, and the example is then run from its first message and 
 
 Usage, inside the evaluation VM:
     python3 -I e2e/run.py e2e/examples/NAME --out FOLDER [--model M] [--sorter-model M] [--max-turns N]
-                          [--through merge|open-facts|answers|security|questions|research|approach|slice|requirements] [--from STAGE]
+                          [--through merge|design|open-facts|answers|security|questions|research|approach|slice|requirements] [--from STAGE]
     python3 -I e2e/run.py e2e/examples/NAME --keep STAGE --out FOLDER_OF_A_FINISHED_RUN
 """
 import argparse
@@ -75,7 +77,7 @@ covers a question, count the question as uncovered.
 # The topics
 
 """
-DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers", "open-facts")
+DOCUMENTS = ("problem", "scope-map", "requirements", "slices", "slice", "approach", "research", "questions", "security", "answers", "open-facts", "design")
 MERGED = 7   # the number of the made-up pull request
 QUIET = 8   # turns with no new document after which a run is stuck, whatever the user says (the fourth example ran 29 turns, $15, at the slice)
 
@@ -254,6 +256,8 @@ def present(planning):
         found.add("answers")
     if planning.is_dir() and any(planning.glob("slice-*/*_open-facts.md")):
         found.add("open-facts")
+    if planning.is_dir() and any(planning.glob("slice-*/*_design.md")):
+        found.add("design")
     return found
 
 
@@ -286,6 +290,21 @@ def tested(planning):
         if drawing.is_file() and drawing.stat().st_mtime_ns >= newest and "; waiting: 0 -->" in drawing.read_text(encoding="utf-8"):
             found.append(path)
     return found
+
+
+def designed(planning):
+    """(the designs the script has drawn with nothing waiting and nothing going back, those drawn with something going back):
+    `designed.md` beside each, no older than it, the answers or the open facts."""
+    done, back = [], []
+    for path in sorted(planning.glob("slice-*/*_design.md")) if planning.is_dir() else []:
+        drawing = path.with_name(path.name.replace("_design.md", "_designed.md"))
+        newest = max(each.stat().st_mtime_ns for each in [path, *path.parent.glob("*_answers.md"), *path.parent.glob("*_open-facts.md")])
+        stamp = re.search(r"; waiting: (\d+); back: (\d+) -->", drawing.read_text(encoding="utf-8")) if drawing.is_file() and drawing.stat().st_mtime_ns >= newest else None
+        if stamp and stamp.groups() == ("0", "0"):
+            done.append(path)
+        elif stamp and stamp.group(2) != "0":
+            back.append(path)
+    return done, back
 
 
 def nothing_to_test(planning):
@@ -430,13 +449,13 @@ def keep(out, example, stage, plugin):
     kept.mkdir(parents=True)
     for path in sorted(planning.rglob("*.md")):
         name = re.sub(r"^\d+_|(-v\d+)?\.md$", "", path.name)
-        if name in wanted or path.name == "sources.md" or (name == "answered" and "answers" in wanted) or (name == "tested" and "open-facts" in wanted):
+        if name in wanted or path.name == "sources.md" or (name == "answered" and "answers" in wanted) or (name == "tested" and "open-facts" in wanted) or (name == "designed" and "design" in wanted):
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
-    if stage in ("approach", "research", "questions", "security", "answers", "open-facts"):   # the pages its quotes are from: research reads them and does not fetch them again
+    if stage in ("approach", "research", "questions", "security", "answers", "open-facts", "design"):   # the pages its quotes are from: research reads them and does not fetch them again
         for path in [*sorted(planning.glob("slice-*/pages/*.txt")), *(research(planning) if stage != "approach" else []),
-                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security", "answers", "open-facts") else []),
-                     *(sorted(path for path in planning.glob("slice-*/*_tests/*") if path.is_file()) if stage == "open-facts" else [])]:
+                     *(sorted(planning.glob("slice-*/*_questions/*.md")) if stage in ("questions", "security", "answers", "open-facts", "design") else []),
+                     *(sorted(path for path in planning.glob("slice-*/*_tests/*") if path.is_file()) if stage in ("open-facts", "design") else [])]:
             (kept / path.relative_to(planning)).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(path, kept / path.relative_to(planning))
     # Only the texts of the stages kept, and the table every stage is given: a later stage's text
@@ -491,7 +510,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
     quiet = 0
     if start:   # the user comes back to documents already written
         said, seen = brief.back, present(planning)
-    sessions, merged, back, since = [], "", None, 0
+    sessions, merged, back, since, sent_back = [], "", None, 0, 0
     for _ in range(max_turns):
         had_list = through == "requirements" and "requirements" in present(planning)
         no_need = through == "approach" and "slice" in present(planning) and needs_nothing(planning)
@@ -545,6 +564,16 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
         if through == "open-facts" and nothing_to_test(planning):
             ended = "the answers left nothing to test and nothing for the owner to decide"
             break
+        # The design (stage 10): drawn by the script, its own decisions decided and nothing going back; what goes back is
+        # another stage's to change, which no example's user does: said once, the run ends.
+        if through == "design" and designed(planning)[0]:
+            ended = "the design was drawn, with no decision waiting and nothing going back"
+            break
+        if through == "design" and designed(planning)[1]:
+            sent_back += 1
+            if sent_back == 2:
+                ended = "the design was drawn and sends something back to an earlier stage"
+                break
         if back is not None:
             back += 1
             if marks(planning)[0].get(str(number_merged)) == "built":
@@ -567,7 +596,7 @@ def run(example, out, plugin, model, sorter_model, max_turns, command=("claude",
             break
         # The slice is built and merged while the user is away: once it needs nothing from outside, or
         # once every need of its approach is decided. A need that goes on waiting is given four turns.
-        left = waiting(planning) if through in ("merge", "research", "questions", "security", "answers", "open-facts") and not merged and "slice" in seen else None
+        left = waiting(planning) if through in ("merge", "research", "questions", "security", "answers", "open-facts", "design") and not merged and "slice" in seen else None
         if left:
             since += 1
             if since == 4:
@@ -627,7 +656,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", default="claude-sonnet-5-5")
     parser.add_argument("--sorter-model", default="claude-haiku-5-5")
     parser.add_argument("--max-turns", type=int, default=30)
-    parser.add_argument("--through", choices=("merge", "open-facts", "answers", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
+    parser.add_argument("--through", choices=("merge", "design", "open-facts", "answers", "security", "questions", "research", "approach", "slice", "requirements"), default="merge")
     parser.add_argument("--from", dest="start", choices=DOCUMENTS)
     parser.add_argument("--keep", choices=DOCUMENTS)
     given = parser.parse_args()
